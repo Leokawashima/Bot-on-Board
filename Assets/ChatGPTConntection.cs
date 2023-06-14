@@ -11,11 +11,14 @@ public class ChatGPTConnection
     //会話履歴を保持するリスト
     private readonly List<ChatGPTMessageModel> _messageList = new();
 
-    public ChatGPTConnection(string apiKey)
+    public readonly string _content;
+
+    public ChatGPTConnection(string apiKey, string content)
     {
         _apiKey = apiKey;
+        _content = content;
         _messageList.Add(
-            new ChatGPTMessageModel() { role = "system", content = "語尾に「にゃ」をつけて" });
+            new ChatGPTMessageModel() { role = "system", content = content });
     }
 
     public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage)
