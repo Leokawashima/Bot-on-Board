@@ -2,6 +2,8 @@
 
 public class TEST : MonoBehaviour
 {
+    [SerializeField]
+    bool GPTON = false;
     [SerializeField, TextArea, Tooltip("APIキーを入力")]
     string YourAPIKey;
     [SerializeField, TextArea, Tooltip("ルールを決めてあげる")]
@@ -11,7 +13,10 @@ public class TEST : MonoBehaviour
 
     async void Start()
     {
-        ChatGPTConnection gpt = new ChatGPTConnection(YourAPIKey, YoutContent);
-        await gpt.RequestAsync(YourMessage);
+        if (GPTON)
+        {
+            ChatGPTConnection gpt = new ChatGPTConnection(YourAPIKey, YoutContent);
+            await gpt.RequestAsync(YourMessage);
+        }
     }
 }
