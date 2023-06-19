@@ -18,6 +18,14 @@ public class NetTest : MonoBehaviour
 
     public void Client()
     {
+        var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        if(transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
+        {
+            // 接続先のIPアドレスとポートを指定
+            var ipAddress = "127.0.0.1";
+            ushort port = 7777;
+            unityTransport.SetConnectionData(ipAddress, port);
+        }
         NetworkManager.Singleton.StartClient();
     }
 
