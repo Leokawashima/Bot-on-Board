@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class NetTest : MonoBehaviour
 {
+    public void Server()
+    {
+        NetworkManager.Singleton.StartServer();
+    }
+
     public void Host()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
