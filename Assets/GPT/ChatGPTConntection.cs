@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -70,7 +71,18 @@ public class ChatGPTConnection
         {
             var responseString = request.downloadHandler.text;
             var responseObject = JsonUtility.FromJson<ChatGPTResponseModel>(responseString);
-            Debug.Log("ChatGPT:" + responseObject.choices[0].message.content);
+
+            //文字列抜き出しパターン
+            string pattern = @"\d+";
+            //元の文字列
+            Debug.Log("<color=red>ChatGPT:" + responseObject.choices[0].message.content + "</color>");
+            //文字列配列として数字のみを記録
+            MatchCollection match = Regex.Matches(responseObject.choices[0].message.content, pattern);
+            //文字配列を区切り文字指定で連結して一つの文字列に
+            string result = string.Join(",", match);
+            //正規化された文字列を出力
+            Debug.Log("<color=yellow>ChatGPT:" + result + "</color>");
+
             _messageList.Add(responseObject.choices[0].message);
             return responseObject;
         }
