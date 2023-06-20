@@ -256,8 +256,8 @@ public class MapCreater : EditorWindow
         {
             for(int x = 0; x < edit_SO.x; ++x)
             {
-                editMap[y, x] = edit_SO.mapChip[y * editScaleNow.y + x];
-                editObj[y, x] = edit_SO.objChip[y * editScaleNow.y + x];
+                editMap[y, x] = edit_SO.mapChip[y * editScaleNow.x + x];
+                editObj[y, x] = edit_SO.objChip[y * editScaleNow.x + x];
             }
         }
                 
@@ -281,8 +281,8 @@ public class MapCreater : EditorWindow
         {
             for(int x = 0; x < edit_SO.x; ++x)
             {
-                edit_SO.mapChip[y * edit_SO.y + x] = editMap[y, x];
-                edit_SO.objChip[y * edit_SO.y + x] = editObj[y, x];
+                edit_SO.mapChip[y * edit_SO.x + x] = editMap[y, x];
+                edit_SO.objChip[y * edit_SO.x + x] = editObj[y, x];
             }
         }
 
