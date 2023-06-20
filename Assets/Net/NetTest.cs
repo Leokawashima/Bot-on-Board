@@ -1,24 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Net;
 using Unity.Netcode;
 using UnityEngine;
+using TMPro;
 
 public class NetTest : MonoBehaviour
 {
+
+    [SerializeField] TMP_InputField text;
+    
     public void Server()
     {
+        NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartServer();
+        text.text = GetLocalIPAddress();
     }
 
     public void Host()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
+        text.text = GetLocalIPAddress();
     }
 
     public void Client()
     {
+        var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        if(transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
+        {
+            // 接続先のIPアドレスとポートを指定
+            var ipAddress = text.text;
+            ushort port = 7777;
+            unityTransport.SetConnectionData(ipAddress, port);
+        }
         NetworkManager.Singleton.StartClient();
+    }
+
+    //ローカルIP
+    string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach(var ip in host.AddressList)
+        {
+            if(ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        return string.Empty;
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
