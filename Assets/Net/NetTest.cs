@@ -2,24 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
+using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using TMPro;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEditor.PackageManager;
 
 public class NetTest : MonoBehaviour
 {
     [SerializeField] TMP_InputField text;
     [SerializeField] uint maxUser = 4;
     [SerializeField] ushort port = 7777;
+    [Header("Build")]
     [SerializeField] bool roomBuildContinueFlag = false;
+    [SerializeField] IPAddress buildAddress = new IPAddress(new byte[4] { 127, 0, 0, 1});//IPAddress.Broadcast
     [SerializeField] int roomSendDelay = 5000;
+    [SerializeField] int roomSendTimeOut = 100;
+    [Header("Search")]
     [SerializeField] bool roomSearchContinueFlag = false;
+    [SerializeField] IPAddress SearchAdderess = new IPAddress(new byte[4] { 127, 0, 0, 1 });//IPAddress.Any
     [SerializeField] int roomCatchDelay = 5000;
     [SerializeField] int roomReceiveTimeOut = 100;
+    [Header("テキストフィールド")]
     [SerializeField] TextMeshProUGUI catchText;
-    UdpClient client;
+    [SerializeField] TextMeshProUGUI logText;
     
     public void Server()
     {
@@ -98,65 +106,71 @@ public class NetTest : MonoBehaviour
     public async void StartRoom()
     {
         if (roomBuildContinueFlag || roomSearchContinueFlag) return;
-        if (client != null) return;
 
         roomBuildContinueFlag = true;
-        //var buffer = Encoding.UTF8.GetBytes(GetLocalIPAddress());
 
-        var endP = new IPEndPoint(IPAddress.Broadcast, port);
+        var client = new UdpClient(port);
+        client.EnableBroadcast = true;
+        var endP = new IPEndPoint(buildAddress, port);
+        client.Connect(endP);
+        client.Client.SendTimeout = roomSendTimeOut;
 
+        var buffer = Encoding.UTF8.GetBytes(GetLocalIPAddress());
         //非同期処理にしてミリ秒単位区切りでループを回して、
         //一定期間ごとにBloadCastアドレスにルーム情報を送り続ける
         while (roomBuildContinueFlag)
         {
-            client = new UdpClient(port);
-            client.EnableBroadcast = true;
-            client.Connect(endP);
-            //udpClient.Client.SendTimeout = 5000; //sendにもタイムアウト機能を付与する
-            //client.Send(buffer, buffer.Length);
-            client.Close();
+            logText.text = "send started...";
+            await client.SendAsync(buffer, buffer.Length);
 
+            logText.text = "send completed... waiting for delay...";
             await Task.Delay(roomSendDelay);
         }
+
+        client.Close();
+        client.Dispose();
+        logText.text = "send stopped";
     }
 
     public async void GetRoom()
     {
         if (roomBuildContinueFlag || roomSearchContinueFlag) return;
-        if (client != null) return;
 
         roomSearchContinueFlag = true;
 
-        var remote = new IPEndPoint(IPAddress.Any, port);
+        var client = new UdpClient(port);
+        client.Client.ReceiveTimeout = roomReceiveTimeOut;
+        var remote = new IPEndPoint(SearchAdderess, port);
 
         while (roomSearchContinueFlag)
         {
             try
             {
-                client = new UdpClient(port);
-                client.Client.ReceiveTimeout = roomReceiveTimeOut;
+                
+                logText.text = "search started...";
                 //この処理は受信完了まで処理が停止する
-                client.Receive(ref remote);
-                catchText.text = remote.ToString();
+                var buffer = client.Receive(ref remote);
+                var data = Encoding.UTF8.GetString(buffer);
+                catchText.text = data;
+                roomSearchContinueFlag = false;
+                logText.text = "getting rooms";
             }
-            catch
+            catch (SocketException e)
             {
-                if (catchText.text == null)
-                {
-                    catchText.text = "NonCatchException";
-                }
+                logText.text = e.Message;
             }
 
+            logText.text = "search missing completed... waiting for delay";
             await Task.Delay(roomCatchDelay);
         }
 
-        //var buffer = client.Receive(ref remote);
-        //var data = Encoding.UTF8.GetString(buffer);
+        client.Close();
+        client.Dispose();
+        logText.text = "search stopped";
     }
 
     public void StopRoom()
     {
-        client = null;
         roomBuildContinueFlag = false;
         roomSearchContinueFlag = false;
     }
