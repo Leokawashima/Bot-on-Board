@@ -15,18 +15,21 @@ public class NetTest : MonoBehaviour
     [SerializeField] ushort port = 7777;
     [Header("Build")]
     [SerializeField] bool roomBuildContinueFlag = false;
+    [SerializeField] bool roomBuildEndFlag = false;
     [SerializeField] IPAddress buildAddress = IPAddress.Broadcast;//new IPAddress(new byte[4] { 127, 0, 0, 1})
     [SerializeField] int roomSendDelay = 5000;
     [SerializeField] int roomSendTimeOut = 1000;
     [Header("Search")]
     [SerializeField] bool roomSearchContinueFlag = false;
+    [SerializeField] bool roomSearchEndFlag = false;
     [SerializeField] IPAddress SearchAdderess = IPAddress.Any;//new IPAddress(new byte[4] { 127, 0, 0, 1 })
     [SerializeField] int roomCatchDelay = 5000;
     [SerializeField] int roomReceiveTimeOut = 500;
     [Header("テキストフィールド")]
     [SerializeField] TextMeshProUGUI catchText;
     [SerializeField] TextMeshProUGUI logText;
-    
+    [SerializeField] uint logSize = 20;
+    List<string> logStr = new List<string>();    
     public void Server()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
@@ -103,9 +106,10 @@ public class NetTest : MonoBehaviour
 
     public async void StartRoom()
     {
-        if (roomBuildContinueFlag || roomSearchContinueFlag) return;
+        if (!roomBuildEndFlag || !roomSearchEndFlag) return;
 
         roomBuildContinueFlag = true;
+        roomBuildEndFlag = false;
 
         var client = new UdpClient(port);
         client.EnableBroadcast = true;
@@ -117,23 +121,25 @@ public class NetTest : MonoBehaviour
 
         while (roomBuildContinueFlag)
         {
-            logText.text = "send started...";
+            LogPush("send started...");
             await client.SendAsync(buffer, buffer.Length);
 
-            logText.text = "send completed... waiting for delay...";
+            LogPush("send completed... waiting for delay...");
             await Task.Delay(roomSendDelay);
         }
 
         client.Close();
         client.Dispose();
-        logText.text = "send stopped";
+        roomBuildEndFlag = true;
+        LogPush("send stopped");
     }
 
     public async void GetRoom()
     {
-        if (roomBuildContinueFlag || roomSearchContinueFlag) return;
+        if (!roomBuildEndFlag || !roomSearchEndFlag) return;
 
         roomSearchContinueFlag = true;
+        roomSearchEndFlag = false;
 
         var client = new UdpClient(port);
         client.EnableBroadcast = true;
@@ -144,28 +150,48 @@ public class NetTest : MonoBehaviour
         {
             try
             {
-                logText.text = "search started...";
+                LogPush("search started...");
                 var buffer = client.Receive(ref endP);//この処理は受信完了まで処理が停止する
                 var data = Encoding.UTF8.GetString(buffer);
                 catchText.text = data;
                 roomSearchContinueFlag = false;
-                logText.text = "getting rooms";
+                LogPush("getting rooms");
             }
-            catch (SocketException e)
-            {   logText.text = e.Message;   }
+            catch (SocketException)
+            {
+                LogPush("Error : SocketException");
+            }
 
-            logText.text = "search completed... waiting for delay";
+            LogPush("search completed... waiting for delay");
             await Task.Delay(roomCatchDelay);
         }
 
         client.Close();
         client.Dispose();
-        logText.text = "search stopped";
+        roomSearchEndFlag = true;
+        LogPush("search stopped");
     }
 
     public void StopRoom()
     {
+        LogPush("require room stop");
         roomBuildContinueFlag = false;
         roomSearchContinueFlag = false;
+    }
+
+    void LogPush(string msg)
+    {
+        if (logStr.Count == logSize)
+        {
+            logStr.RemoveAt(0);
+        }
+        logStr.Add(msg);
+
+        logText.text = null;
+        foreach (var item in logStr)
+        {
+            logText.text += item;
+            logText.text += "\n";
+        }
     }
 }
