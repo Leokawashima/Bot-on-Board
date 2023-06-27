@@ -38,6 +38,7 @@ public class Move : NetworkBehaviour
     {
         var velocity = Vector3.zero;
         velocity.x = m_moveSpeed * m_moveInput.normalized.x;
+        velocity.y = m_rigidBody.velocity.y;
         velocity.z = m_moveSpeed * m_moveInput.normalized.y;
         m_rigidBody.velocity = velocity;
     }

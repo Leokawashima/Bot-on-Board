@@ -372,10 +372,10 @@ MonoBehaviour:
   port: 7777
   roomBuildContinueFlag: 0
   roomSendDelay: 5000
-  roomSendTimeOut: 100
+  roomSendTimeOut: 1000
   roomSearchContinueFlag: 0
   roomCatchDelay: 5000
-  roomReceiveTimeOut: 100
+  roomReceiveTimeOut: 500
   catchText: {fileID: 957690585}
   logText: {fileID: 926818778}
 --- !u!114 &124432314
@@ -410,9 +410,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 800, y: 450}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -936,7 +936,7 @@ MonoBehaviour:
     NetworkTransport: {fileID: 532395312}
     PlayerPrefab: {fileID: 6896535287194777904, guid: feaf6c12d37f4f745b31beb7f4151bb2, type: 3}
     NetworkPrefabs: []
-    TickRate: 60
+    TickRate: 1
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
     ConnectionData: 

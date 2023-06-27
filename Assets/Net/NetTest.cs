@@ -7,8 +7,6 @@ using Unity.Netcode;
 using UnityEngine;
 using TMPro;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using UnityEditor.PackageManager;
 
 public class NetTest : MonoBehaviour
 {
@@ -17,14 +15,14 @@ public class NetTest : MonoBehaviour
     [SerializeField] ushort port = 7777;
     [Header("Build")]
     [SerializeField] bool roomBuildContinueFlag = false;
-    [SerializeField] IPAddress buildAddress = new IPAddress(new byte[4] { 127, 0, 0, 1});//IPAddress.Broadcast
+    [SerializeField] IPAddress buildAddress = IPAddress.Broadcast;//new IPAddress(new byte[4] { 127, 0, 0, 1})
     [SerializeField] int roomSendDelay = 5000;
-    [SerializeField] int roomSendTimeOut = 100;
+    [SerializeField] int roomSendTimeOut = 1000;
     [Header("Search")]
     [SerializeField] bool roomSearchContinueFlag = false;
-    [SerializeField] IPAddress SearchAdderess = new IPAddress(new byte[4] { 127, 0, 0, 1 });//IPAddress.Any
+    [SerializeField] IPAddress SearchAdderess = IPAddress.Any;//new IPAddress(new byte[4] { 127, 0, 0, 1 })
     [SerializeField] int roomCatchDelay = 5000;
-    [SerializeField] int roomReceiveTimeOut = 100;
+    [SerializeField] int roomReceiveTimeOut = 500;
     [Header("テキストフィールド")]
     [SerializeField] TextMeshProUGUI catchText;
     [SerializeField] TextMeshProUGUI logText;
@@ -111,13 +109,12 @@ public class NetTest : MonoBehaviour
 
         var client = new UdpClient(port);
         client.EnableBroadcast = true;
+        client.Client.SendTimeout = roomSendTimeOut;
         var endP = new IPEndPoint(buildAddress, port);
         client.Connect(endP);
-        client.Client.SendTimeout = roomSendTimeOut;
-
+        
         var buffer = Encoding.UTF8.GetBytes(GetLocalIPAddress());
-        //非同期処理にしてミリ秒単位区切りでループを回して、
-        //一定期間ごとにBloadCastアドレスにルーム情報を送り続ける
+
         while (roomBuildContinueFlag)
         {
             logText.text = "send started...";
@@ -139,28 +136,25 @@ public class NetTest : MonoBehaviour
         roomSearchContinueFlag = true;
 
         var client = new UdpClient(port);
+        client.EnableBroadcast = true;
         client.Client.ReceiveTimeout = roomReceiveTimeOut;
-        var remote = new IPEndPoint(SearchAdderess, port);
+        var endP = new IPEndPoint(SearchAdderess, port);
 
         while (roomSearchContinueFlag)
         {
             try
             {
-                
                 logText.text = "search started...";
-                //この処理は受信完了まで処理が停止する
-                var buffer = client.Receive(ref remote);
+                var buffer = client.Receive(ref endP);//この処理は受信完了まで処理が停止する
                 var data = Encoding.UTF8.GetString(buffer);
                 catchText.text = data;
                 roomSearchContinueFlag = false;
                 logText.text = "getting rooms";
             }
             catch (SocketException e)
-            {
-                logText.text = e.Message;
-            }
+            {   logText.text = e.Message;   }
 
-            logText.text = "search missing completed... waiting for delay";
+            logText.text = "search completed... waiting for delay";
             await Task.Delay(roomCatchDelay);
         }
 
