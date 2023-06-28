@@ -148,11 +148,11 @@ public class NetTest : MonoBehaviour
             }
             catch (SocketException)
             {
-                LogPush("search missing");
+                LogPush("search missing... waiting for delay");
+                await Task.Delay(roomCatchDelay);
             }
 
-            LogPush("search completed... waiting for delay");
-            await Task.Delay(roomCatchDelay);
+            
         }
 
         client.Close();
