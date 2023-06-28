@@ -15,21 +15,22 @@ public class NetTest : MonoBehaviour
     [SerializeField] ushort port = 7777;
     [Header("Build")]
     [SerializeField] bool roomBuildContinueFlag = false;
-    [SerializeField] bool roomBuildEndFlag = false;
+    [SerializeField] bool roomBuildEndFlag = true;
     [SerializeField] IPAddress buildAddress = IPAddress.Broadcast;//new IPAddress(new byte[4] { 127, 0, 0, 1})
     [SerializeField] int roomSendDelay = 5000;
     [SerializeField] int roomSendTimeOut = 1000;
     [Header("Search")]
     [SerializeField] bool roomSearchContinueFlag = false;
-    [SerializeField] bool roomSearchEndFlag = false;
+    [SerializeField] bool roomSearchEndFlag = true;
     [SerializeField] IPAddress SearchAdderess = IPAddress.Any;//new IPAddress(new byte[4] { 127, 0, 0, 1 })
     [SerializeField] int roomCatchDelay = 5000;
     [SerializeField] int roomReceiveTimeOut = 500;
-    [Header("テキストフィールド")]
+    [Header("TextField")]
     [SerializeField] TextMeshProUGUI catchText;
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logSize = 20;
-    List<string> logStr = new List<string>();    
+    List<string> logStr = new List<string>();
+
     public void Server()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
@@ -63,9 +64,7 @@ public class NetTest : MonoBehaviour
         foreach(var ip in host.AddressList)
         {
             if(ip.AddressFamily == AddressFamily.InterNetwork)
-            {
                 return ip.ToString();
-            }
         }
         return string.Empty;
     }
