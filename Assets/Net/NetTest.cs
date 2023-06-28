@@ -10,41 +10,42 @@ using System.Threading.Tasks;
 
 public class NetTest : MonoBehaviour
 {
+    #region valiables
     [SerializeField] TMP_InputField text;
     [SerializeField] uint maxUser = 4;
     [SerializeField] ushort port = 7777;
     [Header("Build")]
     [SerializeField] bool roomBuildContinueFlag = false;
     [SerializeField] bool roomBuildEndFlag = true;
-    [SerializeField] IPAddress buildAddress = IPAddress.Broadcast;//new IPAddress(new byte[4] { 127, 0, 0, 1})
-    [SerializeField] int roomSendDelay = 5000;
-    [SerializeField] int roomSendTimeOut = 1000;
+    [SerializeField] IPAddress buildAddress = IPAddress.Broadcast;
+    [SerializeField] int roomSendDelay = 1000;
+    [SerializeField] int roomSendTimeOut = 500;
     [Header("Search")]
     [SerializeField] bool roomSearchContinueFlag = false;
     [SerializeField] bool roomSearchEndFlag = true;
-    [SerializeField] IPAddress SearchAdderess = IPAddress.Any;//new IPAddress(new byte[4] { 127, 0, 0, 1 })
-    [SerializeField] int roomCatchDelay = 5000;
+    [SerializeField] IPAddress SearchAdderess = IPAddress.Any;
+    [SerializeField] int roomCatchDelay = 1000;
     [SerializeField] int roomReceiveTimeOut = 500;
     [Header("TextField")]
     [SerializeField] TextMeshProUGUI catchText;
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logSize = 20;
     List<string> logStr = new List<string>();
+    #endregion
 
+    #region NGOevent
     public void Server()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartServer();
         text.text = GetLocalIPAddress();
     }
-
     public void Host()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         text.text = GetLocalIPAddress();
     }
-
     public void Client()
     {
         var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
@@ -56,18 +57,7 @@ public class NetTest : MonoBehaviour
         }
         NetworkManager.Singleton.StartClient();
     }
-
-    //ÉçÅ[ÉJÉãIP
-    string GetLocalIPAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach(var ip in host.AddressList)
-        {
-            if(ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip.ToString();
-        }
-        return string.Empty;
-    }
+    #endregion
 
     void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
@@ -103,6 +93,7 @@ public class NetTest : MonoBehaviour
         response.Pending = false;
     }
 
+    #region RoomEvent
     public async void StartRoom()
     {
         if (!roomBuildEndFlag || !roomSearchEndFlag) return;
@@ -132,7 +123,6 @@ public class NetTest : MonoBehaviour
         roomBuildEndFlag = true;
         LogPush("send stopped");
     }
-
     public async void GetRoom()
     {
         if (!roomBuildEndFlag || !roomSearchEndFlag) return;
@@ -158,7 +148,7 @@ public class NetTest : MonoBehaviour
             }
             catch (SocketException)
             {
-                LogPush("Error : SocketException");
+                LogPush("search missing");
             }
 
             LogPush("search completed... waiting for delay");
@@ -170,14 +160,25 @@ public class NetTest : MonoBehaviour
         roomSearchEndFlag = true;
         LogPush("search stopped");
     }
-
     public void StopRoom()
     {
         LogPush("require room stop");
         roomBuildContinueFlag = false;
         roomSearchContinueFlag = false;
     }
+    #endregion
 
+    #region functions
+    string GetLocalIPAddress()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+                return ip.ToString();
+        }
+        return string.Empty;
+    }
     void LogPush(string msg)
     {
         if (logStr.Count == logSize)
@@ -193,4 +194,5 @@ public class NetTest : MonoBehaviour
             logText.text += "\n";
         }
     }
+    #endregion
 }

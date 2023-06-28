@@ -557,11 +557,11 @@ MonoBehaviour:
   port: 7777
   roomBuildContinueFlag: 0
   roomBuildEndFlag: 1
-  roomSendDelay: 5000
-  roomSendTimeOut: 1000
+  roomSendDelay: 1000
+  roomSendTimeOut: 500
   roomSearchContinueFlag: 0
   roomSearchEndFlag: 1
-  roomCatchDelay: 5000
+  roomCatchDelay: 1000
   roomReceiveTimeOut: 500
   catchText: {fileID: 957690585}
   logText: {fileID: 160784377}
