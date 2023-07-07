@@ -8,36 +8,28 @@ using UnityEngine.Networking;
 
 public class ChatGPTConnection
 {
-    private readonly string _apiKey;
-    //会話履歴を保持するリスト
-    private readonly List<ChatGPTMessageModel> _messageList = new();
-
-    public readonly string _content;
-
-    public ChatGPTConnection(string apiKey, string content)
-    {
-        _apiKey = apiKey;
-        _content = content;
-        _messageList.Add(
-            new ChatGPTMessageModel() { role = "system", content = content });
-    }
-
-    public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage)
-    {
-        //文章生成AIのAPIのエンドポイントを設定
-        var apiUrl = "https://api.openai.com/v1/chat/completions";
-
-        _messageList.Add(new ChatGPTMessageModel { role = "user", content = userMessage });
-
-        //OpenAIのAPIリクエストに必要なヘッダー情報を設定
-        var headers = new Dictionary<string, string>
+    const string _apiUrl = "https://api.openai.com/v1/chat/completions";
+    readonly string _apiKey;
+    readonly List<ChatGPTMessageModel> _messageList;
+    Dictionary<string, string> _headers { get{
+            return new Dictionary<string, string>
             {
                 {"Authorization", "Bearer " + _apiKey},
                 {"Content-type", "application/json"},
                 {"X-Slack-No-Retry", "1"}
-            };
+            };}
+    }
 
-        //文章生成で利用するモデルやトークン上限、プロンプトをオプションに設定
+    public ChatGPTConnection(string apiKey, string content)
+    {
+        _apiKey = apiKey;
+        _messageList = new List<ChatGPTMessageModel>() { new ChatGPTMessageModel() { role = "system", content = content } };
+    }
+
+    public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage)
+    {
+        _messageList.Add(new ChatGPTMessageModel { role = "user", content = userMessage });
+
         var options = new ChatGPTCompletionRequestModel()
         {
             model = "gpt-3.5-turbo",
@@ -47,22 +39,20 @@ public class ChatGPTConnection
 
         Debug.Log("自分:" + userMessage);
 
-        //OpenAIの文章生成(Completion)にAPIリクエストを送り、結果を変数に格納
-        using var request = new UnityWebRequest(apiUrl, "POST")
+        using var request = new UnityWebRequest(_apiUrl, "POST")
         {
             uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonOptions)),
             downloadHandler = new DownloadHandlerBuffer()
         };
 
-        foreach(var header in headers)
+        foreach(var header in _headers)
         {
             request.SetRequestHeader(header.Key, header.Value);
         }
 
         await request.SendWebRequest();
 
-        if(request.result == UnityWebRequest.Result.ConnectionError ||
-            request.result == UnityWebRequest.Result.ProtocolError)
+        if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.LogError(request.error);
             throw new Exception();
@@ -72,41 +62,55 @@ public class ChatGPTConnection
             var responseString = request.downloadHandler.text;
             var responseObject = JsonUtility.FromJson<ChatGPTResponseModel>(responseString);
 
-            //文字列抜き出しパターン
-            string pattern = @"\d+";
             //元の文字列
             Debug.Log("<color=red>ChatGPT:" + responseObject.choices[0].message.content + "</color>");
-            //文字列配列として数字のみを記録
-            MatchCollection match = Regex.Matches(responseObject.choices[0].message.content, pattern);
-            //文字配列を区切り文字指定で連結して一つの文字列に
-            string result = string.Join(",", match);
-            //正規化された文字列を出力
-            Debug.Log("<color=yellow>ChatGPT:" + result + "</color>");
+            //数字に正規化された文字列
+            Debug.Log("<color=yellow>ChatGPT:" + StrNomalizeToNumber(responseObject.choices[0].message.content) + "</color>");
 
             _messageList.Add(responseObject.choices[0].message);
             return responseObject;
         }
+
+        string StrNomalizeToNumber(string str)
+        {
+            //数字のみに正規化するパターン(詳しくはggr)
+            string pattern = @"\d+";
+            //数字のみを抜き出した文字配列として返す　実質string[]
+            MatchCollection match = Regex.Matches(str, pattern);
+            //数字の間にいれる接続文字
+            string conection = ",";
+            //単体の文字列型に直して返す
+            return string.Join(conection, match);
+        }
     }
 }
 
+#region ChatGPT Models
+/// <summary>
+/// メッセージ一回単位の構造体
+/// </summary>
 [Serializable]
-public class ChatGPTMessageModel
+public struct ChatGPTMessageModel
 {
     public string role;
     public string content;
 }
 
-//ChatGPT APIにRequestを送るためのJSON用クラス
+/// <summary>
+/// リクエスト送信用の構造体
+/// </summary>
 [Serializable]
-public class ChatGPTCompletionRequestModel
+public struct ChatGPTCompletionRequestModel
 {
     public string model;
     public List<ChatGPTMessageModel> messages;
 }
 
-//ChatGPT APIからのResponseを受け取るためのクラス
-[System.Serializable]
-public class ChatGPTResponseModel
+/// <summary>
+/// レスポンスを受け取るための構造体
+/// </summary>
+[Serializable]
+public struct ChatGPTResponseModel
 {
     public string id;
     public string @object;
@@ -114,19 +118,26 @@ public class ChatGPTResponseModel
     public Choice[] choices;
     public Usage usage;
 
-    [System.Serializable]
-    public class Choice
+    /// <summary>
+    /// レスポンスの文字列構造体
+    /// </summary>
+    [Serializable]
+    public struct Choice
     {
         public int index;
         public ChatGPTMessageModel message;
         public string finish_reason;
     }
 
-    [System.Serializable]
-    public class Usage
+    /// <summary>
+    /// トークン使用量の構造体
+    /// </summary>
+    [Serializable]
+    public struct Usage
     {
         public int prompt_tokens;
         public int completion_tokens;
         public int total_tokens;
     }
 }
+#endregion
