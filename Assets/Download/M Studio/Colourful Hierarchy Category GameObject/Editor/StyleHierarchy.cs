@@ -1,10 +1,10 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
-//‚±‚¿‚ç‚ÌƒTƒCƒg‚ğQl‚ÉƒCƒ“ƒ|[ƒg‚µ‚½
+//ã“ã¡ã‚‰ã®ã‚µã‚¤ãƒˆã‚’å‚è€ƒã«ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ãŸ
 //https://umistudioblog.com/%E3%80%90unity%E3%80%91hierarchy-%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E8%89%B2%E5%88%86%E3%81%91%E3%81%97%E3%81%A6%E8%A6%8B%E3%82%84%E3%81%99%E3%81%8F%E3%81%97%E3%81%9F%E3%81%84%E3%80%90%E7%84%A1/
-//Key•¶š‚ğÁ‹‚·‚éd‘g‚İ‚â•K‚¸ToUpper‚Å‘å•¶š‚É‚·‚éd‘g‚İ‚È‚ÇáŠ±æ‚è‰ñ‚µ‚ªˆ«‚¢‚Ì‚ÅŒÂl“I‚É‰ü•Ï‚µ‚Ä‚¢‚é
-//‹ï‘Ì“I‚É‚Í45s–Ú‚Æ50s–Ú‚Æ71s–Ú
+//Keyæ–‡å­—ã‚’æ¶ˆå»ã™ã‚‹ä»•çµ„ã¿ã‚„å¿…ãšToUpperã§å¤§æ–‡å­—ã«ã™ã‚‹ä»•çµ„ã¿ãªã©è‹¥å¹²å–ã‚Šå›ã—ãŒæ‚ªã„ã®ã§å€‹äººçš„ã«æ”¹å¤‰ã—ã¦ã„ã‚‹
+//å…·ä½“çš„ã«ã¯45è¡Œç›®ã¨50è¡Œç›®ã¨71è¡Œç›®
 namespace MStudio
 {
     [InitializeOnLoad]
@@ -42,12 +42,12 @@ namespace MStudio
                     var design = colorPalette.colorDesigns[i];
 
                     //Check if the name of each gameObject is begin with keyChar in colorDesigns list.
-                    #region ‰ü•Ï‰ÓŠ
-                    //instance.name.StartsWith(design.keyChar)‚©‚ç–¼‘O‚ªˆê’v‚·‚é‚à‚Ì‚É•ÏX
+                    #region æ”¹å¤‰ç®‡æ‰€
+                    //instance.name.StartsWith(design.keyChar)ã‹ã‚‰åå‰ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ã«å¤‰æ›´
                     if(instance.name == design.keyChar)
                     #endregion
                     {
-                        #region ‰ü•Ï‰ÓŠ
+                        #region æ”¹å¤‰ç®‡æ‰€
                         //Remove the symbol(keyChar) from the name.
                         string newName = instance.name;
                         //newName = newName.Substring(design.keyChar.Length);
@@ -68,7 +68,7 @@ namespace MStudio
                             }
                         };
 
-                        #region ‰ü•Ï‰ÓŠ
+                        #region æ”¹å¤‰ç®‡æ‰€
                         //Draw a label to show the name in upper letters and newStyle.
                         //If you don't like all capital latter, you can remove ".ToUpper()".
                         EditorGUI.LabelField(selectionRect, newName, newStyle);
