@@ -6,13 +6,15 @@ using System.Text;
 using UnityEngine;
 using TMPro;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Roomの接続処理を賄うクラス
 /// </summary>
 public class RoomManager : MonoBehaviour
 {
-
     [Header("UI")]
     [SerializeField] GameObject selectUI;
     [SerializeField] GameObject hostUI;
@@ -31,7 +33,7 @@ public class RoomManager : MonoBehaviour
     enum State { Non, Host, Client }
     State state;
 
-    UdpClient client;
+    static UdpClient client;
 
     IPAddress buildAddress = IPAddress.Broadcast;
     IPAddress searchAdderess = IPAddress.Any;
@@ -79,7 +81,6 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        client.Close();
         client.Dispose();
         state = State.Non;
     }
@@ -117,13 +118,11 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        client.Close();
         client.Dispose();
         state = State.Non;
     }
     public void Room_Quit()
     {
-        client.Close();
         client.Dispose();
         state = State.Non;
 
@@ -148,27 +147,42 @@ public class RoomManager : MonoBehaviour
     string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
+        foreach(var ip in host.AddressList)
         {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            if(ip.AddressFamily == AddressFamily.InterNetwork)
                 return ip.ToString();
         }
         return string.Empty;
     }
     void LogPush(string msg_)
     {
-        if (logStr.Count == logMax)
+        if(logStr.Count == logMax)
         {
             logStr.RemoveAt(0);
         }
         logStr.Add(msg_);
 
         logText.text = null;
-        foreach (var item in logStr)
+        foreach(var item in logStr)
         {
             logText.text += item;
             logText.text += "\n";
         }
     }
     #endregion
+
+#if UNITY_EDITOR
+    [InitializeOnLoadMethod]
+    static void Initialize()
+    {
+        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+    }
+    static void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+        if(state == PlayModeStateChange.ExitingPlayMode)
+        {
+            client?.Dispose();
+        }
+    }
+#endif
 }
