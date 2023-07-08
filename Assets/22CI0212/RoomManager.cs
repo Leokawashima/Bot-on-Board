@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
@@ -21,31 +22,15 @@ public class RoomManager : MonoBehaviour
     [SerializeField] bool roomEndComplete = true;
     [SerializeField] ushort roomPort = 3939;
     [SerializeField] int roomSendDelay = 1000;
-    [SerializeField] int roomSendTimeOut = 100;
     [SerializeField] int roomReceiveDelay = 1000;
-    [SerializeField] int roomReceiveTimeOut = 100;
+    [SerializeField] int roomTimeOut = 100;
     [Header("TextField")]
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logMax = 20;
     List<string> logStr = new List<string>();
 
-    UdpClient udpObject;
-
     IPAddress buildAddress = IPAddress.Broadcast;
     IPAddress searchAdderess = IPAddress.Any;
-
-    void OnEnable()
-    {
-        udpObject = new UdpClient(roomPort);
-        udpObject.EnableBroadcast = true;
-        udpObject.Client.SendTimeout = roomSendTimeOut;
-        udpObject.Client.ReceiveTimeout = roomReceiveTimeOut;
-    }
-    void OnDisable()
-    {
-        udpObject.Close();
-        udpObject.Dispose();
-    }
 
     void Start()
     {
@@ -69,9 +54,14 @@ public class RoomManager : MonoBehaviour
         while(roomEndComplete == false)
         {
             LogPush("Wait for Conect Complete");
-            await Task.Delay(500);
+            await Task.Delay(roomTimeOut);
         }
 
+        roomEndComplete = false;
+
+        var client = new UdpClient(roomPort);
+        client.EnableBroadcast = true;
+        client.Client.SendTimeout = roomTimeOut;
         var endP = new IPEndPoint(buildAddress, roomPort);
 
         var buffer = Encoding.UTF8.GetBytes(GetLocalIPAddress());
@@ -82,16 +72,19 @@ public class RoomManager : MonoBehaviour
         {
             try
             {
-                await udpObject.SendAsync(buffer, buffer.Length, endP);
+                await client.SendAsync(buffer, buffer.Length, endP);
 
                 await Task.Delay(roomSendDelay);
             }
-            catch(System.ObjectDisposedException)
+            catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
                 roomEndOrder = true;
             }
         }
+
+        client.Close();
+        client.Dispose();
 
         roomEndComplete = true;
     }
@@ -109,6 +102,11 @@ public class RoomManager : MonoBehaviour
             await Task.Delay(500);
         }
 
+        roomEndComplete = false;
+
+        var client = new UdpClient(roomPort);
+        client.EnableBroadcast = true;
+        client.Client.ReceiveTimeout = roomTimeOut;
         var endP = new IPEndPoint(searchAdderess, roomPort);
 
         LogPush("Client Started");
@@ -117,21 +115,25 @@ public class RoomManager : MonoBehaviour
         {
             try
             {
-                var buffer = udpObject.Receive(ref endP);
+                var buffer = client.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
                 roomEndOrder = true;
                 LogPush("Get Host IP : " + data);
+                LogPush("Client Completed");
             }
-            catch (SocketException)
+            catch(SocketException)
             {
                 await Task.Delay(roomReceiveDelay);
             }
-            catch (System.ObjectDisposedException)
+            catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
                 roomEndOrder = true;
             }
         }
+
+        client.Close();
+        client.Dispose();
 
         roomEndComplete = true;
     }
@@ -166,13 +168,13 @@ public class RoomManager : MonoBehaviour
         }
         return string.Empty;
     }
-    void LogPush(string msg)
+    void LogPush(string msg_)
     {
         if (logStr.Count == logMax)
         {
             logStr.RemoveAt(0);
         }
-        logStr.Add(msg);
+        logStr.Add(msg_);
 
         logText.text = null;
         foreach (var item in logStr)
