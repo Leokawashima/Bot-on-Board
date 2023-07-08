@@ -110,9 +110,8 @@ public class RoomManager : MonoBehaviour
                 var buffer = client.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
                 var str = CatchRoomData(data);
-                LogPush("Get Host IP : " + str[0]);
-                LogPush("Passward : " + str[1]);
-                LogPush("Option : " + str[2]);
+                roomList.SetRoomInfo(str);
+                conectState = ConectionState.Non;
             }
             catch(SocketException)
             {
