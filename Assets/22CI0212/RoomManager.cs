@@ -60,7 +60,7 @@ public class RoomManager : MonoBehaviour
         client = MakeUdp(roomPort, roomTimeOut);
         var endP = buildEndP;
 
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), "Test"));
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), 2525, "Test"));
 
         LogPush("Host Started");
 
@@ -102,7 +102,9 @@ public class RoomManager : MonoBehaviour
                 var buffer = client.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
                 var str = CatchRoomData(data);
-                LogPush("Get Host IP : " + str);
+                LogPush("Get Host IP : " + str[0]);
+                LogPush("Passward : " + str[1]);
+                LogPush("Option : " + str[2]);
             }
             catch(SocketException)
             {
@@ -149,14 +151,19 @@ public class RoomManager : MonoBehaviour
         client.Client.ReceiveTimeout = timeOut_;
         return client;
     }
-    string GetRoomData(string address_, string option_)
+    string GetRoomData(string address_, ushort passward_, string option_)
     {
-        return address_ + "_" + option_;
+        return address_ + "_" + passward_.ToString() + "_" + option_;
     }
-    string CatchRoomData(string buffer_)
+    string[] CatchRoomData(string buffer_)
     {
-        var address = buffer_.Substring('_');
-        return address;
+        //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
+        var data = new string[3];
+        data[0] = buffer_.Substring(0, buffer_.IndexOf("_"));//address
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//passward
+        data[2] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
+        return data;
     }
     string GetLocalIPAddress()
     {
@@ -193,6 +200,7 @@ public class RoomManager : MonoBehaviour
     }
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         if(state == PlayModeStateChange.ExitingPlayMode)
         {
             client?.Dispose();
