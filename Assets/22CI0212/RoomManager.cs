@@ -35,8 +35,8 @@ public class RoomManager : MonoBehaviour
 
     static UdpClient client;
 
-    IPAddress buildAddress = IPAddress.Broadcast;
-    IPAddress searchAdderess = IPAddress.Any;
+    IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, roomPort); } }
+    IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, roomPort); } }
 
     void Start()
     {
@@ -57,12 +57,10 @@ public class RoomManager : MonoBehaviour
 
         state = State.Host;
 
-        client = new UdpClient(roomPort);
-        client.EnableBroadcast = true;
-        client.Client.SendTimeout = roomTimeOut;
-        var endP = new IPEndPoint(buildAddress, roomPort);
+        client = MakeUdp(roomPort, roomTimeOut);
+        var endP = buildEndP;
 
-        var buffer = Encoding.UTF8.GetBytes(GetLocalIPAddress());
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), "Test"));
 
         LogPush("Host Started");
 
@@ -92,10 +90,8 @@ public class RoomManager : MonoBehaviour
 
         state = State.Client;
 
-        client = new UdpClient(roomPort);
-        client.EnableBroadcast = true;
-        client.Client.ReceiveTimeout = roomTimeOut;
-        var endP = new IPEndPoint(searchAdderess, roomPort);
+        client = MakeUdp(roomPort, roomTimeOut);
+        var endP = searchEndP;
 
         LogPush("Client Started");
 
@@ -105,7 +101,8 @@ public class RoomManager : MonoBehaviour
             {
                 var buffer = client.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
-                LogPush("Get Host IP : " + data);
+                var str = CatchRoomData(data);
+                LogPush("Get Host IP : " + str);
             }
             catch(SocketException)
             {
@@ -144,6 +141,23 @@ public class RoomManager : MonoBehaviour
     }
 
     #region functions
+    UdpClient MakeUdp(ushort port_, int timeOut_)
+    {
+        var client = new UdpClient(port_);
+        client.EnableBroadcast = true;
+        client.Client.SendTimeout = timeOut_;
+        client.Client.ReceiveTimeout = timeOut_;
+        return client;
+    }
+    string GetRoomData(string address_, string option_)
+    {
+        return address_ + "_" + option_;
+    }
+    string CatchRoomData(string buffer_)
+    {
+        var address = buffer_.Substring('_');
+        return address;
+    }
     string GetLocalIPAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());

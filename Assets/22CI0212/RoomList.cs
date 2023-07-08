@@ -11,14 +11,13 @@ public class RoomList : MonoBehaviour
     RectTransform rect;
 
     [Header("List")]
+    [SerializeField] Transform scrollContent;
     [SerializeField] GameObject memberPrefab;
     [SerializeField] uint people = 2;
-    [SerializeField] Vector2 startPos = new Vector2(-620, 200);
+    [SerializeField] Vector2 startPos = new Vector2(-320, 240);
     [SerializeField] Vector2 offsetPos = new Vector2(0, -110);
-    [Header("Log")]
-    [SerializeField] TextMeshProUGUI logText;
 
-    void MomberCreate()
+    void Start()
     {
         rect = transform as RectTransform;
         Vector3 start = startPos * transform.lossyScale;
@@ -27,7 +26,10 @@ public class RoomList : MonoBehaviour
         for (int i = 0; i < people; ++i)
         {
             var pos = rect.position + start + offset * i;
-            Instantiate(memberPrefab, pos, Quaternion.identity, transform);
+            var ui = Instantiate(memberPrefab, pos, Quaternion.identity, scrollContent);
+            var info = ui.GetComponent<RoomInfo>();
+            info.roomName.text = "Test";
+            info.roomOption.text = "TestOptions";
         }
     }
 }
