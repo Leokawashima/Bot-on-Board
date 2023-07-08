@@ -1,20 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
-/// Room‚ÌÚ‘±ƒŠƒXƒg‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/// Roomã®æ¥ç¶šãƒªã‚¹ãƒˆã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class RoomList : MonoBehaviour
 {
     RectTransform rect;
 
+    [Header("List")]
     [SerializeField] GameObject memberPrefab;
     [SerializeField] uint people = 2;
     [SerializeField] Vector2 startPos = new Vector2(-620, 200);
     [SerializeField] Vector2 offsetPos = new Vector2(0, -110);
+    [Header("Log")]
+    [SerializeField] TextMeshProUGUI logText;
 
-    void Start()
+    void MomberCreate()
     {
         rect = transform as RectTransform;
         Vector3 start = startPos * transform.lossyScale;
