@@ -12,14 +12,13 @@ using System.Threading.Tasks;
 /// </summary>
 public class RoomManager : MonoBehaviour
 {
+
     [Header("UI")]
     [SerializeField] GameObject selectUI;
     [SerializeField] GameObject hostUI;
     [SerializeField] GameObject clientUI;
     [SerializeField] GameObject listUI;
     [Header("RoomSetting")]
-    [SerializeField] bool roomEndOrder = true;
-    [SerializeField] bool roomEndComplete = true;
     [SerializeField] ushort roomPort = 3939;
     [SerializeField] int roomSendDelay = 1000;
     [SerializeField] int roomReceiveDelay = 1000;
@@ -28,6 +27,11 @@ public class RoomManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logMax = 20;
     List<string> logStr = new List<string>();
+
+    enum State { Non, Host, Client }
+    State state;
+
+    UdpClient client;
 
     IPAddress buildAddress = IPAddress.Broadcast;
     IPAddress searchAdderess = IPAddress.Any;
@@ -45,21 +49,13 @@ public class RoomManager : MonoBehaviour
 
     public async void Room_Host()
     {
-        roomEndOrder = false;
-
         selectUI.SetActive(false);
         hostUI.SetActive(true);
         listUI.SetActive(true);
 
-        while(roomEndComplete == false)
-        {
-            LogPush("Wait for Conect Complete");
-            await Task.Delay(roomTimeOut);
-        }
+        state = State.Host;
 
-        roomEndComplete = false;
-
-        var client = new UdpClient(roomPort);
+        client = new UdpClient(roomPort);
         client.EnableBroadcast = true;
         client.Client.SendTimeout = roomTimeOut;
         var endP = new IPEndPoint(buildAddress, roomPort);
@@ -68,7 +64,7 @@ public class RoomManager : MonoBehaviour
 
         LogPush("Host Started");
 
-        while(roomEndOrder == false)
+        while(state == State.Host)
         {
             try
             {
@@ -79,47 +75,36 @@ public class RoomManager : MonoBehaviour
             catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
-                roomEndOrder = true;
+                state = State.Non;
             }
         }
 
         client.Close();
         client.Dispose();
-
-        roomEndComplete = true;
+        state = State.Non;
     }
     public async void Room_Client()
     {
-        roomEndOrder = false;
-
         selectUI.SetActive(false);
         clientUI.SetActive(true);
         listUI.SetActive(true);
 
-        while(roomEndComplete == false)
-        {
-            LogPush("Wait for Conect Complete");
-            await Task.Delay(500);
-        }
+        state = State.Client;
 
-        roomEndComplete = false;
-
-        var client = new UdpClient(roomPort);
+        client = new UdpClient(roomPort);
         client.EnableBroadcast = true;
         client.Client.ReceiveTimeout = roomTimeOut;
         var endP = new IPEndPoint(searchAdderess, roomPort);
 
         LogPush("Client Started");
 
-        while(roomEndOrder == false)
+        while(state == State.Client)
         {
             try
             {
                 var buffer = client.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
-                roomEndOrder = true;
                 LogPush("Get Host IP : " + data);
-                LogPush("Client Completed");
             }
             catch(SocketException)
             {
@@ -128,18 +113,20 @@ public class RoomManager : MonoBehaviour
             catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
-                roomEndOrder = true;
+                state = State.Non;
             }
         }
 
         client.Close();
         client.Dispose();
-
-        roomEndComplete = true;
+        state = State.Non;
     }
     public void Room_Quit()
     {
-        roomEndOrder = true;
+        client.Close();
+        client.Dispose();
+        state = State.Non;
+
         logText.text = string.Empty;
         logStr.Clear();
 
