@@ -6,5 +6,6 @@ using TMPro;
 public class RoomInfo : MonoBehaviour
 {
     public TextMeshProUGUI roomName;
+    public ushort roomPassward;
     public TextMeshProUGUI roomOption;
 }

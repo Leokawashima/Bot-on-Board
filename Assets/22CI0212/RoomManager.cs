@@ -15,6 +15,7 @@ using UnityEditor;
 /// </summary>
 public class RoomManager : MonoBehaviour
 {
+    #region Valiables
     [Header("UI")]
     [SerializeField] GameObject selectUI;
     [SerializeField] GameObject hostUI;
@@ -30,14 +31,17 @@ public class RoomManager : MonoBehaviour
     [SerializeField] uint logMax = 20;
     List<string> logStr = new List<string>();
 
-    enum State { Non, Host, Client }
-    State state;
+    enum ConectionState { Non, Host, Client }
+    ConectionState conectState;
 
     static UdpClient client;
+    RoomList roomList;
 
     IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, roomPort); } }
     IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, roomPort); } }
+    #endregion
 
+    #region UnityEvent
     void Start()
     {
         logText.text = string.Empty;
@@ -47,15 +51,19 @@ public class RoomManager : MonoBehaviour
         hostUI.SetActive(false);
         clientUI.SetActive(false);
         listUI.SetActive(false);
-    }
 
+        roomList = listUI.GetComponent<RoomList>();
+    }
+    #endregion
+
+    #region Room
     public async void Room_Host()
     {
         selectUI.SetActive(false);
         hostUI.SetActive(true);
         listUI.SetActive(true);
 
-        state = State.Host;
+        conectState = ConectionState.Host;
 
         client = MakeUdp(roomPort, roomTimeOut);
         var endP = buildEndP;
@@ -64,7 +72,7 @@ public class RoomManager : MonoBehaviour
 
         LogPush("Host Started");
 
-        while(state == State.Host)
+        while(conectState == ConectionState.Host)
         {
             try
             {
@@ -75,12 +83,12 @@ public class RoomManager : MonoBehaviour
             catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
-                state = State.Non;
+                conectState = ConectionState.Non;
             }
         }
 
         client.Dispose();
-        state = State.Non;
+        conectState = ConectionState.Non;
     }
     public async void Room_Client()
     {
@@ -88,14 +96,14 @@ public class RoomManager : MonoBehaviour
         clientUI.SetActive(true);
         listUI.SetActive(true);
 
-        state = State.Client;
+        conectState = ConectionState.Client;
 
         client = MakeUdp(roomPort, roomTimeOut);
         var endP = searchEndP;
 
         LogPush("Client Started");
 
-        while(state == State.Client)
+        while(conectState == ConectionState.Client)
         {
             try
             {
@@ -113,17 +121,17 @@ public class RoomManager : MonoBehaviour
             catch(ObjectDisposedException)
             {
                 LogPush("Error : Conection Disposed");
-                state = State.Non;
+                conectState = ConectionState.Non;
             }
         }
 
         client.Dispose();
-        state = State.Non;
+        conectState = ConectionState.Non;
     }
     public void Room_Quit()
     {
         client.Dispose();
-        state = State.Non;
+        conectState = ConectionState.Non;
 
         logText.text = string.Empty;
         logStr.Clear();
@@ -141,8 +149,9 @@ public class RoomManager : MonoBehaviour
     {
 
     }
+    #endregion
 
-    #region functions
+    #region Function
     UdpClient MakeUdp(ushort port_, int timeOut_)
     {
         var client = new UdpClient(port_);
@@ -192,6 +201,7 @@ public class RoomManager : MonoBehaviour
     }
     #endregion
 
+    #region Editor
 #if UNITY_EDITOR
     [InitializeOnLoadMethod]
     static void Initialize()
@@ -200,11 +210,11 @@ public class RoomManager : MonoBehaviour
     }
     static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         if(state == PlayModeStateChange.ExitingPlayMode)
         {
             client?.Dispose();
         }
     }
 #endif
+    #endregion
 }

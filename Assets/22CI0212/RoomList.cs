@@ -12,21 +12,24 @@ public class RoomList : MonoBehaviour
 
     [Header("List")]
     [SerializeField] Transform scrollContent;
-    [SerializeField] GameObject memberPrefab;
-    [SerializeField] uint people = 2;
+    [SerializeField] GameObject infoPrefab;
     [SerializeField] Vector2 startPos = new Vector2(-320, 240);
     [SerializeField] Vector2 offsetPos = new Vector2(0, -110);
+
+    Vector3 StartPos { get { return startPos * transform.lossyScale; } }
+    Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
 
     void Start()
     {
         rect = transform as RectTransform;
-        Vector3 start = startPos * transform.lossyScale;
-        Vector3 offset = offsetPos * transform.lossyScale;
+    }
 
-        for (int i = 0; i < people; ++i)
+    public void SetRoomInfo(string[] data_)
+    {
+        for(int i = 0; i < 2; ++i)
         {
-            var pos = rect.position + start + offset * i;
-            var ui = Instantiate(memberPrefab, pos, Quaternion.identity, scrollContent);
+            var pos = rect.position + StartPos + OffsetPos * i;
+            var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
             var info = ui.GetComponent<RoomInfo>();
             info.roomName.text = "Test";
             info.roomOption.text = "TestOptions";
