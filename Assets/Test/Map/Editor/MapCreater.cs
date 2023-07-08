@@ -24,7 +24,7 @@ public class MapCreater : EditorWindow
 
     [SerializeField] static Data_SO edit_SO;
 
-    [SerializeField] static string path = "Assets/Map/image";
+    [SerializeField] static string path = "Assets/Test/Map/image";
 
     [SerializeField] static int[,] editMap, editObj;
     [SerializeField] static Vector2Int
