@@ -10,21 +10,20 @@ public class RoomInfo : MonoBehaviour
 
     byte roomIndex;
     [SerializeField] TextMeshProUGUI roomName;
-    string roomPassward;
     [SerializeField] TextMeshProUGUI roomOption;
-
+    [SerializeField] GameObject roomPassImage;
 
     public void OnClickInfo()
     {
         roomList.SetSelectRoomInfo(this);
     }
 
-    public void InitializeRoomInfo(RoomList list_, byte index_, string name_, string pass_, string option_)
+    public void InitializeRoomInfo(RoomList list_, byte index_, string name_, bool passward_, string option_)
     {
         roomList = list_;
         roomIndex = index_;
         roomName.text = name_;
-        roomPassward = pass_;
         roomOption.text = option_;
+        roomPassImage.SetActive(passward_);
     }
 }

@@ -41,7 +41,7 @@ public class RoomList : MonoBehaviour
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
         var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
         var info = ui.GetComponent<RoomInfo>();
-        info.InitializeRoomInfo(this, (byte)rooms.Count, data[0], data[1], data[2]);
+        info.InitializeRoomInfo(this, (byte)rooms.Count, data[1], bool.Parse(data[2]), data[3]);
 
         addressList.Add(data[0]);
         rooms.Add(info);

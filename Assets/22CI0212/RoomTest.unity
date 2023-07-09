@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 303785983}
   - component: {fileID: 303785982}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: HostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 372112840}
   - component: {fileID: 372112839}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 50
-  m_CharacterLimit: 20
+  m_CharacterLimit: 14
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -2583,7 +2583,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 50
-  m_CharacterLimit: 20
+  m_CharacterLimit: 14
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -2673,7 +2673,7 @@ GameObject:
   - component: {fileID: 945117454}
   - component: {fileID: 945117453}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2887,7 +2887,7 @@ GameObject:
   - component: {fileID: 1022432503}
   - component: {fileID: 1022432502}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: BackText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3161,7 +3161,7 @@ GameObject:
   - component: {fileID: 1141583135}
   - component: {fileID: 1141583134}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Quit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5232,7 +5232,9 @@ MonoBehaviour:
   roomSendDelay: 1000
   roomReceiveDelay: 1000
   roomTimeOut: 100
+  nameText: {fileID: 4979503}
   optionText: {fileID: 1902029841}
+  passwardToggle: {fileID: 1698850674}
   passwardText: {fileID: 1557591038}
   logText: {fileID: 47807948}
   logMax: 20

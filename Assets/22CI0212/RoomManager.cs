@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 #if UNITY_EDITOR
@@ -28,7 +29,9 @@ public class RoomManager : MonoBehaviour
     [SerializeField] int roomReceiveDelay = 1000;
     [SerializeField] int roomTimeOut = 100;
     [Header("TextField")]
+    [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] TextMeshProUGUI optionText;
+    [SerializeField] Toggle passwardToggle;
     [SerializeField] TextMeshProUGUI passwardText;
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logMax = 20;
@@ -77,7 +80,7 @@ public class RoomManager : MonoBehaviour
         client = MakeUdp(roomPort, roomTimeOut);
         var endP = buildEndP;
 
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), passwardText.text, optionText.text));
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData(nameText.text, passwardToggle.isOn, optionText.text));
 
         LogPush("Host Started");
 
@@ -107,7 +110,6 @@ public class RoomManager : MonoBehaviour
         conectState = ConectionState.Client;
 
         client = MakeUdp(roomPort, roomTimeOut);
-        var endP = searchEndP;
 
         LogPush("Client Started");
 
@@ -115,10 +117,10 @@ public class RoomManager : MonoBehaviour
         {
             try
             {
+                var endP = searchEndP;
                 var buffer = client.Receive(ref endP);
-                LogPush(endP.Address.ToString());
                 var data = Encoding.UTF8.GetString(buffer);
-                var info = CatchRoomData(data);
+                var info = CatchRoomData(endP, data);
                 roomList.SetListRoomInfo(info);
             }
             catch(SocketException)
@@ -175,29 +177,20 @@ public class RoomManager : MonoBehaviour
         client.Client.ReceiveTimeout = timeOut_;
         return client;
     }
-    string GetRoomData(string address_, string passward_, string option_)
+    string GetRoomData(string name_, bool passward_, string option_)
     {
-        return address_ + "_" + passward_ + "_" + option_;
+        return name_ + "_" + passward_ + "_" + option_;
     }
-    string[] CatchRoomData(string buffer_)
+    string[] CatchRoomData(IPEndPoint endP_, string buffer_)
     {
         //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
-        var data = new string[3];
-        data[0] = buffer_.Substring(0, buffer_.IndexOf("_"));//address
+        var data = new string[4];
+        data[0] = endP_.Address.ToString();
+        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//name
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//passward
-        data[2] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
+        data[2] = buffer_.Substring(0, buffer_.IndexOf("_"));//passward
+        data[3] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
         return data;
-    }
-    string GetLocalIPAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach(var ip in host.AddressList)
-        {
-            if(ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip.ToString();
-        }
-        return string.Empty;
     }
     void LogPush(string msg_)
     {
@@ -230,13 +223,19 @@ public class RoomManager : MonoBehaviour
             client?.Dispose();
         }
     }
-    [ContextMenu("Test")]
+    [ContextMenu("Test/NonLock")]
     void SendTest()
     {
         var endP = buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), "2525", "hatune miku"));
-        for(int i = 0; i < 3; ++i)
-            client.SendAsync(buffer, buffer.Length, endP);
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData("TestSendRoom", false,  "hatune miku"));
+        client.SendAsync(buffer, buffer.Length, endP);
+    }
+    [ContextMenu("Test/Lock")]
+    void SendTestLocked()
+    {
+        var endP = buildEndP;
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData("TestSendRoom", true, "hatune miku"));
+        client.SendAsync(buffer, buffer.Length, endP);
     }
 #endif
     #endregion
