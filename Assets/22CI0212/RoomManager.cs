@@ -91,7 +91,6 @@ public class RoomManager : MonoBehaviour
             }
             catch(ObjectDisposedException)
             {
-                LogPush("Error : Conection Disposed");
                 conectState = ConectionState.Non;
             }
         }
@@ -128,7 +127,6 @@ public class RoomManager : MonoBehaviour
             }
             catch(ObjectDisposedException)
             {
-                LogPush("Error : Conection Disposed");
                 conectState = ConectionState.Non;
             }
         }
@@ -144,6 +142,14 @@ public class RoomManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
+        selectUI.SetActive(true);
+        makeRoomUI.SetActive(false);
+        hostUI.SetActive(false);
+        clientUI.SetActive(false);
+        listUI.SetActive(false);
+    }
+    public void Room_Back()
+    {
         selectUI.SetActive(true);
         makeRoomUI.SetActive(false);
         hostUI.SetActive(false);
