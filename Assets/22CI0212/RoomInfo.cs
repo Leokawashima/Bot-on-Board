@@ -6,15 +6,25 @@ using TMPro;
 
 public class RoomInfo : MonoBehaviour
 {
-    public byte roomIndex;
-    public TextMeshProUGUI roomName;
-    public ushort roomPassward;
-    public TextMeshProUGUI roomOption;
+    RoomList roomList;
 
-    [SerializeField] Image button;
+    byte roomIndex;
+    [SerializeField] TextMeshProUGUI roomName;
+    string roomPassward;
+    [SerializeField] TextMeshProUGUI roomOption;
+
 
     public void OnClickInfo()
     {
-        RoomList.singleton.SetSelectRoomInfo(this, button);
+        roomList.SetSelectRoomInfo(this);
+    }
+
+    public void InitializeRoomInfo(RoomList list_, byte index_, string name_, string pass_, string option_)
+    {
+        roomList = list_;
+        roomIndex = index_;
+        roomName.text = name_;
+        roomPassward = pass_;
+        roomOption.text = option_;
     }
 }

@@ -18,15 +18,18 @@ public class RoomManager : MonoBehaviour
     #region Valiables
     [Header("UI")]
     [SerializeField] GameObject selectUI;
+    [SerializeField] GameObject makeRoomUI;
+    [SerializeField] GameObject listUI;
     [SerializeField] GameObject hostUI;
     [SerializeField] GameObject clientUI;
-    [SerializeField] GameObject listUI;
     [Header("RoomSetting")]
     [SerializeField] ushort roomPort = 3939;
     [SerializeField] int roomSendDelay = 1000;
     [SerializeField] int roomReceiveDelay = 1000;
     [SerializeField] int roomTimeOut = 100;
     [Header("TextField")]
+    [SerializeField] TextMeshProUGUI optionText;
+    [SerializeField] TextMeshProUGUI passwardText;
     [SerializeField] TextMeshProUGUI logText;
     [SerializeField] uint logMax = 20;
     List<string> logStr = new List<string>();
@@ -48,6 +51,7 @@ public class RoomManager : MonoBehaviour
         logStr.Clear();
 
         selectUI.SetActive(true);
+        makeRoomUI.SetActive(false);
         hostUI.SetActive(false);
         clientUI.SetActive(false);
         listUI.SetActive(false);
@@ -57,6 +61,11 @@ public class RoomManager : MonoBehaviour
     #endregion
 
     #region Room
+    public void Room_MakeRoom()
+    {
+        selectUI.SetActive(false);
+        makeRoomUI.SetActive(true);
+    }
     public async void Room_Host()
     {
         selectUI.SetActive(false);
@@ -68,7 +77,7 @@ public class RoomManager : MonoBehaviour
         client = MakeUdp(roomPort, roomTimeOut);
         var endP = buildEndP;
 
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), 2525, "Test"));
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), passwardText.text, optionText.text));
 
         LogPush("Host Started");
 
@@ -108,10 +117,10 @@ public class RoomManager : MonoBehaviour
             try
             {
                 var buffer = client.Receive(ref endP);
+                LogPush(endP.Address.ToString());
                 var data = Encoding.UTF8.GetString(buffer);
-                var str = CatchRoomData(data);
-                roomList.SetRoomInfo(str);
-                conectState = ConectionState.Non;
+                var info = CatchRoomData(data);
+                roomList.SetListRoomInfo(info);
             }
             catch(SocketException)
             {
@@ -136,6 +145,7 @@ public class RoomManager : MonoBehaviour
         logStr.Clear();
 
         selectUI.SetActive(true);
+        makeRoomUI.SetActive(false);
         hostUI.SetActive(false);
         clientUI.SetActive(false);
         listUI.SetActive(false);
@@ -159,9 +169,9 @@ public class RoomManager : MonoBehaviour
         client.Client.ReceiveTimeout = timeOut_;
         return client;
     }
-    string GetRoomData(string address_, ushort passward_, string option_)
+    string GetRoomData(string address_, string passward_, string option_)
     {
-        return address_ + "_" + passward_.ToString() + "_" + option_;
+        return address_ + "_" + passward_ + "_" + option_;
     }
     string[] CatchRoomData(string buffer_)
     {
@@ -213,6 +223,14 @@ public class RoomManager : MonoBehaviour
         {
             client?.Dispose();
         }
+    }
+    [ContextMenu("Test")]
+    void SendTest()
+    {
+        var endP = buildEndP;
+        var buffer = Encoding.UTF8.GetBytes(GetRoomData(GetLocalIPAddress(), "2525", "hatune miku"));
+        for(int i = 0; i < 3; ++i)
+            client.SendAsync(buffer, buffer.Length, endP);
     }
 #endif
     #endregion

@@ -9,15 +9,15 @@ using TMPro;
 /// </summary>
 public class RoomList : MonoBehaviour
 {
-    public static RoomList singleton { get; private set; }
     RoomInfo selectInfo;
     RectTransform rect;
 
     [Header("List")]
     [SerializeField] Transform scrollContent;
     [SerializeField] GameObject infoPrefab;
-    [SerializeField] Vector2 startPos = new Vector2(-320, 240);
+    [SerializeField] Vector2 startPos = new Vector2(-320, 350);
     [SerializeField] Vector2 offsetPos = new Vector2(0, -110);
+    [SerializeField] List<string> addressList = new();
     [SerializeField] List<RoomInfo> rooms = new();
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
@@ -25,30 +25,25 @@ public class RoomList : MonoBehaviour
 
     void Start()
     {
-        if (singleton == null)
-        {
-            singleton = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
         rect = transform as RectTransform;
+
+        addressList.Clear();
+        rooms.Clear();
     }
 
-    public void SetSelectRoomInfo(RoomInfo info_, Image button_)
+    public void SetSelectRoomInfo(RoomInfo info_)
     {
         selectInfo = info_;
     }
-    public void SetRoomInfo(string[] data)
+    public void SetListRoomInfo(string[] data)
     {
-        var pos = rect.position + StartPos + OffsetPos;
+        if(addressList.Contains(data[0])) return;
+        var pos = rect.position + StartPos + OffsetPos * rooms.Count;
         var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
         var info = ui.GetComponent<RoomInfo>();
-        info.roomIndex = (byte)rooms.Count;
-        info.roomName.text = data[0];
-        info.roomPassward = ushort.Parse(data[1]);
-        info.roomOption.text = data[2];
+        info.InitializeRoomInfo(this, (byte)rooms.Count, data[0], data[1], data[2]);
+
+        addressList.Add(data[0]);
         rooms.Add(info);
     }
 }
