@@ -9,16 +9,16 @@ using TMPro;
 /// </summary>
 public class RoomList : MonoBehaviour
 {
-    RoomInfo selectInfo;
+    RoomInfo selectRoom;
     RectTransform rect;
 
     [Header("List")]
     [SerializeField] Transform scrollContent;
     [SerializeField] GameObject infoPrefab;
-    [SerializeField] Vector2 startPos = new Vector2(-320, 350);
-    [SerializeField] Vector2 offsetPos = new Vector2(0, -110);
+    [SerializeField] Vector2 startPos = new(-320, 350);
+    [SerializeField] Vector2 offsetPos = new(0, -110);
     [SerializeField] List<string> addressList = new();
-    [SerializeField] List<RoomInfo> rooms = new();
+    public List<RoomInfo> rooms = new();
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
@@ -31,19 +31,27 @@ public class RoomList : MonoBehaviour
         rooms.Clear();
     }
 
-    public void SetSelectRoomInfo(RoomInfo info_)
+    public void SetSelectRoomInfo(RoomInfo room_)
     {
-        selectInfo = info_;
+        selectRoom = room_;
     }
-    public void SetListRoomInfo(string[] data)
+    public void AddListRoomInfo(string[] data)
     {
         if(addressList.Contains(data[0])) return;
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
         var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
-        var info = ui.GetComponent<RoomInfo>();
-        info.InitializeRoomInfo(this, (byte)rooms.Count, data[1], bool.Parse(data[2]), data[3]);
+        ui.name = "Room_" + data[1];
+        var room = ui.GetComponent<RoomInfo>();
+        room.InitializeRoomInfo(this, (byte)rooms.Count, data[0], data[1], bool.Parse(data[2]), data[3]);
 
         addressList.Add(data[0]);
-        rooms.Add(info);
+        rooms.Add(room);
+    }
+    public void RemMoveListRoomInfo(RoomInfo room_)
+    {
+        Destroy(room_.gameObject);
+
+        addressList.Remove(room_.address);
+        rooms.Remove(room_);
     }
 }
