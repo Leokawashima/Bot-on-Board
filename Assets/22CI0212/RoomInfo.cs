@@ -9,10 +9,13 @@ public class RoomInfo : MonoBehaviour
     RoomList roomList;
 
     public byte roomIndex { get; private set; }
-    public string address { get; private set; }
+    public string roomAddress { get; private set; }
+    public string roomName { get; private set; }
+    public string roomOption { get; private set; }
+    public bool roomPassward { get; private set; }
 
-    [SerializeField] TextMeshProUGUI roomName;
-    [SerializeField] TextMeshProUGUI roomOption;
+    [SerializeField] TextMeshProUGUI roomNameText;
+    [SerializeField] TextMeshProUGUI roomOptionText;
     [SerializeField] GameObject roomPassImage;
 
     public void OnClickInfo()
@@ -24,9 +27,12 @@ public class RoomInfo : MonoBehaviour
     {
         roomList = list_;
         roomIndex = index_;
-        address = address_;
-        roomName.text = name_;
-        roomOption.text = option_;
+        roomAddress = address_;
+        roomName = name_;
+        roomNameText.text = name_;
+        roomOption = option_;
+        roomOptionText.text = option_;
+        roomPassward = passward_;
         roomPassImage.SetActive(passward_);
     }
 }

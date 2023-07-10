@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93705d57a1aff2a42a29d28a26d29e67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomName: {fileID: 8625833576552403558}
-  roomOption: {fileID: 7069917209832636127}
+  roomNameText: {fileID: 8625833576552403558}
+  roomOptionText: {fileID: 7069917209832636127}
   roomPassImage: {fileID: 5447227208888228827}
 --- !u!1 &2923252812954705176
 GameObject:
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 9113387938878213527}
   - component: {fileID: 8625833576552403558}
   m_Layer: 5
-  m_Name: RoomName
+  m_Name: RoomNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 1023143009886562343}
   - component: {fileID: 7069917209832636127}
   m_Layer: 5
-  m_Name: RoomOption
+  m_Name: RoomOptionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 332762972878048162}
   - component: {fileID: 4095641692027804901}
   m_Layer: 5
-  m_Name: Image
+  m_Name: RoomPasswardImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

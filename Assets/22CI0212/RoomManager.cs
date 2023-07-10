@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 #if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 #endif
 
@@ -34,7 +35,7 @@ public static class RoomManager
     {
         State = ConnectState.Host;
 
-        Udp = MakeUdp();
+        Udp = CreateUdp();
 
         var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
@@ -49,19 +50,20 @@ public static class RoomManager
             }
             catch(ObjectDisposedException)
             {
-                State = ConnectState.Non;
+#if UNITY_EDITOR
+                Debug.Log("error");
+#endif
+                break;
             }
         }
 
-        Udp.Dispose();
-
-        State = ConnectState.Non;
+        Close();
     }
     public static async void Client()
     {
         State = ConnectState.Client;
 
-        Udp = MakeUdp();
+        Udp = CreateUdp();
 
         while(State == ConnectState.Client)
         {
@@ -78,28 +80,34 @@ public static class RoomManager
             }
             catch(ObjectDisposedException)
             {
-                State = ConnectState.Non;
+#if UNITY_EDITOR
+                Debug.Log("error");
+#endif
+                break;
             }
         }
 
-        Udp.Dispose();
-
-        State = ConnectState.Non;
+        Close();
     }
     public static void Close()
     {
         Udp?.Dispose();
         State = ConnectState.Non;
     }
+    public static void Clean()
+    {
+        Close();
+        CallBackReceive = null;
+    }
     #endregion
 
-    static UdpClient MakeUdp()
+    static UdpClient CreateUdp()
     {
-        var client = new UdpClient(Port);
-        client.EnableBroadcast = true;
-        client.Client.SendTimeout = SendTimeOut;
-        client.Client.ReceiveTimeout = ReceiveTimeOut;
-        return client;
+        var udp = new UdpClient(Port);
+        udp.EnableBroadcast = true;
+        udp.Client.SendTimeout = SendTimeOut;
+        udp.Client.ReceiveTimeout = ReceiveTimeOut;
+        return udp;
     }
 
     #region Editor
@@ -109,9 +117,9 @@ public static class RoomManager
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
-    static void OnPlayModeStateChanged(PlayModeStateChange state)
+    static void OnPlayModeStateChanged(PlayModeStateChange state_)
     {
-        if(state == PlayModeStateChange.ExitingPlayMode)
+        if(state_ == PlayModeStateChange.ExitingPlayMode)
         {
             //通信中にEditorの再生が停止した場合終了されないので終了するための処理
             Udp?.Dispose();

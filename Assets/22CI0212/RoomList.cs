@@ -12,6 +12,12 @@ public class RoomList : MonoBehaviour
     RoomInfo selectRoom;
     RectTransform rect;
 
+    [Header("UI")]
+    [SerializeField] GameObject connectUI;
+    [Header("TextFIeld")]
+    [SerializeField] TextMeshProUGUI connectNameText;
+    [SerializeField] TextMeshProUGUI connectOptionText;
+    [SerializeField] GameObject connectPasswardArea;
     [Header("List")]
     [SerializeField] Transform scrollContent;
     [SerializeField] GameObject infoPrefab;
@@ -34,6 +40,10 @@ public class RoomList : MonoBehaviour
     public void SetSelectRoomInfo(RoomInfo room_)
     {
         selectRoom = room_;
+        connectUI.SetActive(true);
+        connectNameText.text = selectRoom.roomName;
+        connectOptionText.text = selectRoom.roomOption;
+        connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
     public void AddListRoomInfo(string[] data)
     {
@@ -51,7 +61,7 @@ public class RoomList : MonoBehaviour
     {
         Destroy(room_.gameObject);
 
-        addressList.Remove(room_.address);
+        addressList.Remove(room_.roomAddress);
         rooms.Remove(room_);
     }
 }
