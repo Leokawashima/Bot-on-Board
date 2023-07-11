@@ -5890,7 +5890,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1799697807}
         m_TargetAssemblyTypeName: RoomUIManager, Assembly-CSharp
-        m_MethodName: Room_ConnectRoom
+        m_MethodName: Room_ConnectRequire
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
