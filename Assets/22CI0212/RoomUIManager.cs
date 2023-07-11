@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Net;
 using System.Text;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Net.Sockets;
+using Unity.VisualScripting;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -24,6 +27,8 @@ public class RoomUIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI makeOptionText;
     [SerializeField] Toggle makePasswardToggle;
     [SerializeField] TextMeshProUGUI makePasswardText;
+    [Header("Member")]
+    [SerializeField] GameObject memberUI;
     [Header("ConnectRoom")]
     [SerializeField] TextMeshProUGUI connectPasswardText;
     [Header("Log")]
@@ -35,6 +40,7 @@ public class RoomUIManager : MonoBehaviour
     RoomList roomList;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
+    enum NetState { Room = 0, Error = -1, RequireConnect = 1, ResponseConnect = 2, StopConnect = 3, }
 
     #endregion
 
@@ -43,7 +49,7 @@ public class RoomUIManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
-        SetState(UIState.Choise);
+        SetUI(UIState.Choise);
 
         roomList = listUI.GetComponent<RoomList>();
     }
@@ -54,44 +60,67 @@ public class RoomUIManager : MonoBehaviour
 
     public void Room_MakeRoom()
     {
-        SetState(UIState.MakeRoom);
+        SetUI(UIState.MakeRoom);
     }
-    public void Room_ConnectRoom()
+    public void Room_ConnectRequire()
     {
-        SetState(UIState.ConnectRoom);
+        SetUI(UIState.ConnectRoom);
+
+        var buffer = Get_RequireConnectData("Name", makePasswardText.text);
+
+        RoomManager.Close();
+
+        RoomManager.Send(buffer, roomList.selectRoom.roomAddress);
+
+        LogPush("Connect Require");
     }
     public void Room_BackRoom()
     {
-        SetState(UIState.BackRoom);
+        SetUI(UIState.BackRoom);
     }
     public void Room_Host()
     {
-        SetState(UIState.Host);
+        SetUI(UIState.Host);
 
-        var buffer = GetRoomData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+        var buffer = GetOpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+
+        void callback(IPEndPoint endP_, string buffer_)
+        {
+            if (CheckNetState(ref buffer_) == NetState.RequireConnect)
+            {
+                var data = Catch_ConnectData(endP_, buffer_);
+                var ui = Instantiate(memberUI, (transform as RectTransform).position, Quaternion.identity, listUI.transform);
+
+            }
+        }
+        RoomManager.CallBackResponse = callback;
 
         RoomManager.Host(buffer);
+        RoomManager.Response();
 
         LogPush("Host Started");
     }
     public void Room_Client()
     {
-        SetState(UIState.Client);
+        SetUI(UIState.Client);
 
-        void callback(IPEndPoint endP, string data)
+        void callback(IPEndPoint endP_, string buffer_)
         {
-            var info = CatchRoomData(endP, data);
-            roomList.AddListRoomInfo(info);
+            if (CheckNetState(ref buffer_) == NetState.Room)
+            {
+                var data = Catch_OpenData(endP_, buffer_);
+                roomList.AddListRoomInfo(endP_.Address, data);
+            }
         }
 
-        RoomManager.CallBackReceive = callback;
+        RoomManager.CallBackClient = callback;
         RoomManager.Client();
 
         LogPush("Client Started");
     }
     public void Room_Quit()
     {
-        SetState(UIState.Choise);
+        SetUI(UIState.Choise);
 
         RoomManager.Close();
 
@@ -105,7 +134,7 @@ public class RoomUIManager : MonoBehaviour
     }
     public void Room_Back()
     {
-        SetState(UIState.Choise);
+        SetUI(UIState.Choise);
     }
     public void Room_GameStart()
     {
@@ -116,7 +145,7 @@ public class RoomUIManager : MonoBehaviour
 
     }
 
-    void SetState(UIState state_)
+    void SetUI(UIState state_)
     {
         switch (state_)
         {
@@ -153,11 +182,25 @@ public class RoomUIManager : MonoBehaviour
         }
     }
 
-    string GetRoomData(string name_, bool passward_, string option_)
+    NetState CheckNetState(ref string buffer_)
     {
-        return name_ + "_" + passward_ + "_" + option_;
+        var state = buffer_.Substring(0, buffer_.IndexOf("_"));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        
+        try
+        {
+            return (NetState)Enum.Parse(typeof(NetState), state);
+        }
+        catch (ArgumentException)
+        {
+            return NetState.Error;
+        }
     }
-    string[] CatchRoomData(IPEndPoint endP_, string buffer_)
+    string GetOpenData(string name_, bool passward_, string option_)
+    {
+        return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
+    }
+    string[] Catch_OpenData(IPEndPoint endP_, string buffer_)
     {
         //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
         var data = new string[4];
@@ -166,6 +209,18 @@ public class RoomUIManager : MonoBehaviour
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
         data[2] = buffer_.Substring(0, buffer_.IndexOf("_"));//passward
         data[3] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
+        return data;
+    }
+    string Get_RequireConnectData(string name_, string passward_)
+    {
+        return (int)NetState.RequireConnect + "_" + name_ + "_" + passward_;
+    }
+    string[] Catch_ConnectData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new string[3];
+        data[0] = endP_.Address.ToString();
+        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//name
+        data[2] = buffer_.Substring(buffer_.IndexOf("_") + 1);//passward
         return data;
     }
     void LogPush(string msg_)
@@ -185,18 +240,37 @@ public class RoomUIManager : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    [ContextMenu("Test/NonLock")]
+    [ContextMenu("Send")]
     void SendTest()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData("TestSendRoom", false, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(GetOpenData("TestSendRoom", false, "hatune miku"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
-    [ContextMenu("Test/Lock")]
+    [ContextMenu("SendLock")]
     void SendTestLocked()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(GetRoomData("TestSendRoom", true, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(GetOpenData("TestSendRoom", true, "hatune miku"));
+        RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
+    }
+    [ContextMenu("SendConnect")]
+    void SendTestConnect()
+    {
+        IPAddress ipAddress = null;
+        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                ipAddress = ip;
+                break;
+            }
+        }
+
+        var endP = new IPEndPoint(ipAddress, RoomManager.Port);
+        var buffer = Encoding.UTF8.GetBytes(Get_RequireConnectData("Test", "3939"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
 #endif

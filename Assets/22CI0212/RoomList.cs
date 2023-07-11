@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Net;
 
 /// <summary>
 /// Roomの接続リストを管理するクラス
 /// </summary>
 public class RoomList : MonoBehaviour
 {
-    RoomInfo selectRoom;
+    public RoomInfo selectRoom { get; private set; }
     RectTransform rect;
 
     [Header("UI")]
@@ -23,7 +24,7 @@ public class RoomList : MonoBehaviour
     [SerializeField] GameObject infoPrefab;
     [SerializeField] Vector2 startPos = new(-320, 350);
     [SerializeField] Vector2 offsetPos = new(0, -110);
-    [SerializeField] List<string> addressList = new();
+    [SerializeField] List<IPAddress> addressList = new();
     public List<RoomInfo> rooms = new();
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
@@ -45,16 +46,16 @@ public class RoomList : MonoBehaviour
         connectOptionText.text = selectRoom.roomOption;
         connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
-    public void AddListRoomInfo(string[] data)
+    public void AddListRoomInfo(IPAddress address_, string[] data)
     {
-        if(addressList.Contains(data[0])) return;
+        if(addressList.Contains(address_)) return;
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
         var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
         ui.name = "Room_" + data[1];
         var room = ui.GetComponent<RoomInfo>();
         room.InitializeRoomInfo(this, (byte)rooms.Count, data[0], data[1], bool.Parse(data[2]), data[3]);
 
-        addressList.Add(data[0]);
+        addressList.Add(address_);
         rooms.Add(room);
     }
     public void RemMoveListRoomInfo(RoomInfo room_)

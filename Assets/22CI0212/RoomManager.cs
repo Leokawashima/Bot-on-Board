@@ -20,11 +20,10 @@ public static class RoomManager
     public static int SendTimeOut { get; private set; } = 100;
     public static int ReceiveTimeOut { get; private set; } = 100;
 
-    public enum ConnectState { Non, Host, Client }
-    public static ConnectState State { get; private set; } = ConnectState.Non;
     public static UdpClient Udp { get; private set; }
 
-    public static Action<IPEndPoint, string> CallBackReceive;
+    public static Action<IPEndPoint, string> CallBackClient;
+    public static Action<IPEndPoint, string> CallBackResponse;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
@@ -33,14 +32,12 @@ public static class RoomManager
     #region Room
     public static async void Host(string buffer_)
     {
-        State = ConnectState.Host;
-
         Udp = CreateUdp();
 
         var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        while(State == ConnectState.Host)
+        while(Udp != null)
         {
             try
             {
@@ -51,7 +48,33 @@ public static class RoomManager
             catch(ObjectDisposedException)
             {
 #if UNITY_EDITOR
-                Debug.Log("error");
+                Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+                break;
+            }
+        }
+
+        Close();
+    }
+    public static async void Response()
+    {
+        while (Udp != null)
+        {
+            try
+            {
+                var endP = searchEndP;
+                var buffer = Udp.Receive(ref endP);
+                var data = Encoding.UTF8.GetString(buffer);
+                CallBackResponse?.Invoke(endP, data);
+            }
+            catch (SocketException)
+            {
+                await Task.Delay(ReceiveDelay);
+            }
+            catch (ObjectDisposedException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Disposed");
 #endif
                 break;
             }
@@ -61,18 +84,16 @@ public static class RoomManager
     }
     public static async void Client()
     {
-        State = ConnectState.Client;
-
         Udp = CreateUdp();
 
-        while(State == ConnectState.Client)
+        while(Udp != null)
         {
             try
             {
                 var endP = searchEndP;
                 var buffer = Udp.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
-                CallBackReceive?.Invoke(endP, data);
+                CallBackClient?.Invoke(endP, data);
             }
             catch(SocketException)
             {
@@ -81,7 +102,33 @@ public static class RoomManager
             catch(ObjectDisposedException)
             {
 #if UNITY_EDITOR
-                Debug.Log("error");
+                Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+                break;
+            }
+        }
+
+        Close();
+    }
+    public static async void Send(string buffer_, IPAddress address_)
+    {
+        Udp = CreateUdp();
+
+        var endP = new IPEndPoint(address_, Port);
+        var buffer = Encoding.UTF8.GetBytes(buffer_);
+
+        while (Udp != null)
+        {
+            try
+            {
+                await Udp.SendAsync(buffer, buffer.Length, endP);
+
+                await Task.Delay(SendDelay);
+            }
+            catch (ObjectDisposedException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Disposed");
 #endif
                 break;
             }
@@ -92,12 +139,12 @@ public static class RoomManager
     public static void Close()
     {
         Udp?.Dispose();
-        State = ConnectState.Non;
     }
     public static void Clean()
     {
         Close();
-        CallBackReceive = null;
+        CallBackClient = null;
+        CallBackResponse = null;
     }
     #endregion
 
@@ -123,7 +170,6 @@ public static class RoomManager
         {
             //通信中にEditorの再生が停止した場合終了されないので終了するための処理
             Udp?.Dispose();
-            State = ConnectState.Non;
         }
     }
 #endif
