@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -24,7 +24,7 @@ public class MapCreater : EditorWindow
 
     [SerializeField] static Data_SO edit_SO;
 
-    [SerializeField] static string path = "Assets/Map/image";
+    [SerializeField] static string path = "Assets/Test/Map/image";
 
     [SerializeField] static int[,] editMap, editObj;
     [SerializeField] static Vector2Int
@@ -57,7 +57,7 @@ public class MapCreater : EditorWindow
     {
         InitFlag = false;
 
-        //ƒtƒHƒ“ƒgƒXƒ^ƒCƒ‹
+        //ãƒ•ã‚©ãƒ³ãƒˆã‚¹ã‚¿ã‚¤ãƒ«
         style = new GUIStyle();
         style.alignment = TextAnchor.MiddleCenter;
         style.normal.textColor = Color.white;
@@ -81,12 +81,12 @@ public class MapCreater : EditorWindow
     {
         if (InitFlag) Initialize();
 
-        //UI”wŒi
+        //UIèƒŒæ™¯
         using (new ExColorScope.GUIBackGround(UIColor))
             GUI.Box(new Rect(0, 0, UIWidth + 5, position.size.y), "");
 
-        //ƒ}ƒbƒvƒf[ƒ^‚ğó‚¯æ‚éƒtƒB[ƒ‹ƒh
-        edit_SO = EditorGUILayout.ObjectField("Mapƒf[ƒ^", edit_SO, typeof(Data_SO), false, GUIWIDTH) as Data_SO;
+        //ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+        edit_SO = EditorGUILayout.ObjectField("Mapãƒ‡ãƒ¼ã‚¿", edit_SO, typeof(Data_SO), false, GUIWIDTH) as Data_SO;
         using (new GUILayout.HorizontalScope(GUIWIDTH))
         {
             if(GUILayout.Button("new")) New();
@@ -94,32 +94,32 @@ public class MapCreater : EditorWindow
             if(GUILayout.Button("Save")) Save();
         }
 
-        //ƒeƒLƒXƒgƒtƒB[ƒ‹ƒh(ƒtƒHƒ‹ƒ_‚ğƒhƒ‰ƒbƒO‚ÅƒpƒX‚ğó‚¯æ‚ê‚é)
+        //ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(ãƒ•ã‚©ãƒ«ãƒ€ã‚’ãƒ‰ãƒ©ãƒƒã‚°ã§ãƒ‘ã‚¹ã‚’å—ã‘å–ã‚Œã‚‹)
         var rect = GUILayoutUtility.GetRect(0, 18, GUI.skin.textField, GUIWIDTH);
         path = GUI.TextField(rect, path);
         CatchDragAndDrop(rect, ref path);
 
-        //ƒTƒCƒYƒtƒB[ƒ‹ƒh
-        GUILayout.Label("•ÒWƒTƒCƒY", style, GUIWIDTH);
+        //ã‚µã‚¤ã‚ºãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+        GUILayout.Label("ç·¨é›†ã‚µã‚¤ã‚º", style, GUIWIDTH);
         editScaleNew = EditorGUILayout.Vector2IntField("", editScaleNew, GUIWIDTH);
         editScaleNew.x = Mathf.Max(editScaleNew.x, 1);
         editScaleNew.y = Mathf.Max(editScaleNew.y, 1);
-        if (GUILayout.Button("ƒTƒCƒY•ÏX", GUIWIDTH))
+        if (GUILayout.Button("ã‚µã‚¤ã‚ºå¤‰æ›´", GUIWIDTH))
         {
             if(editScaleNow != editScaleNew)
                 SizeChange();
         }
-        GUILayout.Label("•`‰æƒTƒCƒY", style, GUIWIDTH);
+        GUILayout.Label("æç”»ã‚µã‚¤ã‚º", style, GUIWIDTH);
         editSizeIndex = GUILayout.Toolbar(editSizeIndex, renderSizeStr, GUIWIDTH, GUIHEIGHT);
 
-        //‰æ‘œ‰»ƒ{ƒ^ƒ“‚ÆƒI[ƒgƒZ[ƒuƒ{ƒ^ƒ“
+        //ç”»åƒåŒ–ãƒœã‚¿ãƒ³ã¨ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–ãƒœã‚¿ãƒ³
         using(new GUILayout.HorizontalScope(GUIWIDTH))
         {
-            pngMode = GUILayout.Toggle(pngMode, "‰æ‘œƒ‚[ƒh");
-            autoSave = GUILayout.Toggle(autoSave, "ƒI[ƒgƒZ[ƒu");
+            pngMode = GUILayout.Toggle(pngMode, "ç”»åƒãƒ¢ãƒ¼ãƒ‰");
+            autoSave = GUILayout.Toggle(autoSave, "ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–");
         }
 
-        //•ÒWƒAƒCƒeƒ€ƒ{ƒ^ƒ“
+        //ç·¨é›†ã‚¢ã‚¤ãƒ†ãƒ ãƒœã‚¿ãƒ³
         if (!pngMode)
         {
             selectMapIndex = GUILayout.Toolbar(selectMapIndex, editMapStrs, GUIWIDTH, GUIHEIGHT);
@@ -131,11 +131,11 @@ public class MapCreater : EditorWindow
             selectObjIndex = GUILayout.Toolbar(selectObjIndex, editObjTexs, GUIWIDTH, GUIHEIGHT);
         }
 
-        //ƒGƒfƒBƒbƒg”wŒi
+        //ã‚¨ãƒ‡ã‚£ãƒƒãƒˆèƒŒæ™¯
         using (new ExColorScope.GUIBackGround(EditUIColor))
             GUI.Box(new Rect(UIWidth + 10, 0, position.size.x - UIWidth - 10, position.size.y), "");
 
-        //ƒGƒfƒBƒ^[ƒ`ƒbƒv•`‰æ
+        //ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼ãƒãƒƒãƒ—æç”»
         for (int y = 0; y < editScaleNow.y; ++y)
         {
             for (int x = 0; x < editScaleNow.x; ++x)
@@ -150,7 +150,7 @@ public class MapCreater : EditorWindow
             }
         }
 
-        //ƒ}ƒEƒX“ü—Íˆ—
+        //ãƒã‚¦ã‚¹å…¥åŠ›å‡¦ç†
         Event e = Event.current;
         if (e.type == EventType.MouseDown || e.type == EventType.MouseDrag)
         {
@@ -176,12 +176,12 @@ public class MapCreater : EditorWindow
     }
 
     /// <summary>
-    /// ƒhƒ‰ƒbƒOƒAƒ“ƒhƒhƒƒbƒv‚ğŠm”F‚·‚éŠÖ”
+    /// ãƒ‰ãƒ©ãƒƒã‚°ã‚¢ãƒ³ãƒ‰ãƒ‰ãƒ­ãƒƒãƒ—ã‚’ç¢ºèªã™ã‚‹é–¢æ•°
     /// </summary>
-    /// QlŒ³@https://kan-kikuchi.hatenablog.com/entry/PathAttribute_1
+    /// å‚è€ƒå…ƒã€€https://kan-kikuchi.hatenablog.com/entry/PathAttribute_1
     void CatchDragAndDrop(Rect rect_, ref string path_)
     {
-        //”ÍˆÍ“à‚Éƒ}ƒEƒX‚ª‚ ‚é‚Æ‚«‚Ì‚İŠJn
+        //ç¯„å›²å†…ã«ãƒã‚¦ã‚¹ãŒã‚ã‚‹ã¨ãã®ã¿é–‹å§‹
         if(rect_.Contains(Event.current.mousePosition))
         {
             EventType eventType = Event.current.type;
@@ -248,10 +248,10 @@ public class MapCreater : EditorWindow
         editScaleNew = new Vector2Int(edit_SO.x, edit_SO.y);
         editMap = new int[editScaleNow.y, editScaleNow.x];
         editObj = new int[editScaleNow.y, editScaleNow.x];
-        //’l“n‚µ‚ÆQÆ“n‚µ‚Å”z—ñ‚ÍQÆ‚ğŸè‚É“n‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚ÅƒRƒs[‚ğs‚Á‚Ä‚¢‚é
-        //‚æ‚¤‚ÍŸè‚É”z—ñƒ|ƒCƒ“ƒ^[‚ğ‘ŠŒİQÆ‚·‚é‚æ‚¤‚É‚È‚è
-        //Ÿè‚ÉƒGƒfƒBƒ^‚ÆSO‚Ì”z—ñƒf[ƒ^‚ªí‚É“¯Šú‚µn‚ß‚é
-        //System.Array.Copy‚Å‚Í‘Î‰‚Å‚«‚È‚¢
+        //å€¤æ¸¡ã—ã¨å‚ç…§æ¸¡ã—ã§é…åˆ—ã¯å‚ç…§ã‚’å‹æ‰‹ã«æ¸¡ã•ã‚Œã¦ã—ã¾ã†ã®ã§ã‚³ãƒ”ãƒ¼ã‚’è¡Œã£ã¦ã„ã‚‹
+        //ã‚ˆã†ã¯å‹æ‰‹ã«é…åˆ—ãƒã‚¤ãƒ³ã‚¿ãƒ¼ã‚’ç›¸äº’å‚ç…§ã™ã‚‹ã‚ˆã†ã«ãªã‚Š
+        //å‹æ‰‹ã«ã‚¨ãƒ‡ã‚£ã‚¿ã¨SOã®é…åˆ—ãƒ‡ãƒ¼ã‚¿ãŒå¸¸ã«åŒæœŸã—å§‹ã‚ã‚‹
+        //System.Array.Copyã§ã¯å¯¾å¿œã§ããªã„
         for(int y = 0; y < edit_SO.y; ++y)
         {
             for(int x = 0; x < edit_SO.x; ++x)
