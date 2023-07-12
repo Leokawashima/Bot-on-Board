@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Net;
+using UnityEngine;
 using TMPro;
-using System.Net;
 
 /// <summary>
 /// Roomの情報を格納するクラス

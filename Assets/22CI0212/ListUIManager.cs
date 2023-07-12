@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Net;
-using Unity.VisualScripting;
 
 /// <summary>
 /// 接続リストUIを管理するクラス
@@ -35,7 +34,7 @@ public class ListUIManager : MonoBehaviour
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
 
-    void Start()
+    public void InitializeList()
     {
         rect = transform as RectTransform;
 
@@ -52,6 +51,19 @@ public class ListUIManager : MonoBehaviour
         connectOptionText.text = selectRoom.roomOption;
         connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
+
+    public void AddListHostInfo()
+    {
+        var pos = rect.position + StartPos + OffsetPos * members.Count;
+        var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
+        ui.name = "Room_Host";
+        var host = ui.GetComponent<MemberInfo>();
+        host.InitializeInfo(this, (byte)members.Count, RoomManager.GetLocalIPAddress(), "Host");
+
+        addressList.Add(host.memberAddress);
+        members.Add(host);
+    }
+
     public void AddListRoomInfo(IPAddress address_, string[] data_)
     {
         if (addressList.Contains(address_))

@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Net.Sockets;
-using System.Threading;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -50,6 +49,7 @@ public class RoomUIManager : MonoBehaviour
         SetUI(UIState.Choise);
 
         listUIManager = listUI.GetComponent<ListUIManager>();
+        listUIManager.InitializeList();
     }
     void OnDestroy()
     {
@@ -88,7 +88,6 @@ public class RoomUIManager : MonoBehaviour
             if (CheckNetState(ref buffer_) == NetState.RequireConnect)
             {
                 var data = Catch_ConnectData(endP_, buffer_);
-                Debug.Log(data[0] + "____" + data[1] + "____" + data[2]);
                 if (makePasswardToggle.isOn)
                 {
                     if (data[2] == makePasswardText.text)
@@ -102,6 +101,8 @@ public class RoomUIManager : MonoBehaviour
         }
         RoomManager.CallBackResponse = callback;
         RoomManager.Response();
+
+        listUIManager.AddListHostInfo();
 
         LogPush("Host Started");
     }
@@ -265,19 +266,7 @@ public class RoomUIManager : MonoBehaviour
     [ContextMenu("SendConnect")]
     void SendTestConnect()
     {
-        IPAddress ipAddress = null;
-        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-
-        foreach (IPAddress ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                ipAddress = ip;
-                break;
-            }
-        }
-
-        var endP = new IPEndPoint(ipAddress, RoomManager.Port);
+        var endP = new IPEndPoint(RoomManager.GetLocalIPAddress(), RoomManager.Port);
         var buffer = Encoding.UTF8.GetBytes(Get_RequireConnectData("Test", "3939"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }

@@ -156,6 +156,19 @@ public static class RoomManager
         udp.Client.ReceiveTimeout = ReceiveTimeOut;
         return udp;
     }
+    public static IPAddress GetLocalIPAddress()
+    {
+        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip;
+            }
+        }
+        return null;
+    }
 
     #region Editor
 #if UNITY_EDITOR

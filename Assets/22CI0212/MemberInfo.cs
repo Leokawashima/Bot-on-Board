@@ -1,6 +1,6 @@
 ﻿using System.Net;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// Memberの情報を格納するクラス
