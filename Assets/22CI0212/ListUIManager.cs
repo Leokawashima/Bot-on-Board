@@ -10,6 +10,7 @@ using System.Net;
 /// </summary>
 public class ListUIManager : MonoBehaviour
 {
+    #region Field
     public RoomInfo selectRoom { get; private set; }
     RectTransform rect;
 
@@ -33,6 +34,7 @@ public class ListUIManager : MonoBehaviour
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
+    #endregion
 
     public void InitializeList()
     {

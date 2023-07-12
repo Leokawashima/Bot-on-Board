@@ -14,6 +14,9 @@ using UnityEditor;
 public static class RoomManager
 {
     #region Field
+    public enum State { Error = -1, Close, Host, Client, ConnectRequire, ConnectResponse }
+    public static State state = State.Close;
+
     public static ushort Port { get; private set; } = 3939;
     public static int SendDelay { get; private set; } = 1000;
     public static int ReceiveDelay { get; private set; } = 1000;
@@ -24,20 +27,23 @@ public static class RoomManager
 
     public static Action<IPEndPoint, string> CallBackClient;
     public static Action<IPEndPoint, string> CallBackResponse;
+    public static Action<IPEndPoint, string> CallBackConnectResponse;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
+    static IPAddress localIPAddress;
     #endregion
 
     #region Room
     public static async void Host(string buffer_)
     {
+        state = State.Host;
         Udp = CreateUdp();
 
         var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        while(Udp != null)
+        while(state == State.Host)
         {
             try
             {
@@ -53,12 +59,10 @@ public static class RoomManager
                 break;
             }
         }
-
-        Close();
     }
     public static async void Response()
     {
-        while (Udp != null)
+        while (state == State.Host)
         {
             try
             {
@@ -79,14 +83,13 @@ public static class RoomManager
                 break;
             }
         }
-
-        Close();
     }
     public static async void Client()
     {
+        state = State.Client;
         Udp = CreateUdp();
 
-        while(Udp != null)
+        while(state == State.Client)
         {
             try
             {
@@ -107,17 +110,16 @@ public static class RoomManager
                 break;
             }
         }
-
-        Close();
     }
-    public static async void Send(string buffer_, IPAddress address_)
+    public static async void ConnectRequire(string buffer_, IPAddress address_)
     {
+        state = State.ConnectRequire;
         Udp = CreateUdp();
 
         var endP = new IPEndPoint(address_, Port);
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        while (Udp != null)
+        while (state == State.ConnectRequire)
         {
             try
             {
@@ -133,21 +135,48 @@ public static class RoomManager
                 break;
             }
         }
-
-        Close();
+    }
+    public static async void ConnectResponse(IPAddress address_)
+    {
+        while (state == State.ConnectRequire)
+        {
+            try
+            {
+                var endP = searchEndP;
+                var buffer = Udp.Receive(ref endP);
+                var data = Encoding.UTF8.GetString(buffer);
+                CallBackConnectResponse?.Invoke(endP, data);
+            }
+            catch (SocketException)
+            {
+                await Task.Delay(ReceiveDelay);
+            }
+            catch (ObjectDisposedException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+                break;
+            }
+        }
     }
     public static void Close()
     {
+        state = State.Close;
         Udp?.Dispose();
+        Udp = null;
     }
     public static void Clean()
     {
         Close();
         CallBackClient = null;
         CallBackResponse = null;
+        CallBackConnectResponse = null;
+        localIPAddress = null;
     }
     #endregion
 
+    #region Func
     static UdpClient CreateUdp()
     {
         var udp = new UdpClient(Port);
@@ -158,17 +187,22 @@ public static class RoomManager
     }
     public static IPAddress GetLocalIPAddress()
     {
-        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-
-        foreach (IPAddress ip in host.AddressList)
+        if (localIPAddress == null)
         {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+            foreach (IPAddress ip in host.AddressList)
             {
-                return ip;
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return localIPAddress = ip;
+                }
             }
+            localIPAddress = null;
         }
-        return null;
+        return localIPAddress;
     }
+    #endregion
 
     #region Editor
 #if UNITY_EDITOR
@@ -182,7 +216,7 @@ public static class RoomManager
         if(state_ == PlayModeStateChange.ExitingPlayMode)
         {
             //通信中にEditorの再生が停止した場合終了されないので終了するための処理
-            Udp?.Dispose();
+            Clean();
         }
     }
 #endif

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Net.Sockets;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -37,7 +36,7 @@ public class RoomUIManager : MonoBehaviour
     ListUIManager listUIManager;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
-    enum NetState { Room = 0, Error = -1, RequireConnect = 1, ResponseConnect = 2, StopConnect = 3, }
+    enum NetState { Error = -1, Room, ConnectRequire, ConnectResponse = 2 }
 
     #endregion
 
@@ -64,11 +63,22 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.ConnectRoom);
 
-        var buffer = Get_RequireConnectData("Name", makePasswardText.text);
-
         RoomManager.Close();
 
-        RoomManager.Send(buffer, listUIManager.selectRoom.roomAddress);
+        var buffer = Get_RequireData("Name", makePasswardText.text);
+        RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
+
+        void callback(IPEndPoint endP_, string buffer_)
+        {
+            if (CheckNetState(ref buffer_) == NetState.ConnectResponse)
+            {
+                var data = Catch_ResponseData(endP_, buffer_);
+                LogPush(data[1]);
+            }
+        }
+
+        RoomManager.CallBackConnectResponse = callback;
+        RoomManager.ConnectResponse(listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
     }
@@ -80,23 +90,22 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Host);
 
-        var buffer = GetOpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+        var buffer = Get_OpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
         RoomManager.Host(buffer);
 
         void callback(IPEndPoint endP_, string buffer_)
         {
-            if (CheckNetState(ref buffer_) == NetState.RequireConnect)
+            if (CheckNetState(ref buffer_) == NetState.ConnectRequire)
             {
-                var data = Catch_ConnectData(endP_, buffer_);
-                if (makePasswardToggle.isOn)
-                {
-                    if (data[2] == makePasswardText.text)
-                        listUIManager.AddListMemberInfo(endP_.Address, data);
-                }
-                else
+                var data = Catch_RequireData(endP_, buffer_);
+                var flag = !makePasswardToggle.isOn && data[2] == makePasswardText.text;
+                if (flag)
                 {
                     listUIManager.AddListMemberInfo(endP_.Address, data);
+                    LogPush(data[1] + " joined");
                 }
+
+                //要求に対しての応答を出す　Send
             }
         }
         RoomManager.CallBackResponse = callback;
@@ -115,7 +124,8 @@ public class RoomUIManager : MonoBehaviour
             if (CheckNetState(ref buffer_) == NetState.Room)
             {
                 var data = Catch_OpenData(endP_, buffer_);
-                listUIManager.AddListRoomInfo(endP_.Address, data);
+                if (endP_.Address != RoomManager.GetLocalIPAddress())
+                    listUIManager.AddListRoomInfo(endP_.Address, data);
             }
         }
         RoomManager.CallBackClient = callback;
@@ -205,7 +215,7 @@ public class RoomUIManager : MonoBehaviour
             return NetState.Error;
         }
     }
-    string GetOpenData(string name_, bool passward_, string option_)
+    string Get_OpenData(string name_, bool passward_, string option_)
     {
         return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
     }
@@ -220,16 +230,27 @@ public class RoomUIManager : MonoBehaviour
         data[3] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
         return data;
     }
-    string Get_RequireConnectData(string name_, string passward_)
+    string Get_RequireData(string name_, string passward_)
     {
-        return (int)NetState.RequireConnect + "_" + name_ + "_" + passward_;
+        return (int)NetState.ConnectRequire + "_" + name_ + "_" + passward_;
     }
-    string[] Catch_ConnectData(IPEndPoint endP_, string buffer_)
+    string[] Catch_RequireData(IPEndPoint endP_, string buffer_)
     {
         var data = new string[3];
         data[0] = endP_.Address.ToString();
         data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//name
         data[2] = buffer_.Substring(buffer_.IndexOf("_") + 1);//passward
+        return data;
+    }
+    string Get_ResponseData(bool flag_)
+    {
+        return (int)NetState.ConnectResponse + "_" + flag_;
+    }
+    string[] Catch_ResponseData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new string[2];
+        data[0] = endP_.Address.ToString();
+        data[1] = buffer_.Substring(buffer_.IndexOf("_") + 1);//flag
         return data;
     }
     void LogPush(string msg_)
@@ -248,27 +269,29 @@ public class RoomUIManager : MonoBehaviour
         }
     }
 
+    #region Editor
 #if UNITY_EDITOR
     [ContextMenu("Send")]
     void SendTest()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(GetOpenData("TestSendRoom", false, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(Get_OpenData("TestSendRoom", false, "hatune miku"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
     [ContextMenu("SendLock")]
     void SendTestLocked()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(GetOpenData("TestSendRoom", true, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(Get_OpenData("TestSendRoom", true, "hatune miku"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
     [ContextMenu("SendConnect")]
     void SendTestConnect()
     {
         var endP = new IPEndPoint(RoomManager.GetLocalIPAddress(), RoomManager.Port);
-        var buffer = Encoding.UTF8.GetBytes(Get_RequireConnectData("Test", "3939"));
+        var buffer = Encoding.UTF8.GetBytes(Get_RequireData("Test", "3939"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
 #endif
+    #endregion
 }
