@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Net.Sockets;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -105,7 +106,8 @@ public class RoomUIManager : MonoBehaviour
                     LogPush(data[1] + " joined");
                 }
 
-                //要求に対しての応答を出す　Send
+                var message = Get_ResponseData(flag);
+                RoomManager.HostMessage(message, endP_.Address);
             }
         }
         RoomManager.CallBackResponse = callback;
@@ -291,6 +293,27 @@ public class RoomUIManager : MonoBehaviour
         var endP = new IPEndPoint(RoomManager.GetLocalIPAddress(), RoomManager.Port);
         var buffer = Encoding.UTF8.GetBytes(Get_RequireData("Test", "3939"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
+    }
+    [ContextMenu("Receive")]
+    void ReceiveTest()
+    {
+        try
+        {
+            var endP = RoomManager.searchEndP;
+            var buffer = RoomManager.Udp.Receive(ref endP);
+            var data = Encoding.UTF8.GetString(buffer);
+            Debug.Log(data);
+        }
+        catch (SocketException)
+        {
+            Debug.Log("No catch");
+        }
+        catch (ObjectDisposedException)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+        }
     }
 #endif
     #endregion

@@ -142,7 +142,7 @@ public static class RoomManager
         {
             try
             {
-                var endP = searchEndP;
+                var endP = new IPEndPoint(address_, Port);
                 var buffer = Udp.Receive(ref endP);
                 var data = Encoding.UTF8.GetString(buffer);
                 CallBackConnectResponse?.Invoke(endP, data);
@@ -150,6 +150,28 @@ public static class RoomManager
             catch (SocketException)
             {
                 await Task.Delay(ReceiveDelay);
+            }
+            catch (ObjectDisposedException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+                break;
+            }
+        }
+    }
+    public static async void HostMessage(string buffer_, IPAddress address_)
+    {
+        var endP = new IPEndPoint(address_, Port);
+        var buffer = Encoding.UTF8.GetBytes(buffer_);
+
+        while (state == State.Host)
+        {
+            try
+            {
+                await Udp.SendAsync(buffer, buffer.Length, endP);
+
+                await Task.Delay(SendDelay);
             }
             catch (ObjectDisposedException)
             {
