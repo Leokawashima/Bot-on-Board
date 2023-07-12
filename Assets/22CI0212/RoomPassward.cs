@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// 正の整数のみ入力を許可するためのクラス
+/// 正の整数のみ入力を許可するクラス
 /// </summary>
 /// 参考:https://nekojara.city/unity-input-field-content-type
 public class RoomPassward : MonoBehaviour

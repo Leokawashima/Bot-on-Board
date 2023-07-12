@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Net;
+using Unity.VisualScripting;
 
 /// <summary>
-/// Roomの接続リストを管理するクラス
+/// 接続リストUIを管理するクラス
 /// </summary>
-public class RoomList : MonoBehaviour
+public class ListUIManager : MonoBehaviour
 {
     public RoomInfo selectRoom { get; private set; }
     RectTransform rect;
@@ -21,11 +22,13 @@ public class RoomList : MonoBehaviour
     [SerializeField] GameObject connectPasswardArea;
     [Header("List")]
     [SerializeField] Transform scrollContent;
-    [SerializeField] GameObject infoPrefab;
+    [SerializeField] GameObject roomInfoPrefab;
+    [SerializeField] GameObject memberInfoPrefab;
     [SerializeField] Vector2 startPos = new(-320, 350);
     [SerializeField] Vector2 offsetPos = new(0, -110);
     [SerializeField] List<IPAddress> addressList = new();
     public List<RoomInfo> rooms = new();
+    public List<MemberInfo> members = new();
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
@@ -36,6 +39,7 @@ public class RoomList : MonoBehaviour
 
         addressList.Clear();
         rooms.Clear();
+        members.Clear();
     }
 
     public void SetSelectRoomInfo(RoomInfo room_)
@@ -46,14 +50,20 @@ public class RoomList : MonoBehaviour
         connectOptionText.text = selectRoom.roomOption;
         connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
-    public void AddListRoomInfo(IPAddress address_, string[] data)
+    public void AddListRoomInfo(IPAddress address_, string[] data_)
     {
-        if(addressList.Contains(address_)) return;
+        if (addressList.Contains(address_))
+        {
+#if UNITY_EDITOR
+            Debug.Log("Address has already connected");
+#endif
+            return;
+        }
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
-        var ui = Instantiate(infoPrefab, pos, Quaternion.identity, scrollContent);
-        ui.name = "Room_" + data[1];
+        var ui = Instantiate(roomInfoPrefab, pos, Quaternion.identity, scrollContent);
+        ui.name = "Room_" + data_[1];
         var room = ui.GetComponent<RoomInfo>();
-        room.InitializeRoomInfo(this, (byte)rooms.Count, data[0], data[1], bool.Parse(data[2]), data[3]);
+        room.InitializeInfo(this, (byte)rooms.Count, IPAddress.Parse(data_[0]), data_[1], bool.Parse(data_[2]), data_[3]);
 
         addressList.Add(address_);
         rooms.Add(room);
@@ -64,5 +74,30 @@ public class RoomList : MonoBehaviour
 
         addressList.Remove(room_.roomAddress);
         rooms.Remove(room_);
+    }
+    public void AddListMemberInfo(IPAddress address_, string[] data_)
+    {
+        if (addressList.Contains(address_))
+        {
+#if UNITY_EDITOR
+            Debug.Log("Address has already connected");
+#endif
+            return;
+        }
+        var pos = rect.position + StartPos + OffsetPos * members.Count;
+        var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
+        ui.name = "Member_" + data_[1];
+        var member = ui.GetComponent<MemberInfo>();
+        member.InitializeInfo(this, (byte)members.Count, IPAddress.Parse(data_[0]), data_[1]);
+
+        addressList.Add(address_);
+        members.Add(member);
+    }
+    public void RemoveListMemberInfo(MemberInfo member_)
+    {
+        Destroy(member_.gameObject);
+
+        addressList.Remove(member_.memberAddress);
+        members.Remove(member_);
     }
 }

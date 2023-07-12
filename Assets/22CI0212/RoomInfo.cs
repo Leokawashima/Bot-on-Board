@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using TMPro;
 using System.Net;
 
+/// <summary>
+/// Roomの情報を格納するクラス
+/// </summary>
 public class RoomInfo : MonoBehaviour
 {
-    RoomList roomList;
+    ListUIManager list;
 
     public byte roomIndex { get; private set; }
     public IPAddress roomAddress { get; private set; }
@@ -21,14 +21,14 @@ public class RoomInfo : MonoBehaviour
 
     public void OnClickInfo()
     {
-        roomList.SetSelectRoomInfo(this);
+        list.SetSelectRoomInfo(this);
     }
 
-    public void InitializeRoomInfo(RoomList list_, byte index_, string address_, string name_, bool passward_, string option_)
+    public void InitializeInfo(ListUIManager list_, byte index_, IPAddress address_, string name_, bool passward_, string option_)
     {
-        roomList = list_;
+        list = list_;
         roomIndex = index_;
-        roomAddress = IPAddress.Parse(address_);
+        roomAddress = address_;
         roomName = name_;
         roomNameText.text = name_;
         roomOption = option_;

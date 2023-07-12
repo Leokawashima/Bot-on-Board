@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Net.Sockets;
-using Unity.VisualScripting;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -27,8 +26,6 @@ public class RoomUIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI makeOptionText;
     [SerializeField] Toggle makePasswardToggle;
     [SerializeField] TextMeshProUGUI makePasswardText;
-    [Header("Member")]
-    [SerializeField] GameObject memberUI;
     [Header("ConnectRoom")]
     [SerializeField] TextMeshProUGUI connectPasswardText;
     [Header("Log")]
@@ -37,7 +34,7 @@ public class RoomUIManager : MonoBehaviour
 
     List<string> logStr = new List<string>();
 
-    RoomList roomList;
+    ListUIManager listUIManager;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
     enum NetState { Room = 0, Error = -1, RequireConnect = 1, ResponseConnect = 2, StopConnect = 3, }
@@ -51,7 +48,7 @@ public class RoomUIManager : MonoBehaviour
 
         SetUI(UIState.Choise);
 
-        roomList = listUI.GetComponent<RoomList>();
+        listUIManager = listUI.GetComponent<ListUIManager>();
     }
     void OnDestroy()
     {
@@ -70,7 +67,7 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        RoomManager.Send(buffer, roomList.selectRoom.roomAddress);
+        RoomManager.Send(buffer, listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
     }
@@ -83,19 +80,17 @@ public class RoomUIManager : MonoBehaviour
         SetUI(UIState.Host);
 
         var buffer = GetOpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+        RoomManager.Host(buffer);
 
         void callback(IPEndPoint endP_, string buffer_)
         {
             if (CheckNetState(ref buffer_) == NetState.RequireConnect)
             {
                 var data = Catch_ConnectData(endP_, buffer_);
-                var ui = Instantiate(memberUI, (transform as RectTransform).position, Quaternion.identity, listUI.transform);
-
+                listUIManager.AddListMemberInfo(endP_.Address, data);
             }
         }
         RoomManager.CallBackResponse = callback;
-
-        RoomManager.Host(buffer);
         RoomManager.Response();
 
         LogPush("Host Started");
@@ -109,10 +104,9 @@ public class RoomUIManager : MonoBehaviour
             if (CheckNetState(ref buffer_) == NetState.Room)
             {
                 var data = Catch_OpenData(endP_, buffer_);
-                roomList.AddListRoomInfo(endP_.Address, data);
+                listUIManager.AddListRoomInfo(endP_.Address, data);
             }
         }
-
         RoomManager.CallBackClient = callback;
         RoomManager.Client();
 
@@ -127,9 +121,9 @@ public class RoomUIManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
-        for(int i = 0, count = roomList.rooms.Count; i < count; ++i)
+        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
         {
-            roomList.RemMoveListRoomInfo(roomList.rooms[0]);
+            listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
         }
     }
     public void Room_Back()
