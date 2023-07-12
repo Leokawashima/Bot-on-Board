@@ -756,7 +756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrecedenceButton: {fileID: 308579039}
   FollowerButton: {fileID: 791486228}
-  DecideButton: {fileID: 0}
+  DecideButton: {fileID: 1502926543}
   SelectImage: {fileID: 54848898}
 --- !u!1 &1502926541
 GameObject:
