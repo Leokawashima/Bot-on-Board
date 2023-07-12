@@ -3971,10 +3971,12 @@ MonoBehaviour:
   connectOptionText: {fileID: 431158333}
   connectPasswardArea: {fileID: 354916255}
   scrollContent: {fileID: 79497998}
-  infoPrefab: {fileID: 1169174478110788408, guid: bac3bd985e99e894794df8563a1877be, type: 3}
+  roomInfoPrefab: {fileID: 1169174478110788408, guid: bac3bd985e99e894794df8563a1877be, type: 3}
+  memberInfoPrefab: {fileID: 1169174478110788408, guid: ca973de0a5a15504787b4995774074ec, type: 3}
   startPos: {x: -320, y: 240}
   offsetPos: {x: 0, y: -110}
   rooms: []
+  members: []
 --- !u!1 &1092371135
 GameObject:
   m_ObjectHideFlags: 0
@@ -6909,7 +6911,6 @@ MonoBehaviour:
   makeOptionText: {fileID: 1902029841}
   makePasswardToggle: {fileID: 1698850674}
   makePasswardText: {fileID: 1557591038}
-  memberUI: {fileID: 1169174478110788408, guid: ca973de0a5a15504787b4995774074ec, type: 3}
   connectPasswardText: {fileID: 955726927}
   logText: {fileID: 47807948}
   logMax: 20

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Net.Sockets;
+using System.Threading;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -87,7 +88,16 @@ public class RoomUIManager : MonoBehaviour
             if (CheckNetState(ref buffer_) == NetState.RequireConnect)
             {
                 var data = Catch_ConnectData(endP_, buffer_);
-                listUIManager.AddListMemberInfo(endP_.Address, data);
+                Debug.Log(data[0] + "____" + data[1] + "____" + data[2]);
+                if (makePasswardToggle.isOn)
+                {
+                    if (data[2] == makePasswardText.text)
+                        listUIManager.AddListMemberInfo(endP_.Address, data);
+                }
+                else
+                {
+                    listUIManager.AddListMemberInfo(endP_.Address, data);
+                }
             }
         }
         RoomManager.CallBackResponse = callback;
@@ -124,6 +134,10 @@ public class RoomUIManager : MonoBehaviour
         for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
         {
             listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
+        }
+        for (int i = 0, count = listUIManager.members.Count; i < count; ++i)
+        {
+            listUIManager.RemoveListMemberInfo(listUIManager.members[0]);
         }
     }
     public void Room_Back()

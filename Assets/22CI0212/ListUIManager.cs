@@ -14,21 +14,23 @@ public class ListUIManager : MonoBehaviour
     public RoomInfo selectRoom { get; private set; }
     RectTransform rect;
 
-    [Header("UI")]
+    [Header("COnnect")]
     [SerializeField] GameObject connectUI;
-    [Header("TextFIeld")]
     [SerializeField] TextMeshProUGUI connectNameText;
     [SerializeField] TextMeshProUGUI connectOptionText;
     [SerializeField] GameObject connectPasswardArea;
     [Header("List")]
     [SerializeField] Transform scrollContent;
+    [Header("InfoPrefab")]
     [SerializeField] GameObject roomInfoPrefab;
     [SerializeField] GameObject memberInfoPrefab;
+    [Header("Position")]
     [SerializeField] Vector2 startPos = new(-320, 350);
     [SerializeField] Vector2 offsetPos = new(0, -110);
+    [Header("Debug")]
     [SerializeField] List<IPAddress> addressList = new();
-    public List<RoomInfo> rooms = new();
-    public List<MemberInfo> members = new();
+    public List<RoomInfo> rooms { get; private set; } = new();
+    public List<MemberInfo> members { get; private set; } = new();
 
     Vector3 StartPos { get { return startPos * transform.lossyScale; } }
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
