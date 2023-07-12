@@ -21,8 +21,6 @@ public class Order : MonoBehaviour
     [SerializeField] Text InductionText; //プレイヤーがするべきことへ誘導するテキスト
     protected StateOrder order = StateOrder.Non; //先行、後行が決まるまで何も決まっていない状態にしておく
 
-    [SerializeField] Text testText;
-
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +32,6 @@ public class Order : MonoBehaviour
         DecideButton.onClick.AddListener(Decide);
 
         SelectImage.enabled = false;
-        testText.enabled = false;
 
         InductionText.text = "先行 後行を選んでください";
     }
@@ -68,7 +65,5 @@ public class Order : MonoBehaviour
         if (order == StateOrder.Non) return;
 
         OrderCanvas.enabled = false;
-        testText.enabled = true;
-        testText.text = "あなたは" + order;
     }
 }
