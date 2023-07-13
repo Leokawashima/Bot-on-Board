@@ -2263,7 +2263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 79497998}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -3975,8 +3975,6 @@ MonoBehaviour:
   memberInfoPrefab: {fileID: 1169174478110788408, guid: ca973de0a5a15504787b4995774074ec, type: 3}
   startPos: {x: -320, y: 240}
   offsetPos: {x: 0, y: -110}
-  rooms: []
-  members: []
 --- !u!1 &1092371135
 GameObject:
   m_ObjectHideFlags: 0
@@ -7794,7 +7792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 482296574}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1

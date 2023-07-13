@@ -67,19 +67,18 @@ public class RoomUIManager : MonoBehaviour
         RoomManager.Close();
 
         var buffer = Get_RequireData("Name", makePasswardText.text);
-        RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
+        RoomManager.Connect(buffer, listUIManager.selectRoom.roomAddress);
 
         void callback(IPEndPoint endP_, string buffer_)
         {
             if (CheckNetState(ref buffer_) == NetState.ConnectResponse)
             {
                 var data = Catch_ResponseData(endP_, buffer_);
+                RoomManager.Close();
                 LogPush(data[1]);
             }
         }
-
         RoomManager.CallBackConnectResponse = callback;
-        RoomManager.ConnectResponse(listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
     }
@@ -110,8 +109,7 @@ public class RoomUIManager : MonoBehaviour
                 RoomManager.HostMessage(message, endP_.Address);
             }
         }
-        RoomManager.CallBackResponse = callback;
-        RoomManager.Response();
+        RoomManager.CallBackHostResponse = callback;
 
         listUIManager.AddListHostInfo();
 
@@ -130,7 +128,7 @@ public class RoomUIManager : MonoBehaviour
                     listUIManager.AddListRoomInfo(endP_.Address, data);
             }
         }
-        RoomManager.CallBackClient = callback;
+        RoomManager.CallBackClientReceive = callback;
         RoomManager.Client();
 
         LogPush("Client Started");
@@ -217,6 +215,7 @@ public class RoomUIManager : MonoBehaviour
             return NetState.Error;
         }
     }
+
     string Get_OpenData(string name_, bool passward_, string option_)
     {
         return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
@@ -255,6 +254,7 @@ public class RoomUIManager : MonoBehaviour
         data[1] = buffer_.Substring(buffer_.IndexOf("_") + 1);//flag
         return data;
     }
+
     void LogPush(string msg_)
     {
         if(logStr.Count == logMax)

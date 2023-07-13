@@ -11,6 +11,7 @@ using UnityEditor;
 /// <summary>
 /// Roomの接続処理を管理するクラス
 /// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public static class RoomManager
 {
     #region Field
@@ -18,15 +19,17 @@ public static class RoomManager
     public static State state = State.Close;
 
     public static ushort Port { get; private set; } = 3939;
-    public static int SendDelay { get; private set; } = 1000;
-    public static int ReceiveDelay { get; private set; } = 1000;
-    public static int SendTimeOut { get; private set; } = 100;
-    public static int ReceiveTimeOut { get; private set; } = 100;
+    public static int HostDelay { get; private set; } = 1000;
+    public static int ClientDelay { get; private set; } = 1000;
+    public static int ConnectDelay { get; private set; } = 1000;
+
+    public static int SendTimeOut { get; private set; } = 10;
+    public static int ReceiveTimeOut { get; private set; } = 10;
 
     public static UdpClient Udp { get; private set; }
 
-    public static Action<IPEndPoint, string> CallBackClient;
-    public static Action<IPEndPoint, string> CallBackResponse;
+    public static Action<IPEndPoint, string> CallBackHostResponse;
+    public static Action<IPEndPoint, string> CallBackClientReceive;
     public static Action<IPEndPoint, string> CallBackConnectResponse;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
@@ -48,8 +51,6 @@ public static class RoomManager
             try
             {
                 await Udp.SendAsync(buffer, buffer.Length, endP);
-
-                await Task.Delay(SendDelay);
             }
             catch(ObjectDisposedException)
             {
@@ -58,32 +59,33 @@ public static class RoomManager
 #endif
                 break;
             }
-        }
-    }
-    public static async void Response()
-    {
-        while (state == State.Host)
-        {
+
             try
             {
-                var endP = searchEndP;
-                var buffer = Udp.Receive(ref endP);
-                var data = Encoding.UTF8.GetString(buffer);
-                CallBackResponse?.Invoke(endP, data);
+                while(true)
+                {
+                    var remote = searchEndP;
+                    var getbuffer = Udp.Receive(ref remote);
+                    var data = Encoding.UTF8.GetString(getbuffer);
+                    CallBackHostResponse?.Invoke(endP, data);
+                }
             }
-            catch (SocketException)
+            catch(SocketException)
             {
-                await Task.Delay(ReceiveDelay);
+                await Task.Delay(HostDelay);
             }
-            catch (ObjectDisposedException)
+            catch(ObjectDisposedException)
             {
 #if UNITY_EDITOR
                 Debug.Log("Socket Close Because Udp is Disposed");
 #endif
                 break;
             }
+
+            
         }
     }
+
     public static async void Client()
     {
         state = State.Client;
@@ -93,14 +95,17 @@ public static class RoomManager
         {
             try
             {
-                var endP = searchEndP;
-                var buffer = Udp.Receive(ref endP);
-                var data = Encoding.UTF8.GetString(buffer);
-                CallBackClient?.Invoke(endP, data);
+                while(true)
+                {
+                    var endP = searchEndP;
+                    var buffer = Udp.Receive(ref endP);
+                    var data = Encoding.UTF8.GetString(buffer);
+                    CallBackClientReceive?.Invoke(endP, data);
+                }
             }
             catch(SocketException)
             {
-                await Task.Delay(ReceiveDelay);
+                await Task.Delay(ClientDelay);
             }
             catch(ObjectDisposedException)
             {
@@ -110,8 +115,11 @@ public static class RoomManager
                 break;
             }
         }
+
+        Close();
     }
-    public static async void ConnectRequire(string buffer_, IPAddress address_)
+
+    public static async void Connect(string buffer_, IPAddress address_)
     {
         state = State.ConnectRequire;
         Udp = CreateUdp();
@@ -124,8 +132,6 @@ public static class RoomManager
             try
             {
                 await Udp.SendAsync(buffer, buffer.Length, endP);
-
-                await Task.Delay(SendDelay);
             }
             catch (ObjectDisposedException)
             {
@@ -134,24 +140,22 @@ public static class RoomManager
 #endif
                 break;
             }
-        }
-    }
-    public static async void ConnectResponse(IPAddress address_)
-    {
-        while (state == State.ConnectRequire)
-        {
+
             try
             {
-                var endP = new IPEndPoint(address_, Port);
-                var buffer = Udp.Receive(ref endP);
-                var data = Encoding.UTF8.GetString(buffer);
-                CallBackConnectResponse?.Invoke(endP, data);
+                while(true)
+                {
+                    var remote = new IPEndPoint(address_, Port);
+                    var getbuffer = Udp.Receive(ref remote);
+                    var data = Encoding.UTF8.GetString(getbuffer);
+                    CallBackConnectResponse?.Invoke(endP, data);
+                }
             }
-            catch (SocketException)
+            catch(SocketException)
             {
-                await Task.Delay(ReceiveDelay);
+                await Task.Delay(ConnectDelay);
             }
-            catch (ObjectDisposedException)
+            catch(ObjectDisposedException)
             {
 #if UNITY_EDITOR
                 Debug.Log("Socket Close Because Udp is Disposed");
@@ -160,6 +164,7 @@ public static class RoomManager
             }
         }
     }
+
     public static async void HostMessage(string buffer_, IPAddress address_)
     {
         var endP = new IPEndPoint(address_, Port);
@@ -171,7 +176,7 @@ public static class RoomManager
             {
                 await Udp.SendAsync(buffer, buffer.Length, endP);
 
-                await Task.Delay(SendDelay);
+                await Task.Delay(1000);
             }
             catch (ObjectDisposedException)
             {
@@ -182,6 +187,7 @@ public static class RoomManager
             }
         }
     }
+
     public static void Close()
     {
         state = State.Close;
@@ -191,8 +197,8 @@ public static class RoomManager
     public static void Clean()
     {
         Close();
-        CallBackClient = null;
-        CallBackResponse = null;
+        CallBackClientReceive = null;
+        CallBackHostResponse = null;
         CallBackConnectResponse = null;
         localIPAddress = null;
     }
