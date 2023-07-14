@@ -90,7 +90,6 @@ public static class RoomManager
         {
             if(await Send(buffer, endP))
             {
-                Debug.Log("send");
                 if(count++ >= 20)
                     break;
             }

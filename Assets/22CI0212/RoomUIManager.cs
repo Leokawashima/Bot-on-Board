@@ -37,7 +37,8 @@ public class RoomUIManager : MonoBehaviour
     ListUIManager listUIManager;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
-    enum NetState { Error = -1, Room, ConnectRequire, ConnectResponse }
+    enum NetState { Error = -1, Room, Host, Client }
+    enum MessageState { Error = -1, Connect, interval, join, Ready }
 
     #endregion
 
@@ -68,30 +69,33 @@ public class RoomUIManager : MonoBehaviour
 
         void callback(IPEndPoint endP_, string buffer_)
         {
-            if(CheckNetState(ref buffer_) == NetState.ConnectResponse)
+            if(CheckNetState(ref buffer_) == NetState.Host)
             {
-                var data = Get_ResponseData(endP_, buffer_);
-                RoomManager.Close();
-                if(data.connectFlag)
+                if (CheckMessageState(ref buffer_) == MessageState.Connect)
                 {
-                    LogPush("Connected");
-                    SetUI(UIState.Client);
-                    loadUI.SetActive(false);
-                    for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-                        listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
+                    var data = Get_ConectResponseData(endP_, buffer_);
+                    RoomManager.Close();
+                    if(data.connectFlag)
+                    {
+                        LogPush("Connected");
+                        SetUI(UIState.Client);
+                        loadUI.SetActive(false);
+                        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+                            listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
 
-                    listUIManager.Add_MemberInfo(endP_.Address, "Host");
-                    listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "me");
-                }
-                else
-                {
-                    Room_Client();
+                        listUIManager.Add_MemberInfo(endP_.Address, "Host");
+                        listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "me");
+                    }
+                    else
+                    {
+                        Room_Client();
+                    }
                 }
             }
         }
         RoomManager.CallBackConnectResponse = callback;
 
-        var buffer = Convert_RequireData("Name", makePasswardText.text);
+        var buffer = Convert_ConectRequestData("Name", makePasswardText.text);
         RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require"); 
@@ -106,18 +110,21 @@ public class RoomUIManager : MonoBehaviour
 
         void callback(IPEndPoint endP_, string buffer_)
         {
-            if(CheckNetState(ref buffer_) == NetState.ConnectRequire)
+            if(CheckNetState(ref buffer_) == NetState.Client)
             {
-                var data = Get_RequireData(endP_, buffer_);
-                var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
-                if(flag)
+                if (CheckMessageState(ref buffer_) == MessageState.Connect)
                 {
-                    listUIManager.Add_MemberInfo(endP_.Address, data);
-                    LogPush(data.name + " joined");
-                }
+                    var data = Get_ConectRequestData(endP_, buffer_);
+                    var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
+                    if(flag)
+                    {
+                        listUIManager.Add_MemberInfo(endP_.Address, data);
+                        LogPush(data.name + " joined");
+                    }
 
-                var message = Convert_ResponseData(flag);
-                RoomManager.HostMessage(message, endP_.Address);
+                    var message = Convert_ConectResponseData(flag);
+                    RoomManager.HostMessage(message, endP_.Address);
+                }
             }
         }
         RoomManager.CallBackResponse = callback;
@@ -225,6 +232,20 @@ public class RoomUIManager : MonoBehaviour
             return NetState.Error;
         }
     }
+    MessageState CheckMessageState(ref string buffer_)
+    {
+        var state = buffer_.Substring(0, buffer_.IndexOf("_"));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+
+        try
+        {
+            return (MessageState)Enum.Parse(typeof(MessageState), state);
+        }
+        catch(ArgumentException)
+        {
+            return MessageState.Error;
+        }
+    }
 
     #region Send/Receive Converter
     string Convert_RoomData(string name_, bool passward_, string option_)
@@ -242,11 +263,11 @@ public class RoomUIManager : MonoBehaviour
         data.option = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-    string Convert_RequireData(string name_, string passward_)
+    string Convert_ConectRequestData(string name_, string passward_)
     {
-        return (int)NetState.ConnectRequire + "_" + name_ + "_" + passward_;
+        return (int)NetState.Client + "_" + (int)MessageState.Connect + "_" + name_ + "_" + passward_;
     }
-    UDPMessage_RequestData Get_RequireData(IPEndPoint endP_, string buffer_)
+    UDPMessage_RequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
     {
         var data = new UDPMessage_RequestData();
         data.address = endP_.Address;
@@ -254,11 +275,11 @@ public class RoomUIManager : MonoBehaviour
         data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-    string Convert_ResponseData(bool flag_)
+    string Convert_ConectResponseData(bool flag_)
     {
-        return (int)NetState.ConnectResponse + "_" + flag_;
+        return (int)NetState.Host + "_" + (int)MessageState.Connect + "_" + flag_;
     }
-    UDPMessage_ResponseData Get_ResponseData(IPEndPoint endP_, string buffer_)
+    UDPMessage_ResponseData Get_ConectResponseData(IPEndPoint endP_, string buffer_)
     {
         var data = new UDPMessage_ResponseData();
         data.address = endP_.Address;
