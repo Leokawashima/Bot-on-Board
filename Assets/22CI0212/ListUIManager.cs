@@ -44,6 +44,17 @@ public class ListUIManager : MonoBehaviour
         rooms.Clear();
         members.Clear();
     }
+    public void Clear()
+    {
+        foreach(var room in rooms)
+            Destroy(room.gameObject);
+        foreach(var member in members)
+            Destroy(member.gameObject);
+
+        addressList.Clear();
+        rooms.Clear();
+        members.Clear();
+    }
 
     public void SetSelectRoomInfo(RoomInfo room_)
     {
@@ -79,6 +90,13 @@ public class ListUIManager : MonoBehaviour
         addressList.Remove(room_.roomAddress);
         rooms.Remove(room_);
     }
+    public void RemoveAllListRoomInfo()
+    {
+        foreach(var room in rooms)
+            Destroy(room.gameObject);
+        addressList.Clear();
+        rooms.Clear();
+    }
     public void AddListMemberInfo(IPAddress address_, string[] data_)
     {
         if (addressList.Contains(address_))
@@ -103,5 +121,12 @@ public class ListUIManager : MonoBehaviour
 
         addressList.Remove(member_.memberAddress);
         members.Remove(member_);
+    }
+    public void RemoveAllListMemberInfo()
+    {
+        foreach(var member in members)
+            Destroy(member.gameObject);
+        addressList.Clear();
+        members.Clear();
     }
 }

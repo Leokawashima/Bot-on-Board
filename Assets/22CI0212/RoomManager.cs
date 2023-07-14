@@ -30,6 +30,7 @@ public static class RoomManager
 
     public static Action<IPEndPoint, string> CallBack_ReceiveHost;
     public static Action<IPEndPoint, string> CallBack_ReceiveClient;
+    public static Action<IPEndPoint, string> CallBack_ReceiveConnect;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
@@ -146,8 +147,9 @@ public static class RoomManager
                 {
                     var remote = new IPEndPoint(address_, Port);
                     var getbuffer = Udp.Receive(ref remote);
+                    Debug.Log("get");
                     var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBack_ReceiveClient?.Invoke(endP, data);
+                    CallBack_ReceiveConnect?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -204,6 +206,7 @@ public static class RoomManager
         Close();
         CallBack_ReceiveHost = null;
         CallBack_ReceiveClient = null;
+        CallBack_ReceiveConnect = null;
         localIPAddress = null;
     }
     #endregion

@@ -84,19 +84,23 @@ public class RoomUIManager : MonoBehaviour
                             listUIManager.AddListRoomInfo(endP_.Address, data);
                     }
                     break;
+            }
+        }
+        RoomManager.CallBack_ReceiveClient = callbackClient;
+
+        void callbackConnect(IPEndPoint endP_, string buffer_)
+        {
+            switch(CheckNetState(ref buffer_))
+            {
                 case NetState.ConnectResponse:
                     {
                         var data = Catch_ResponseData(endP_, buffer_);
-                        Debug.Log(data[1]);
                         RoomManager.Close();
                         if(bool.Parse(data[1]))
                         {
                             LogPush("Conected");
                             SetUI(UIState.Client);
-                            for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-                            {
-                                listUIManager.RemoveListRoomInfo(listUIManager.rooms[i]);
-                            }
+                            listUIManager.RemoveAllListRoomInfo();
                             var hostdata = new string[2] { data[0], "Host" };
                             listUIManager.AddListMemberInfo(endP_.Address, hostdata);
                             var mydata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "me" };
@@ -110,7 +114,7 @@ public class RoomUIManager : MonoBehaviour
                     break;
             }
         }
-        RoomManager.CallBack_ReceiveClient = callbackClient;
+        RoomManager.CallBack_ReceiveConnect = callbackConnect;
     }
     void OnDestroy()
     {
@@ -127,7 +131,7 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        var buffer = Get_RequireData("Name", makePasswardText.text);
+        var buffer = Get_RequireData("Guest", makePasswardText.text);
         RoomManager.Connect(buffer, listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
@@ -165,14 +169,7 @@ public class RoomUIManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
-        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-        {
-            listUIManager.RemoveListRoomInfo(listUIManager.rooms[0]);
-        }
-        for (int i = 0, count = listUIManager.members.Count; i < count; ++i)
-        {
-            listUIManager.RemoveListMemberInfo(listUIManager.members[0]);
-        }
+        listUIManager.Clear();
     }
     public void Room_Back()
     {
