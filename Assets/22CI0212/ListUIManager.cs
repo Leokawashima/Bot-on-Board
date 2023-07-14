@@ -54,18 +54,6 @@ public class ListUIManager : MonoBehaviour
         connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
 
-    public void AddListHostInfo()
-    {
-        var pos = rect.position + StartPos + OffsetPos * members.Count;
-        var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
-        ui.name = "Room_Host";
-        var host = ui.GetComponent<MemberInfo>();
-        host.InitializeInfo(this, (byte)members.Count, RoomManager.GetLocalIPAddress(), "Host");
-
-        addressList.Add(host.memberAddress);
-        members.Add(host);
-    }
-
     public void AddListRoomInfo(IPAddress address_, string[] data_)
     {
         if (addressList.Contains(address_))
@@ -84,7 +72,7 @@ public class ListUIManager : MonoBehaviour
         addressList.Add(address_);
         rooms.Add(room);
     }
-    public void RemMoveListRoomInfo(RoomInfo room_)
+    public void RemoveListRoomInfo(RoomInfo room_)
     {
         Destroy(room_.gameObject);
 

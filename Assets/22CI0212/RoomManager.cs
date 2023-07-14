@@ -28,9 +28,7 @@ public static class RoomManager
 
     public static UdpClient Udp { get; private set; }
 
-    public static Action<IPEndPoint, string> CallBackHostResponse;
-    public static Action<IPEndPoint, string> CallBackClientReceive;
-    public static Action<IPEndPoint, string> CallBackConnectResponse;
+    public static Action<IPEndPoint, string> CallBack;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
@@ -67,7 +65,7 @@ public static class RoomManager
                     var remote = searchEndP;
                     var getbuffer = Udp.Receive(ref remote);
                     var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBackHostResponse?.Invoke(endP, data);
+                    CallBack?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -100,7 +98,7 @@ public static class RoomManager
                     var endP = searchEndP;
                     var buffer = Udp.Receive(ref endP);
                     var data = Encoding.UTF8.GetString(buffer);
-                    CallBackClientReceive?.Invoke(endP, data);
+                    CallBack?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -148,7 +146,7 @@ public static class RoomManager
                     var remote = new IPEndPoint(address_, Port);
                     var getbuffer = Udp.Receive(ref remote);
                     var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBackConnectResponse?.Invoke(endP, data);
+                    CallBack?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -197,9 +195,7 @@ public static class RoomManager
     public static void Clean()
     {
         Close();
-        CallBackClientReceive = null;
-        CallBackHostResponse = null;
-        CallBackConnectResponse = null;
+        CallBack = null;
         localIPAddress = null;
     }
     #endregion
