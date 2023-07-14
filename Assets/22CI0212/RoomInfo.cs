@@ -24,16 +24,16 @@ public class RoomInfo : MonoBehaviour
         list.SetSelectRoomInfo(this);
     }
 
-    public void InitializeInfo(ListUIManager list_, byte index_, IPAddress address_, string name_, bool passward_, string option_)
+    public void InitializeInfo(ListUIManager list_, byte index_, UDPMessage_RoomData data_)
     {
         list = list_;
         roomIndex = index_;
-        roomAddress = address_;
-        roomName = name_;
-        roomNameText.text = name_;
-        roomOption = option_;
-        roomOptionText.text = option_;
-        roomPassward = passward_;
-        roomPassImage.SetActive(passward_);
+        roomAddress = data_.address;
+        roomName = data_.name;
+        roomNameText.text = data_.name;
+        roomPassward = data_.passwardFlag;
+        roomPassImage.SetActive(data_.passwardFlag);
+        roomOption = data_.option;
+        roomOptionText.text = data_.option;
     }
 }

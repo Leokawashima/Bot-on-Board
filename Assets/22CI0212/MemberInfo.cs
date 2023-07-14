@@ -28,4 +28,12 @@ public class MemberInfo : MonoBehaviour
         memberName = name_;
         memberNameText.text = name_;
     }
+    public void InitializeInfo(ListUIManager list_, byte index_, UDPMessage_RequestData data_)
+    {
+        list = list_;
+        memberIndex = index_;
+        memberAddress = data_.address;
+        memberName = data_.name;
+        memberNameText.text = data_.name;
+    }
 }

@@ -49,7 +49,7 @@ public class RoomUIManager : MonoBehaviour
         SetUI(UIState.Choise);
 
         listUIManager = listUI.GetComponent<ListUIManager>();
-        listUIManager.InitializeList();
+        listUIManager.Initialize();
     }
     void OnDestroy()
     {
@@ -66,7 +66,7 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        var buffer = Get_RequireData("Name", makePasswardText.text);
+        var buffer = Convert_RequireData("Name", makePasswardText.text);
         RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
@@ -75,20 +75,18 @@ public class RoomUIManager : MonoBehaviour
         {
             if (CheckNetState(ref buffer_) == NetState.ConnectResponse)
             {
-                var data = Catch_ResponseData(endP_, buffer_);
+                var data = Get_ResponseData(endP_, buffer_);
                 RoomManager.Close();
-                if (bool.Parse(data[1]))
+                if (data.connectFlag)
                 {
                     LogPush("Connected");
                     SetUI(UIState.Client);
                     loadUI.SetActive(false);
                     for (int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-                        listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
+                        listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
 
-                    var hostdata = new string[2] { data[0], "Host" };
-                    listUIManager.AddListMemberInfo(endP_.Address, hostdata);
-                    var mydata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "me" };
-                    listUIManager.AddListMemberInfo(RoomManager.GetLocalIPAddress(), mydata);
+                    listUIManager.Add_MemberInfo(endP_.Address, "Host");
+                    listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "me");
                 }
                 else
                 {
@@ -98,7 +96,6 @@ public class RoomUIManager : MonoBehaviour
         }
 
         RoomManager.CallBackConnectResponse = callback;
-        RoomManager.ConnectResponse(listUIManager.selectRoom.roomAddress);
     }
     public void Room_BackRoom()
     {
@@ -108,30 +105,28 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Host);
 
-        var buffer = Get_OpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+        var buffer = Convert_RoomData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
         RoomManager.Host(buffer);
 
         void callback(IPEndPoint endP_, string buffer_)
         {
             if (CheckNetState(ref buffer_) == NetState.ConnectRequire)
             {
-                var data = Catch_RequireData(endP_, buffer_);
-                var flag = !makePasswardToggle.isOn && data[2] == makePasswardText.text;
+                var data = Get_RequireData(endP_, buffer_);
+                var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
                 if (flag)
                 {
-                    listUIManager.AddListMemberInfo(endP_.Address, data);
-                    LogPush(data[1] + " joined");
+                    listUIManager.Add_MemberInfo(endP_.Address, data);
+                    LogPush(data.name + " joined");
                 }
 
-                var message = Get_ResponseData(flag);
+                var message = Convert_ResponseData(flag);
                 RoomManager.HostMessage(message, endP_.Address);
             }
         }
         RoomManager.CallBackResponse = callback;
-        RoomManager.Response();
 
-        var hostdata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "Host(Me)" };
-        listUIManager.AddListMemberInfo(RoomManager.GetLocalIPAddress(), hostdata);
+        listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "Host(Me)");
 
         LogPush("Host Started");
     }
@@ -143,9 +138,9 @@ public class RoomUIManager : MonoBehaviour
         {
             if (CheckNetState(ref buffer_) == NetState.Room)
             {
-                var data = Catch_OpenData(endP_, buffer_);
+                var data = Get_RoomData(endP_, buffer_);
                 if (endP_.Address != RoomManager.GetLocalIPAddress())
-                    listUIManager.AddListRoomInfo(endP_.Address, data);
+                    listUIManager.Add_RoomInfo(endP_.Address, data);
             }
         }
         RoomManager.CallBackClient = callback;
@@ -162,14 +157,7 @@ public class RoomUIManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
-        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-        {
-            listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
-        }
-        for (int i = 0, count = listUIManager.members.Count; i < count; ++i)
-        {
-            listUIManager.RemoveListMemberInfo(listUIManager.members[0]);
-        }
+        listUIManager.Clear();
     }
     public void Room_Back()
     {
@@ -221,6 +209,9 @@ public class RoomUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// データのヘッダーからメッセージステートを読み取る
+    /// </summary>
     NetState CheckNetState(ref string buffer_)
     {
         var state = buffer_.Substring(0, buffer_.IndexOf("_"));
@@ -235,44 +226,51 @@ public class RoomUIManager : MonoBehaviour
             return NetState.Error;
         }
     }
-    string Get_OpenData(string name_, bool passward_, string option_)
+
+    #region Send/Receive Converter
+    string Convert_RoomData(string name_, bool passward_, string option_)
     {
         return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
     }
-    string[] Catch_OpenData(IPEndPoint endP_, string buffer_)
+    UDPMessage_RoomData Get_RoomData(IPEndPoint endP_, string buffer_)
     {
         //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
-        var data = new string[4];
-        data[0] = endP_.Address.ToString();
-        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//name
+        var data = new UDPMessage_RoomData();
+        data.address = endP_.Address;
+        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        data[2] = buffer_.Substring(0, buffer_.IndexOf("_"));//passward
-        data[3] = buffer_.Substring(buffer_.IndexOf("_") + 1);//option
+        data.passwardFlag = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        data.option = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-    string Get_RequireData(string name_, string passward_)
+    string Convert_RequireData(string name_, string passward_)
     {
         return (int)NetState.ConnectRequire + "_" + name_ + "_" + passward_;
     }
-    string[] Catch_RequireData(IPEndPoint endP_, string buffer_)
+    UDPMessage_RequestData Get_RequireData(IPEndPoint endP_, string buffer_)
     {
-        var data = new string[3];
-        data[0] = endP_.Address.ToString();
-        data[1] = buffer_.Substring(0, buffer_.IndexOf("_"));//name
-        data[2] = buffer_.Substring(buffer_.IndexOf("_") + 1);//passward
+        var data = new UDPMessage_RequestData();
+        data.address = endP_.Address;
+        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
+        data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-    string Get_ResponseData(bool flag_)
+    string Convert_ResponseData(bool flag_)
     {
         return (int)NetState.ConnectResponse + "_" + flag_;
     }
-    string[] Catch_ResponseData(IPEndPoint endP_, string buffer_)
+    UDPMessage_ResponseData Get_ResponseData(IPEndPoint endP_, string buffer_)
     {
-        var data = new string[2];
-        data[0] = endP_.Address.ToString();
-        data[1] = buffer_.Substring(buffer_.IndexOf("_") + 1);//flag
+        var data = new UDPMessage_ResponseData();
+        data.address = endP_.Address;
+        data.connectFlag = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
         return data;
     }
+    #endregion
+
+    /// <summary>
+    /// ログに行を追加する
+    /// </summary>
     void LogPush(string msg_)
     {
         if(logStr.Count == logMax)
@@ -295,21 +293,21 @@ public class RoomUIManager : MonoBehaviour
     void SendTest()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(Get_OpenData("TestSendRoom", false, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(Convert_RoomData("TestSendRoom", false, "hatune miku"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
     [ContextMenu("SendLock")]
     void SendTestLocked()
     {
         var endP = RoomManager.buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(Get_OpenData("TestSendRoom", true, "hatune miku"));
+        var buffer = Encoding.UTF8.GetBytes(Convert_RoomData("TestSendRoom", true, "hatune miku"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
     [ContextMenu("SendConnect")]
     void SendTestConnect()
     {
         var endP = new IPEndPoint(RoomManager.GetLocalIPAddress(), RoomManager.Port);
-        var buffer = Encoding.UTF8.GetBytes(Get_RequireData("Test", "3939"));
+        var buffer = Encoding.UTF8.GetBytes(Convert_RequireData("Test", "3939"));
         RoomManager.Udp?.SendAsync(buffer, buffer.Length, endP);
     }
     [ContextMenu("Receive")]

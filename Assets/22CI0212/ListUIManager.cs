@@ -27,8 +27,8 @@ public class ListUIManager : MonoBehaviour
     [Header("Position")]
     [SerializeField] Vector2 startPos = new(-320, 350);
     [SerializeField] Vector2 offsetPos = new(0, -110);
-    [Header("Debug")]
-    [SerializeField] List<IPAddress> addressList = new();
+
+    List<IPAddress> addressList = new();
     public List<RoomInfo> rooms { get; private set; } = new();
     public List<MemberInfo> members { get; private set; } = new();
 
@@ -36,9 +36,18 @@ public class ListUIManager : MonoBehaviour
     Vector3 OffsetPos { get { return offsetPos * transform.lossyScale; } }
     #endregion
 
-    public void InitializeList()
+    public void Initialize()
     {
         rect = transform as RectTransform;
+
+        Clear();
+    }
+    public void Clear()
+    {
+        foreach(var room in rooms)
+            Destroy(room.gameObject);
+        foreach(var member in members)
+            Destroy(member.gameObject);
 
         addressList.Clear();
         rooms.Clear();
@@ -54,7 +63,7 @@ public class ListUIManager : MonoBehaviour
         connectPasswardArea.SetActive(selectRoom.roomPassward);
     }
 
-    public void AddListRoomInfo(IPAddress address_, string[] data_)
+    public void Add_RoomInfo(IPAddress address_, UDPMessage_RoomData data_)
     {
         if (addressList.Contains(address_))
         {
@@ -65,21 +74,47 @@ public class ListUIManager : MonoBehaviour
         }
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
         var ui = Instantiate(roomInfoPrefab, pos, Quaternion.identity, scrollContent);
-        ui.name = "Room_" + data_[1];
+        ui.name = "Room_" + data_.name;
         var room = ui.GetComponent<RoomInfo>();
-        room.InitializeInfo(this, (byte)rooms.Count, IPAddress.Parse(data_[0]), data_[1], bool.Parse(data_[2]), data_[3]);
+        room.InitializeInfo(this, (byte)rooms.Count, data_);
 
         addressList.Add(address_);
         rooms.Add(room);
     }
-    public void RemMoveListRoomInfo(RoomInfo room_)
+    public void Remove_RoomInfo(RoomInfo room_)
     {
         Destroy(room_.gameObject);
 
         addressList.Remove(room_.roomAddress);
         rooms.Remove(room_);
     }
-    public void AddListMemberInfo(IPAddress address_, string[] data_)
+    public void RemoveAll_RoomInfo()
+    {
+        foreach(var room in rooms)
+            Destroy(room.gameObject);
+
+        addressList.Clear();
+        rooms.Clear();
+    }
+    public void Add_MemberInfo(IPAddress address_, string name)
+    {
+        if(addressList.Contains(address_))
+        {
+#if UNITY_EDITOR
+            Debug.Log("Address has already connected");
+#endif
+            return;
+        }
+        var pos = rect.position + StartPos + OffsetPos * members.Count;
+        var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
+        ui.name = "Member_" + name;
+        var member = ui.GetComponent<MemberInfo>();
+        member.InitializeInfo(this, (byte)members.Count, address_, name);
+
+        addressList.Add(address_);
+        members.Add(member);
+    }
+    public void Add_MemberInfo(IPAddress address_, UDPMessage_RequestData data_)
     {
         if (addressList.Contains(address_))
         {
@@ -90,18 +125,26 @@ public class ListUIManager : MonoBehaviour
         }
         var pos = rect.position + StartPos + OffsetPos * members.Count;
         var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
-        ui.name = "Member_" + data_[1];
+        ui.name = "Member_" + data_.name;
         var member = ui.GetComponent<MemberInfo>();
-        member.InitializeInfo(this, (byte)members.Count, IPAddress.Parse(data_[0]), data_[1]);
+        member.InitializeInfo(this, (byte)members.Count, data_);
 
         addressList.Add(address_);
         members.Add(member);
     }
-    public void RemoveListMemberInfo(MemberInfo member_)
+    public void Remove_MemberInfo(MemberInfo member_)
     {
         Destroy(member_.gameObject);
 
         addressList.Remove(member_.memberAddress);
         members.Remove(member_);
+    }
+    public void RemoveAll_MemberInfo()
+    {
+        foreach(var member in members)
+            Destroy(member.gameObject);
+
+        addressList.Clear();
+        members.Clear();
     }
 }
