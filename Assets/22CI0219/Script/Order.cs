@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
 
+/// <summary>
+/// 先行後行用
+/// </summary>
 public class Order : MonoBehaviour
 {
     protected enum StateOrder
@@ -13,7 +16,6 @@ public class Order : MonoBehaviour
         Follower //後行
     }
 
-    [SerializeField] Canvas OrderCanvas;
     [SerializeField] Button PrecedenceButton; //先行ボタン
     [SerializeField] Button FollowerButton; //後行ボタン
     [SerializeField] Button DecideButton; //決定ボタン
@@ -36,6 +38,7 @@ public class Order : MonoBehaviour
         InductionText.text = "先行 後行を選んでください";
     }
 
+    #region Button
     //PrecedenceButtonが押されたとき
     void Precedence_()
     {
@@ -64,6 +67,7 @@ public class Order : MonoBehaviour
         //先行、後行が選択されていない場合、この先の処理は行わない
         if (order == StateOrder.Non) return;
 
-        OrderCanvas.enabled = false;
+        gameObject.SetActive(false);
     }
+    #endregion
 }
