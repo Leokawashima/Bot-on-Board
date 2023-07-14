@@ -37,7 +37,7 @@ public class RoomUIManager : MonoBehaviour
     ListUIManager listUIManager;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
-    enum NetState { Error = -1, Room, ConnectRequire, ConnectResponse = 2 }
+    enum NetState { Error = -1, Room, ConnectRequire, ConnectResponse }
 
     #endregion
 
@@ -66,23 +66,18 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        var buffer = Convert_RequireData("Name", makePasswardText.text);
-        RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
-
-        LogPush("Connect Require");
-
         void callback(IPEndPoint endP_, string buffer_)
         {
-            if (CheckNetState(ref buffer_) == NetState.ConnectResponse)
+            if(CheckNetState(ref buffer_) == NetState.ConnectResponse)
             {
                 var data = Get_ResponseData(endP_, buffer_);
                 RoomManager.Close();
-                if (data.connectFlag)
+                if(data.connectFlag)
                 {
                     LogPush("Connected");
                     SetUI(UIState.Client);
                     loadUI.SetActive(false);
-                    for (int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+                    for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
                         listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
 
                     listUIManager.Add_MemberInfo(endP_.Address, "Host");
@@ -94,8 +89,12 @@ public class RoomUIManager : MonoBehaviour
                 }
             }
         }
-
         RoomManager.CallBackConnectResponse = callback;
+
+        var buffer = Convert_RequireData("Name", makePasswardText.text);
+        RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
+
+        LogPush("Connect Require"); 
     }
     public void Room_BackRoom()
     {
@@ -105,16 +104,13 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Host);
 
-        var buffer = Convert_RoomData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
-        RoomManager.Host(buffer);
-
         void callback(IPEndPoint endP_, string buffer_)
         {
-            if (CheckNetState(ref buffer_) == NetState.ConnectRequire)
+            if(CheckNetState(ref buffer_) == NetState.ConnectRequire)
             {
                 var data = Get_RequireData(endP_, buffer_);
                 var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
-                if (flag)
+                if(flag)
                 {
                     listUIManager.Add_MemberInfo(endP_.Address, data);
                     LogPush(data.name + " joined");
@@ -125,6 +121,9 @@ public class RoomUIManager : MonoBehaviour
             }
         }
         RoomManager.CallBackResponse = callback;
+
+        var buffer = Convert_RoomData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
+        RoomManager.Host(buffer);
 
         listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "Host(Me)");
 

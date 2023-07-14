@@ -83,17 +83,16 @@ public static class RoomManager
     public static async void HostMessage(string buffer_, IPAddress address_)
     {
         int count = 0;
-        var endP = new IPEndPoint(address_, Port);
+        var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
         while (state == State.Host)
         {
             if(await Send(buffer, endP))
             {
+                Debug.Log("send");
                 if(count++ >= 20)
                     break;
-
-                await Task.Delay(SendDelay);
             }
             else
             {
