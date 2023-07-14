@@ -50,71 +50,6 @@ public class RoomUIManager : MonoBehaviour
 
         listUIManager = listUI.GetComponent<ListUIManager>();
         listUIManager.InitializeList();
-
-        void callbackHost(IPEndPoint endP_, string buffer_)
-        {
-            switch(CheckNetState(ref buffer_))
-            {
-                case NetState.ConnectRequire:
-                    {
-                        var data = Catch_RequireData(endP_, buffer_);
-                        var flag = !makePasswardToggle.isOn && data[2] == makePasswardText.text;
-                        if(flag)
-                        {
-                            listUIManager.AddListMemberInfo(endP_.Address, data);
-                            LogPush(data[1] + " joined");
-                        }
-
-                        var message = Get_ResponseData(flag);
-                        RoomManager.HostMessage(message, endP_.Address);
-                    }
-                    break;
-            }
-        }
-        RoomManager.CallBack_ReceiveHost = callbackHost;
-
-        void callbackClient(IPEndPoint endP_, string buffer_)
-        {
-            switch(CheckNetState(ref buffer_))
-            {
-                case NetState.Room:
-                    {
-                        var data = Catch_OpenData(endP_, buffer_);
-                        if(endP_.Address != RoomManager.GetLocalIPAddress())
-                            listUIManager.AddListRoomInfo(endP_.Address, data);
-                    }
-                    break;
-            }
-        }
-        RoomManager.CallBack_ReceiveClient = callbackClient;
-
-        void callbackConnect(IPEndPoint endP_, string buffer_)
-        {
-            switch(CheckNetState(ref buffer_))
-            {
-                case NetState.ConnectResponse:
-                    {
-                        var data = Catch_ResponseData(endP_, buffer_);
-                        RoomManager.Close();
-                        if(bool.Parse(data[1]))
-                        {
-                            LogPush("Conected");
-                            SetUI(UIState.Client);
-                            listUIManager.RemoveAllListRoomInfo();
-                            var hostdata = new string[2] { data[0], "Host" };
-                            listUIManager.AddListMemberInfo(endP_.Address, hostdata);
-                            var mydata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "me" };
-                            listUIManager.AddListMemberInfo(endP_.Address, mydata);
-                        }
-                        else
-                        {
-                            Room_Client();
-                        }
-                    }
-                    break;
-            }
-        }
-        RoomManager.CallBack_ReceiveConnect = callbackConnect;
     }
     void OnDestroy()
     {
@@ -131,10 +66,39 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        var buffer = Get_RequireData("Guest", makePasswardText.text);
-        RoomManager.Connect(buffer, listUIManager.selectRoom.roomAddress);
+        var buffer = Get_RequireData("Name", makePasswardText.text);
+        RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
 
         LogPush("Connect Require");
+
+        void callback(IPEndPoint endP_, string buffer_)
+        {
+            if (CheckNetState(ref buffer_) == NetState.ConnectResponse)
+            {
+                var data = Catch_ResponseData(endP_, buffer_);
+                RoomManager.Close();
+                if (bool.Parse(data[1]))
+                {
+                    LogPush("Connected");
+                    SetUI(UIState.Client);
+                    loadUI.SetActive(false);
+                    for (int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+                        listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
+
+                    var hostdata = new string[2] { data[0], "Host" };
+                    listUIManager.AddListMemberInfo(endP_.Address, hostdata);
+                    var mydata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "me" };
+                    listUIManager.AddListMemberInfo(RoomManager.GetLocalIPAddress(), mydata);
+                }
+                else
+                {
+                    Room_Client();
+                }
+            }
+        }
+
+        RoomManager.CallBackConnectResponse = callback;
+        RoomManager.ConnectResponse(listUIManager.selectRoom.roomAddress);
     }
     public void Room_BackRoom()
     {
@@ -147,8 +111,27 @@ public class RoomUIManager : MonoBehaviour
         var buffer = Get_OpenData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
         RoomManager.Host(buffer);
 
-        var data = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "Host" };
-        listUIManager.AddListMemberInfo(RoomManager.GetLocalIPAddress(), data);
+        void callback(IPEndPoint endP_, string buffer_)
+        {
+            if (CheckNetState(ref buffer_) == NetState.ConnectRequire)
+            {
+                var data = Catch_RequireData(endP_, buffer_);
+                var flag = !makePasswardToggle.isOn && data[2] == makePasswardText.text;
+                if (flag)
+                {
+                    listUIManager.AddListMemberInfo(endP_.Address, data);
+                    LogPush(data[1] + " joined");
+                }
+
+                var message = Get_ResponseData(flag);
+                RoomManager.HostMessage(message, endP_.Address);
+            }
+        }
+        RoomManager.CallBackResponse = callback;
+        RoomManager.Response();
+
+        var hostdata = new string[2] { RoomManager.GetLocalIPAddress().ToString(), "Host(Me)" };
+        listUIManager.AddListMemberInfo(RoomManager.GetLocalIPAddress(), hostdata);
 
         LogPush("Host Started");
     }
@@ -156,6 +139,16 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Client);
 
+        void callback(IPEndPoint endP_, string buffer_)
+        {
+            if (CheckNetState(ref buffer_) == NetState.Room)
+            {
+                var data = Catch_OpenData(endP_, buffer_);
+                if (endP_.Address != RoomManager.GetLocalIPAddress())
+                    listUIManager.AddListRoomInfo(endP_.Address, data);
+            }
+        }
+        RoomManager.CallBackClient = callback;
         RoomManager.Client();
 
         LogPush("Client Started");
@@ -169,7 +162,14 @@ public class RoomUIManager : MonoBehaviour
         logText.text = string.Empty;
         logStr.Clear();
 
-        listUIManager.Clear();
+        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+        {
+            listUIManager.RemMoveListRoomInfo(listUIManager.rooms[0]);
+        }
+        for (int i = 0, count = listUIManager.members.Count; i < count; ++i)
+        {
+            listUIManager.RemoveListMemberInfo(listUIManager.members[0]);
+        }
     }
     public void Room_Back()
     {
@@ -235,7 +235,6 @@ public class RoomUIManager : MonoBehaviour
             return NetState.Error;
         }
     }
-
     string Get_OpenData(string name_, bool passward_, string option_)
     {
         return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
@@ -274,7 +273,6 @@ public class RoomUIManager : MonoBehaviour
         data[1] = buffer_.Substring(buffer_.IndexOf("_") + 1);//flag
         return data;
     }
-
     void LogPush(string msg_)
     {
         if(logStr.Count == logMax)
