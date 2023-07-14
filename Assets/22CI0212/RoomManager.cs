@@ -44,70 +44,22 @@ public static class RoomManager
         var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
+        Receive(State.Host, CallBackResponse);
         while(state == State.Host)
         {
-            try
+            if(await Send(buffer, endP) == false)
             {
-                await Udp.SendAsync(buffer, buffer.Length, endP);
-            }
-            catch(ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
-                break;
-            }
-
-            try
-            {
-                while(true)
-                {
-                    var remote = searchEndP;
-                    var getbuffer = Udp.Receive(ref remote);
-                    var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBackResponse?.Invoke(remote, data);
-                }
-            }
-            catch(SocketException)
-            {
-                await Task.Delay(1000);
-            }
-            catch(ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
                 break;
             }
         }
     }
 
-    public static async void Client()
+    public static void Client()
     {
         state = State.Client;
         CreateUdp();
 
-        while(state == State.Client)
-        {
-            try
-            {
-                var endP = searchEndP;
-                var buffer = Udp.Receive(ref endP);
-                var data = Encoding.UTF8.GetString(buffer);
-                CallBackClient?.Invoke(endP, data);
-            }
-            catch(SocketException)
-            {
-                await Task.Delay(ReceiveDelay);
-            }
-            catch(ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
-                break;
-            }
-        }
+        Receive(State.Client, CallBackClient);
     }
 
     public static async void ConnectRequire(string buffer_, IPAddress address_)
@@ -118,39 +70,11 @@ public static class RoomManager
         var endP = new IPEndPoint(address_, Port);
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        while (state == State.ConnectRequire)
+        Receive(State.ConnectRequire, CallBackConnectResponse);
+        while(state == State.ConnectRequire)
         {
-            try
+            if(await Send(buffer, endP) == false)
             {
-                await Udp.SendAsync(buffer, buffer.Length, endP);
-            }
-            catch (ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
-                break;
-            }
-
-            try
-            {
-                while(true)
-                {
-                    var remote = new IPEndPoint(address_, Port);
-                    var getbuffer = Udp.Receive(ref remote);
-                    var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBackConnectResponse?.Invoke(remote, data);
-                }
-            }
-            catch(SocketException)
-            {
-                await Task.Delay(1000);
-            }
-            catch(ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
                 break;
             }
         }
@@ -164,23 +88,15 @@ public static class RoomManager
 
         while (state == State.Host)
         {
-            try
+            if(await Send(buffer, endP))
             {
-                await Udp.SendAsync(buffer, buffer.Length, endP);
                 if(count++ >= 20)
-                {
-#if UNITY_EDITOR
-                    Debug.Log("Sended 20 times");
-#endif
                     break;
-                }
+
                 await Task.Delay(SendDelay);
             }
-            catch (ObjectDisposedException)
+            else
             {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
                 break;
             }
         }
@@ -226,6 +142,90 @@ public static class RoomManager
             localIPAddress = null;
         }
         return localIPAddress;
+    }
+    static async Task<bool> Send(byte[] buffer_, IPEndPoint endP_)
+    {
+        try
+        {
+            await Udp.SendAsync(buffer_, buffer_.Length, endP_);
+
+            await Task.Delay(SendDelay);
+            return true;
+        }
+        catch(ObjectDisposedException)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+            return false;
+        }
+        catch(NullReferenceException)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Socket Close Because Udp is Null");
+#endif
+            return false;
+        }
+    }
+    static async void Receive(State state_, Action<IPEndPoint, string> callback_)
+    {
+        #region Receive
+        while(state == state_)
+        {
+            try
+            {
+                var endP = searchEndP;
+                var buffer = Udp.Receive(ref endP);
+                var data = Encoding.UTF8.GetString(buffer);
+                callback_?.Invoke(endP, data);
+            }
+            catch(SocketException)
+            {
+                await Task.Delay(ReceiveDelay);
+            }
+            catch(ObjectDisposedException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Disposed");
+#endif
+                break;
+            }
+            catch(NullReferenceException)
+            {
+#if UNITY_EDITOR
+                Debug.Log("Socket Close Because Udp is Null");
+#endif
+                break;
+            }
+        }
+        #endregion
+
+        #region ReceiveAsync
+        /*
+        //ReceiveAsync方式
+        //文字列に変換しないと自身のアドレスとの比較が上手くいかない(IPAddressが参照型だから比較できない？)
+        //文字を受け取ったら勝手に仕事してまた探すのでメッセージが多い時も少ない時も使い勝手が良いが気に入らないので使っていない
+        //ReceiveAsyncはキャンセルトークンも渡せないようなので余計にヘイトが高い
+        //使いたい場合はコメント外してね
+        try
+        {
+            while(state == state_)
+            {
+                var result = await Udp.ReceiveAsync();
+                var data = Encoding.UTF8.GetString(result.Buffer);
+                callback_?.Invoke(result.RemoteEndPoint, data);
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            //なにがし
+        }
+        catch(NullReferenceException)
+        {
+            //それがし
+        }
+        */
+        #endregion
     }
     #endregion
 
