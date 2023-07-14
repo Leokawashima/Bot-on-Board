@@ -28,7 +28,8 @@ public static class RoomManager
 
     public static UdpClient Udp { get; private set; }
 
-    public static Action<IPEndPoint, string> CallBack;
+    public static Action<IPEndPoint, string> CallBack_ReceiveHost;
+    public static Action<IPEndPoint, string> CallBack_ReceiveClient;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
@@ -65,7 +66,7 @@ public static class RoomManager
                     var remote = searchEndP;
                     var getbuffer = Udp.Receive(ref remote);
                     var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBack?.Invoke(endP, data);
+                    CallBack_ReceiveHost?.Invoke(remote, data);
                 }
             }
             catch(SocketException)
@@ -98,7 +99,7 @@ public static class RoomManager
                     var endP = searchEndP;
                     var buffer = Udp.Receive(ref endP);
                     var data = Encoding.UTF8.GetString(buffer);
-                    CallBack?.Invoke(endP, data);
+                    CallBack_ReceiveClient?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -146,7 +147,7 @@ public static class RoomManager
                     var remote = new IPEndPoint(address_, Port);
                     var getbuffer = Udp.Receive(ref remote);
                     var data = Encoding.UTF8.GetString(getbuffer);
-                    CallBack?.Invoke(endP, data);
+                    CallBack_ReceiveClient?.Invoke(endP, data);
                 }
             }
             catch(SocketException)
@@ -165,6 +166,7 @@ public static class RoomManager
 
     public static async void HostMessage(string buffer_, IPAddress address_)
     {
+        int cnt = 0;
         var endP = new IPEndPoint(address_, Port);
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
@@ -173,7 +175,12 @@ public static class RoomManager
             try
             {
                 await Udp.SendAsync(buffer, buffer.Length, endP);
-
+                if(cnt++ >= 20)
+                {
+                    Debug.Log("Host sended");
+                    break;
+                }
+                
                 await Task.Delay(1000);
             }
             catch (ObjectDisposedException)
@@ -195,7 +202,8 @@ public static class RoomManager
     public static void Clean()
     {
         Close();
-        CallBack = null;
+        CallBack_ReceiveHost = null;
+        CallBack_ReceiveClient = null;
         localIPAddress = null;
     }
     #endregion

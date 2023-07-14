@@ -51,17 +51,10 @@ public class RoomUIManager : MonoBehaviour
         listUIManager = listUI.GetComponent<ListUIManager>();
         listUIManager.InitializeList();
 
-        void callback(IPEndPoint endP_, string buffer_)
+        void callbackHost(IPEndPoint endP_, string buffer_)
         {
             switch(CheckNetState(ref buffer_))
             {
-                case NetState.Room:
-                    {
-                        var data = Catch_OpenData(endP_, buffer_);
-                        if(endP_.Address != RoomManager.GetLocalIPAddress())
-                            listUIManager.AddListRoomInfo(endP_.Address, data);
-                    }
-                    break;
                 case NetState.ConnectRequire:
                     {
                         var data = Catch_RequireData(endP_, buffer_);
@@ -76,16 +69,31 @@ public class RoomUIManager : MonoBehaviour
                         RoomManager.HostMessage(message, endP_.Address);
                     }
                     break;
+            }
+        }
+        RoomManager.CallBack_ReceiveHost = callbackHost;
+
+        void callbackClient(IPEndPoint endP_, string buffer_)
+        {
+            switch(CheckNetState(ref buffer_))
+            {
+                case NetState.Room:
+                    {
+                        var data = Catch_OpenData(endP_, buffer_);
+                        if(endP_.Address != RoomManager.GetLocalIPAddress())
+                            listUIManager.AddListRoomInfo(endP_.Address, data);
+                    }
+                    break;
                 case NetState.ConnectResponse:
                     {
                         var data = Catch_ResponseData(endP_, buffer_);
                         Debug.Log(data[1]);
                         RoomManager.Close();
-                        if (bool.Parse(data[1]))
+                        if(bool.Parse(data[1]))
                         {
                             LogPush("Conected");
                             SetUI(UIState.Client);
-                            for (int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+                            for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
                             {
                                 listUIManager.RemoveListRoomInfo(listUIManager.rooms[i]);
                             }
@@ -102,7 +110,7 @@ public class RoomUIManager : MonoBehaviour
                     break;
             }
         }
-        RoomManager.CallBack = callback;
+        RoomManager.CallBack_ReceiveClient = callbackClient;
     }
     void OnDestroy()
     {
