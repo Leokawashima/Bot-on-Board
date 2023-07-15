@@ -28,7 +28,7 @@ public class ListUIManager : MonoBehaviour
     [SerializeField] Vector2 startPos = new(-320, 350);
     [SerializeField] Vector2 offsetPos = new(0, -110);
 
-    List<IPAddress> addressList = new();
+    public List<IPAddress> addressList { get; private set; } = new();
     public List<RoomInfo> rooms { get; private set; } = new();
     public List<MemberInfo> members { get; private set; } = new();
 
@@ -76,7 +76,7 @@ public class ListUIManager : MonoBehaviour
         var ui = Instantiate(roomInfoPrefab, pos, Quaternion.identity, scrollContent);
         ui.name = "Room_" + data_.name;
         var room = ui.GetComponent<RoomInfo>();
-        room.InitializeInfo(this, (byte)rooms.Count, data_);
+        room.SetInfo(this, (byte)rooms.Count, data_);
 
         addressList.Add(address_);
         rooms.Add(room);
@@ -96,7 +96,7 @@ public class ListUIManager : MonoBehaviour
         addressList.Clear();
         rooms.Clear();
     }
-    public void Add_MemberInfo(IPAddress address_, string name)
+    public void Add_MemberInfo(IPAddress address_, string name_)
     {
         if(addressList.Contains(address_))
         {
@@ -107,11 +107,29 @@ public class ListUIManager : MonoBehaviour
         }
         var pos = rect.position + StartPos + OffsetPos * members.Count;
         var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
-        ui.name = "Member_" + name;
+        ui.name = "Member_" + name_;
         var member = ui.GetComponent<MemberInfo>();
-        member.InitializeInfo(this, (byte)members.Count, address_, name);
+        member.SetInfo(this, (byte)members.Count, address_, name_);
 
         addressList.Add(address_);
+        members.Add(member);
+    }
+    public void Add_MemberInfo(MemberInfoData data_)
+    {
+        if(addressList.Contains(data_.address))
+        {
+#if UNITY_EDITOR
+            Debug.Log("Address has already connected");
+#endif
+            return;
+        }
+        var pos = rect.position + StartPos + OffsetPos * members.Count;
+        var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
+        ui.name = "Member_" + data_.name;
+        var member = ui.GetComponent<MemberInfo>();
+        member.SetInfo(this, (byte)members.Count, data_);
+
+        addressList.Add(data_.address);
         members.Add(member);
     }
     public void Add_MemberInfo(IPAddress address_, UDPMessage_ConnectRequestData data_)
@@ -127,7 +145,7 @@ public class ListUIManager : MonoBehaviour
         var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
         ui.name = "Member_" + data_.name;
         var member = ui.GetComponent<MemberInfo>();
-        member.InitializeInfo(this, (byte)members.Count, data_);
+        member.SetInfo(this, (byte)members.Count, data_);
 
         addressList.Add(address_);
         members.Add(member);

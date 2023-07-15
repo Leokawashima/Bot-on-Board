@@ -24,7 +24,7 @@ public class RoomInfo : MonoBehaviour
         list.SetSelectRoomInfo(this);
     }
 
-    public void InitializeInfo(ListUIManager list_, byte index_, UDPMessage_RoomData data_)
+    public void SetInfo(ListUIManager list_, byte index_, UDPMessage_RoomData data_)
     {
         list = list_;
         roomIndex = index_;

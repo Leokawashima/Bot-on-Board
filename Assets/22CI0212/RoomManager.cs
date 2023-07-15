@@ -3,6 +3,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
@@ -19,6 +20,7 @@ public static class RoomManager
     public static State state = State.Close;
 
     public static ushort Port { get; private set; } = 3939;
+    public static int MessageCount { get; private set; } = 10;
     public static int SendDelay { get; private set; } = 1000;
     public static int ReceiveDelay { get; private set; } = 1000;
     public static int SendTimeOut { get; private set; } = 100;
@@ -79,20 +81,27 @@ public static class RoomManager
         }
     }
 
-    public static async void HostMessage(string buffer_, IPAddress address_)
+    public static async void Message(State state_, string buffer_, IPAddress address_)
     {
-        int count = 0;
-        var endP = buildEndP;
+        var endP = new IPEndPoint(address_, Port);
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        while (state == State.Host)
+        while (state == state_)
         {
-            if(await Send(buffer, endP))
+            if(await Send(buffer, endP) == false)
             {
-                if(count++ >= 20)
-                    break;
+                break;
             }
-            else
+        }
+    }
+
+    public static async Task Subscribe(string buffer_, List<IPAddress> address_)
+    {
+        var buffer = Encoding.UTF8.GetBytes(buffer_);
+        foreach(IPAddress address in address_)
+        {
+            var endP = new IPEndPoint(address, Port);
+            if(await Send(buffer, endP) == false)
             {
                 break;
             }

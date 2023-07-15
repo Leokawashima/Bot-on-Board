@@ -6904,7 +6904,6 @@ MonoBehaviour:
   hostUI: {fileID: 1927866611}
   clientUI: {fileID: 1172133658}
   connectUI: {fileID: 565158577}
-  loadUI: {fileID: 257669082}
   makeNameText: {fileID: 4979503}
   makeOptionText: {fileID: 1902029841}
   makePasswardToggle: {fileID: 1698850674}

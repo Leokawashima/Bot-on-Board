@@ -13,6 +13,17 @@ public struct UDPMessage_ConnectRequestData
     public string name;
     public string passward;
 }
+public struct MemberInfoData
+{
+    public IPAddress address;
+    public string name;
+    public bool ready;
+}
+public struct UDPMessage_HostSubscribeData
+{
+    public IPAddress address;
+    public MemberInfoData[] members;
+}
 public struct UDPMessage_FlagData
 {
     public IPAddress address;

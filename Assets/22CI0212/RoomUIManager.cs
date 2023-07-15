@@ -38,8 +38,7 @@ public class RoomUIManager : MonoBehaviour
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
     enum MessageState {
         Error = -1, R_Open, R_Request, R_Response,
-        H_Subscribe, H_GameReady, H_GameStart,
-        C_Subscribe, C_Join, C_Leave, C_Ready, C_NotReady, C_GameReady }
+        H_Subscribe, H_GameStart, C_Subscribe, C_GameReady }
 
     #endregion
 
@@ -68,32 +67,12 @@ public class RoomUIManager : MonoBehaviour
                         }
 
                         var message = Convert_FlagData(MessageState.R_Response, flag);
-                        RoomManager.HostMessage(message, endP_.Address);
+                        RoomManager.Message(RoomManager.State.Host, message, endP_.Address);
                     }
                     break;
                 case MessageState.C_Subscribe:
                     {
                         //接続者からの定期メッセージを処理する
-                    }
-                    break;
-                case MessageState.C_Join:
-                    {
-                        //Roomに接続するメッセージを処理する
-                    }
-                    break;
-                case MessageState.C_Leave:
-                    {
-                        //Roomから離れるメッセージを処理する
-                    }
-                    break;
-                case MessageState.C_Ready:
-                    {
-                        //準備完了メッセージを処理する
-                    }
-                    break;
-                case MessageState.C_NotReady:
-                    {
-                        //準備未完了メッセージを処理する
                     }
                     break;
                 case MessageState.C_GameReady:
@@ -119,7 +98,6 @@ public class RoomUIManager : MonoBehaviour
                 case MessageState.R_Response:
                     {
                         var data = Get_FlagData(endP_, buffer_);
-                        RoomManager.Close();
                         if(data.flag)
                         {
                             LogPush("Connected");
@@ -138,12 +116,10 @@ public class RoomUIManager : MonoBehaviour
                     break;
                 case MessageState.H_Subscribe:
                     {
-                        //Room定期メッセージを 処理する　
-                    }
-                    break;
-                case MessageState.H_GameReady:
-                    {
-                        //ゲーム開始するがよろしいか？を伝えるメッセージを処理する
+                        var data = Get_HostSubscribeData(endP_, buffer_);
+                        listUIManager.RemoveAll_MemberInfo();
+                        foreach(var member in data.members)
+                            listUIManager.Add_MemberInfo(member);
                     }
                     break;
                 case MessageState.H_GameStart:
@@ -187,6 +163,16 @@ public class RoomUIManager : MonoBehaviour
         RoomManager.Host(buffer);
 
         listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "Host(Me)");
+
+        async void Message()
+        {
+            while(RoomManager.state == RoomManager.State.Host)
+            {
+                var data = Convert_HostScbscribeData(listUIManager.members);
+                await RoomManager.Subscribe(data, listUIManager.addressList);
+            }
+        }
+        Message();
 
         LogPush("Host Started");
     }
@@ -306,7 +292,32 @@ public class RoomUIManager : MonoBehaviour
         data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-
+    string Convert_HostScbscribeData(List<MemberInfo> members)
+    {
+        var str = (int)MessageState.H_Subscribe + "_" + members.Count + "_";
+        foreach(var member in members)
+            str += member.memberAddress + "_" + member.memberName.Length + "_" + member.memberName + "_" + member.memberReady + "_";
+        return str;
+    }
+    UDPMessage_HostSubscribeData Get_HostSubscribeData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new UDPMessage_HostSubscribeData();
+        data.address = endP_.Address;
+        data.members = new MemberInfoData[int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")))];
+        for(int i = 0; i < data.members.Length; ++i)
+        {
+            data.members[i] = new MemberInfoData();
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].address = IPAddress.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            var length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].name = buffer_.Substring(0, length);
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].ready = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        }
+        return data;
+    }
     string Convert_FlagData(MessageState message_, bool flag_)
     {
         return (int)message_ + "_" + flag_;
