@@ -114,7 +114,7 @@ public class ListUIManager : MonoBehaviour
         addressList.Add(address_);
         members.Add(member);
     }
-    public void Add_MemberInfo(IPAddress address_, UDPMessage_RequestData data_)
+    public void Add_MemberInfo(IPAddress address_, UDPMessage_ConnectRequestData data_)
     {
         if (addressList.Contains(address_))
         {

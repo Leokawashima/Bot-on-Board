@@ -20,7 +20,6 @@ public class RoomUIManager : MonoBehaviour
     [SerializeField] GameObject hostUI;
     [SerializeField] GameObject clientUI;
     [SerializeField] GameObject connectUI;
-    [SerializeField] GameObject loadUI;
     [Header("MakeRoom")]
     [SerializeField] TextMeshProUGUI makeNameText;
     [SerializeField] TextMeshProUGUI makeOptionText;
@@ -37,8 +36,10 @@ public class RoomUIManager : MonoBehaviour
     ListUIManager listUIManager;
 
     enum UIState { Choise, MakeRoom, ConnectRoom, BackRoom, Host, Client }
-    enum NetState { Error = -1, Room, Host, Client }
-    enum MessageState { Error = -1, Connect, interval, join, Ready }
+    enum MessageState {
+        Error = -1, R_Open, R_Request, R_Response,
+        H_Subscribe, H_GameReady, H_GameStart,
+        C_Subscribe, C_Join, C_Leave, C_Ready, C_NotReady, C_GameReady }
 
     #endregion
 
@@ -51,6 +52,108 @@ public class RoomUIManager : MonoBehaviour
 
         listUIManager = listUI.GetComponent<ListUIManager>();
         listUIManager.Initialize();
+
+        void host(IPEndPoint endP_, string buffer_)
+        {
+            switch(CheckMessageState(ref buffer_))
+            {
+                case MessageState.R_Request:
+                    {
+                        var data = Get_ConectRequestData(endP_, buffer_);
+                        var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
+                        if(flag)
+                        {
+                            listUIManager.Add_MemberInfo(endP_.Address, data);
+                            LogPush(data.name + " joined");
+                        }
+
+                        var message = Convert_FlagData(MessageState.R_Response, flag);
+                        RoomManager.HostMessage(message, endP_.Address);
+                    }
+                    break;
+                case MessageState.C_Subscribe:
+                    {
+                        //接続者からの定期メッセージを処理する
+                    }
+                    break;
+                case MessageState.C_Join:
+                    {
+                        //Roomに接続するメッセージを処理する
+                    }
+                    break;
+                case MessageState.C_Leave:
+                    {
+                        //Roomから離れるメッセージを処理する
+                    }
+                    break;
+                case MessageState.C_Ready:
+                    {
+                        //準備完了メッセージを処理する
+                    }
+                    break;
+                case MessageState.C_NotReady:
+                    {
+                        //準備未完了メッセージを処理する
+                    }
+                    break;
+                case MessageState.C_GameReady:
+                    {
+                        //ゲームスタートを押してこっちも準備ができたと知らせるメッセージを処理する
+                    }
+                    break;
+            }
+        }
+        RoomManager.CallBackHost = host;
+
+        void client(IPEndPoint endP_, string buffer_)
+        {
+            switch(CheckMessageState(ref buffer_))
+            {
+                case MessageState.R_Open:
+                    {
+                        var data = Get_RoomData(endP_, buffer_);
+                        if(endP_.Address != RoomManager.GetLocalIPAddress())
+                            listUIManager.Add_RoomInfo(endP_.Address, data);
+                    }
+                    break;
+                case MessageState.R_Response:
+                    {
+                        var data = Get_FlagData(endP_, buffer_);
+                        RoomManager.Close();
+                        if(data.flag)
+                        {
+                            LogPush("Connected");
+                            SetUI(UIState.Client);
+                            for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
+                                listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
+
+                            listUIManager.Add_MemberInfo(endP_.Address, "Host");
+                            listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "me");
+                        }
+                        else
+                        {
+                            Room_Client();
+                        }
+                    }
+                    break;
+                case MessageState.H_Subscribe:
+                    {
+                        //Room定期メッセージを 処理する　
+                    }
+                    break;
+                case MessageState.H_GameReady:
+                    {
+                        //ゲーム開始するがよろしいか？を伝えるメッセージを処理する
+                    }
+                    break;
+                case MessageState.H_GameStart:
+                    {
+                        //実際にゲーム開始を伝えるメッセージを処理する
+                    }
+                    break;
+            }
+        }
+        RoomManager.CallBackClient = client;
     }
     void OnDestroy()
     {
@@ -67,34 +170,6 @@ public class RoomUIManager : MonoBehaviour
 
         RoomManager.Close();
 
-        void callback(IPEndPoint endP_, string buffer_)
-        {
-            if(CheckNetState(ref buffer_) == NetState.Host)
-            {
-                if (CheckMessageState(ref buffer_) == MessageState.Connect)
-                {
-                    var data = Get_ConectResponseData(endP_, buffer_);
-                    RoomManager.Close();
-                    if(data.connectFlag)
-                    {
-                        LogPush("Connected");
-                        SetUI(UIState.Client);
-                        loadUI.SetActive(false);
-                        for(int i = 0, count = listUIManager.rooms.Count; i < count; ++i)
-                            listUIManager.Remove_RoomInfo(listUIManager.rooms[0]);
-
-                        listUIManager.Add_MemberInfo(endP_.Address, "Host");
-                        listUIManager.Add_MemberInfo(RoomManager.GetLocalIPAddress(), "me");
-                    }
-                    else
-                    {
-                        Room_Client();
-                    }
-                }
-            }
-        }
-        RoomManager.CallBackConnectResponse = callback;
-
         var buffer = Convert_ConectRequestData("Name", makePasswardText.text);
         RoomManager.ConnectRequire(buffer, listUIManager.selectRoom.roomAddress);
 
@@ -108,27 +183,6 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Host);
 
-        void callback(IPEndPoint endP_, string buffer_)
-        {
-            if(CheckNetState(ref buffer_) == NetState.Client)
-            {
-                if (CheckMessageState(ref buffer_) == MessageState.Connect)
-                {
-                    var data = Get_ConectRequestData(endP_, buffer_);
-                    var flag = !makePasswardToggle.isOn && data.passward == makePasswardText.text;
-                    if(flag)
-                    {
-                        listUIManager.Add_MemberInfo(endP_.Address, data);
-                        LogPush(data.name + " joined");
-                    }
-
-                    var message = Convert_ConectResponseData(flag);
-                    RoomManager.HostMessage(message, endP_.Address);
-                }
-            }
-        }
-        RoomManager.CallBackResponse = callback;
-
         var buffer = Convert_RoomData(makeNameText.text, makePasswardToggle.isOn, makeOptionText.text);
         RoomManager.Host(buffer);
 
@@ -140,16 +194,6 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Client);
 
-        void callback(IPEndPoint endP_, string buffer_)
-        {
-            if (CheckNetState(ref buffer_) == NetState.Room)
-            {
-                var data = Get_RoomData(endP_, buffer_);
-                if (endP_.Address != RoomManager.GetLocalIPAddress())
-                    listUIManager.Add_RoomInfo(endP_.Address, data);
-            }
-        }
-        RoomManager.CallBackClient = callback;
         RoomManager.Client();
 
         LogPush("Client Started");
@@ -189,15 +233,15 @@ public class RoomUIManager : MonoBehaviour
                 hostUI.SetActive(false);
                 clientUI.SetActive(false);
                 connectUI.SetActive(false);
-                loadUI.SetActive(false);
                 break;
             case UIState.MakeRoom:
                 selectUI.SetActive(false);
                 makeRoomUI.SetActive(true);
                 break;
             case UIState.ConnectRoom:
-                connectUI.SetActive(false);
-                loadUI.SetActive(true);
+                selectUI.SetActive(false);
+                clientUI.SetActive(true);
+                listUI.SetActive(true);
                 break;
             case UIState.BackRoom:
                 connectUI.SetActive(false);
@@ -208,6 +252,7 @@ public class RoomUIManager : MonoBehaviour
                 listUI.SetActive(true);
                 break;
             case UIState.Client:
+                connectUI.SetActive(false);
                 selectUI.SetActive(false);
                 clientUI.SetActive(true);
                 listUI.SetActive(true);
@@ -218,20 +263,6 @@ public class RoomUIManager : MonoBehaviour
     /// <summary>
     /// データのヘッダーからメッセージステートを読み取る
     /// </summary>
-    NetState CheckNetState(ref string buffer_)
-    {
-        var state = buffer_.Substring(0, buffer_.IndexOf("_"));
-        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        
-        try
-        {
-            return (NetState)Enum.Parse(typeof(NetState), state);
-        }
-        catch (ArgumentException)
-        {
-            return NetState.Error;
-        }
-    }
     MessageState CheckMessageState(ref string buffer_)
     {
         var state = buffer_.Substring(0, buffer_.IndexOf("_"));
@@ -250,7 +281,7 @@ public class RoomUIManager : MonoBehaviour
     #region Send/Receive Converter
     string Convert_RoomData(string name_, bool passward_, string option_)
     {
-        return (int)NetState.Room + "_" + name_ + "_" + passward_ + "_" + option_;
+        return (int)MessageState.R_Open + "_" + name_ + "_" + passward_ + "_" + option_;
     }
     UDPMessage_RoomData Get_RoomData(IPEndPoint endP_, string buffer_)
     {
@@ -265,25 +296,26 @@ public class RoomUIManager : MonoBehaviour
     }
     string Convert_ConectRequestData(string name_, string passward_)
     {
-        return (int)NetState.Client + "_" + (int)MessageState.Connect + "_" + name_ + "_" + passward_;
+        return (int)MessageState.R_Request + "_" + name_ + "_" + passward_;
     }
-    UDPMessage_RequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
+    UDPMessage_ConnectRequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_RequestData();
+        var data = new UDPMessage_ConnectRequestData();
         data.address = endP_.Address;
         data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
         data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
         return data;
     }
-    string Convert_ConectResponseData(bool flag_)
+
+    string Convert_FlagData(MessageState message_, bool flag_)
     {
-        return (int)NetState.Host + "_" + (int)MessageState.Connect + "_" + flag_;
+        return (int)message_ + "_" + flag_;
     }
-    UDPMessage_ResponseData Get_ConectResponseData(IPEndPoint endP_, string buffer_)
+    UDPMessage_FlagData Get_FlagData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_ResponseData();
+        var data = new UDPMessage_FlagData();
         data.address = endP_.Address;
-        data.connectFlag = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
+        data.flag = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
         return data;
     }
     #endregion

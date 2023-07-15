@@ -26,9 +26,8 @@ public static class RoomManager
 
     public static UdpClient Udp { get; private set; }
 
+    public static Action<IPEndPoint, string> CallBackHost;
     public static Action<IPEndPoint, string> CallBackClient;
-    public static Action<IPEndPoint, string> CallBackResponse;
-    public static Action<IPEndPoint, string> CallBackConnectResponse;
 
     public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
     public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
@@ -44,7 +43,7 @@ public static class RoomManager
         var endP = buildEndP;
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        Receive(State.Host, CallBackResponse);
+        Receive(State.Host, CallBackHost);
         while(state == State.Host)
         {
             if(await Send(buffer, endP) == false)
@@ -70,7 +69,7 @@ public static class RoomManager
         var endP = new IPEndPoint(address_, Port);
         var buffer = Encoding.UTF8.GetBytes(buffer_);
 
-        Receive(State.ConnectRequire, CallBackConnectResponse);
+        Receive(State.ConnectRequire, CallBackClient);
         while(state == State.ConnectRequire)
         {
             if(await Send(buffer, endP) == false)
@@ -109,9 +108,8 @@ public static class RoomManager
     public static void Clean()
     {
         Close();
+        CallBackHost = null;
         CallBackClient = null;
-        CallBackResponse = null;
-        CallBackConnectResponse = null;
         localIPAddress = null;
     }
     #endregion

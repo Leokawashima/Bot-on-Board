@@ -7,14 +7,14 @@ public struct UDPMessage_RoomData
     public bool passwardFlag;
     public string option;
 }
-public struct UDPMessage_RequestData
+public struct UDPMessage_ConnectRequestData
 {
     public IPAddress address;
     public string name;
     public string passward;
 }
-public struct UDPMessage_ResponseData
+public struct UDPMessage_FlagData
 {
     public IPAddress address;
-    public bool connectFlag;
+    public bool flag;
 }
