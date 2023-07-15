@@ -5,23 +5,23 @@ using UnityEngine.UI;
 using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
 
 /// <summary>
-/// 先行後行用
+/// 先攻後攻用
 /// </summary>
 public class Order : MonoBehaviour
 {
     protected enum StateOrder
     {
         Non, //まだ決まっていない
-        Precedence, //先行
-        Follower //後行
+        First, //先攻
+        Second //後攻
     }
 
-    [SerializeField] Button PrecedenceButton; //先行ボタン
-    [SerializeField] Button FollowerButton; //後行ボタン
+    [SerializeField] Button FirstAttackButton; //先攻ボタン
+    [SerializeField] Button SecondAttack; //後攻ボタン
     [SerializeField] Button DecideButton; //決定ボタン
     [SerializeField] Image SelectImage; //選択したボタンが分かりやすいように作成した画像
     [SerializeField] Text InductionText; //プレイヤーがするべきことへ誘導するテキスト
-    protected StateOrder order = StateOrder.Non; //先行、後行が決まるまで何も決まっていない状態にしておく
+    protected StateOrder order = StateOrder.Non; //先攻、後攻が決まるまで何も決まっていない状態にしておく
 
 
     // Start is called before the first frame update
@@ -29,42 +29,42 @@ public class Order : MonoBehaviour
     {
         Debug.Log(order);
 
-        PrecedenceButton.onClick.AddListener(Precedence_);
-        FollowerButton.onClick.AddListener(Follower_);
+        FirstAttackButton.onClick.AddListener(First_);
+        SecondAttack.onClick.AddListener(Second_);
         DecideButton.onClick.AddListener(Decide);
 
         SelectImage.enabled = false;
 
-        InductionText.text = "先行 後行を選んでください";
+        InductionText.text = "先攻 後攻を選んでください";
     }
 
     #region Button
     //PrecedenceButtonが押されたとき
-    void Precedence_()
+    void First_()
     {
         SelectImage.enabled = true;
-        SelectImage.transform.position = PrecedenceButton.transform.position + new Vector3(200, 98, 0);
-        order = StateOrder.Precedence;
+        SelectImage.transform.position = FirstAttackButton.transform.position + new Vector3(200, 98, 0);
+        order = StateOrder.First;
         Debug.Log(order);
 
-        InductionText.text = "先行でよろしいでしょうか";
+        InductionText.text = "先攻でよろしいでしょうか";
     }
 
     //FollowerButtonが押されたとき
-    void Follower_()
+    void Second_()
     {
         SelectImage.enabled = true;
-        SelectImage.transform.position = FollowerButton.transform.position + new Vector3(200, 98, 0);
-        order = StateOrder.Follower;
+        SelectImage.transform.position = SecondAttack.transform.position + new Vector3(200, 98, 0);
+        order = StateOrder.Second;
         Debug.Log(order);
 
-        InductionText.text = "後行でよろしいでしょうか";
+        InductionText.text = "後攻でよろしいでしょうか";
     }
 
     //DecideButtonが押されたとき
     void Decide()
     {
-        //先行、後行が選択されていない場合、この先の処理は行わない
+        //先攻、後攻が選択されていない場合、この先の処理は行わない
         if (order == StateOrder.Non) return;
 
         gameObject.SetActive(false);
