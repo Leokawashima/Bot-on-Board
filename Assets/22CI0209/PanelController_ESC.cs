@@ -2,16 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*パネル制御：各シーンで、ESCキーを押した時に出現するパネル*/
 public class PanelController_ESC : PanelController_SUPER
 {
-    private void Update() 
+    private InputMaster input;//Input Action
+
+    private void Awake()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            ChangeEnabled();
-        }
+        input = new InputMaster();
+        input.Menu.Quit.performed += PushEsc;
+        input.Enable();
+    }
+
+    /// <summary>
+    /// ボタン入力でメニューを開く
+    /// </summary>
+    /// <param name="context">入力</param>
+    private void PushEsc(InputAction.CallbackContext context)
+    {
+        ChangeEnabled();
     }
 
     /*以下、対応するButtonを押したときのメソッド*/

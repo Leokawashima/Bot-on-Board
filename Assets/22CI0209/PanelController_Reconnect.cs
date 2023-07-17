@@ -5,14 +5,6 @@ using UnityEngine;
 
 public class PanelController_Reconnect : PanelController_SUPER
 {
-    private void Update() 
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            ChangeEnabled();
-        }
-    }
-
     /*以下、対応するButtonを押したときのメソッド*/
     public void Button_ReconnectYes()
     {
