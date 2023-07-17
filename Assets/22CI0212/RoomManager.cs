@@ -112,6 +112,7 @@ public class RoomManager : MonoBehaviour
                     if(flag)
                     {
                         roomList.Add_MemberInfo(endP_.Address, data);
+                        MyRoom.userCnt++;
                         roomLog.LogPush(data.name + " joined");
                     }
 
@@ -203,6 +204,8 @@ public class RoomManager : MonoBehaviour
             {
                 clientState = ClientState.Subscribe;
                 roomLog.LogPush("Connect Room");
+
+                roomList.RemoveAll_RoomInfo();
             }
             else
             {
