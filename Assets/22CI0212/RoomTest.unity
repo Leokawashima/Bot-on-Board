@@ -4515,7 +4515,7 @@ MonoBehaviour:
   scrollContent: {fileID: 79497998}
   roomInfoPrefab: {fileID: 1169174478110788408, guid: bac3bd985e99e894794df8563a1877be, type: 3}
   memberInfoPrefab: {fileID: 1169174478110788408, guid: ca973de0a5a15504787b4995774074ec, type: 3}
-  startPos: {x: -320, y: -65}
+  startPos: {x: -320, y: -55}
   offsetPos: {x: 0, y: -110}
 --- !u!1 &1092371135
 GameObject:
@@ -6705,7 +6705,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1799697807}
         m_TargetAssemblyTypeName: RoomUIManager, Assembly-CSharp
-        m_MethodName: Room_ConnectRequire
+        m_MethodName: OnClick_ConnectStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7405,7 +7405,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1799697807}
         m_TargetAssemblyTypeName: RoomUIManager, Assembly-CSharp
-        m_MethodName: Room_BackRoom
+        m_MethodName: OnClick_ConnectBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
