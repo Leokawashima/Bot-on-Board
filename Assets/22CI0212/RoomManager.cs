@@ -101,7 +101,7 @@ public class RoomManager : MonoBehaviour
             await Task.Delay(RoomUDP.HostDelay);
         }
     }
-    void HostReveive(IPEndPoint endP_, string buffer_)
+    async void HostReveive(IPEndPoint endP_, string buffer_)
     {
         switch(CheckMessageState(ref buffer_))
         {
@@ -115,7 +115,8 @@ public class RoomManager : MonoBehaviour
                         roomLog.LogPush(data.name + " joined");
                     }
 
-                    //メッセージを接続要求者に返す
+                    var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(flag));
+                    await RoomUDP.Send(buffer, endP_);
                 }
                 break;
             case MessageState.C_Subscribe:
@@ -141,7 +142,7 @@ public class RoomManager : MonoBehaviour
             {
                 case ClientState.Search:
                     {
-                        if(RoomUDP.Receive(ClientReceive) == false)
+                        if(RoomUDP.Receive(ClientReceive_Search) == false)
                         {
                             clientState = ClientState.Close;
                         }
@@ -157,7 +158,7 @@ public class RoomManager : MonoBehaviour
                             clientState = ClientState.Close;
                         }
 
-                        if(RoomUDP.Receive(ClientReceive) == false)
+                        if(RoomUDP.Receive(ClientReceive_ConnectRequest) == false)
                         {
                             clientState = ClientState.Close;
                         }
@@ -173,7 +174,7 @@ public class RoomManager : MonoBehaviour
                             clientState = ClientState.Close;
                         }
 
-                        if(RoomUDP.Receive(ClientReceive) == false)
+                        if(RoomUDP.Receive(ClientReceive_Subscribe) == false)
                         {
                             clientState = ClientState.Close;
                         }
@@ -184,45 +185,41 @@ public class RoomManager : MonoBehaviour
             await Task.Delay(RoomUDP.ClientDelay);
         }
     }
-    void ClientReceive(IPEndPoint endP_, string buffer_)
+    void ClientReceive_Search(IPEndPoint endP_, string buffer_)
     {
-        switch(CheckMessageState(ref buffer_))
+        if (CheckMessageState(ref buffer_) == MessageState.R_Open)
         {
-            case MessageState.R_Open:
-                {
-                    var data = Get_RoomData(endP_, buffer_);
-                    if(endP_.Address != RoomUDP.GetLocalIPAddress())
-                        roomList.Add_RoomInfo(endP_.Address, data);
-                }
-                break;
-            case MessageState.R_Response:
-                {
-                    var data = Get_FlagData(endP_, buffer_);
-                    if(data.flag)
-                    {
-                        roomLog.LogPush("Connected");
-                        roomUI.SetUI(RoomUIManager.UIState.Client);
-                    }
-                    else
-                    {
-                        Client();
-                        roomUI.SetUI(RoomUIManager.UIState.Client);
-                    }
-                }
-                break;
-            case MessageState.H_Subscribe:
-                {
-                    var data = Get_HostSubscribeData(endP_, buffer_);
-                    roomList.RemoveAll_MemberInfo();
-                    foreach(var member in data.members)
-                        roomList.Add_MemberInfo(member);
-                }
-                break;
-            case MessageState.H_GameStart:
-                {
-                    //実際にゲーム開始を伝えるメッセージを処理する
-                }
-                break;
+            var data = Get_RoomData(endP_, buffer_);
+            if(endP_.Address != RoomUDP.GetLocalIPAddress())
+                roomList.Add_RoomInfo(endP_.Address, data);
+        }
+    }
+    void ClientReceive_ConnectRequest(IPEndPoint endP_, string buffer_)
+    {
+        if(CheckMessageState(ref buffer_) == MessageState.R_Response)
+        {
+            var data = Get_FlagData(endP_, buffer_);
+            if(data.flag)
+            {
+                clientState = ClientState.Subscribe;
+                roomLog.LogPush("Connect Room");
+            }
+            else
+            {
+                clientState = ClientState.Search;
+                roomLog.LogPush("Conecct Failed");
+            }
+            roomUI.SetUI(RoomUIManager.UIState.Client);
+        } 
+    }
+    void ClientReceive_Subscribe(IPEndPoint endP_, string buffer_)
+    {
+        if (CheckMessageState(ref  buffer_) == MessageState.H_Subscribe)
+        {
+            var data = Get_HostSubscribeData(endP_, buffer_);
+            roomList.RemoveAll_MemberInfo();
+            foreach(var member in data.members)
+                roomList.Add_MemberInfo(member);
         }
     }
     public void Close()

@@ -23,7 +23,7 @@ public class RoomListManager : MonoBehaviour
     [SerializeField] GameObject roomInfoPrefab;
     [SerializeField] GameObject memberInfoPrefab;
     [Header("Position")]
-    [SerializeField] Vector2 startPos = new(-320, -65);
+    [SerializeField] Vector2 startPos = new(-320, -55);
     [SerializeField] Vector2 offsetPos = new(0, -110);
 
     public List<IPAddress> addressList { get; private set; } = new();
@@ -71,6 +71,7 @@ public class RoomListManager : MonoBehaviour
             return;
         }
         var pos = rect.position + StartPos + OffsetPos * rooms.Count;
+        pos.y += scrollContent.position.y;
         var ui = Instantiate(roomInfoPrefab, pos, Quaternion.identity, scrollContent);
         ui.name = "Room_" + data_.name;
         var room = ui.GetComponent<InfoRoomData>();
@@ -124,6 +125,7 @@ public class RoomListManager : MonoBehaviour
             return;
         }
         var pos = rect.position + StartPos + OffsetPos * members.Count;
+        pos.y += scrollContent.position.y;
         var ui = Instantiate(memberInfoPrefab, pos, Quaternion.identity, scrollContent);
         ui.name = "Member_" + data_.name;
         var member = ui.GetComponent<InfoRoomMember>();

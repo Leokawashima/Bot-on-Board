@@ -27,7 +27,7 @@ public class RoomUIManager : MonoBehaviour
     [SerializeField] RoomConnectManager roomConnect;
     public TMP_InputField nameText;
 
-    public enum UIState { Select, MakeRoom, Host, Client, ConnectSelect, ConnectBack }
+    public enum UIState { Select, MakeRoom, Host, Client }
 
     void Start()
     {
@@ -60,23 +60,15 @@ public class RoomUIManager : MonoBehaviour
 
         roomLog.LogPush("Client Started");
     }
-    public void OnClick_SelectInfo()
-    {
-        SetUI(UIState.ConnectSelect);
-
-        roomLog.LogPush("Connect Require"); 
-    }
     public void OnClick_ConnectBack()
     {
         SetUI(UIState.Client);
     }
     public void OnClick_ConnectStart()
     {
-        SetUI(UIState.Client);
-
         roomManager.clientState = RoomManager.ClientState.ConnectRequest;
 
-        roomLog.LogPush("Client Started");
+        roomLog.LogPush("Connect Started");
     }
     public void OnClick_Quit()
     {
@@ -125,11 +117,6 @@ public class RoomUIManager : MonoBehaviour
                 listUI.SetActive(true);
                 logUI.SetActive(true);
                 clientUI.SetActive(true);
-                break;
-            case UIState.ConnectSelect:
-                connectUI.SetActive(true);
-                break;
-            case UIState.ConnectBack:
                 connectUI.SetActive(false);
                 break;
         }
