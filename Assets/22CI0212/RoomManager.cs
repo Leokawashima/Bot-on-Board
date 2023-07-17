@@ -1,254 +1,328 @@
-﻿using System;
-using System.Text;
+﻿using UnityEngine;
 using System.Net;
-using System.Net.Sockets;
+using System;
+using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEngine;
-using UnityEditor;
-#endif
 
-/// <summary>
-/// Roomの接続処理を管理するクラス
-/// </summary>
-/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
-public static class RoomManager
+public class RoomManager : MonoBehaviour
 {
-    #region Field
-    public enum State { Error = -1, Close, Host, Client, ConnectRequire, ConnectResponse }
-    public static State state = State.Close;
+    [SerializeField] RoomUIManager roomUI;
+    [SerializeField] RoomLogManager roomLog;
+    [SerializeField] RoomListManager roomList;
+    [SerializeField] RoomMakeManager roomMake;
+    [SerializeField] RoomConnectManager roomConnect;
 
-    public static ushort Port { get; private set; } = 3939;
-    public static int MessageCount { get; private set; } = 10;
-    public static int SendDelay { get; private set; } = 1000;
-    public static int ReceiveDelay { get; private set; } = 1000;
-    public static int SendTimeOut { get; private set; } = 100;
-    public static int ReceiveTimeOut { get; private set; } = 100;
+    RoomData MyRoom;
 
-    public static UdpClient Udp { get; private set; }
+    enum MessageState { Error = -1, R_Open, R_Request, R_Response, H_Subscribe, H_GameStart, C_Subscribe, C_GameReady }
+    public enum HostState { Close, Host, GameReady }
+    public HostState hostState = HostState.Close;
+    public enum ClientState { Close, Search, ConnectRequest, Subscribe, Ready, Quit }
+    public ClientState clientState = ClientState.Close;
 
-    public static Action<IPEndPoint, string> CallBackHost;
-    public static Action<IPEndPoint, string> CallBackClient;
-
-    public static IPEndPoint buildEndP { get { return new IPEndPoint(IPAddress.Broadcast, Port); } }
-    public static IPEndPoint searchEndP { get { return new IPEndPoint(IPAddress.Any, Port); } }
-    static IPAddress localIPAddress;
-    #endregion
-
-    #region Room
-    public static async void Host(string buffer_)
+    void OnDestroy()
     {
-        state = State.Host;
-        CreateUdp();
+        RoomUDP.Clean();
+    }
 
-        var endP = buildEndP;
-        var buffer = Encoding.UTF8.GetBytes(buffer_);
-
-        Receive(State.Host, CallBackHost);
-        while(state == State.Host)
+    public async void Host()
+    {
+        MyRoom = new RoomData()
         {
-            if(await Send(buffer, endP) == false)
-            {
-                break;
-            }
-        }
-    }
+            address = RoomUDP.GetLocalIPAddress(),
+            name = roomMake.getName,
+            option = roomMake.getOption,
+            passward = roomMake.getPasswardIsOn,
+            userMax = roomMake.getUserMax,
+            userCnt = 1
+        };
 
-    public static void Client()
-    {
-        state = State.Client;
-        CreateUdp();
-
-        Receive(State.Client, CallBackClient);
-    }
-
-    public static async void ConnectRequire(string buffer_, IPAddress address_)
-    {
-        state = State.ConnectRequire;
-        CreateUdp();
-
-        var endP = new IPEndPoint(address_, Port);
-        var buffer = Encoding.UTF8.GetBytes(buffer_);
-
-        Receive(State.ConnectRequire, CallBackClient);
-        while(state == State.ConnectRequire)
+        var host = new MemberData()
         {
-            if(await Send(buffer, endP) == false)
-            {
-                break;
-            }
-        }
-    }
+            address = RoomUDP.GetLocalIPAddress(),
+            name = "Host(Me)",
+            ready = false
+        };
+        roomList.Add_MemberInfo(host);
 
-    public static async void Message(State state_, string buffer_, IPAddress address_)
-    {
-        var endP = new IPEndPoint(address_, Port);
-        var buffer = Encoding.UTF8.GetBytes(buffer_);
+        hostState = HostState.Host;
+        RoomUDP.CreateUdp();
 
-        while (state == state_)
+        var buffer = Encoding.UTF8.GetBytes(Convert_RoomData());
+
+        while(hostState == HostState.Host)
         {
-            if(await Send(buffer, endP) == false)
+            if(MyRoom.userMax > MyRoom.userCnt)
             {
-                break;
-            }
-        }
-    }
-
-    public static async Task Subscribe(string buffer_, List<IPAddress> address_)
-    {
-        var buffer = Encoding.UTF8.GetBytes(buffer_);
-        foreach(IPAddress address in address_)
-        {
-            var endP = new IPEndPoint(address, Port);
-            if(await Send(buffer, endP) == false)
-            {
-                break;
-            }
-        }
-    }
-
-    public static void Close()
-    {
-        state = State.Close;
-        Udp?.Dispose();
-        Udp = null;
-    }
-    public static void Clean()
-    {
-        Close();
-        CallBackHost = null;
-        CallBackClient = null;
-        localIPAddress = null;
-    }
-    #endregion
-
-    #region Func
-    static void CreateUdp()
-    {
-        Udp = new UdpClient(Port);
-        Udp.EnableBroadcast = true;
-        Udp.Client.SendTimeout = SendTimeOut;
-        Udp.Client.ReceiveTimeout = ReceiveTimeOut;
-    }
-    public static IPAddress GetLocalIPAddress()
-    {
-        if (localIPAddress == null)
-        {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                if(await RoomUDP.Send(buffer, RoomUDP.buildEndP) == false)
                 {
-                    return localIPAddress = ip;
+                    hostState = HostState.Close;
                 }
             }
-            localIPAddress = null;
+
+            if(MyRoom.userCnt > 1)
+            {
+                var subscribeBuffer = Encoding.UTF8.GetBytes(Convert_HostScbscribeData());
+                foreach(var member in roomList.members)
+                {
+                    if(await RoomUDP.Send(subscribeBuffer, member.memberEndP) == false)
+                    {
+                        hostState = HostState.Close;
+                        break;
+                    }
+                }
+            }
+
+            if(RoomUDP.Receive(HostReveive) == false)
+            {
+                hostState = HostState.Close;
+            }
+
+            await Task.Delay(RoomUDP.HostDelay);
         }
-        return localIPAddress;
+
+        hostState = HostState.GameReady;
+
+        while(hostState == HostState.GameReady)
+        {
+            //開始するぞメッセージを送る　帰ってくるように待つ
+
+            if(RoomUDP.Receive(HostReveive) == false)
+            {
+                hostState = HostState.Close;
+            }
+
+            await Task.Delay(RoomUDP.HostDelay);
+        }
+
+        //接続開始
     }
-    static async Task<bool> Send(byte[] buffer_, IPEndPoint endP_)
+    void HostReveive(IPEndPoint endP_, string buffer_)
     {
+        switch(CheckMessageState(ref buffer_))
+        {
+            case MessageState.R_Request:
+                {
+                    var data = Get_ConectRequestData(endP_, buffer_);
+                    var flag = !roomMake.getPasswardIsOn && data.passward == roomMake.getPassward;
+                    if(flag)
+                    {
+                        roomList.Add_MemberInfo(endP_.Address, data);
+                        roomLog.LogPush(data.name + " joined");
+                    }
+
+                    //メッセージを接続要求者に返す
+                }
+                break;
+            case MessageState.C_Subscribe:
+                {
+                    //接続者からの定期メッセージを処理する
+                }
+                break;
+            case MessageState.C_GameReady:
+                {
+                    //ゲームスタートを押してこっちも準備ができたと知らせるメッセージを処理する
+                }
+                break;
+        }
+    }
+    public async void Client()
+    {
+        clientState = ClientState.Search;
+        RoomUDP.CreateUdp();
+
+        while(clientState == ClientState.Search)
+        {
+            if(RoomUDP.Receive(ClientReceive) == false)
+            {
+                clientState = ClientState.Close;
+            }
+
+            await Task.Delay(RoomUDP.ClientDelay);
+        }
+
+        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
+        var connectBuffer = Encoding.UTF8.GetBytes(Convert_ConectRequestData());
+
+        while(clientState == ClientState.ConnectRequest)
+        {
+            if(await RoomUDP.Send(connectBuffer, endP) == false)
+            {
+                clientState = ClientState.Close;
+            }
+
+            if(RoomUDP.Receive(ClientReceive) == false)
+            {
+                clientState = ClientState.Close;
+            }
+
+            await Task.Delay(RoomUDP.ClientDelay);
+        }
+
+        var subscriveBuffer = Encoding.UTF8.GetBytes(Convert_ClientSubscribeData());
+
+        while(clientState == ClientState.Subscribe)
+        {
+            if(await RoomUDP.Send(subscriveBuffer, endP) == false)
+            {
+                clientState = ClientState.Close;
+            }
+
+            if(RoomUDP.Receive(ClientReceive) == false)
+            {
+                clientState = ClientState.Close;
+            }
+
+            await Task.Delay(RoomUDP.ClientDelay);
+        }
+    }
+    void ClientReceive(IPEndPoint endP_, string buffer_)
+    {
+        switch(CheckMessageState(ref buffer_))
+        {
+            case MessageState.R_Open:
+                {
+                    var data = Get_RoomData(endP_, buffer_);
+                    if(endP_.Address != RoomUDP.GetLocalIPAddress())
+                        roomList.Add_RoomInfo(endP_.Address, data);
+                }
+                break;
+            case MessageState.R_Response:
+                {
+                    var data = Get_FlagData(endP_, buffer_);
+                    if(data.flag)
+                    {
+                        roomLog.LogPush("Connected");
+                        roomUI.SetUI(RoomUIManager.UIState.Client);
+                    }
+                    else
+                    {
+                        Client();
+                        roomUI.SetUI(RoomUIManager.UIState.Client);
+                    }
+                }
+                break;
+            case MessageState.H_Subscribe:
+                {
+                    var data = Get_HostSubscribeData(endP_, buffer_);
+                    roomList.RemoveAll_MemberInfo();
+                    foreach(var member in data.members)
+                        roomList.Add_MemberInfo(member);
+                }
+                break;
+            case MessageState.H_GameStart:
+                {
+                    //実際にゲーム開始を伝えるメッセージを処理する
+                }
+                break;
+        }
+    }
+    public void Close()
+    {
+        hostState = HostState.Close;
+        clientState = ClientState.Close;
+        RoomUDP.Close();
+    }
+
+    #region Send/Receive Converter
+    /// <summary>
+    /// データのヘッダーからメッセージステートを読み取る
+    /// </summary>
+    MessageState CheckMessageState(ref string buffer_)
+    {
+        var state = buffer_.Substring(0, buffer_.IndexOf("_"));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+
         try
         {
-            await Udp.SendAsync(buffer_, buffer_.Length, endP_);
+            return (MessageState)Enum.Parse(typeof(MessageState), state);
+        }
+        catch(ArgumentException)
+        {
+            return MessageState.Error;
+        }
+    }
 
-            await Task.Delay(SendDelay);
-            return true;
-        }
-        catch(ObjectDisposedException)
-        {
-#if UNITY_EDITOR
-            Debug.Log("Socket Close Because Udp is Disposed");
-#endif
-            return false;
-        }
-        catch(NullReferenceException)
-        {
-#if UNITY_EDITOR
-            Debug.Log("Socket Close Because Udp is Null");
-#endif
-            return false;
-        }
-    }
-    static async void Receive(State state_, Action<IPEndPoint, string> callback_)
+    string Convert_RoomData()
     {
-        #region Receive
-        while(state == state_)
-        {
-            try
-            {
-                var endP = searchEndP;
-                var buffer = Udp.Receive(ref endP);
-                var data = Encoding.UTF8.GetString(buffer);
-                callback_?.Invoke(endP, data);
-            }
-            catch(SocketException)
-            {
-                await Task.Delay(ReceiveDelay);
-            }
-            catch(ObjectDisposedException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Disposed");
-#endif
-                break;
-            }
-            catch(NullReferenceException)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Socket Close Because Udp is Null");
-#endif
-                break;
-            }
-        }
-        #endregion
-
-        #region ReceiveAsync
-        /*
-        //ReceiveAsync方式
-        //文字列に変換しないと自身のアドレスとの比較が上手くいかない(IPAddressが参照型だから比較できない？)
-        //文字を受け取ったら勝手に仕事してまた探すのでメッセージが多い時も少ない時も使い勝手が良いが気に入らないので使っていない
-        //ReceiveAsyncはキャンセルトークンも渡せないようなので余計にヘイトが高い
-        //使いたい場合はコメント外してね
-        try
-        {
-            while(state == state_)
-            {
-                var result = await Udp.ReceiveAsync();
-                var data = Encoding.UTF8.GetString(result.Buffer);
-                callback_?.Invoke(result.RemoteEndPoint, data);
-            }
-        }
-        catch (ObjectDisposedException)
-        {
-            //なにがし
-        }
-        catch(NullReferenceException)
-        {
-            //それがし
-        }
-        */
-        #endregion
+        return (int)MessageState.R_Open + "_" + MyRoom.name + "_" + MyRoom.option.Length + "_" + MyRoom.option + "_" + MyRoom.passward + "_" + MyRoom.userMax + "_" + MyRoom.userCnt;
     }
-    #endregion
-
-    #region Editor
-#if UNITY_EDITOR
-    [InitializeOnLoadMethod]
-    static void Initialize()
+    UDPMessage_RoomData Get_RoomData(IPEndPoint endP_, string buffer_)
     {
-        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
+        var data = new UDPMessage_RoomData();
+        data.address = endP_.Address;
+        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        var length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        data.option = buffer_.Substring(0, length);
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        data.passwardFlag = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        data.userMax = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        data.userCnt = int.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
+        return data;
     }
-    static void OnPlayModeStateChanged(PlayModeStateChange state_)
+    string Convert_ConectRequestData()
     {
-        if(state_ == PlayModeStateChange.ExitingPlayMode)
-        {
-            //通信中にEditorの再生が停止した場合終了されないので終了するための処理
-            Clean();
-        }
+        return (int)MessageState.R_Request + "_" + roomUI.nameText.text + "_" + roomConnect.getPaswardText.text;
     }
-#endif
+    UDPMessage_ConnectRequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new UDPMessage_ConnectRequestData();
+        data.address = endP_.Address;
+        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
+        data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        return data;
+    }
+    string Convert_HostScbscribeData()
+    {
+        var str = (int)MessageState.H_Subscribe + "_" + roomList.members.Count + "_";
+        foreach(var member in roomList.members)
+            str += member.memberAddress + "_" + member.memberName.Length + "_" + member.memberName + "_" + member.memberReady + "_";
+        return str;
+    }
+    UDPMessage_HostSubscribeData Get_HostSubscribeData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new UDPMessage_HostSubscribeData();
+        data.address = endP_.Address;
+        data.members = new MemberData[int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")))];
+        for(int i = 0; i < data.members.Length; ++i)
+        {
+            data.members[i] = new MemberData();
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].address = IPAddress.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            var length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].name = buffer_.Substring(0, length);
+            buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
+            data.members[i].ready = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        }
+        return data;
+    }
+    string Convert_ClientSubscribeData()
+    {
+        return (int)MessageState.C_Subscribe + "_" + roomUI.nameText.text;
+    }
+    UDPMessage_ClientSubscribeData Get_ClientSubscribeData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new UDPMessage_ClientSubscribeData();
+        data.address = endP_.Address;
+        data.name = buffer_;
+        return data;
+    }
+    string Convert_FlagData(bool flag_)
+    {
+        return (int)MessageState.R_Response + "_" + flag_;
+    }
+    UDPMessage_FlagData Get_FlagData(IPEndPoint endP_, string buffer_)
+    {
+        var data = new UDPMessage_FlagData();
+        data.address = endP_.Address;
+        data.flag = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
+        return data;
+    }
     #endregion
 }

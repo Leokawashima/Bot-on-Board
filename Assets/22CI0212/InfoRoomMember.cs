@@ -5,11 +5,11 @@ using TMPro;
 /// <summary>
 /// Memberの情報を格納するクラス
 /// </summary>
-public class MemberInfo : MonoBehaviour
+public class InfoRoomMember : MonoBehaviour
 {
-    ListUIManager list;
-    
-    public byte memberIndex { get; private set; }
+    RoomListManager list;
+
+    public IPEndPoint memberEndP { get; private set; }
     public IPAddress memberAddress { get; private set; }
     public string memberName { get; private set; }
     public bool memberReady { get; private set; }
@@ -22,21 +22,10 @@ public class MemberInfo : MonoBehaviour
 
     }
 
-    public void SetInfo(ListUIManager list_, byte index_, IPAddress address_, string name_)
+    public void InitializeInfo(RoomListManager list_, UDPMessage_ConnectRequestData data_)
     {
         list = list_;
-        memberIndex = index_;
-        memberAddress = address_;
-        memberName = name_;
-        memberNameText.text = name_;
-        memberReady = false;
-        memberReadyImage.SetActive(false);
-    }
-
-    public void SetInfo(ListUIManager list_, byte index_, UDPMessage_ConnectRequestData data_)
-    {
-        list = list_;
-        memberIndex = index_;
+        memberEndP = new IPEndPoint(data_.address, RoomUDP.Port);
         memberAddress = data_.address;
         memberName = data_.name;
         memberNameText.text = data_.name;
@@ -44,10 +33,10 @@ public class MemberInfo : MonoBehaviour
         memberReadyImage.SetActive(false);
     }
 
-    public void SetInfo(ListUIManager list_, byte index_, MemberInfoData data_)
+    public void UpdateInfo(RoomListManager list_, MemberData data_)
     {
         list = list_;
-        memberIndex = index_;
+        memberEndP = new IPEndPoint(data_.address, RoomUDP.Port);
         memberAddress = data_.address;
         memberName = data_.name;
         memberNameText.text = data_.name;
