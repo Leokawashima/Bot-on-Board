@@ -5,7 +5,7 @@ using TMPro;
 /// 正の整数のみ入力を許可するクラス
 /// </summary>
 /// 参考:https://nekojara.city/unity-input-field-content-type
-public class RoomPassward : MonoBehaviour
+public class InputFieldOnNumberOnly : MonoBehaviour
 {
     [SerializeField] TMP_InputField input;
 

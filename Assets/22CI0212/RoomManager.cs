@@ -40,7 +40,7 @@ public class RoomManager : MonoBehaviour
         var host = new MemberData()
         {
             address = RoomUDP.GetLocalIPAddress(),
-            name = "Host(Me)",
+            name = roomUI.nameText.text + "(Host)",
             ready = false
         };
         roomList.Add_MemberInfo(host);
@@ -48,54 +48,58 @@ public class RoomManager : MonoBehaviour
         hostState = HostState.Host;
         RoomUDP.CreateUdp();
 
-        var buffer = Encoding.UTF8.GetBytes(Convert_RoomData());
 
-        while(hostState == HostState.Host)
+        while (hostState != HostState.Close)
         {
-            if(MyRoom.userMax > MyRoom.userCnt)
+            switch(hostState)
             {
-                if(await RoomUDP.Send(buffer, RoomUDP.buildEndP) == false)
-                {
-                    hostState = HostState.Close;
-                }
-            }
-
-            if(MyRoom.userCnt > 1)
-            {
-                var subscribeBuffer = Encoding.UTF8.GetBytes(Convert_HostScbscribeData());
-                foreach(var member in roomList.members)
-                {
-                    if(await RoomUDP.Send(subscribeBuffer, member.memberEndP) == false)
+                case HostState.Host:
                     {
-                        hostState = HostState.Close;
-                        break;
+                        if(MyRoom.userMax > MyRoom.userCnt)
+                        {
+                            var buffer = Encoding.UTF8.GetBytes(Convert_RoomData());
+                            var endP = RoomUDP.buildEndP;
+
+                            if(await RoomUDP.Send(buffer, endP) == false)
+                            {
+                                hostState = HostState.Close;
+                            }
+                        }
+
+                        if(MyRoom.userCnt > 1)
+                        {
+                            var buffer = Encoding.UTF8.GetBytes(Convert_HostScbscribeData());
+
+                            foreach(var member in roomList.members)
+                            {
+                                if(await RoomUDP.Send(buffer, member.memberEndP) == false)
+                                {
+                                    hostState = HostState.Close;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(RoomUDP.Receive(HostReveive) == false)
+                        {
+                            hostState = HostState.Close;
+                        }
                     }
-                }
-            }
+                    break;
+                case HostState.GameReady:
+                    {
+                        //開始するぞメッセージを送る　帰ってくるように待つ
 
-            if(RoomUDP.Receive(HostReveive) == false)
-            {
-                hostState = HostState.Close;
-            }
-
-            await Task.Delay(RoomUDP.HostDelay);
-        }
-
-        hostState = HostState.GameReady;
-
-        while(hostState == HostState.GameReady)
-        {
-            //開始するぞメッセージを送る　帰ってくるように待つ
-
-            if(RoomUDP.Receive(HostReveive) == false)
-            {
-                hostState = HostState.Close;
+                        if(RoomUDP.Receive(HostReveive) == false)
+                        {
+                            hostState = HostState.Close;
+                        }
+                    }
+                    break;
             }
 
             await Task.Delay(RoomUDP.HostDelay);
         }
-
-        //接続開始
     }
     void HostReveive(IPEndPoint endP_, string buffer_)
     {
@@ -131,46 +135,50 @@ public class RoomManager : MonoBehaviour
         clientState = ClientState.Search;
         RoomUDP.CreateUdp();
 
-        while(clientState == ClientState.Search)
+        while(clientState != ClientState.Close)
         {
-            if(RoomUDP.Receive(ClientReceive) == false)
+            switch(clientState)
             {
-                clientState = ClientState.Close;
-            }
+                case ClientState.Search:
+                    {
+                        if(RoomUDP.Receive(ClientReceive) == false)
+                        {
+                            clientState = ClientState.Close;
+                        }
+                    }
+                    break;
+                case ClientState.ConnectRequest:
+                    {
+                        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
+                        var buffer = Encoding.UTF8.GetBytes(Convert_ConectRequestData());
 
-            await Task.Delay(RoomUDP.ClientDelay);
-        }
+                        if(await RoomUDP.Send(buffer, endP) == false)
+                        {
+                            clientState = ClientState.Close;
+                        }
 
-        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
-        var connectBuffer = Encoding.UTF8.GetBytes(Convert_ConectRequestData());
+                        if(RoomUDP.Receive(ClientReceive) == false)
+                        {
+                            clientState = ClientState.Close;
+                        }
+                    }
+                    break;
+                case ClientState.Subscribe:
+                    {
+                        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
+                        var buffer = Encoding.UTF8.GetBytes(Convert_ClientSubscribeData());
 
-        while(clientState == ClientState.ConnectRequest)
-        {
-            if(await RoomUDP.Send(connectBuffer, endP) == false)
-            {
-                clientState = ClientState.Close;
-            }
+                        if(await RoomUDP.Send(buffer, endP) == false)
+                        {
+                            clientState = ClientState.Close;
+                        }
 
-            if(RoomUDP.Receive(ClientReceive) == false)
-            {
-                clientState = ClientState.Close;
-            }
-
-            await Task.Delay(RoomUDP.ClientDelay);
-        }
-
-        var subscriveBuffer = Encoding.UTF8.GetBytes(Convert_ClientSubscribeData());
-
-        while(clientState == ClientState.Subscribe)
-        {
-            if(await RoomUDP.Send(subscriveBuffer, endP) == false)
-            {
-                clientState = ClientState.Close;
-            }
-
-            if(RoomUDP.Receive(ClientReceive) == false)
-            {
-                clientState = ClientState.Close;
+                        if(RoomUDP.Receive(ClientReceive) == false)
+                        {
+                            clientState = ClientState.Close;
+                        }
+                    }
+                    break;
             }
 
             await Task.Delay(RoomUDP.ClientDelay);
