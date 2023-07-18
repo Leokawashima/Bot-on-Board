@@ -14,27 +14,22 @@ public class AIMessage : MonoBehaviour
     [SerializeField] InputField Rule;
     [SerializeField] InputField Message;
     [SerializeField] Button DecisionButton;
-    // Start is called before the first frame update
-    //async void Start()
-    //{
-    //    //if (GPTON)
-    //    //{
-    //    //    ChatGPTConnection gpt = new ChatGPTConnection(APIKey.text, Rule.text);
-    //    //    await gpt.RequestAsync(Message.text);
-    //    //}
-    //}
+    [SerializeField] Text AIMesse;
 
-    void Awake()
+    void Start()
     {
         DecisionButton.onClick.AddListener(Decision);
     }
+
+
 
     async void Decision()
     {
         if (GPTON)
         {
             ChatGPTConnection gpt = new ChatGPTConnection(APIKey.text, Rule.text);
-            await gpt.RequestAsync(Message.text);
+            var response = await gpt.RequestAsync(Message.text);
+            AIMesse.text = response.choices[0].message.content;
         }
     }
-}
+} 
