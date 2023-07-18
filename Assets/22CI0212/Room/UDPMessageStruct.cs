@@ -36,3 +36,13 @@ public struct UDPMessage_FlagData
     public IPAddress address;
     public bool flag;
 }
+public struct HostResponseData
+{
+    public IPEndPoint connectEndP;
+    public bool connectFlag;
+    public int connectCnt;
+    public void AddCnt()
+    {
+        connectCnt++;
+    }
+}

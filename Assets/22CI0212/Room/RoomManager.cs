@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Net;
 using System;
 using System.Text;
@@ -13,6 +14,7 @@ public class RoomManager : MonoBehaviour
     [SerializeField] RoomConnectManager roomConnect;
 
     RoomData MyRoom;
+    List<HostResponseData> connections = new();
 
     enum MessageState { Error = -1, R_Open, R_Request, R_Response, H_Subscribe, H_GameStart, C_Subscribe, C_GameReady }
     public enum HostState { Close, Host, GameReady }
@@ -80,6 +82,30 @@ public class RoomManager : MonoBehaviour
                             }
                         }
 
+                        if (connections.Count > 0)
+                        {
+                            for(int i = 0; i < connections.Count; ++i)
+                            {
+                                if (connections[i].connectCnt < RoomUDP.MessageCount)
+                                {
+                                    var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(connections[i].connectFlag));
+                                    if (await RoomUDP.Send(buffer, connections[i].connectEndP))
+                                    {
+                                        connections[i].AddCnt();
+                                    }
+                                    else
+                                    {
+                                        hostState = HostState.Close;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    connections.Remove(connections[i]);
+                                }
+                            }
+                        }
+
                         if(RoomUDP.Receive(HostReveive) == false)
                         {
                             hostState = HostState.Close;
@@ -116,12 +142,27 @@ public class RoomManager : MonoBehaviour
                         roomLog.LogPush(data.name + " joined");
                     }
 
+                    var response = new HostResponseData()
+                    {
+                        connectEndP = endP_,
+                        connectFlag = flag,
+                        connectCnt = 0
+                    };
+                    connections.Add(response);
                     var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(flag));
                     await RoomUDP.Send(buffer, endP_);
                 }
                 break;
             case MessageState.C_Subscribe:
                 {
+                    var data = Get_ClientSubscribeData(endP_, buffer_);
+                    for (int i = 0; i < connections.Count; ++i)
+                    {
+                        if (connections[i].connectEndP.Equals(endP_))
+                        {
+                            connections.Remove(connections[i]);
+                        }
+                    }
                     //接続者からの定期メッセージを処理する
                 }
                 break;
