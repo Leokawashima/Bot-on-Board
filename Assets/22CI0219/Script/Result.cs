@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class Result : MonoBehaviour
 {
-    private float timeCount = 3.0f; //表示する間隔
+    private float timeCount = 1.5f; //表示する間隔
 
     [SerializeField] Text WinnerText; //勝者の名前を表示するテキスト
     [SerializeField] Text text; //「勝者は」
@@ -33,7 +33,7 @@ public class Result : MonoBehaviour
         {
             if(inputActions.UI.Click.triggered)
             {
-                Debug.Log("関数呼び出し");
+                Kansuu();
                 break;
             }
             else
@@ -43,5 +43,8 @@ public class Result : MonoBehaviour
         }
     }
 
-
+    void Kansuu()
+    {
+        Debug.Log("関数呼び出し");
+    }
 }
