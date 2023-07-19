@@ -14,11 +14,12 @@ public class AIState : MonoBehaviour
 
     enum AIstate
     {
+        Non,
         poison,
         stun,
         die
     }
-    AIstate state = AIstate.poison;
+    AIstate state = AIstate.Non;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,7 +66,7 @@ public class AIState : MonoBehaviour
         }
 
         if (Input.GetKeyUp(KeyCode.A)) {
-        state = AIstate.stun;
+            state = AIstate.stun;
         }
 
         if (Input.GetKeyDown(KeyCode.B)){
