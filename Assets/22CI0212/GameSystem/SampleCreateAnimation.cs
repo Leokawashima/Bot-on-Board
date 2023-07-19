@@ -7,19 +7,36 @@ using System.Threading.Tasks;
 
 public class SampleCreateAnimation : MonoBehaviour
 {
+    [Header("Cube")]
     [SerializeField] GameObject cube;
-    [SerializeField] Vector3 spawnPosition = new Vector3(0, 10, 0);
-    [SerializeField] int sizeX = 10;
-    [SerializeField] int sizeZ = 10;
-    [SerializeField] int cnt = 0;
-    [SerializeField] float waitsecond = 0.2f;
-    [SerializeField] int waitmilisecond = 200;
-    void Start()
+    [Header("Corutine")]
+    [SerializeField] Vector3 c_spawnPosition = new Vector3(0, 10, 0);
+    [SerializeField] int c_sizeX = 10;
+    [SerializeField] int c_sizeZ = 10;
+    [SerializeField] int c_cnt = 0;
+    [SerializeField] float c_waitsecond = 0.2f;
+    [Header("Async/Await")]
+    [SerializeField] Vector3 a_spawnPosition = new Vector3(0, 10, 10);
+    [SerializeField] int a_sizeX = 10;
+    [SerializeField] int a_sizeZ = 10;
+    [SerializeField] int a_cnt = 0;
+    [SerializeField] int a_waitsecond = 200;
+
+    CancellationTokenSource cts;
+
+    async void Start()
     {
+        cts = new CancellationTokenSource();
+        var token = cts.Token;
+        await MapAnimationAsync(token);
         StartCoroutine(Animation());
     }
 
-    async Task<bool> MapAnimation(CancellationToken token)
+    public void OnClick_Cancel()
+    {
+        cts.Cancel();
+    }
+    async Task<bool> MapAnimationAsync(CancellationToken token)
     {
         while (true)
         {
@@ -27,23 +44,31 @@ public class SampleCreateAnimation : MonoBehaviour
             // 0 1 2
             // 1 2 3
             // 2 3 4
-            for (int z = 0; z < sizeZ; ++z)
+            for (int z = 0; z < a_sizeZ; ++z)
             {
-                for (int x = 0; x < sizeX; ++x)
+                for (int x = 0; x < a_sizeX; ++x)
                 {
-                    if (cnt == z + x)
-                        Instantiate(cube, spawnPosition + new Vector3(x, 0, z), Quaternion.identity, transform);
+                    if (a_cnt == z + x)
+                        Instantiate(cube, a_spawnPosition + new Vector3(x, 0, z), Quaternion.identity, transform);
                 }
             }
             //カウントを増加
-            cnt++;
+            a_cnt++;
 
             //カウントがマップサイズを超えたら停止
-            if (cnt == sizeX + sizeZ)
+            if (a_cnt == a_sizeX + a_sizeZ)
                 break;
 
             //一定時間待つ
-            await Task.Delay(waitmilisecond);
+            try
+            {
+                await Task.Delay(a_waitsecond, token);
+            }
+            catch(TaskCanceledException)
+            {
+                Debug.Log("<color=red>Cancel</color>");
+                break;
+            }
         }
         return true;
     }
@@ -55,23 +80,23 @@ public class SampleCreateAnimation : MonoBehaviour
             // 0 1 2
             // 1 2 3
             // 2 3 4
-            for (int z = 0; z < sizeZ; ++z)
+            for (int z = 0; z < c_sizeZ; ++z)
             {
-                for (int x = 0; x < sizeX; ++x)
+                for (int x = 0; x < c_sizeX; ++x)
                 {
-                    if (cnt == z + x)
-                        Instantiate(cube, spawnPosition + new Vector3(x, 0, z), Quaternion.identity, transform);
+                    if (c_cnt == z + x)
+                        Instantiate(cube, c_spawnPosition + new Vector3(x, 0, z), Quaternion.identity, transform);
                 }
             }
             //カウントを増加
-            cnt++;
+            c_cnt++;
 
             //カウントがマップサイズを超えたら停止
-            if (cnt == sizeX + sizeZ)
+            if (c_cnt == c_sizeX + c_sizeZ)
                 break;
 
             //一定時間待つ
-            yield return new WaitForSeconds(waitsecond);
+            yield return new WaitForSeconds(c_waitsecond);
         }
     }
 }
