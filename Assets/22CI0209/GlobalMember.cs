@@ -1,12 +1,21 @@
 /*This script is written in UTF-8*/
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
 /*どこからでもアクセスできる関数*/
-public class GlobalMember : MonoBehaviour
+public class GlobalMember
 {
+    public static bool openingMenu{get; private set;}
+
+    /*フラグ等リセット*/
+    public static void ResetProgress()
+    {
+        openingMenu =false;
+    }
+
     /*ゲームプレイ終了*/
     public static void QuitGame()
     {
@@ -34,5 +43,11 @@ public class GlobalMember : MonoBehaviour
             cg.alpha += 0.1f;
             await Task.Delay(50);
         }
+    }
+
+    /*一時停止を伴うメニュー開閉*/
+    public static void OpenCloseMenu()
+    {
+        openingMenu = !openingMenu;
     }
 }

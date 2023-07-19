@@ -35,6 +35,15 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Anything"",
+                    ""type"": ""Button"",
+                    ""id"": ""caa0a741-b851-4451-abda-54b28320f981"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -59,6 +68,28 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
                     ""action"": ""Quit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c468640b-75ad-410a-966d-ea6f19c1af92"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Anything"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""639f0dfa-9f5c-4012-9ae9-8e89d6f75c97"",
+                    ""path"": ""<Gamepad>/*"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Anything"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -68,6 +99,7 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Quit = m_Menu.FindAction("Quit", throwIfNotFound: true);
+        m_Menu_Anything = m_Menu.FindAction("Anything", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -130,11 +162,13 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Menu;
     private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
     private readonly InputAction m_Menu_Quit;
+    private readonly InputAction m_Menu_Anything;
     public struct MenuActions
     {
         private @InputMaster m_Wrapper;
         public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Quit => m_Wrapper.m_Menu_Quit;
+        public InputAction @Anything => m_Wrapper.m_Menu_Anything;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -147,6 +181,9 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
             @Quit.started += instance.OnQuit;
             @Quit.performed += instance.OnQuit;
             @Quit.canceled += instance.OnQuit;
+            @Anything.started += instance.OnAnything;
+            @Anything.performed += instance.OnAnything;
+            @Anything.canceled += instance.OnAnything;
         }
 
         private void UnregisterCallbacks(IMenuActions instance)
@@ -154,6 +191,9 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
             @Quit.started -= instance.OnQuit;
             @Quit.performed -= instance.OnQuit;
             @Quit.canceled -= instance.OnQuit;
+            @Anything.started -= instance.OnAnything;
+            @Anything.performed -= instance.OnAnything;
+            @Anything.canceled -= instance.OnAnything;
         }
 
         public void RemoveCallbacks(IMenuActions instance)
@@ -174,5 +214,6 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
     public interface IMenuActions
     {
         void OnQuit(InputAction.CallbackContext context);
+        void OnAnything(InputAction.CallbackContext context);
     }
 }
