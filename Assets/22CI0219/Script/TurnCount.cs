@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// ターン数をカウントして表示する用
 /// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0219　後藤
 public class TurnCount : MonoBehaviour
 {
     [SerializeField] Text turnCountText;

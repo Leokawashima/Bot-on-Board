@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
+// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class RoomManager : MonoBehaviour
 {
     [SerializeField] RoomUIManager roomUI;

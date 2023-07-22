@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class ClickObjCatch : MonoBehaviour
 {
     Vector2 mPos;

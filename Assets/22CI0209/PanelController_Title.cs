@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
+//　制作者　日本電子専門学校　ゲーム制作科　22CI0209　荻島
 public class PanelController_Title : PanelController_SUPER
 {
     [SerializeField] CanvasGroup panel_CG;      //タイトル側canvas
@@ -15,16 +16,31 @@ public class PanelController_Title : PanelController_SUPER
     [SerializeField] GameObject button_Credits;
     [SerializeField] GameObject credits;        //クレジット側パネル
     [SerializeField] CanvasGroup credits_CG;    //クレジット側canvas
-    private InputMaster input;                  //Input Action
     bool pressedAnyKey = false;                 //何かボタンを押した
     bool isFading = false;                      //フェード中
 
-    private void Awake()
+    #region 川島修正
+    /*
+     void Awake()
     {
         input = new InputMaster();
         input.Menu.Anything.performed += PressAnyKey;
         input.Enable();
     }
+     */
+    void OnEnable()
+    {
+        var map = new InputActionMapSettings();
+        map.UI.Any.started += PressAnyKey;
+        map.Enable();
+    }
+    void OnDisable()
+    {
+        var map = new InputActionMapSettings();
+        map.UI.Any.started -= PressAnyKey;
+        map.Disable();
+    }
+    #endregion
 
     /*"ボタンを押してください"に従うとテキストが消滅しボタンが出現*/
     private void PressAnyKey(InputAction.CallbackContext context) 
