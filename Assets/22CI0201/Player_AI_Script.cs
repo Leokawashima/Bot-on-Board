@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Player_AI_Script : MonoBehaviour
@@ -26,11 +27,25 @@ public class Player_AI_Script : MonoBehaviour
     //AIの向いている方向 (左右)
     public enum AI_direction_LR { non = 0, left = 1, right = -1, }
 
+    //テスト用の変数
     int hoge;
+    //AIの状態
     AI_state state;
+
+    //AIの前後左右の向き
     AI_direction_LR direction_LR;
     AI_direction_FB direction_FB;
-    Vector3 AIpos;
+ 
+    //現在のマップチップ上の位置
+    private int current_X;
+    private int current_Y;
+
+    //MapManagerへの参照
+    private MapManager mapManager;
+
+    //進行予定のマップチップが入る変数
+    private int map_X;
+    private int map_Y;
 
     //現在のステートの状態からベクトルを作成する
     private Vector3 direction
@@ -38,14 +53,22 @@ public class Player_AI_Script : MonoBehaviour
         get { return new Vector3((int)direction_LR, 0, (int)direction_FB); }
     }
 
+
     void Start()
     {
+        //MapManagerコンポーネントを持つオブジェクトを見つけて参照を取得
+        mapManager = FindObjectOfType<MapManager>();
+
+        //1マスの移動距離を設定
         One_steps_size = 1f;
 
-        Initialized(1f, 1, 0, 1);
+        Initialized(1f, 1, 0, 1, 0 ,0);
 
         current_direction = direction;
 
+        // 初期位置の設定
+        
+        
     }
 
     void Update()
@@ -53,7 +76,10 @@ public class Player_AI_Script : MonoBehaviour
         hoge++;
         if (hoge == 1000)
         {
-            go_1steps();
+            if (map_check())
+            {
+                go_1steps();
+            }
             state_check();
         }
     }
@@ -71,12 +97,14 @@ public class Player_AI_Script : MonoBehaviour
     }
 
     //生成時に値を設定する
-    public void Initialized(float one_steps_size, int directionFB, int directionLR, int AIstate)
+    public void Initialized(float one_steps_size, int directionFB, int directionLR, int AIstate, int currentX, int currentY)
     {
         One_steps_size = one_steps_size;
         Direction_FB = (AI_direction_FB)directionFB;
         Direction_LR = (AI_direction_LR)directionLR;
         State = (AI_state)AIstate;
+        Current_x = (int)transform.position.x;
+        Current_y = (int)transform.position.z;
     }
 
     //パーティクルエフェクトを再生する
@@ -191,13 +219,24 @@ public class Player_AI_Script : MonoBehaviour
     }
 
     //マップの有無を確認する
-    bool map_check()
+    public bool map_check()
     {
-        if (exists_map)
-        {
-            return true;
-        }
+        int[,] mapStates = mapManager.mapStates;
+
+        //進行予定のマップチップの状態を確認
+        int[,] nextState = mapStates;
+
+            //ここで nextState の値を元に進行するかどうかの条件判定を行う
+            //例えば、Ground (1) のマスだけ進行可能とするならば
+            if ((MapManager.MapStates)nextState == MapManager.MapStates.Ground)
+            {
+                return true;
+            }
+
+        //進行予定の座標がマップの範囲外または進行不可のマップチップの場合は進行を許可しない
         return false;
+
+        UnityEngine.Debug.Log(mapStates);
     }
     #endregion
 
@@ -222,6 +261,20 @@ public class Player_AI_Script : MonoBehaviour
     {
         get { return exists_map; }
         protected set { exists_map = value; }
+    }
+
+    //マップ上のX位置のget/set
+    public int Current_x
+    {
+        get { return current_X; }
+        protected set { current_X = value; }
+    }
+
+    //マップ上のY位置のget/set
+    public int Current_y
+    {
+        get { return current_Y; }
+        protected set { current_Y = value; }
     }
 
     //AIの状態のget/set
