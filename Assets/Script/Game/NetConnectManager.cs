@@ -37,7 +37,7 @@ public class NetConnectManager : MonoBehaviour
         // true から false に遷移すると、接続承認応答が処理されます。
         response.Pending = true;
 
-        if(NetworkManager.Singleton.ConnectedClients.Count >= RoomUDP.ConnectMaxUser)
+        if(NetworkManager.Singleton.ConnectedClients.Count >= RoomUDP.ConnectUserMax)
         {
             response.Approved = false;//接続を許可しない
             response.Pending = false;

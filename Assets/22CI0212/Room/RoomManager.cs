@@ -39,6 +39,7 @@ public class RoomManager : MonoBehaviour
             userMax = roomMake.getUserMax,
             userCnt = 1
         };
+        RoomUDP.SetRoomUserMax(MyRoom.userMax);
 
         var host = new MemberData()
         {

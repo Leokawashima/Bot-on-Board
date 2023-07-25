@@ -23,7 +23,7 @@ public static class RoomUDP
     public static int SendTimeOut { get; private set; } = 100;
     public static int ReceiveTimeOut { get; private set; } = 100;
     public static string ConnectIPAddress { get; private set; }
-    public static int ConnectMaxUser { get; private set; } = 2;
+    public static int ConnectUserMax { get; private set; }
     public static int connectIndex { get; private set; }
 
     public static UdpClient Udp { get; private set; }
@@ -44,6 +44,10 @@ public static class RoomUDP
     public static void SetRoomIPAddress(IPAddress address_)
     {
         ConnectIPAddress = address_.ToString();
+    }
+    public static void SetRoomUserMax(int userMax_)
+    {
+        ConnectUserMax = userMax_;
     }
     public static IPAddress GetLocalIPAddress()
     {
