@@ -23,7 +23,8 @@ public static class RoomUDP
     public static int SendTimeOut { get; private set; } = 100;
     public static int ReceiveTimeOut { get; private set; } = 100;
     public static string ConnectIPAddress { get; private set; }
-    public static int ConnectMaxUser { get; private set; }
+    public static int ConnectMaxUser { get; private set; } = 2;
+    public static int connectIndex { get; private set; }
 
     public static UdpClient Udp { get; private set; }
 

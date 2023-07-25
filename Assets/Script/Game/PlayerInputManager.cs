@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// プレイヤーの入力を管理するクラス
+/// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class PlayerInputManager : MonoBehaviour
 {
     public static event Action OnMouseClickEvent;

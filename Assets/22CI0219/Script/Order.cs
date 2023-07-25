@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.ShaderKeywordFilter.FilterAttribute;
 
 /// <summary>
 /// 先攻後攻用
@@ -28,7 +27,9 @@ public class Order : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+#if UNITY_EDITOR
         Debug.Log(order);
+#endif
 
         FirstAttackButton.onClick.AddListener(First_);
         SecondAttack.onClick.AddListener(Second_);
@@ -46,7 +47,9 @@ public class Order : MonoBehaviour
         SelectImage.enabled = true;
         SelectImage.transform.position = FirstAttackButton.transform.position + new Vector3(200, 98, 0);//ボタンの右上に設置する
         order = StateOrder.First;
+#if UNITY_EDITOR
         Debug.Log(order);
+#endif
 
         InductionText.text = "先攻でよろしいでしょうか";
     }
@@ -57,7 +60,9 @@ public class Order : MonoBehaviour
         SelectImage.enabled = true;
         SelectImage.transform.position = SecondAttack.transform.position + new Vector3(200, 98, 0);//ボタンの右上に設置する
         order = StateOrder.Second;
+#if UNITY_EDITOR
         Debug.Log(order);
+#endif
 
         InductionText.text = "後攻でよろしいでしょうか";
     }

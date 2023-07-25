@@ -1,7 +1,5 @@
-﻿using Palmmedia.ReportGenerator.Core.Reporting.Builders;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 //　制作者　日本電子専門学校　ゲーム制作科　22CI0201　青山

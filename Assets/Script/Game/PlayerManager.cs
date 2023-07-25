@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerManager : MonoBehaviour
+/// <summary>
+/// プレイヤーの操作を管理するクラス
+/// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
+public class PlayerManager : NetworkBehaviour
 {
     void OnEnable()
     {
@@ -11,11 +16,6 @@ public class PlayerManager : MonoBehaviour
     void OnDisable()
     {
         PlayerInputManager.OnMouseClickEvent -= OnMouse_Click;
-    }
-
-    void Start()
-    {
-
     }
 
     void OnMouse_Click()
