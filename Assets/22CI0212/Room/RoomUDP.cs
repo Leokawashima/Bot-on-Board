@@ -41,6 +41,10 @@ public static class RoomUDP
         Udp.Client.SendTimeout = SendTimeOut;
         Udp.Client.ReceiveTimeout = ReceiveTimeOut;
     }
+    public static void SetRoomIPAddress(IPAddress address_)
+    {
+        ConnectIPAddress = address_.ToString();
+    }
     public static IPAddress GetLocalIPAddress()
     {
         if(localIPAddress == null)

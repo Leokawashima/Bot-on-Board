@@ -26,8 +26,7 @@ public class NetConnectManager : MonoBehaviour
         var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
         if(transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
         {
-            //unityTransport.SetConnectionData(RoomUDP.ConnectIPAddress, RoomUDP.Port);
-            unityTransport.SetConnectionData("127.0.0.1", RoomUDP.Port);
+            unityTransport.SetConnectionData(RoomUDP.ConnectIPAddress, RoomUDP.Port);
         }
         NetworkManager.Singleton.StartClient();
     }
