@@ -1,8 +1,9 @@
-/*This script is written in UTF-8*/
+﻿/*This script is written in UTF-8*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//　制作者　日本電子専門学校　ゲーム制作科　22CI0209　荻島
 public class PanelController_Reconnect : PanelController_SUPER
 {
     /*以下、対応するButtonを押したときのメソッド*/

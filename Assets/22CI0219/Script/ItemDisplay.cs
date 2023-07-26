@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// アイテムをボタン内に表示するスクリプト
 /// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0219　後藤
 public class ItemDisplay : MonoBehaviour
 {
     Text ButtonText;

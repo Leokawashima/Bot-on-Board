@@ -10,6 +10,7 @@ using System.Net.Sockets;
 /// <summary>
 /// RoomのUIを管理するクラス
 /// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class RoomUIManager : MonoBehaviour
 {
     [Header("UI")]
@@ -82,11 +83,17 @@ public class RoomUIManager : MonoBehaviour
     }
     public void OnClick_GameStart()
     {
-
+        RoomUDP.SetRoomState(RoomUDP.RoomState.Host);
+        //テスト実装　通信処理を挟む
+        Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
     }
     public void OnClick_GameReady()
     {
-
+        //テスト実装　通信処理を挟む
+        RoomUDP.SetRoomState(RoomUDP.RoomState.Client);
+        RoomUDP.SetRoomIPAddress(roomList.selectRoom.roomData.address);
+        //RoomUDP.SetRoomIPAddress(new IPAddress(new byte[] {127, 0, 0, 1}));
+        Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
     }
 
     public void SetUI(UIState state_)

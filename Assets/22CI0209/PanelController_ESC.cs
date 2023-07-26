@@ -6,16 +6,31 @@ using UnityEngine.InputSystem;
 
 /*パネル制御：各シーンで、ESCキーを押した時に出現するパネル
   メニューを開いている間は一部の処理が一時停止するようにする*/
+//　制作者　日本電子専門学校　ゲーム制作科　22CI0209　荻島
 public class PanelController_ESC : PanelController_SUPER
 {
-    private InputMaster input;  //Input Action
-
-    private void Awake()
+    #region 川島修正
+    /*
+     private void Awake()
     {
         input = new InputMaster();
         input.Menu.Quit.performed += PushEsc;
         input.Enable();
     }
+     */
+    void OnEnable()
+    {
+        var map = new InputActionMapSettings();
+        map.UI.Esc.started += PushEsc;
+        map.Enable();
+    }
+    void OnDisable()
+    {
+        var map = new InputActionMapSettings();
+        map.UI.Esc.started -= PushEsc;
+        map.Disable();
+    }
+    #endregion
 
     /// <summary>
     /// ボタン入力でメニューを開く
