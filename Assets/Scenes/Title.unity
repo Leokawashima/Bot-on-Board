@@ -4627,8 +4627,8 @@ GameObject:
   m_Component:
   - component: {fileID: 697688963}
   - component: {fileID: 697688965}
-  - component: {fileID: 697688964}
   - component: {fileID: 697688966}
+  - component: {fileID: 697688964}
   m_Layer: 0
   m_Name: PanelController
   m_TagString: Untagged
@@ -4664,7 +4664,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 697688962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c9528c79823e047b64784664d27236, type: 3}
+  m_Script: {fileID: 11500000, guid: dbca41d1d17b70342a6ff31915229e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 2094015084}
@@ -4677,10 +4677,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 697688962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85c3d494a1083404bb59aebb53df1ad1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bc2569ffcf854d41b0cf9f9ae1e5ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1347405087}
+  panel: {fileID: 1908300994}
+  panel_CG: {fileID: 0}
+  text_PAK: {fileID: 306601906}
+  button_Start: {fileID: 1071787487}
+  button_Quit: {fileID: 1725223968}
+  button_Credits: {fileID: 1508809982}
+  credits: {fileID: 1209894657}
+  credits_CG: {fileID: 1209894658}
 --- !u!114 &697688966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4690,17 +4697,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 697688962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fd0a6a082cb6fd4694aaeb8bd8408aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b395960c83ce434a8470620f0a2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1908300994}
-  panel_CG: {fileID: 1908300996}
-  text_PAK: {fileID: 306601906}
-  button_Start: {fileID: 1071787487}
-  button_Quit: {fileID: 1725223968}
-  button_Credits: {fileID: 1508809982}
-  credits: {fileID: 1209894657}
-  credits_CG: {fileID: 1209894658}
+  panel: {fileID: 1347405087}
 --- !u!1 &712467104
 GameObject:
   m_ObjectHideFlags: 0
@@ -5320,7 +5320,7 @@ MonoBehaviour:
   m_text: Ready
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 3725512006366861618, guid: 34075dd4672893e489f2753294f5655f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5344,8 +5344,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5383,7 +5383,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &841309642
@@ -6663,7 +6663,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.4009434, g: 1, b: 0.81707776, a: 1}
-    m_HighlightedColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
+    m_HighlightedColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -11009,7 +11009,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0.650289, b: 0.4292453, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.650289, b: 0.4292453, a: 1}
+    m_HighlightedColor: {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 1}
     m_PressedColor: {r: 0.3679245, g: 0.19034244, b: 0.078097194, a: 1}
     m_SelectedColor: {r: 0.6784314, g: 0.2627451, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
