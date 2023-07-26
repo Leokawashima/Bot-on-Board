@@ -9,74 +9,39 @@ using UnityEngine.UI;
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0219　後藤
 public class AIState : MonoBehaviour
 {
-    [SerializeField] Image Poison;
-    [SerializeField] Image Stun;
+    [SerializeField] Image Normal;
     [SerializeField] Image Die;
 
-    enum AIstate
-    {
-        Non,
-        poison,
-        stun,
-        die
-    }
-    AIstate state = AIstate.Non;
+    public Player_AI_Script playerAI;
+
     // Start is called before the first frame update
     void Start()
     {
-        Poison.enabled = false;
-        Stun.enabled = false;
+        Normal.enabled = false;
         Die.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (Player_AI_Script.state == poison)
+        //if (playerAI.State == Player_AI_Script.AI_state.dead)
         //{
-        //    Poison.enabled = true;
+        //    Die.enabled = true;
         //}
         //else
         //{
-        //    Poison.enabled = false;
+        //    Normal.enabled = true;
         //}
 
-        if (state == AIstate.poison)
+        switch (playerAI.State)
         {
-            Poison.enabled = true;
-        }
-        else
-        {
-            Poison.enabled = false;
-        }
-        if (state == AIstate.stun)
-        {
-            Stun.enabled = true;
-        }
-        else
-        {
-            Stun.enabled = false;
-        }
-        if (state == AIstate.die)
-        {
-            Die.enabled = true;
-        }
-        else
-        {
-            Die.enabled = false;
+            case Player_AI_Script.AI_state.dead:
+                Die.enabled = true;
+                break;
+            default:
+                Normal.enabled = true;
+                    break;
         }
 
-        if (Input.GetKeyUp(KeyCode.A)) {
-            state = AIstate.stun;
-        }
-
-        if (Input.GetKeyDown(KeyCode.B)){
-            state = AIstate.poison;
-        }
-
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            state = AIstate.die;
-        }
     }
 }
