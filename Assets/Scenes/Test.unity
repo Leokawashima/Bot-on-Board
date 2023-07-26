@@ -2304,8 +2304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2069ab869f691b4ba52b503ac0d2f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GPTON: 0
-  YourAPIKey: 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
+  GPTON: 1
+  YourAPIKey: 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
   YoutContent: "\u8A9E\u5C3E\u306B\u300C\u306B\u3083\u300D\u3092\u3064\u3051\u3066"
   YourMessage: "\u6570\u5B57\u3068\u6587\u5B57\u3092\u8A00\u3063\u3066\u3000\u4E09\u56DE\u304F\u3089\u3044\u8A00\u3063\u3066"
 --- !u!23 &977708526
