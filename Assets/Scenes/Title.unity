@@ -2686,7 +2686,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697688965}
+      - m_Target: {fileID: 697688966}
         m_TargetAssemblyTypeName: PanelController_ESC, Assembly-CSharp
         m_MethodName: Button_QuitNo
         m_Mode: 1
@@ -4785,7 +4785,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697688965}
+      - m_Target: {fileID: 697688966}
         m_TargetAssemblyTypeName: PanelController_ESC, Assembly-CSharp
         m_MethodName: Button_QuitYes
         m_Mode: 1
@@ -7993,7 +7993,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697688966}
+      - m_Target: {fileID: 697688965}
         m_TargetAssemblyTypeName: PanelController_Title, Assembly-CSharp
         m_MethodName: Button_HideCredits
         m_Mode: 1
@@ -9511,7 +9511,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697688966}
+      - m_Target: {fileID: 697688965}
         m_TargetAssemblyTypeName: PanelController_Title, Assembly-CSharp
         m_MethodName: Button_ShowCredits
         m_Mode: 1
