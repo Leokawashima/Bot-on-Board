@@ -10,6 +10,7 @@ public class GameSystem : MonoBehaviour
 {
     [SerializeField] SelectPlayManager selectPlayManager;
     [SerializeField] MapManager mapManager;
+    [SerializeField] NetConnectManager netConnectManager;
     
     public static event Action GameIntializeEvent;
     public static event Action GameLoopEvent_First;
@@ -23,6 +24,16 @@ public class GameSystem : MonoBehaviour
 
     void Start()
     {
+        //とりあえずホストクライアントを自動で開始するようにするだけの処理
+        if (RoomUDP.State == RoomUDP.RoomState.Host)
+        {
+            netConnectManager.Host();
+        }
+        else if (RoomUDP.State == RoomUDP.RoomState.Client)
+        {
+            netConnectManager.Client();
+        }
+
         selectPlayManager.Initialize();
         selectPlayManager.SetFinishEvent += GameInitialize;
     }

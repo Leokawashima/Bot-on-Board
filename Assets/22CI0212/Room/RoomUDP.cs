@@ -25,6 +25,8 @@ public static class RoomUDP
     public static string ConnectIPAddress { get; private set; } = "127.0.0.1";
     public static int ConnectUserMax { get; private set; } = 2;
     public static int connectIndex { get; private set; }
+    public enum RoomState { Non, Host, Client }
+    public static RoomState State { get; private set; } = RoomState.Non;
 
     public static UdpClient Udp { get; private set; }
 
@@ -48,6 +50,10 @@ public static class RoomUDP
     public static void SetRoomUserMax(int userMax_)
     {
         ConnectUserMax = userMax_;
+    }
+    public static void SetRoomState(RoomState state_)
+    {
+        State = state_;
     }
     public static IPAddress GetLocalIPAddress()
     {
