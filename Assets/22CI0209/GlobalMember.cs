@@ -9,7 +9,7 @@ using UnityEngine;
 //　制作者　日本電子専門学校　ゲーム制作科　22CI0209　荻島
 public class GlobalMember
 {
-    public static bool openingMenu{get; private set;}
+    public static bool openingMenu { get; private set; } = false;
 
     /*フラグ等リセット*/
     public static void ResetProgress()
