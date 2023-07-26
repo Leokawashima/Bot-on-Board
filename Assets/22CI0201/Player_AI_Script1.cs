@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static MapManager;
 
-public class Player_AI_Script : MonoBehaviour
+public class Player_AI_Script1 : MonoBehaviour
 {
     [Header("一歩のサイズ")]
     [SerializeField] private float one_steps_size;
@@ -35,7 +36,7 @@ public class Player_AI_Script : MonoBehaviour
     //AIの前後左右の向き
     AI_direction_LR direction_LR;
     AI_direction_FB direction_FB;
- 
+
     //現在のマップチップ上の位置
     private int current_X;
     private int current_Y;
@@ -53,6 +54,8 @@ public class Player_AI_Script : MonoBehaviour
         get { return new Vector3((int)direction_LR, 0, (int)direction_FB); }
     }
 
+    //進行予定方向の保存用変数
+    Vector3 Destination;
 
     void Start()
     {
@@ -62,25 +65,17 @@ public class Player_AI_Script : MonoBehaviour
         //1マスの移動距離を設定
         One_steps_size = 1f;
 
-        Initialized(1f, 1, 0, 1, 0 ,0);
+        Initialized(one_steps_size, 1, 0, 0, 0, 0);
 
         current_direction = direction;
-
-        // 初期位置の設定
-        
-        
     }
 
     void Update()
     {
         hoge++;
-        if (hoge == 1000)
+        if (hoge == 1000 || hoge == 2000 || hoge == 3000 || hoge == 4000 || hoge == 5000 || hoge == 6000)
         {
-            if (map_check())
-            {
-                go_1steps();
-            }
-            state_check();
+            go_1steps();
         }
     }
 
@@ -123,9 +118,17 @@ public class Player_AI_Script : MonoBehaviour
     void go_1steps()
     {
         current_direction = direction;
-        play_particle_effect();
-        transform.position += transform.TransformDirection(current_direction) * one_steps_size;
-        UnityEngine.Debug.Log("現在の向きへの移動が実行されました。");
+        Destination = transform.TransformDirection(current_direction) * one_steps_size;
+        if (map_check())
+        {
+            transform.position += transform.TransformDirection(current_direction) * one_steps_size;
+            play_particle_effect();
+            if (Destination.z == 1) { current_Y++; }
+            if (Destination.z == -1) { current_Y--; }
+            if (Destination.x == 1) { current_X++; }
+            if (Destination.x == -1) { current_X--; }
+        }
+
     }
 
     //１歩前に進む
@@ -160,7 +163,7 @@ public class Player_AI_Script : MonoBehaviour
     //AIの向いている、左右の方向をチェックする
     void direction_check_LR()
     {
-        switch(direction_LR)
+        switch (direction_LR)
         {
             case AI_direction_LR.non:
                 UnityEngine.Debug.Log("AIは右も左も向いていません。");
@@ -198,7 +201,7 @@ public class Player_AI_Script : MonoBehaviour
     //AIの状態異常をチェックする
     void state_check()
     {
-        switch(state)
+        switch (state)
         {
             case AI_state.non:
                 UnityEngine.Debug.Log("AIの状態が存在しません。");
@@ -222,21 +225,17 @@ public class Player_AI_Script : MonoBehaviour
     public bool map_check()
     {
         UnityEngine.Debug.Log("map_checkが実行");
-        int[,] nextState = mapManager.mapStates;
-
-            //ここで nextState の値を元に進行するかどうかの条件判定を行う
-            //例えば、Ground (1) のマスだけ進行可能とするならば
-            if ((MapManager.MapStates)nextState == MapManager.MapStates.Ground)
-            {
-                return true;
-            UnityEngine.Debug.Log("trueが返された");
-            UnityEngine.Debug.Log(mapStates);
+        UnityEngine.Debug.Log(mapManager.mapStates[current_Y + (int)Destination.x, current_X + (int)Destination.z]);
+        if ((int)Destination.z < 0 || (int)Destination.x < 0)
+        {
+            return false;
         }
-
-        //進行予定の座標がマップの範囲外または進行不可のマップチップの場合は進行を許可しない
+        if (mapManager.mapStates[current_Y + (int)Destination.x, current_X + (int)Destination.z] >= 1)
+        {
+            return true;
+        }
+        //UnityEngine.Debug.Log(mapManager.mapStates[current_Y, current_X]);
         return false;
-        UnityEngine.Debug.Log(mapStates);
-        UnityEngine.Debug.Log("falseが返された");
     }
     #endregion
 
