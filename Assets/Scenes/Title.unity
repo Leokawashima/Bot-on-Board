@@ -4681,7 +4681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1908300994}
-  panel_CG: {fileID: 0}
+  panel_CG: {fileID: 1908300996}
   text_PAK: {fileID: 306601906}
   button_Start: {fileID: 1071787487}
   button_Quit: {fileID: 1725223968}
@@ -11031,7 +11031,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 697688966}
+      - m_Target: {fileID: 697688965}
         m_TargetAssemblyTypeName: PanelController_Title, Assembly-CSharp
         m_MethodName: Button_QuitGame
         m_Mode: 1
