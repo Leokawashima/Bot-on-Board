@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
@@ -20,12 +21,19 @@ public class MapManager : MonoBehaviour
     public int[,] mapStates { get; private set; }
     public int[,] objStates { get; private set; }
 
+    public event Action OnMapCreated;
+
     int cnt = 0;
     Vector3 offset { get { return new Vector3(0.5f, 0, 0.5f); } }
-    int waitSecond = 200;
+    float waitSecond = 0.2f;
     float AnimY = 10;
 
-    public async Task<bool> MapCreateAsync(CancellationToken token)
+    public void MapCreate()
+    {
+        StartCoroutine(CoMapCreate());
+    }
+
+    IEnumerator CoMapCreate()
     {
         mapStates = new int[data_SO.y, data_SO.x];
         objStates = new int[data_SO.y, data_SO.x];
@@ -61,25 +69,10 @@ public class MapManager : MonoBehaviour
             if(cnt == data_SO.x + data_SO.y)
                 break;
 
-            try
-            {
-                await Task.Delay(waitSecond, token);
-            }
-            catch(TaskCanceledException)
-            {
-                return false;
-            }
-        }
-        try
-        {
-            await Task.Delay(1000, token);
-        }
-        catch (TaskCanceledException)
-        {
-            return false;
+            yield return new WaitForSeconds(waitSecond);
         }
 
-        return true;
+        OnMapCreated?.Invoke();
     }
 
     void OnDrawGizmos()

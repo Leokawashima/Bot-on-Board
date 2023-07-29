@@ -36,14 +36,18 @@ public class GameSystem : MonoBehaviour
 
         selectPlayManager.Initialize();
         selectPlayManager.SetFinishEvent += GameInitialize;
+
+        mapManager.OnMapCreated += () =>
+        {
+            GameIntializeEvent?.Invoke();
+            GameFirst();
+        };
     }
 
-    async void GameInitialize()
+    void GameInitialize()
     {
         selectPlayManager.gameObject.SetActive(false);
-        await mapManager.MapCreateAsync(cts.Token);
-        GameIntializeEvent?.Invoke();
-        GameFirst();
+        mapManager.MapCreate();
     }
 
     void GameFirst()

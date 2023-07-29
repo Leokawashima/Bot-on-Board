@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Normal_Map
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -41,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 4202916697
+    locked: 0
+  - name: UI_Effect
+    uniqueID: 778119379
     locked: 0
