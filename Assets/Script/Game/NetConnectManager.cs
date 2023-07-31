@@ -11,8 +11,6 @@ using TMPro;
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class NetConnectManager : MonoBehaviour
 {
-    public static event Action NetUserMaxEvent;
-
     public void Host()
     {
         var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
@@ -42,7 +40,6 @@ public class NetConnectManager : MonoBehaviour
 
         if(NetworkManager.Singleton.ConnectedClients.Count >= RoomUDP.ConnectUserMax)
         {
-            NetUserMaxEvent?.Invoke();
             response.Approved = false;//接続を許可しない
             response.Pending = false;
             return;
