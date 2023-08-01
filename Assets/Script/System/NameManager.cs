@@ -27,5 +27,6 @@ namespace Name
         public const int UI = 5;
         public const int PostProcess = 9;
         public const int OutLine = 10;
+        public const int Map = 11;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class RainbowText : MonoBehaviour
+public class RainbowTextSystem : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI m_Text;
     [SerializeField] Color m_StartColor = Color.red;

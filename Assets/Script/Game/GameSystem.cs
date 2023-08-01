@@ -33,6 +33,10 @@ public class GameSystem : MonoBehaviour
         {
             netConnectManager.Client();
         }
+        else
+        {
+            netConnectManager.Host();
+        }
 
         selectPlayManager.Initialize();
         selectPlayManager.SetFinishEvent += GameInitialize;

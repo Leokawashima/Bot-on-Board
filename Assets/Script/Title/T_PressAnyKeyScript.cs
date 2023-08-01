@@ -7,7 +7,7 @@ public class T_PressAnyKeyScript : MonoBehaviour
 {
     [SerializeField] FlashSystem m_Flash;
     public FlashSystem Flash { get { return m_Flash; } }
-    [SerializeField] RainbowText m_Rainbow;
+    [SerializeField] RainbowTextSystem m_Rainbow;
     [SerializeField] AudioSource m_Audio;
     [SerializeField] ParticleSystem m_Particle;
 

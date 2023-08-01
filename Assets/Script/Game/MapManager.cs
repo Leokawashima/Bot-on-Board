@@ -37,32 +37,35 @@ public class MapManager : MonoBehaviour
     {
         mapStates = new int[data_SO.y, data_SO.x];
         objStates = new int[data_SO.y, data_SO.x];
+        
+        var mapOffset = new Vector3(-data_SO.y / 2.0f, 0, -data_SO.x / 2.0f) + transform.position;
 
         while(true)
         {
             for(int z = 0; z < data_SO.y; ++z)
             {
-                int zz = z;
-                z = data_SO.y - z - 1;
                 for(int x = 0; x < data_SO.x; ++x)
                 {
                     if (cnt == x + z)
                     {
                         if(data_SO.mapChip[z * data_SO.x + x] != 0)
                         {
-                            var mapPos = new Vector3(x, AnimY, z) + offset;
-                            Instantiate(mapChip[data_SO.mapChip[z * data_SO.x + x]], mapPos, Quaternion.identity, transform);
+                            var mapPos = new Vector3(x, AnimY, z) + offset + mapOffset;
+                            var map = Instantiate(mapChip[data_SO.mapChip[z * data_SO.x + x]], mapPos, Quaternion.identity, transform);
                             mapStates[z, x] = data_SO.mapChip[z * data_SO.x + x];
+                            var data = map.GetComponent<MapChip>();
+                            data.m_State = (MapState)Enum.ToObject(typeof(MapState), mapStates[z, x]);
+                            data.m_IndexX = x;
+                            data.m_IndexY = z;
                         }
                         if(data_SO.objChip[z * data_SO.x + x] != 0)
                         {
-                            var objPos = new Vector3(x, AnimY, z) + offset + Vector3.up;
+                            var objPos = new Vector3(x, AnimY, z) + offset + Vector3.up + mapOffset;
                             Instantiate(objChip[data_SO.objChip[z * data_SO.x + x]], objPos, Quaternion.identity, transform);
                             objStates[z, x] = data_SO.objChip[z * data_SO.x + x];
                         }
                     }
                 }
-                z = zz;
             }
             cnt++;
 
@@ -77,8 +80,7 @@ public class MapManager : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        var pos = new Vector3(data_SO.x, 0, data_SO.y);
         var size = new Vector3(data_SO.x, 1, data_SO.y);
-        Gizmos.DrawWireCube(transform.position + pos / 2.0f, size);
+        Gizmos.DrawWireCube(transform.position, size);
     }
 }

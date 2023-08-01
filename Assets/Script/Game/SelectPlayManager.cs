@@ -21,6 +21,8 @@ public class SelectPlayManager : MonoBehaviour
 
     public event Action SetFinishEvent;
 
+    Vector2 offset { get { return new Vector2(200, 98); } }
+
     public void Initialize()
     {
         FirstAttackButton.onClick.AddListener(First);
@@ -35,7 +37,7 @@ public class SelectPlayManager : MonoBehaviour
     void First()
     {
         SelectImage.enabled = true;
-        var pos = (FirstAttackButton.transform as RectTransform).anchoredPosition + new Vector2(200, 98);
+        var pos = (FirstAttackButton.transform as RectTransform).anchoredPosition + offset;
         pos = new Vector2(pos.x * transform.lossyScale.x, pos.y * transform.lossyScale.y);
         SelectImage.transform.position = pos;
         myOrder = StateOrder.First;
@@ -46,7 +48,7 @@ public class SelectPlayManager : MonoBehaviour
     void Second()
     {
         SelectImage.enabled = true;
-        var pos = (SecondAttack.transform as RectTransform).anchoredPosition + new Vector2(200, 98);
+        var pos = (SecondAttack.transform as RectTransform).anchoredPosition + offset;
         pos = new Vector2(pos.x * transform.lossyScale.x, pos.y * transform.lossyScale.y);
         SelectImage.transform.position = pos;
         myOrder = StateOrder.Second;

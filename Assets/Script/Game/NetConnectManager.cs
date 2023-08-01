@@ -50,8 +50,8 @@ public class NetConnectManager : MonoBehaviour
         response.PlayerPrefabHash = null;
 
         //PlayerObjectをスポーンする位置(nullの場合Vector3.zero)
-        var position = new Vector3(0, 5, 4);
-        position.x = 4 + 2 * NetworkManager.Singleton.ConnectedClients.Count;
+        var position = new Vector3(0, 0, 0);
+        position.x = 2 * NetworkManager.Singleton.ConnectedClients.Count;
         response.Position = position;
         //PlayerObjectをスポーン時の回転 (nullの場合Quaternion.identity)
         response.Rotation = Quaternion.identity;

@@ -46,9 +46,27 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""MainAction"",
                     ""type"": ""Button"",
                     ""id"": ""29b6c6d6-4a60-40a5-a994-5e1c955cc8d4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SubAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a42036e-143b-4edc-be57-b4b01d943f1c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MiddleAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""7bd4cbae-fe53-4e31-9278-3c35f652aac5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -228,7 +246,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Fire"",
+                    ""action"": ""MainAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -239,7 +257,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Fire"",
+                    ""action"": ""MainAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -250,7 +268,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Touch"",
-                    ""action"": ""Fire"",
+                    ""action"": ""MainAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -261,7 +279,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
-                    ""action"": ""Fire"",
+                    ""action"": ""MainAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -272,7 +290,29 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""XR"",
-                    ""action"": ""Fire"",
+                    ""action"": ""MainAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d6d10e8-9ab5-4534-bef7-b987de5a7e64"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d3e4901-d6f9-4419-a316-b76d56629017"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -856,7 +896,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_MainAction = m_Player.FindAction("MainAction", throwIfNotFound: true);
+        m_Player_SubAction = m_Player.FindAction("SubAction", throwIfNotFound: true);
+        m_Player_MiddleAction = m_Player.FindAction("MiddleAction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -932,14 +974,18 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_MainAction;
+    private readonly InputAction m_Player_SubAction;
+    private readonly InputAction m_Player_MiddleAction;
     public struct PlayerActions
     {
         private @InputActionMapSettings m_Wrapper;
         public PlayerActions(@InputActionMapSettings wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @MainAction => m_Wrapper.m_Player_MainAction;
+        public InputAction @SubAction => m_Wrapper.m_Player_SubAction;
+        public InputAction @MiddleAction => m_Wrapper.m_Player_MiddleAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -955,9 +1001,15 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
+            @MainAction.started += instance.OnMainAction;
+            @MainAction.performed += instance.OnMainAction;
+            @MainAction.canceled += instance.OnMainAction;
+            @SubAction.started += instance.OnSubAction;
+            @SubAction.performed += instance.OnSubAction;
+            @SubAction.canceled += instance.OnSubAction;
+            @MiddleAction.started += instance.OnMiddleAction;
+            @MiddleAction.performed += instance.OnMiddleAction;
+            @MiddleAction.canceled += instance.OnMiddleAction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -968,9 +1020,15 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
+            @MainAction.started -= instance.OnMainAction;
+            @MainAction.performed -= instance.OnMainAction;
+            @MainAction.canceled -= instance.OnMainAction;
+            @SubAction.started -= instance.OnSubAction;
+            @SubAction.performed -= instance.OnSubAction;
+            @SubAction.canceled -= instance.OnSubAction;
+            @MiddleAction.started -= instance.OnMiddleAction;
+            @MiddleAction.performed -= instance.OnMiddleAction;
+            @MiddleAction.canceled -= instance.OnMiddleAction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1110,7 +1168,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
+        void OnMainAction(InputAction.CallbackContext context);
+        void OnSubAction(InputAction.CallbackContext context);
+        void OnMiddleAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
