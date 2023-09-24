@@ -12,6 +12,7 @@ public class T_MenuScript : MonoBehaviour
     [SerializeField] Button m_Credits;
     [Header("Sound")]
     [SerializeField] AudioSource m_Audio;
+    [SerializeField] Animator m_Animator;
 
     public event Action OnMenuStart;
     public event Action OnMenuCredits;
@@ -45,10 +46,13 @@ public class T_MenuScript : MonoBehaviour
 
     void OnQuit()
     {
+        m_Audio.Play();
+        m_Animator.SetTrigger("Off");
+
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+        //Application.Quit();
 #endif
     }
 

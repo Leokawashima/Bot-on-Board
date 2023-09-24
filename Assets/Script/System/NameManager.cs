@@ -4,6 +4,7 @@ namespace Name
 {
     public static class Scene
     {
+        public const string Message = "Message";
         public const string Title = "Title";
         public const string Game = "Game";
     }
@@ -43,6 +44,12 @@ namespace Name
 
     public static class Setting
     {
-        public static readonly string SettingFilePath = Application.dataPath + "/Settings";
+#if UNITY_EDITOR
+        public static readonly string AppFilePath = Application.dataPath + "/";
+#else
+        public static readonly string AppFilePath = Application.dataPath + "/../";
+#endif
+        public static readonly string SettingFilePath = AppFilePath + "Settings";
+        public static readonly string ScreenShotFilePath = AppFilePath + "ScreenShots";
     }
 }

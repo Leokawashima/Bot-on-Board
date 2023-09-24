@@ -141,4 +141,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_State: 0
-  m_Index: {x: 0, y: 0}
+  m_IndexX: 0
+  m_IndexY: 0

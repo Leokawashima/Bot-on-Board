@@ -17,6 +17,11 @@ public class DiceScript : MonoBehaviour
     [SerializeField] Vector2 m_RandomRotY = new Vector2(50, 100);
     [SerializeField] int m_Delay = 100;
 
+    private async void Start()
+    {
+        Debug.Log(await GetResult());
+    }
+
     bool m_isHit = false;
 
     async Task Roll()

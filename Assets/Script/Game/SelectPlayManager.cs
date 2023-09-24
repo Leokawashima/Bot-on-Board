@@ -38,8 +38,7 @@ public class SelectPlayManager : MonoBehaviour
     {
         SelectImage.enabled = true;
         var pos = (FirstAttackButton.transform as RectTransform).anchoredPosition + offset;
-        pos = new Vector2(pos.x * transform.lossyScale.x, pos.y * transform.lossyScale.y);
-        SelectImage.transform.position = pos;
+        SelectImage.transform.localPosition = new Vector3(pos.x, pos.y, 0);
         myOrder = StateOrder.First;
 
         InductionText.text = "先攻でよろしいでしょうか";
@@ -49,8 +48,7 @@ public class SelectPlayManager : MonoBehaviour
     {
         SelectImage.enabled = true;
         var pos = (SecondAttack.transform as RectTransform).anchoredPosition + offset;
-        pos = new Vector2(pos.x * transform.lossyScale.x, pos.y * transform.lossyScale.y);
-        SelectImage.transform.position = pos;
+        SelectImage.transform.localPosition = new Vector3(pos.x, pos.y, 0);
         myOrder = StateOrder.Second;
 
         InductionText.text = "後攻でよろしいでしょうか";
