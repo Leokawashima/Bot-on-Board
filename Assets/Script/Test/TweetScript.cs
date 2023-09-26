@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TweetScript : MonoBehaviour
 {
-    
     [SerializeField] string text = "TweetTest";
+    [SerializeField] CreateQR QR;
 
     const string
         newText = "text=",
@@ -24,12 +24,12 @@ public class TweetScript : MonoBehaviour
             + newLine + newHashTag + "BotonBoard"
             + newLine + newHashTag + "BoB";
 
-        Debug.Log(url);
+        QR.CreateQRCode(url);
 
 #if UNITY_WEBGL
         Application.ExternalEval(string.Format("window.open('{0}','_blank')", url));
 #else
-        Application.OpenURL(url);
+        //Application.OpenURL(url);
 #endif
     }
 }
