@@ -23,11 +23,11 @@ public class CreateQR : MonoBehaviour
         string lenIndicator = Convert.ToString((input.Length), 2);
         while (lenIndicator.Length < 9) { lenIndicator = "0" + lenIndicator; }
         //データ
-        string data = "";
+        string data = string.Empty;
         for (int i = 0; i <= (input.Length - 1) / 2; i++)
         {
             int H, L, deciInt;
-            string deciStr = "";
+            string deciStr = string.Empty;
             if (i * 2 + 1 < input.Length)
             {
                 H = input[i * 2];
@@ -49,7 +49,8 @@ public class CreateQR : MonoBehaviour
         string terminator = "0000";
 
         string dataraw = modeIndicator + lenIndicator + data + terminator;
-        List<int> dataList = new List<int>();
+        List<int> dataList = new();
+
         while (dataraw.Length >= 8)
         {
             string codeLang = dataraw.Substring(0, 8);
@@ -129,15 +130,7 @@ public class CreateQR : MonoBehaviour
         //QRコード生成
         int QRsize = 21;
         int[,] bitAry = new int[QRsize, QRsize];
-
-        //初期化
-        for (int i = 0; i < QRsize; ++i)
-        {
-            for (int j = 0; j < QRsize; ++j)
-            {
-                bitAry[i, j] = 0;
-            }
-        }
+        bitAry.Initialize();
 
         //タイミングパターン
         for (int i = 0; i < QRsize; ++i)
@@ -189,8 +182,8 @@ public class CreateQR : MonoBehaviour
         bool UpFlag = true;
         for (int i = 0; i <= 103; ++i)
         {
-            bitAry[row, col] = (int)Char.GetNumericValue(dataWithErrorStr[i * 2]);
-            bitAry[row, col - 1] = (int)Char.GetNumericValue(dataWithErrorStr[i * 2 + 1]);
+            bitAry[row, col] = (int)char.GetNumericValue(dataWithErrorStr[i * 2]);
+            bitAry[row, col - 1] = (int)char.GetNumericValue(dataWithErrorStr[i * 2 + 1]);
 
             if (UpFlag)
             {
@@ -252,7 +245,7 @@ public class CreateQR : MonoBehaviour
         int Celindex = 0;
         while (index < 15)
         {
-            bitAry[Celindex, 8] = (int)Char.GetNumericValue(formatStr[index]);
+            bitAry[Celindex, 8] = (int)char.GetNumericValue(formatStr[index]);
             Celindex += 1;
             while (!IsFormatArea(Celindex, 8)) { Celindex += 1; }
             index += 1;
@@ -262,7 +255,7 @@ public class CreateQR : MonoBehaviour
         Celindex = 20;
         while (index < 15)
         {
-            bitAry[8, Celindex] = (int)Char.GetNumericValue(formatStr[index]);
+            bitAry[8, Celindex] = (int)char.GetNumericValue(formatStr[index]);
             Celindex += -1;
             while (!IsFormatArea(8, Celindex))
             {
