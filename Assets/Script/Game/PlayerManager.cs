@@ -29,7 +29,7 @@ public class PlayerManager : NetworkBehaviour
 
     void OnMouse_MainClick()
     {
-        Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.mPos);
+        Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
 
         int mask = 1 << Name.Layer.Map; 
         if (Physics.Raycast(ray, out var hit, Mathf.Infinity, mask))

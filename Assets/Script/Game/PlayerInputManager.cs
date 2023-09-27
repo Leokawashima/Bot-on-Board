@@ -11,52 +11,49 @@ using UnityEngine.InputSystem;
 public class PlayerInputManager : MonoBehaviour
 {
     public static event Action OnMouseMainClickEvent;
-    public static event Action OnMouseSubClickEvent;
+    public static event Action OnDragStartEvent;
+    public static event Action OnDragEvent;
     public static event Action OnMouseMiddleClickEvent;
-    public static Vector2 mPos { get; private set; }
+    public static Vector2 m_Pos { get; private set; }
+
+    InputActionMapSettings m_Map;
 
     void OnEnable()
     {
-        var map = new InputActionMapSettings();
-        map.Player.MainAction.started += OnAction_MainClick;
-        map.Player.SubAction.started += OnAction_SubClick;
-        map.Player.SubAction.performed += OnAction_SubClick;
-        map.Player.SubAction.canceled += OnAction_SubClick;
-        map.Player.MiddleAction.started += OnAction_MiddleClick;
-        map.UI.Point.started += OnAction_MouseMove;
-        map.UI.Point.performed += OnAction_MouseMove;
-        map.UI.Point.canceled += OnAction_MouseMove;
-        map.Enable();
+        m_Map = new();
+        m_Map.Player.MainAction.started += OnAction_MainClick;
+        m_Map.Player.DragAction.started += OnAction_DragStart;
+        m_Map.Player.DragAction.performed += OnAction_Drag;
+        m_Map.Player.DragAction.canceled += OnAction_Drag;
+        m_Map.Player.MiddleAction.started += OnAction_MiddleClick;
+        m_Map.Enable();
     }
     void OnDisable()
     {
-        var map = new InputActionMapSettings();
-        map.Player.MainAction.started -= OnAction_MainClick;
-        map.Player.SubAction.started -= OnAction_SubClick;
-        map.Player.SubAction.performed -= OnAction_SubClick;
-        map.Player.SubAction.canceled -= OnAction_SubClick;
-        map.Player.MiddleAction.started -= OnAction_MiddleClick;
-        map.UI.Point.started -= OnAction_MouseMove;
-        map.UI.Point.performed -= OnAction_MouseMove;
-        map.UI.Point.canceled -= OnAction_MouseMove;
-        map.Disable();
+        m_Map.Player.MainAction.started -= OnAction_MainClick;
+        m_Map.Player.DragAction.started -= OnAction_DragStart;
+        m_Map.Player.DragAction.performed -= OnAction_Drag;
+        m_Map.Player.DragAction.canceled -= OnAction_Drag;
+        m_Map.Player.MiddleAction.started -= OnAction_MiddleClick;
+        m_Map.Disable();
     }
 
     void OnAction_MainClick(InputAction.CallbackContext context)
     {
         OnMouseMainClickEvent?.Invoke();
     }
-    void OnAction_SubClick(InputAction.CallbackContext context)
+    void OnAction_DragStart(InputAction.CallbackContext context)
     {
-        OnMouseSubClickEvent?.Invoke();
+        m_Pos = context.ReadValue<Vector2>();
+        OnDragStartEvent?.Invoke();
+    }
+    void OnAction_Drag(InputAction.CallbackContext context)
+    {
+        m_Pos = context.ReadValue<Vector2>();
+        OnDragEvent?.Invoke();
     }
     void OnAction_MiddleClick(InputAction.CallbackContext context)
     {
         OnMouseMiddleClickEvent?.Invoke();
-    }
-
-    void OnAction_MouseMove(InputAction.CallbackContext context)
-    {
-        mPos = context.ReadValue<Vector2>();
     }
 }
