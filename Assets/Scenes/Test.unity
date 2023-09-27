@@ -766,10 +766,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 210416508}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073859b85833d994893ee3bfffeffe63, type: 3}
+  m_Script: {fileID: 11500000, guid: 21829bd310205a44e89f7627f123cfbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSize: {x: 10, y: 10}
+  so: {fileID: 11400000, guid: 82bdf782649334e4694caa07c615f9ff, type: 2}
 --- !u!1 &641321588
 GameObject:
   m_ObjectHideFlags: 0
