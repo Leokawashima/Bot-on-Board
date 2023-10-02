@@ -1275,7 +1275,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 2436920488497989455, guid: d180d20d197e33d4b81660ed23e57c0c, type: 2}
   m_audioClip: {fileID: 8300000, guid: ed175f62b20cd2a42a2d1f19a1a243d9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -20464,6 +20464,7 @@ GameObject:
   - component: {fileID: 939861976}
   - component: {fileID: 939861975}
   - component: {fileID: 939861974}
+  - component: {fileID: 939861981}
   - component: {fileID: 939861978}
   - component: {fileID: 939861979}
   - component: {fileID: 939861980}
@@ -20534,7 +20535,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &939861977
 RectTransform:
@@ -20614,6 +20615,19 @@ MonoBehaviour:
   _pathText: {fileID: 1427727840}
   _mask: {fileID: 1575723378}
   _actionAsset: {fileID: -944628639613478452, guid: 11d7dfff054772b4a9b2326df501dc56, type: 3}
+--- !u!114 &939861981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939861973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca83a94c5c386446a7757dddbb4b750, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SoundVolumeManager: {fileID: 939861978}
 --- !u!1 &941111374
 GameObject:
   m_ObjectHideFlags: 0
@@ -23940,7 +23954,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ceed9344a4441a5438fbfecd747fe82e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -30265,6 +30279,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c22c31e02eb4c224c847647805879a7b, type: 3}
     - target: {fileID: 5529826906206859012, guid: 2288b705f42643b4f95dff54c50410b5, type: 3}
+      propertyPath: m_IsOn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5529826906206859012, guid: 2288b705f42643b4f95dff54c50410b5, type: 3}
       propertyPath: m_Group
       value: 
       objectReference: {fileID: 1118670338}
@@ -30648,7 +30666,7 @@ GameObject:
   - component: {fileID: 1356554925}
   - component: {fileID: 1356554926}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Profile_Lighting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37667,7 +37685,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ceed9344a4441a5438fbfecd747fe82e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -41480,7 +41498,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 68a173b8830f09640b89975e27d7d477, type: 3}
     - target: {fileID: 5529826906206859012, guid: 2288b705f42643b4f95dff54c50410b5, type: 3}
       propertyPath: m_IsOn
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5529826906206859012, guid: 2288b705f42643b4f95dff54c50410b5, type: 3}
       propertyPath: m_Group

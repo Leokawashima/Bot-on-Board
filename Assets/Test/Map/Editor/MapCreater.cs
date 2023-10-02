@@ -65,11 +65,11 @@ public class MapCreater : EditorWindow
         editMap = new int[editScaleNow.y, editScaleNow.x];
         editObj = new int[editScaleNow.y, editScaleNow.x];
 
-        editMapStrs = System.Enum.GetNames(typeof(MapManager.MapState));
-        editObjStrs = System.Enum.GetNames(typeof(MapManager.ObjState));
+        editMapStrs = new string[] { "Non", "Ground", "Damage" };
+        editObjStrs = new string[] { "Non", "Box", "Unko" };
 
-        editMapTexs = new Texture[System.Enum.GetValues(typeof(MapManager.MapState)).Length];
-        editObjTexs = new Texture[System.Enum.GetValues(typeof(MapManager.ObjState)).Length];
+        editMapTexs = new Texture[3];
+        editObjTexs = new Texture[3];
 
         for(int i = 0; i < editMapTexs.Length; i++)
             editMapTexs[i] = AssetDatabase.LoadAssetAtPath<Texture>($"{path}/{editMapStrs[i]}.png");
@@ -248,16 +248,18 @@ public class MapCreater : EditorWindow
         editScaleNew = new Vector2Int(edit_SO.x, edit_SO.y);
         editMap = new int[editScaleNow.y, editScaleNow.x];
         editObj = new int[editScaleNow.y, editScaleNow.x];
+
         //値渡しと参照渡しで配列は参照を勝手に渡されてしまうのでコピーを行っている
         //ようは勝手に配列ポインターを相互参照するようになり
         //勝手にエディタとSOの配列データが常に同期し始める
         //System.Array.Copyでは対応できない
-        for(int y = 0; y < edit_SO.y; ++y)
+        for(int y = edit_SO.y - 1, yy = 0; y >= 0; --y, ++yy)
+        //for(int y = 0; y < edit_SO.y; ++y)
         {
             for(int x = 0; x < edit_SO.x; ++x)
             {
-                editMap[y, x] = edit_SO.mapChip[y * editScaleNow.x + x];
-                editObj[y, x] = edit_SO.objChip[y * editScaleNow.x + x];
+                editMap[y, x] = edit_SO.mapChip[yy * editScaleNow.x + x];
+                editObj[y, x] = edit_SO.objChip[yy * editScaleNow.x + x];
             }
         }
                 
@@ -277,12 +279,13 @@ public class MapCreater : EditorWindow
         edit_SO.mapChip = new int[edit_SO.y * edit_SO.x];
         edit_SO.objChip = new int[edit_SO.y * edit_SO.x];
 
-        for (int y = 0; y < edit_SO.y; ++y)
+        for(int y = edit_SO.y - 1, yy = 0; y >= 0; --y, ++yy)
+        //for (int y = 0; y < edit_SO.y; ++y)
         {
             for(int x = 0; x < edit_SO.x; ++x)
             {
-                edit_SO.mapChip[y * edit_SO.x + x] = editMap[y, x];
-                edit_SO.objChip[y * edit_SO.x + x] = editObj[y, x];
+                edit_SO.mapChip[yy * edit_SO.x + x] = editMap[y, x];
+                edit_SO.objChip[yy * edit_SO.x + x] = editObj[y, x];
             }
         }
 
