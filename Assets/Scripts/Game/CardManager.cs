@@ -10,7 +10,7 @@ public class CardManager : MonoBehaviour
         m_DrawSize = 2;
 
     [SerializeField] List<int> m_Deck { get; set; } = new(m_DeckSize) {
-        0, 0, 0, 0, 0, 1, 1, 1, 1, 1,//test
+        0, 0, 0, 1, 1, 1, 2, 2, 2, 3,//test
     };
 
     [SerializeField] MapObject_SO_Template[] MO_SO_Array;

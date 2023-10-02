@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2241ec27307379148a3474ae44278d0e, type: 3}
+  m_Name: TestMaruta
+  m_EditorClassIdentifier: 
+  m_MOName: Maruta
+  m_Info: Maruta dayo
+  m_Prefab: {fileID: 8805880689579995009, guid: 43470795ae4be83488d4046094e222bc, type: 3}
+  m_Card: {fileID: 1245101544976431882, guid: 799d8bd86af92f04d9eeb6978b963fee, type: 3}
+  m_IsCollider: 1
+  m_Destry_MaxTurn: 8
+  m_Destroy_NowTurn: 8
