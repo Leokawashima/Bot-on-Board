@@ -11,8 +11,8 @@ public class PlayerManager : NetworkBehaviour
 {
     [SerializeField] GameObject m_Robot;
 
-    public static PlayerManager local { get; private set; }
-    public static List<PlayerManager> list { get; private set; } = new();
+    public static PlayerManager m_Local { get; private set; }
+    public static List<PlayerManager> m_List { get; private set; } = new();
 
     public NetworkVariable<int> roll = new NetworkVariable<int>(
         0,                                          // 初期値
@@ -36,10 +36,10 @@ public class PlayerManager : NetworkBehaviour
         PlayerInputManager.OnMouseMainClickEvent -= OnMouse_MainClick;
     }
 
-    private void Start()
+    void Start()
     {
-        if(IsOwner) local = this;
-        list.Add(this);
+        if(IsOwner) m_Local = this;
+        m_List.Add(this);
         m_Robot.SetActive(false);
     }
 

@@ -68,7 +68,7 @@ public class GameSystem : MonoBehaviour
             m_RollButton.interactable = false;
             int _result = await m_Dice.GetResult();
             m_Text.text = "Your Dice :" + _result;
-            PlayerManager.local.roll.Value = _result;
+            PlayerManager.m_Local.roll.Value = _result;
 
             await Task.Delay(1000);
             m_Dice.gameObject.SetActive(false);
@@ -76,7 +76,7 @@ public class GameSystem : MonoBehaviour
             while(true)
             {
                 var _flag = false;
-                foreach(PlayerManager p in PlayerManager.list)
+                foreach(PlayerManager p in PlayerManager.m_List)
                 {
                     _flag = p.roll.Value != 0;
                 }
