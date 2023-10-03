@@ -26,6 +26,7 @@ public class Quaorty : MonoBehaviour
         sizedrop.AddOptions(new List<string> { "FullScreen", "Window", "BoraderLess", "???", "Half", "Full" });
         sizedrop.onValueChanged.AddListener((int v) =>
         {
+#if !UNITY_ANDROID
             switch(v)
             {
                 case 0:
@@ -47,6 +48,7 @@ public class Quaorty : MonoBehaviour
                     Screen.SetResolution(960, 540, false);
                     break;
             }
+#endif
         });
 
         volume.TryGet(out ColorAdjustments light);
