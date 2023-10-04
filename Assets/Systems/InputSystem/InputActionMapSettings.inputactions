@@ -11,16 +11,7 @@
                     "id": "29b6c6d6-4a60-40a5-a994-5e1c955cc8d4",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MiddleAction",
-                    "type": "Button",
-                    "id": "7bd4cbae-fe53-4e31-9278-3c35f652aac5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 },
                 {
@@ -73,17 +64,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "MainAction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0d3e4901-d6f9-4419-a316-b76d56629017",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MiddleAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

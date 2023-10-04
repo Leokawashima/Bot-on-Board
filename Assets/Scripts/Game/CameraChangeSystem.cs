@@ -8,16 +8,6 @@ public class CameraChangeSystem : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera[] m_Cameras;
     [SerializeField] int m_Index = 0;
 
-    private void OnEnable()
-    {
-        PlayerInputManager.OnMouseMiddleClickEvent += Change;
-    }
-
-    private void OnDisable()
-    {
-        PlayerInputManager.OnMouseMiddleClickEvent -= Change;
-    }
-
     private void Start()
     {
         for (int i = 0; i < m_Cameras.Length - 1; ++i)

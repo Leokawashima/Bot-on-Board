@@ -33,16 +33,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""id"": ""29b6c6d6-4a60-40a5-a994-5e1c955cc8d4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MiddleAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""7bd4cbae-fe53-4e31-9278-3c35f652aac5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -95,17 +86,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MainAction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0d3e4901-d6f9-4419-a316-b76d56629017"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MiddleAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -776,7 +756,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MainAction = m_Player.FindAction("MainAction", throwIfNotFound: true);
-        m_Player_MiddleAction = m_Player.FindAction("MiddleAction", throwIfNotFound: true);
         m_Player_DragAction = m_Player.FindAction("DragAction", throwIfNotFound: true);
         m_Player_Position = m_Player.FindAction("Position", throwIfNotFound: true);
         // UI
@@ -853,7 +832,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MainAction;
-    private readonly InputAction m_Player_MiddleAction;
     private readonly InputAction m_Player_DragAction;
     private readonly InputAction m_Player_Position;
     public struct PlayerActions
@@ -861,7 +839,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         private @InputActionMapSettings m_Wrapper;
         public PlayerActions(@InputActionMapSettings wrapper) { m_Wrapper = wrapper; }
         public InputAction @MainAction => m_Wrapper.m_Player_MainAction;
-        public InputAction @MiddleAction => m_Wrapper.m_Player_MiddleAction;
         public InputAction @DragAction => m_Wrapper.m_Player_DragAction;
         public InputAction @Position => m_Wrapper.m_Player_Position;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -876,9 +853,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @MainAction.started += instance.OnMainAction;
             @MainAction.performed += instance.OnMainAction;
             @MainAction.canceled += instance.OnMainAction;
-            @MiddleAction.started += instance.OnMiddleAction;
-            @MiddleAction.performed += instance.OnMiddleAction;
-            @MiddleAction.canceled += instance.OnMiddleAction;
             @DragAction.started += instance.OnDragAction;
             @DragAction.performed += instance.OnDragAction;
             @DragAction.canceled += instance.OnDragAction;
@@ -892,9 +866,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @MainAction.started -= instance.OnMainAction;
             @MainAction.performed -= instance.OnMainAction;
             @MainAction.canceled -= instance.OnMainAction;
-            @MiddleAction.started -= instance.OnMiddleAction;
-            @MiddleAction.performed -= instance.OnMiddleAction;
-            @MiddleAction.canceled -= instance.OnMiddleAction;
             @DragAction.started -= instance.OnDragAction;
             @DragAction.performed -= instance.OnDragAction;
             @DragAction.canceled -= instance.OnDragAction;
@@ -1039,7 +1010,6 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     public interface IPlayerActions
     {
         void OnMainAction(InputAction.CallbackContext context);
-        void OnMiddleAction(InputAction.CallbackContext context);
         void OnDragAction(InputAction.CallbackContext context);
         void OnPosition(InputAction.CallbackContext context);
     }
