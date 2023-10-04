@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -16,7 +14,7 @@ public class NetConnectManager : MonoBehaviour
         if (transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
         {
             unityTransport.ConnectionData.Port = RoomUDP.Port;
-            unityTransport.ConnectionData.ServerListenAddress = "0.0.0.0";//RoomUDP.ConnectIPAddress
+            unityTransport.ConnectionData.ServerListenAddress = "0.0.0.0";
         }
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck; 
         NetworkManager.Singleton.StartHost();
@@ -31,20 +29,19 @@ public class NetConnectManager : MonoBehaviour
         NetworkManager.Singleton.StartClient();
     }
 
+    //参考　https://yuru-uni.com/2023/02/09/multiplay-tutorial3/
     void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        // 追加の承認手順が必要な場合は、追加の手順が完了するまでこれを true に設定します
-        // true から false に遷移すると、接続承認応答が処理されます。
         response.Pending = true;
 
         if(NetworkManager.Singleton.ConnectedClients.Count >= RoomUDP.ConnectUserMax)
         {
-            response.Approved = false;//接続を許可しない
+            response.Approved = false;
             response.Pending = false;
             return;
         }
-
-        response.Approved = true;//接続を許可
+        
+        response.Approved = true;
         response.CreatePlayerObject = true;
         response.PlayerPrefabHash = null;
 

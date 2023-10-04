@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public abstract class MapObject_SO_Template : ScriptableObject
 {
-    public string m_MOName = "null";
+    public string m_ObjectName = "null";
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
 
     public GameObject m_Prefab;
@@ -18,13 +18,15 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
     public bool m_IsCollider;
 
-    public virtual MapObject ObjectSpawn(Vector2Int pos_, Transform tf_)
+    const int ObjOffset = 1;//マップに高低差を設ける場合この変数を使わないべき
+
+    public virtual MapObject ObjectSpawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
-        var go = Instantiate(m_Prefab, tf_);
+        var go = Instantiate(m_Prefab, tf_.position + pos_, m_Prefab.transform.rotation, tf_);
         var mo = go.AddComponent<MapObject>();
         mo.m_SO = this;
 
-        mo.m_Pos = pos_;
+        mo.m_Pos = posdata_;
 
         return mo;
     }
@@ -33,7 +35,7 @@ public abstract class MapObject_SO_Template : ScriptableObject
         var go = Instantiate(m_Card, tf_);
         var moc = go.GetComponent<MapObjectCard>();
         moc.m_SO = this;
-        moc.m_Text.text = m_MOName;
+        moc.m_Text.text = m_ObjectName;
 
         return moc;
     }

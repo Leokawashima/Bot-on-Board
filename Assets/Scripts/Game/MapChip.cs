@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MapChip : MonoBehaviour
 {
-    public int m_IndexX = 0, m_IndexY = 0;
+    public MapChip_SO_Template m_SO;
+    public Vector2Int m_Pos = Vector2Int.zero;
 
     Material m_Material;
     bool m_Flag = false;

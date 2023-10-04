@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fd18c3f124fd24487275e2101b3305, type: 3}
   m_Name: TestWeapon
   m_EditorClassIdentifier: 
-  m_MOName: Weapon
+  m_ObjectName: null
   m_Info: Weapon dayo
-  m_Prefab: {fileID: 919132149155446097, guid: db71668ac98f95b4ab9583f936eba4b3, type: 3}
+  m_Prefab: {fileID: 1933853278335757198, guid: 03edbfdfe859f974dab9e3ba5c628c4d, type: 3}
   m_Card: {fileID: 1245101544976431882, guid: 799d8bd86af92f04d9eeb6978b963fee, type: 3}
   m_IsCollider: 0
   m_Destry_MaxTurn: 3

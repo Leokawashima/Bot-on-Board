@@ -5,9 +5,11 @@ public static class GlobalSystemManager
     public static bool m_IsPause { get; private set; }
     public static void SetPause(bool pause_) { m_IsPause = pause_; }
 
-    public enum RoomState { Non, Host, Client }
-    public static RoomState m_RoomState { get; private set; }
-    public static void SetRoomState(RoomState state_) { m_RoomState = state_; }
+    public enum MatchState { Non, Local, Multi }
+    public static MatchState m_MatchState { get; private set; }
+    public static void SetMatchState(MatchState state_) { m_MatchState = state_; }
+
+    public static RoomUDP.RoomState m_RoomState { get { return RoomUDP.State; } }
 }
 
 namespace Name

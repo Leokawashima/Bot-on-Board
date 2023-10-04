@@ -1157,7 +1157,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328738301}
-  m_LocalRotation: {x: 0.20874257, y: 0.20312831, z: -0.044371013, w: 0.95561326}
+  m_LocalRotation: {x: 0.20874257, y: 0.2031283, z: -0.044371, w: 0.95561326}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1902,7 +1902,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546397390}
-  m_LocalRotation: {x: 0.20231408, y: 0.203422, z: -0.04300455, w: 0.95699483}
+  m_LocalRotation: {x: 0.20231408, y: 0.20342198, z: -0.043004546, w: 0.95699483}
   m_LocalPosition: {x: -5.0292716, y: 5.1724577, z: -11.295536}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2342,7 +2342,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626029440}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 319d2fe34a804e245819465c9505ea59, type: 3}
   m_Name: 
@@ -2504,14 +2504,8 @@ MonoBehaviour:
   m_DrawMapGizmos: 1
   m_DrawObjGizmos: 1
   m_Data_SO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
-  m_MapChip:
-  - {fileID: 0}
-  - {fileID: 288836546640084954, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}
-  - {fileID: 288836546640084954, guid: 92a3b685f8a8dd14c8f7abf2f523a3e9, type: 3}
-  m_ObjChip:
-  - {fileID: 0}
-  - {fileID: 288836546640084954, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}
-  - {fileID: 288836546640084954, guid: ffebf8c24d4ff32458f6c43ba8c0c7a8, type: 3}
+  m_MapChipTable: {fileID: 11400000, guid: 09abf90a4512e7942988897314854d46, type: 2}
+  m_MapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_WaitOnePlaceSecond: 0.05
 --- !u!1 &718842888
 GameObject:
@@ -3102,7 +3096,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

@@ -26,6 +26,9 @@ public class PlayerInputManager : MonoBehaviour
         m_Map.Player.DragAction.performed += OnAction_Drag;
         m_Map.Player.DragAction.canceled += OnAction_Drag;
         m_Map.Player.MiddleAction.started += OnAction_MiddleClick;
+        m_Map.Player.Position.started += OnAction_Position;
+        m_Map.Player.Position.performed += OnAction_Position;
+        m_Map.Player.Position.canceled += OnAction_Position;
         m_Map.Enable();
     }
     void OnDisable()
@@ -35,6 +38,9 @@ public class PlayerInputManager : MonoBehaviour
         m_Map.Player.DragAction.performed -= OnAction_Drag;
         m_Map.Player.DragAction.canceled -= OnAction_Drag;
         m_Map.Player.MiddleAction.started -= OnAction_MiddleClick;
+        m_Map.Player.Position.started -= OnAction_Position;
+        m_Map.Player.Position.performed -= OnAction_Position;
+        m_Map.Player.Position.canceled -= OnAction_Position;
         m_Map.Disable();
     }
 
@@ -55,5 +61,9 @@ public class PlayerInputManager : MonoBehaviour
     void OnAction_MiddleClick(InputAction.CallbackContext context)
     {
         OnMouseMiddleClickEvent?.Invoke();
+    }
+    void OnAction_Position(InputAction.CallbackContext context)
+    {
+        m_Pos = context.ReadValue<Vector2>();
     }
 }

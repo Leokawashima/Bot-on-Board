@@ -16,8 +16,9 @@ public class MapManager : MonoBehaviour
 #endif
     [SerializeField] Data_SO m_Data_SO;
     public Data_SO Data_SO { get { return m_Data_SO; } }
-    [SerializeField] GameObject[] m_MapChip;
-    [SerializeField] GameObject[] m_ObjChip;
+
+    [SerializeField] MapChipTable_SO m_MapChipTable;
+    [SerializeField] MapObjectTable_SO m_MapObjectTable;
 
     [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
 
@@ -52,16 +53,15 @@ public class MapManager : MonoBehaviour
                         if(m_Data_SO.mapChip[z * m_Data_SO.x + x] != 0)
                         {
                             var _pos = new Vector3(x, 0, z) + Offset + _mapOffset;
-                            var _map = Instantiate(m_MapChip[m_Data_SO.mapChip[z * m_Data_SO.x + x]], _pos, Quaternion.identity, transform);
+                            m_MapChipTable.m_Table[m_Data_SO.mapChip[z * m_Data_SO.x + x]]
+                                .MapCreate(new Vector2Int(x, z), _pos, transform);
                             m_MapStates[z, x] = m_Data_SO.mapChip[z * m_Data_SO.x + x];
-                            var _data = _map.GetComponent<MapChip>();
-                            _data.m_IndexX = x;
-                            _data.m_IndexY = z;
                         }
                         if(m_Data_SO.objChip[z * m_Data_SO.x + x] != 0)
                         {
                             var _pos = new Vector3(x, 0, z) + Offset + Vector3.up + _mapOffset;
-                            Instantiate(m_ObjChip[m_Data_SO.objChip[z * m_Data_SO.x + x]], _pos, Quaternion.identity, transform);
+                            m_MapObjectTable.m_Table[m_Data_SO.objChip[z * m_Data_SO.x + x]]
+                                .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
                             m_ObjStates[z, x] = m_Data_SO.objChip[z * m_Data_SO.x + x];
                         }
                     }

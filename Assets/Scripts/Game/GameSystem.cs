@@ -35,6 +35,9 @@ public class GameSystem : MonoBehaviour
         mapManager.OnMapCreated += () =>
         {
             GameIntializeEvent?.Invoke();
+
+            m_State = GameState.Place;
+
             GameFirst();
         };
 
@@ -86,27 +89,9 @@ public class GameSystem : MonoBehaviour
                 }
                 await Task.Delay(100);
             }
-            
+
             GameInitialize();
         });
-
-        #region
-        /*
-        //とりあえずホストクライアントを自動で開始するようにするだけの処理
-        if(RoomUDP.State == RoomUDP.RoomState.Host)
-        {
-            netConnectManager.Host();
-        }
-        else if (RoomUDP.State == RoomUDP.RoomState.Client)
-        {
-            netConnectManager.Client();
-        }
-        else
-        {
-            netConnectManager.Host();
-        }
-        */
-        #endregion
     }
 
     void GameInitialize()

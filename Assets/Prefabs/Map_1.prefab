@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5656440973538133165}
   - component: {fileID: 1170095482952892412}
   - component: {fileID: 6855166334663939408}
-  - component: {fileID: -3123763593394760175}
   m_Layer: 11
   m_Name: Map_1
   m_TagString: Untagged
@@ -62,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7c4aa77e57a9d8f48931ae7fd2d6f379, type: 2}
+  - {fileID: 2100000, guid: 094906d5e62a6aa489cdc47438d4b615, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,18 +83,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-3123763593394760175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 288836546640084954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36212da5f936b5a42b8a96182d8fa1e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_State: 0
-  m_IndexX: 0
-  m_IndexY: 0
