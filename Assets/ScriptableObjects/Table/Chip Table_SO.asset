@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3eefbb0ec5be47c46ac0cba1f9972bec, type: 3}
-  m_Name: New Map Chip Table_SO
+  m_Name: Chip Table_SO
   m_EditorClassIdentifier: 
   m_Table:
   - {fileID: 0}

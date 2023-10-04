@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88a9918fadcbdcf4f941c6bc937a8704, type: 3}
-  m_Name: New MC_SO_Default
+  m_Name: MC_SO_Damage
   m_EditorClassIdentifier: 
-  m_ChipName: Box
-  m_Prefab: {fileID: 288836546640084954, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}
+  m_ChipName: Damage
+  m_Prefab: {fileID: 288836546640084954, guid: 92a3b685f8a8dd14c8f7abf2f523a3e9, type: 3}
