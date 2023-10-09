@@ -35,6 +35,9 @@ public class LocalPlayerManager : MonoBehaviour
 
     void OnMouse_MainClick()
     {
+        //メインカメラから例を飛ばしているのでUIが別カメラでoverray映ししているため判定が取れていない
+        //サブカメラのインスタンスを取ってそこからUIオンリーのレイを飛ばして、
+        //判定していたらマップ選択は呼び出さないような処理をすればUI透過現象は回避できるはず
         Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
 
         int mask = 1 << Name.Layer.Map | 1 << Name.Layer.UI;

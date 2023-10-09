@@ -43,7 +43,19 @@ public class PlayerUIManager : MonoBehaviour
         {
             if(MapManager.Singleton.m_ObjStates[_chip.m_Pos.y, _chip.m_Pos.x] == -1)
             {
-                MapManager.Singleton.SetObjState(_chip.m_Pos, 1);
+                var _cost = 0; //仮実装しないと提出できないのでマップのコストをここで設定
+                               //本実装では　オブジェクト依存のコスト設定　賢さに応じての倍率補正設定　＆図鑑ナンバーのようなインデックスが必須
+                               //ナンバーどうするか...　名前順でもいいしモンストみたいに登録順でもいいし悩み
+                switch(m_CardManager.GetSelectCard.m_Index)
+                {
+                    case 0: _cost = 10000; break;
+                    case 1: _cost = 50; break;
+                    case 2: _cost = -50; break;
+                    case 3: _cost = -100; break;
+                    case 4: _cost = 10000; break;
+                }
+                MapManager.Singleton.SetObjState(_chip.m_Pos, _cost);
+
                 m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
                 m_CardManager.GetSelectCard.Trash();
 

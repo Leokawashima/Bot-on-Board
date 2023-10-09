@@ -26,12 +26,13 @@ public class MapManager : MonoBehaviour
     [SerializeField] MapObjectTable_SO m_MapObjectTable;
 
     [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
-    public List<AIManager> m_AIManagerList { get; private set; } = new();
+    public List<AISystem> m_AIManagerList { get; private set; } = new();
 
     public int[,] m_MapStates { get; private set; }
     public int[,] m_ObjStates { get; private set; }
-    public void SetObjState(Vector2Int pos_, int obj_) {
-        m_ObjStates[pos_.y, pos_.x] = obj_;
+
+    public void SetObjState(Vector2Int pos_, int cost_) {
+        m_ObjStates[pos_.y, pos_.x] = cost_;
     }
 
     public static event Action Event_MapCreated;

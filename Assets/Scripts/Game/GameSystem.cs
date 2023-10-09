@@ -27,8 +27,6 @@ public class GameSystem : MonoBehaviour
     //public int m_SuddenDeathTurn  = 30;
     public int m_ForceFinishTurn = 50;
 
-    [SerializeField] List<AIManager> m_AIList = new();
-
     public static event Action Event_Initialize;
     public static event Action Event_Turn_Initialize;
     public static event Action Event_Turn_Place;
@@ -38,6 +36,7 @@ public class GameSystem : MonoBehaviour
     public static event Action Event_Turn_Finalize;
     public static event Action Event_Finalize;
 
+#region EventSubscribe
     void OnEnable()
     {
         //演出系の処理を作ったらそっちのコールバックイベント等につなぎを任せる
@@ -49,15 +48,22 @@ public class GameSystem : MonoBehaviour
         MapManager.Event_MapCreated -= OnMapCreated;
         GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
     }
+#endregion EventSubscribe
 
-    void Start()
+#region Singleton
+    void Awake()
     {
         Singleton ??= this;
-        SystemInitalize();
     }
     void OnDestroy()
     {
         Singleton = null;
+    }
+#endregion Singleton
+
+    void Start()
+    {
+        SystemInitalize();
     }
 
     void SystemInitalize()
@@ -112,11 +118,7 @@ public class GameSystem : MonoBehaviour
         m_BattleState = BattleState.AIAction;
         Event_Turn_AIAction?.Invoke();
 
-        foreach(var _ai in m_AIList)//全員現在の状態から意思決定
-            _ai.Think();
-
-        foreach(var _ai in m_AIList)//前意思決定後に行動
-            _ai.Move();
+        m_AIManager.AIAction();
 
         TurnFinalize();
     }
@@ -124,6 +126,9 @@ public class GameSystem : MonoBehaviour
     {
         m_BattleState = BattleState.Finalize;
         Event_Turn_Finalize?.Invoke();
+        
+        if (m_AIManager.CheckAIIsDead())
+            TurnGameSet();
 
         if(m_ElapsedTurn < m_ForceFinishTurn)
         {
@@ -256,16 +261,13 @@ public class GameSystem : MonoBehaviour
 
     void OnMapCreated()
     {
+        //本来ローカル専用初期化処理だが用意の時間が足りなかったので直書き
         var player = new GameObject("PlayerManager");
         player.AddComponent<PlayerInputManager>();
         player.AddComponent<LocalPlayerManager>();
 
-        for(int i = 0; i < 2; ++i)//人数分処理する　現在は2固定
-        {
-            var _ai = Instantiate(m_AIManager, player.transform);
-            _ai.Spawn($"AI:{i}", new Vector2Int(i * 9, i * 9));
-            m_AIList.Add(_ai);
-        }
+        m_AIManager.Initialize();
+        //ここまでローカル専用処理
 
         TurnInitialize();
     }

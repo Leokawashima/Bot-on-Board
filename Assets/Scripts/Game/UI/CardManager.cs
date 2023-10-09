@@ -18,7 +18,7 @@ public class CardManager : MonoBehaviour
         0, 0, 1, 1, 2, 2, 3, 3, 4, 4,//デッキを組めるようになったらデッキをJson保存しそれらを呼び出して初期化する
     };
 
-    [SerializeField] MapObject_SO_Template[] MO_SO_Array;
+    [SerializeField] MapObjectTable_SO m_MO_SO_Table;
     [SerializeField] ToggleGroup m_ToggleGroup;
 
     public List<int> m_TrashCardList = new();
@@ -31,8 +31,8 @@ public class CardManager : MonoBehaviour
         {
             var _index = Random.Range(0, m_Deck.Count - 1);
             m_HandCardList.Add(m_Deck[_index]);
-            
-            MO_SO_Array[m_Deck[_index]].CardCreate(m_Deck[_index], transform, m_ToggleGroup, this);
+
+            m_MO_SO_Table.m_Table[m_Deck[_index]].CardCreate(m_Deck[_index], transform, m_ToggleGroup, this);
 
             m_Deck.RemoveAt(_index);
         }
@@ -50,7 +50,7 @@ public class CardManager : MonoBehaviour
             var _index = Random.Range(0, m_StockCaedList.Count - 1);
             m_HandCardList.Add(m_StockCaedList[_index]);
 
-            MO_SO_Array[m_StockCaedList[_index]].CardCreate(m_StockCaedList[_index], transform, m_ToggleGroup, this);
+            m_MO_SO_Table.m_Table[m_StockCaedList[_index]].CardCreate(m_StockCaedList[_index], transform, m_ToggleGroup, this);
 
             m_StockCaedList.RemoveAt(_index);
         }

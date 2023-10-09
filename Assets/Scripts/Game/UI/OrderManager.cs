@@ -14,8 +14,8 @@ public class OrderManager : MonoBehaviour
 
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
-    AIOrder[] m_AIOrderArray;
 #endif
+    AIOrder[] m_AIOrderArray;
 
     public void Initialize()
     {

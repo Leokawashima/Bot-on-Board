@@ -4,52 +4,80 @@ using UnityEngine;
 
 public class AIManager : MonoBehaviour
 {
-    public enum Dir_FB { Non = 0, Forward = 1, Back = -1 }
-    public enum Dir_RL { Non = 0, Right = 1, Left = -1 }
-    public enum State { Non, Alive, Dead }
+    public static AIManager Singleton { get; private set; }
 
-    public Dir_FB m_Dir_FB { get; private set; } = Dir_FB.Non;
-    public Dir_RL m_Dir_RL { get; private set; } = Dir_RL.Non;
-    public State m_State { get; private set; } = State.Non;
+    [SerializeField] AISystem m_AIPrefab;
+#if UNITY_EDITOR
+    [Header("Debug"), SerializeField]
+#endif
+    List<AISystem> m_AIList = new();
 
-    public Vector2Int m_Position { get; private set; } = Vector2Int.zero;
-    public Vector2Int m_Direction { get { return new Vector2Int((int)m_Dir_RL, (int)m_Dir_FB); } }
-
-    AStarAlgorithm m_AStar;
-    [SerializeField] List<Vector2Int> path;
-
-    public void Spawn(string name_, Vector2Int posData_)
+    void Awake()
     {
-        name = name_;
-        m_Position = posData_;
-        transform.position = new Vector3(posData_.x, 0, posData_.y) + MapManager.Singleton.Offset + Vector3.up;
-
-        var _size = new Vector2Int(MapManager.Singleton.Data_SO.y, MapManager.Singleton.Data_SO.x);
-        m_AStar = new AStarAlgorithm(_size, MapManager.Singleton.m_ObjStates);
-
-        MapManager.Singleton.m_AIManagerList.Add(this);
+        Singleton ??= this;
+    }
+    void OnDestroy()
+    {
+        Singleton = null;
     }
 
-    public void Think()
+    public void Initialize()
     {
-        var _pos = m_Position;
-        
-        var enemy = new List<AIManager>(MapManager.Singleton.m_AIManagerList);
-        enemy.Remove(this);
-
-        path = m_AStar.Search(_pos, enemy[0].m_Position);
-        if(path.Count <= 1) m_State = State.Dead;
+        for(int i = 0; i < 2; ++i)//人数分処理する　現在は2固定
+        {
+            var _ai = Instantiate(m_AIPrefab, transform);
+            _ai.Spawn(i, $"AI:{i}", new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
+            m_AIList.Add(_ai);
+            _ai.Event_DamageHP += (int index_, float hp_) =>
+            {
+                GUIManager.Singleton.OnSetHPText(index_, hp_);
+            };
+            _ai.Event_HealHP += (int index_, float hp_) =>
+            {
+                GUIManager.Singleton.OnSetHPText(index_, hp_);
+            };
+        }
     }
 
-    public void Move()
+    public bool CheckAIIsDead()//誰か死んだ時点でtrueを返しているので人数が増えた場合
     {
-        transform.localPosition = new Vector3(path[1].x, 0, path[1].y)
-             + MapManager.Singleton.Offset + Vector3.up;
-        m_Position = path[1];
+        foreach(var _ai in m_AIList)
+        {
+            if(_ai.m_State == AISystem.State.Dead)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void Action()
+    public void AIAction()
     {
-        
+        foreach(var _ai in m_AIList)//全員現在の状態から意思決定
+            _ai.Think();
+
+        foreach(var _ai in m_AIList)//前意思決定後に行動
+            _ai.Action();
+
+        //以下AI2体前提処理　時間が足りないのでこのまま
+        var _flag = false;
+        if(m_AIList[0].m_Position == m_AIList[1].m_Position) _flag = true;//完全に同一のマスにいる
+        if(m_AIList[0].m_Position == m_AIList[1].m_PrePosition)//[0]が[1]の移動前にいた場所にがいる
+        {
+            if(m_AIList[0].m_PrePosition == m_AIList[1].m_Position)//[1]が[0]の移動前にいた場所にいる
+                _flag = true;//つまりすれ違っているのでHit判定
+        }
+
+        if(_flag)
+        {
+            for(int i = 0; i < 2; ++i)
+            {
+                m_AIList[i].BackPosition();
+                m_AIList[i].DamageHP(0.5f);
+                //接触ダメージ直入れ　アモアスのように設定できるようにしたい
+            }
+        }
+        //ここまでAI2体前提処理
     }
 }

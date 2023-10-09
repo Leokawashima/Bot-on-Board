@@ -94,4 +94,9 @@ public class GUIManager : MonoBehaviour
     {
         m_CutInManager.CutIn("GameSet");
     }
+
+    public void OnSetHPText(int index_, float hp_)
+    {
+        m_AIHPUIManager.Refresh(index_, hp_);
+    }
 }
