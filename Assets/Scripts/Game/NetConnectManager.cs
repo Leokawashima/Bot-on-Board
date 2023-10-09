@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 
 /// <summary>
 /// NGO接続を管理するクラス
@@ -8,50 +9,72 @@ using Unity.Netcode;
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class NetConnectManager : MonoBehaviour
 {
+    public event Action Event_PlayersConnected;
+    public event Action Event_PlayersDisconnected;
+
     public void Host()
     {
-        var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
-        if (transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
+        var _transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        if (_transport is UnityTransport _unityTransport)
         {
-            unityTransport.ConnectionData.Port = RoomUDP.Port;
-            unityTransport.ConnectionData.ServerListenAddress = "0.0.0.0";
+            _unityTransport.ConnectionData.Port = RoomUDP.Port;
+            _unityTransport.ConnectionData.ServerListenAddress = "0.0.0.0";
         }
-        NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck; 
+        NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
+        AddCallBacks();
         NetworkManager.Singleton.StartHost();
     }
     public void Client()
     {
-        var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
-        if(transport is Unity.Netcode.Transports.UTP.UnityTransport unityTransport)
+        var _transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        if(_transport is UnityTransport _unityTransport)
         {
-            unityTransport.SetConnectionData(RoomUDP.ConnectIPAddress, RoomUDP.Port);
+            //RoomUDP.ConnectionIPAddressは初期化しない場合127.0.0.1になる
+            _unityTransport.SetConnectionData(RoomUDP.ConnectIPAddress, RoomUDP.Port);
         }
+        AddCallBacks();
         NetworkManager.Singleton.StartClient();
     }
-
-    //参考　https://yuru-uni.com/2023/02/09/multiplay-tutorial3/
-    void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+    private void AddCallBacks()
     {
-        response.Pending = true;
+        NetworkManager.Singleton.OnClientConnectedCallback += OnConnectedCallBack;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnDisConnectedCallBack;
+    }
+
+    //接続承認要求のコールバック処理　参考 https://yuru-uni.com/2023/02/09/multiplay-tutorial3/
+    void ApprovalCheck(NetworkManager.ConnectionApprovalRequest _, NetworkManager.ConnectionApprovalResponse response_)
+    {
+        response_.Pending = true;
 
         if(NetworkManager.Singleton.ConnectedClients.Count >= RoomUDP.ConnectUserMax)
         {
-            response.Approved = false;
-            response.Pending = false;
+            response_.Approved = false;
+            response_.Pending = false;
+#if UNITY_EDITOR
+            Debug.Log("最大人数を超過して接続するアクセス要求を破棄しました");
+#endif
             return;
         }
         
-        response.Approved = true;
-        response.CreatePlayerObject = true;
-        response.PlayerPrefabHash = null;
+        response_.Approved = true;
+        response_.CreatePlayerObject = true;
+        response_.PlayerPrefabHash = null;
 
-        //PlayerObjectをスポーンする位置(nullの場合Vector3.zero)
-        var position = new Vector3(0, 0, 0);
-        position.x = 2 * NetworkManager.Singleton.ConnectedClients.Count;
-        response.Position = position;
-        //PlayerObjectをスポーン時の回転 (nullの場合Quaternion.identity)
-        response.Rotation = Quaternion.identity;
+        //s生成座標
+        response_.Position = new Vector3(NetworkManager.Singleton.ConnectedClients.Count, 0, 0);
 
-        response.Pending = false;
+        response_.Pending = false;
+    }
+
+    void OnConnectedCallBack(ulong count_)
+    {
+        //接続時に全員接続完了しているか確認してからの処理を呼ぶので?.Invokeは必要ない
+        if ((int)++count_ == 2)
+            Event_PlayersConnected();
+    }
+
+    void OnDisConnectedCallBack(ulong count_)
+    {
+        Event_PlayersDisconnected();
     }
 }

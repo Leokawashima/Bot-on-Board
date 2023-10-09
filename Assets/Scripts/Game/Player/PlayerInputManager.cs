@@ -12,7 +12,8 @@ public class PlayerInputManager : MonoBehaviour
 {
     public static event Action OnMouseMainClickEvent;
     public static event Action OnDragStartEvent;
-    public static event Action OnDragEvent;
+    public static event Action OnDragCancelEvent;
+    public static event Action OnMouseMovePerformEvent;
     public static Vector2 m_Pos { get; private set; }
 
     InputActionMapSettings m_Map;
@@ -21,9 +22,8 @@ public class PlayerInputManager : MonoBehaviour
     {
         m_Map = new();
         m_Map.Player.MainAction.performed += OnAction_MainClick;
-        m_Map.Player.DragAction.started += OnAction_DragStart;
-        m_Map.Player.DragAction.performed += OnAction_Drag;
-        m_Map.Player.DragAction.canceled += OnAction_Drag;
+        m_Map.Player.HoldAction.started += OnAction_DragStart;
+        m_Map.Player.HoldAction.canceled += OnAction_DragCancel;
         m_Map.Player.Position.started += OnAction_Position;
         m_Map.Player.Position.performed += OnAction_Position;
         m_Map.Player.Position.canceled += OnAction_Position;
@@ -32,9 +32,8 @@ public class PlayerInputManager : MonoBehaviour
     void OnDisable()
     {
         m_Map.Player.MainAction.performed -= OnAction_MainClick;
-        m_Map.Player.DragAction.started -= OnAction_DragStart;
-        m_Map.Player.DragAction.performed -= OnAction_Drag;
-        m_Map.Player.DragAction.canceled -= OnAction_Drag;
+        m_Map.Player.HoldAction.started -= OnAction_DragStart;
+        m_Map.Player.HoldAction.canceled -= OnAction_DragCancel;
         m_Map.Player.Position.started -= OnAction_Position;
         m_Map.Player.Position.performed -= OnAction_Position;
         m_Map.Player.Position.canceled -= OnAction_Position;
@@ -47,16 +46,15 @@ public class PlayerInputManager : MonoBehaviour
     }
     void OnAction_DragStart(InputAction.CallbackContext context)
     {
-        m_Pos = context.ReadValue<Vector2>();
         OnDragStartEvent?.Invoke();
     }
-    void OnAction_Drag(InputAction.CallbackContext context)
+    void OnAction_DragCancel(InputAction.CallbackContext context)
     {
-        m_Pos = context.ReadValue<Vector2>();
-        OnDragEvent?.Invoke();
+        OnDragCancelEvent?.Invoke();
     }
     void OnAction_Position(InputAction.CallbackContext context)
     {
         m_Pos = context.ReadValue<Vector2>();
+        OnMouseMovePerformEvent?.Invoke();
     }
 }

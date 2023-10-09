@@ -37,18 +37,27 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DragAction"",
+                    ""name"": ""HoldAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""b051ca0d-3b6a-47a4-a50e-8249458d43e4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Position"",
                     ""type"": ""Value"",
-                    ""id"": ""4a42036e-143b-4edc-be57-b4b01d943f1c"",
+                    ""id"": ""2775b9af-f3c0-4ab6-a620-9bd505408402"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Position"",
+                    ""name"": ""DragPosition"",
                     ""type"": ""Value"",
-                    ""id"": ""2775b9af-f3c0-4ab6-a620-9bd505408402"",
+                    ""id"": ""4a42036e-143b-4edc-be57-b4b01d943f1c"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -96,7 +105,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -107,7 +116,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -118,7 +127,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -129,7 +138,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -140,7 +149,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -151,9 +160,31 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DragAction"",
+                    ""action"": ""DragPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee763a09-d2a5-4ac8-a8c3-bc0854451626"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf6d2c96-bcba-4b9a-891a-220df4637dc0"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -756,8 +787,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MainAction = m_Player.FindAction("MainAction", throwIfNotFound: true);
-        m_Player_DragAction = m_Player.FindAction("DragAction", throwIfNotFound: true);
+        m_Player_HoldAction = m_Player.FindAction("HoldAction", throwIfNotFound: true);
         m_Player_Position = m_Player.FindAction("Position", throwIfNotFound: true);
+        m_Player_DragPosition = m_Player.FindAction("DragPosition", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -832,15 +864,17 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MainAction;
-    private readonly InputAction m_Player_DragAction;
+    private readonly InputAction m_Player_HoldAction;
     private readonly InputAction m_Player_Position;
+    private readonly InputAction m_Player_DragPosition;
     public struct PlayerActions
     {
         private @InputActionMapSettings m_Wrapper;
         public PlayerActions(@InputActionMapSettings wrapper) { m_Wrapper = wrapper; }
         public InputAction @MainAction => m_Wrapper.m_Player_MainAction;
-        public InputAction @DragAction => m_Wrapper.m_Player_DragAction;
+        public InputAction @HoldAction => m_Wrapper.m_Player_HoldAction;
         public InputAction @Position => m_Wrapper.m_Player_Position;
+        public InputAction @DragPosition => m_Wrapper.m_Player_DragPosition;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -853,12 +887,15 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @MainAction.started += instance.OnMainAction;
             @MainAction.performed += instance.OnMainAction;
             @MainAction.canceled += instance.OnMainAction;
-            @DragAction.started += instance.OnDragAction;
-            @DragAction.performed += instance.OnDragAction;
-            @DragAction.canceled += instance.OnDragAction;
+            @HoldAction.started += instance.OnHoldAction;
+            @HoldAction.performed += instance.OnHoldAction;
+            @HoldAction.canceled += instance.OnHoldAction;
             @Position.started += instance.OnPosition;
             @Position.performed += instance.OnPosition;
             @Position.canceled += instance.OnPosition;
+            @DragPosition.started += instance.OnDragPosition;
+            @DragPosition.performed += instance.OnDragPosition;
+            @DragPosition.canceled += instance.OnDragPosition;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -866,12 +903,15 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @MainAction.started -= instance.OnMainAction;
             @MainAction.performed -= instance.OnMainAction;
             @MainAction.canceled -= instance.OnMainAction;
-            @DragAction.started -= instance.OnDragAction;
-            @DragAction.performed -= instance.OnDragAction;
-            @DragAction.canceled -= instance.OnDragAction;
+            @HoldAction.started -= instance.OnHoldAction;
+            @HoldAction.performed -= instance.OnHoldAction;
+            @HoldAction.canceled -= instance.OnHoldAction;
             @Position.started -= instance.OnPosition;
             @Position.performed -= instance.OnPosition;
             @Position.canceled -= instance.OnPosition;
+            @DragPosition.started -= instance.OnDragPosition;
+            @DragPosition.performed -= instance.OnDragPosition;
+            @DragPosition.canceled -= instance.OnDragPosition;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1010,8 +1050,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     public interface IPlayerActions
     {
         void OnMainAction(InputAction.CallbackContext context);
-        void OnDragAction(InputAction.CallbackContext context);
+        void OnHoldAction(InputAction.CallbackContext context);
         void OnPosition(InputAction.CallbackContext context);
+        void OnDragPosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

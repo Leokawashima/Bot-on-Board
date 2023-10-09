@@ -13,18 +13,6 @@ public class CameraTrailSystem : MonoBehaviour
     Vector2 m_PrePos = new();
     int m_PathWayPoints = 0;
 
-    private void OnEnable()
-    {
-        PlayerInputManager.OnDragStartEvent += OnDragStart;
-        PlayerInputManager.OnDragEvent += OnDrag;
-    }
-
-    private void OnDisable()
-    {
-        PlayerInputManager.OnDragStartEvent -= OnDragStart;
-        PlayerInputManager.OnDragEvent -= OnDrag;
-    }
-
     private void Start()
     {
         m_Dolly = m_Camera.GetCinemachineComponent<CinemachineTrackedDolly>();

@@ -19,6 +19,14 @@ public class DiceSystem : MonoBehaviour
     [SerializeField] int m_StartDelay = 2000;
 
     bool m_IsHit = false;
+    Vector3 m_Pos;
+    Quaternion m_Rot;
+
+    void Start()
+    {
+        m_Pos = transform.position;
+        m_Rot = transform.rotation;
+    }
 
     async Task Roll()
     {
@@ -58,6 +66,12 @@ public class DiceSystem : MonoBehaviour
         var _result = _dice.FirstOrDefault(x => x.Value.Equals(_dice.Values.Max()));
 
         return _result.Key;
+    }
+
+    public void ResetDice()
+    {
+        transform.position = m_Pos;
+        transform.rotation = m_Rot;
     }
 
 #if UNITY_EDITOR

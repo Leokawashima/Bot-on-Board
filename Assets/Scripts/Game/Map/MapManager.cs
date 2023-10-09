@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,73 +11,109 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
 #if UNITY_EDITOR
+    [Header("Gizmos")]
     [SerializeField] bool m_DrawGizmos = true;
     [SerializeField] bool m_DrawMapGizmos = true;
     [SerializeField] bool m_DrawObjGizmos = true;
 #endif
-    [SerializeField] Data_SO m_Data_SO;
-    public Data_SO Data_SO { get { return m_Data_SO; } }
+    public static MapManager Singleton { get; private set; }
+
+    [Header("Data")]
+    [SerializeField] MapData_SO m_Data_SO;
+    public MapData_SO Data_SO { get { return m_Data_SO; } }
 
     [SerializeField] MapChipTable_SO m_MapChipTable;
     [SerializeField] MapObjectTable_SO m_MapObjectTable;
 
     [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
+    public List<AIManager> m_AIManagerList { get; private set; } = new();
 
     public int[,] m_MapStates { get; private set; }
     public int[,] m_ObjStates { get; private set; }
-
-    public event Action OnMapCreated;
-
-    Vector3 Offset { get { return new Vector3(0.5f, 0, 0.5f); } }
-
-    public void MapCreate()
-    {
-        StartCoroutine(CoMapCreate());
+    public void SetObjState(Vector2Int pos_, int obj_) {
+        m_ObjStates[pos_.y, pos_.x] = obj_;
     }
 
-    IEnumerator CoMapCreate()
-    {
-        m_MapStates = new int[m_Data_SO.y, m_Data_SO.x];
-        m_ObjStates = new int[m_Data_SO.y, m_Data_SO.x];
-        
-        var _mapOffset = new Vector3(-m_Data_SO.y / 2.0f, 0, -m_Data_SO.x / 2.0f) + transform.position;
-        var _cnt = 0;
+    public static event Action Event_MapCreated;
 
-        while(true)
+    public Vector3 Offset { get {
+            return new Vector3(-m_Data_SO.x / 2.0f + 0.5f, 0, -m_Data_SO.y / 2.0f + 0.5f) + transform.position;
+        } 
+    }
+
+    void OnEnable()
+    {
+        GameSystem.Event_Initialize += OnSystemInitialize;
+    }
+    void OnDisable()
+    {
+        GameSystem.Event_Initialize -= OnSystemInitialize;
+    }
+
+    void OnSystemInitialize()
+    {
+        MapCreate();
+    }
+
+    void Start()
+    {
+        Singleton ??= this;
+    }
+    void OnDestroy()
+    {
+        Singleton = null;
+    }
+
+    void MapCreate()
+    {
+        IEnumerator CoMapCreate()
         {
-            for(int z = 0; z < m_Data_SO.y; ++z)
+            m_MapStates = new int[m_Data_SO.y, m_Data_SO.x];
+            m_ObjStates = new int[m_Data_SO.y, m_Data_SO.x];
+
+            var _mapOffset = Offset;
+            var _cnt = 0;
+
+            while(true)
             {
-                for(int x = 0; x < m_Data_SO.x; ++x)
+                for(int z = 0; z < m_Data_SO.y; ++z)
                 {
-                    if (_cnt == x + z)
+                    for(int x = 0; x < m_Data_SO.x; ++x)
                     {
-                        if(m_Data_SO.mapChip[z * m_Data_SO.x + x] != 0)
+                        if(_cnt == x + z)//斜めに順生成するための判定
                         {
-                            var _pos = new Vector3(x, 0, z) + Offset + _mapOffset;
-                            m_MapChipTable.m_Table[m_Data_SO.mapChip[z * m_Data_SO.x + x]]
-                                .MapCreate(new Vector2Int(x, z), _pos, transform);
+                            if(m_Data_SO.mapChip[z * m_Data_SO.x + x] != -1)
+                            {
+                                var _pos = new Vector3(x, 0, z) + _mapOffset;
+                                m_MapChipTable.m_Table[m_Data_SO.mapChip[z * m_Data_SO.x + x]]
+                                    .MapCreate(new Vector2Int(x, z), _pos, transform);
+                            }
+                            if(m_Data_SO.objChip[z * m_Data_SO.x + x] != -1)
+                            {
+                                var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
+                                m_MapObjectTable.m_Table[m_Data_SO.objChip[z * m_Data_SO.x + x]]
+                                    .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
+                            }
+
                             m_MapStates[z, x] = m_Data_SO.mapChip[z * m_Data_SO.x + x];
-                        }
-                        if(m_Data_SO.objChip[z * m_Data_SO.x + x] != 0)
-                        {
-                            var _pos = new Vector3(x, 0, z) + Offset + Vector3.up + _mapOffset;
-                            m_MapObjectTable.m_Table[m_Data_SO.objChip[z * m_Data_SO.x + x]]
-                                .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
                             m_ObjStates[z, x] = m_Data_SO.objChip[z * m_Data_SO.x + x];
                         }
                     }
                 }
+                _cnt++;//++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので好きでない
+                       //頂点位置計算等の数学フィジカルごり押しプログラムなら良いと思う
+
+                if(_cnt == m_Data_SO.x + m_Data_SO.y) break;
+
+                yield return new WaitForSeconds(m_WaitOnePlaceSecond);
             }
-            _cnt++;//++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので好きでない
-                   //頂点位置計算等の数学フィジカルプログラムなら良いけど
 
-            if(_cnt == m_Data_SO.x + m_Data_SO.y) break;
-
-            yield return new WaitForSeconds(m_WaitOnePlaceSecond);
+            Event_MapCreated?.Invoke();
         }
 
-        OnMapCreated?.Invoke();
+        StartCoroutine(CoMapCreate());
     }
+
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
@@ -98,9 +135,9 @@ public class MapManager : MonoBehaviour
                 {
                     for(int x = 0; x < m_Data_SO.x; ++x)
                     {
-                        if (m_ObjStates[y, x] != 0)
+                        if (m_ObjStates[y, x] != -1)
                         {
-                            Gizmos.color = Color.HSVToRGB(m_ObjStates[y, x] / 360.0f % 1, 1, 1);
+                            Gizmos.color = Color.HSVToRGB(m_ObjStates[y, x] / 36.0f % 1, 1, 1);
                             Gizmos.DrawWireCube(transform.position + _offset + new Vector3(x, 0, y), Vector3.one);
                         }
                     }

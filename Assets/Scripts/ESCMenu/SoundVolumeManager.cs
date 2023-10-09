@@ -24,7 +24,7 @@ public class SoundVolumeManager : MonoBehaviour
     [Header("Toggle")]
     [SerializeField] Toggle m_MuteSoundToggle;
 
-    readonly string m_FilePath = Name.Setting.FilePath_Setting + "/SoundSetting.json";
+    readonly string FilePath = Name.Setting.FilePath_Setting + "/SoundSetting.json";
 
     bool m_IsDirty = false;
     public bool IsDirty { get {
@@ -148,13 +148,13 @@ public class SoundVolumeManager : MonoBehaviour
             UIVolume = m_UISlider.value
         };
 
-        JsonFileManager.Save(m_FilePath, save);
+        JsonFileManager.Save(FilePath, save);
     }
 
     [ContextMenu("Load")]
     public void Load()
     {
-        if (false ==  JsonFileManager.Load<SaveData>(m_FilePath, out var save))
+        if (false ==  JsonFileManager.Load<SaveData>(FilePath, out var save))
         {
             return;
         }

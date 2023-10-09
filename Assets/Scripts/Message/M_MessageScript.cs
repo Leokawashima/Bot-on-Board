@@ -17,11 +17,11 @@ public class M_MessageScript : MonoBehaviour
 
     void Start()
     {
-        m_InputMap = new InputActionMapSettings();
+        m_InputMap = new();
         m_InputMap.UI.Any.started += OnAnyInput;
         m_InputMap.Enable();
 
-        for (int i = 0; i < m_Message.Length; i++)
+        for (int i = 0; i < m_Message.Length; ++i)
         {
             if(m_Message[i].Contains("\\n"))
                 m_Message[i] = m_Message[i].Replace("\\n", Environment.NewLine);
@@ -54,7 +54,7 @@ public class M_MessageScript : MonoBehaviour
             m_InputMap.Disable();
 
             StopAllCoroutines();
-            StartCoroutine(CoLoad());
+            StartCoroutine(CoSceneLoad());
         }
     }
 
@@ -80,7 +80,7 @@ public class M_MessageScript : MonoBehaviour
         m_IsFade = false;
     }
 
-    IEnumerator CoLoad()
+    IEnumerator CoSceneLoad()
     {
         m_IsFade = true;
 
@@ -91,7 +91,7 @@ public class M_MessageScript : MonoBehaviour
             m_Text.color = color;
             if(m_Text.color.a <= 0)
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(Name.Scene.Title);
+                Initiate.Fade(Name.Scene.Title, Color.black, 1.0f);
                 break;
             }
             yield return null;

@@ -69,6 +69,12 @@ namespace MyFileSystem
                 return false;
             }
 
+            if (!File.Exists(path_))
+            {
+                str_ = default;
+                return false;
+            }
+
             StreamReader _sr = new StreamReader(path_);
             str_ = _sr.ReadToEnd();
             _sr.Close();

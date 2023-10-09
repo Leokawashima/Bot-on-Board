@@ -3,22 +3,26 @@ using UnityEngine.UI;
 
 public abstract class MapObject_SO_Template : ScriptableObject
 {
-    public string m_ObjectName = "null";
+    public string m_ObjectName = string.Empty;
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
 
+    public uint
+        m_Destroy_MaxTurn = 10,
+        m_Destroy_SpawnTurn = 10;
+
+    public bool m_IsCollider = false;
+
     public GameObject m_Prefab;
-    private Animator m_Animator;
+    public MapObjectCard m_Card;
+
+    const float CardSelectOffset = 50.0f;
+
+    Animator m_Animator;
     protected Animator GetAnimator {
         get { 
             return m_Animator ? m_Animator = m_Prefab.GetComponent<Animator>() : m_Animator;
         }
     }
-
-    public GameObject m_Card;
-
-    public bool m_IsCollider;
-
-    const int ObjOffset = 1;//マップに高低差を設ける場合この変数を使わないべき
 
     public virtual MapObject ObjectSpawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
@@ -30,12 +34,24 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
         return mo;
     }
-    public virtual MapObjectCard CardCreate(Transform tf_)
+    public virtual MapObjectCard CardCreate(int index_, Transform tf_, ToggleGroup group_, CardManager cardManager_)
     {
-        var go = Instantiate(m_Card, tf_);
-        var moc = go.GetComponent<MapObjectCard>();
+        var moc = Instantiate(m_Card, tf_);
         moc.m_SO = this;
+        moc.m_Index = index_;
         moc.m_Text.text = m_ObjectName;
+        moc.m_Toggle.group = group_;
+        moc.m_CardManager = cardManager_;
+        moc.m_Toggle.onValueChanged.AddListener((bool isOn_) =>
+        {
+            var rect = moc.transform as RectTransform;
+            rect.anchoredPosition = new Vector2(
+                rect.anchoredPosition.x,
+                isOn_ ?
+                rect.anchoredPosition.y + CardSelectOffset :
+                rect.anchoredPosition.y - CardSelectOffset
+                );
+        });
 
         return moc;
     }
@@ -43,7 +59,17 @@ public abstract class MapObject_SO_Template : ScriptableObject
     public virtual void Destry() { }
 }
 
-public abstract class MO_Destroy_SO_Template : MapObject_SO_Template
+//以下継承クラス　インターフェース化する方がデータ設計が楽だが、
+//プロパティは通常のインスペクターから見えない為後々編集エディターを作るまでクラス実装
+
+public abstract class MO_SO_Weapon : MapObject_SO_Template
 {
-    public uint m_Destry_MaxTurn, m_Destroy_NowTurn;
+    public int m_AttackPow = 1;
+    public abstract bool CheckAttackCollider();
+    public abstract void Attack();
+}
+
+public abstract class MO_SO_Heal : MapObject_SO_Template
+{
+    public int m_HealPow = 1;
 }

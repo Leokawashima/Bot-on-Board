@@ -15,18 +15,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DragAction",
+                    "name": "HoldAction",
+                    "type": "Button",
+                    "id": "b051ca0d-3b6a-47a4-a50e-8249458d43e4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Position",
                     "type": "Value",
-                    "id": "4a42036e-143b-4edc-be57-b4b01d943f1c",
+                    "id": "2775b9af-f3c0-4ab6-a620-9bd505408402",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Position",
+                    "name": "DragPosition",
                     "type": "Value",
-                    "id": "2775b9af-f3c0-4ab6-a620-9bd505408402",
+                    "id": "4a42036e-143b-4edc-be57-b4b01d943f1c",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -74,7 +83,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -85,7 +94,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -96,7 +105,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -107,7 +116,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -118,7 +127,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -129,9 +138,31 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DragAction",
+                    "action": "DragPosition",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ee763a09-d2a5-4ac8-a8c3-bc0854451626",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cf6d2c96-bcba-4b9a-891a-220df4637dc0",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",

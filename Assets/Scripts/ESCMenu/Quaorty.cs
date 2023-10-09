@@ -9,6 +9,9 @@ using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// まだ調整中
+/// </summary>
 public class Quaorty : MonoBehaviour
 {
     [SerializeField] TMP_Dropdown drop;
