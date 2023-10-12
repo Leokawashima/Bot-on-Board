@@ -1,6 +1,8 @@
 *.csproj
 *.sln
 *.suo
+.vsconfig
+.vscode/
 Library/
 Logs/
 obj/
@@ -8,4 +10,4 @@ UserSettings/
 Temp/
 .vs/
 Assets/Systems/TMPFonts/
-Assets/Systems/TMPFonts.meta
+Assets/Downloads/ProPixelizer/
