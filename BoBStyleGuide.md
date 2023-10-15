@@ -36,6 +36,7 @@
 | ScriptableObjectクラス | PascalCase | class PlayerIndex_SO | サフィックス `_SO` |
 | ScriptableObject抽象クラス | PascalCase | abstract class PlayerIndex_SO_Template | サフィックス `_SO_Template` |
 | メソッド | PascalCase | void PlayerIndex() |
+| イベントハンドラ | PascalCase | void OnPlayerIndex() | プレフィックス`On` |
 | ローカルメソッド | PascalCase | void _PlayerIndex() | プレフィックス `_` |
 | コルーチン | PascalCase | IENumrator CoPlayerIndex() | プレフィックス `Co` |
 | ローカルコルーチン | PascalCase | IENumrator Co_PlayerIndex() | プレフィックス `Co_` |
@@ -46,6 +47,7 @@
 | protected internal フィールド | PascalCase | protected internal int PlayerIndex; |
 | private protected フィールド | camelCase | private protected int m_playerIndex; | プレフィックス `m_` |
 | const フィールド | CONSTANT_CASE | const int PLAYER_INDEX; |
+| readonly フィールド | CONSTANT_CASE | readonly int m_PLAYER_INDEX; | プレフィックス `m_` |
 | private / protected static フィールド | PascalCase | private static int m_PlayerIndex; | プレフィックス `m_` |
 | public / internal static フィールド | PascalCase | public static int PlayerIndex; |
 | ローカル変数 | camelCase | int _playerIndex; | プレフィックス `_` |
@@ -58,7 +60,16 @@
 ローカル変数はその限りではありません。  
 具体的にはゲームオブジェクトを`go`と省略することを許容します。  
 しかし、使用されているスコープ内で似通った意味合いを持つ変数等がある場合に省略を多用することは好ましくありません。  
-使用範囲が限定されている場合のみ許容されているということを念頭に命名をしてください。  
+使用範囲が限定されている場合のみ許容されているということを念頭に命名をしてください。 
+#### 変数名の順序について
+このプロジェクトでは名詞、形容詞の順に命名します。  
+具体的には  
+`m_maxValue`と`m_minValue`  
+と命名することはせず、  
+`m_valueMax`と`m_minValue`  
+と命名します。  
+これは形容詞が対義語であるなどの場合問題ないですが、2つ以上の変数がある、  
+複雑な状態を指している場合等に末尾の名刺を見るまで変数を読み取りづらいためです。  
 
 ## フォーマットルール
 #### コメントアウトについて
@@ -90,7 +101,7 @@ public class PlayerData : MonoBehaviour
     }
 }
 
-/// このようにクラスやメソッドにはコメントでマークダウンを行ってください。
+/// このようにクラスやメソッドにはマークダウンを行ってください。
 /// <summary>では最大でも2~3行ほどで簡潔に説明することを遵守してください。
 ```
 #### 改行について
@@ -110,6 +121,54 @@ namespace PlayerData
   public class PlayerData
   {
       // 記述...
-	}
+　}
 }
 ```
+
+#### コードルールについて
+* privateを明示的に宣言しないものとします。  
+  これはUnityEventのStart()等も同様で、privateは必ず削除します。  
+``` CSharp
+  int m_hoge;
+  void Start()
+　{
+　　// 記述...
+　}
+```
+* bool値のif文は`!`での反転を行った判定を禁じます。  
+  これは簡潔に記述できるもののコードリーディングを行う際に見落とす可能性を考慮したものです。  
+  `==`を`=`にしてしまう記述ミスでのバグが生まれる可能性もありますが、気にしないものとします。  
+``` CSharp
+  if (m_isOpen)
+  {
+      // 記述...
+　}
+  if (m_isPlaying == false)
+  {
+      // 記述...
+  }
+```
+* Awakeではフィールドの初期化、Startでは参照、取得する行為を含めた初期化を行います。  
+  これはAwakeが呼び出されるときに他のオブジェクトの生成処理が終わっていない可能性を考慮し、  
+  Awakeでは他のコンポーネントを参照、取得以外の初期化を行い、  
+  StartではAwakeでできなかった初期化処理を記述します。  
+  ``` CSharp
+    [SerializeField] int m_MapSizeX = 10;
+    [SerializeField] int m_MapSizeY = 5;
+    readonly Vector2Int m_MAP_SIZE;
+    // MapManager 型
+    readonly MapManager m_MAP_MANAGER;
+  
+    void Awake()
+    {
+      // 参照、取得なしでできる初期化を行う(Vector2Intを[SerializeField]しろは言わないでね)
+      m_MAP_SIZE = new Vector2Int(m_MapSizeX, m_MapSizeY);
+    }
+
+    void Start()
+    {
+  　　// 相手のシングルトンインスタンスを取得する
+      // MapManager.Singleton はAwakeで初期化されている
+      m_MAP_MANAGER = MapManager.Singleton;
+    }
+  ```
