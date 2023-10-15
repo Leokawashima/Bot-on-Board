@@ -10690,10 +10690,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc84052c79f1804f827aa3ae11aa8df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Flash: {fileID: 818966758}
-  m_Rainbow: {fileID: 232689784}
-  m_Audio: {fileID: 65456414}
-  m_Particle: {fileID: 65456416}
+  m_flashSystem: {fileID: 0}
+  m_rainbowText: {fileID: 0}
+  m_audio: {fileID: 0}
+  m_particle: {fileID: 0}
 --- !u!1 &827305520
 GameObject:
   m_ObjectHideFlags: 0
@@ -11021,12 +11021,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aee583352e32a34b9fd78a2104103a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 0}
-  room: {fileID: 489863311}
-  m_PressAnyKey: {fileID: 818966759}
-  m_Menu: {fileID: 1822314238}
-  m_Credits: {fileID: 1161760927}
-  m_FadePanelSystem: {fileID: 1369140701}
+  m_pressAnyKey: {fileID: 0}
+  m_menu: {fileID: 0}
+  m_credit: {fileID: 0}
+  m_creditFadePanelSystem: {fileID: 0}
+  m_isEntered: 0
 --- !u!1 &899499822
 GameObject:
   m_ObjectHideFlags: 0
@@ -17752,9 +17751,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26c1c6b5dd58c941870f805ee8844b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Credits: {fileID: 1558538919}
-  m_ButtonBack: {fileID: 1303771270}
-  m_Audio: {fileID: 1161760928}
+  m_credit: {fileID: 0}
+  m_backButton: {fileID: 0}
+  m_audio: {fileID: 0}
 --- !u!82 &1161760928
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23801,11 +23800,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b0b892eba58c84eb1cafabd8c91d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Image: {fileID: 1369140699}
-  m_Value: 0
-  m_Time: 1
-  m_Cutting: 10
-  m_WaitTime: 0.2
+  m_image: {fileID: 1369140699}
+  m_value: 0
+  m_wholeTime: 1
+  m_cutting: 10
+  m_waitTime: 1
 --- !u!1 &1374484909
 GameObject:
   m_ObjectHideFlags: 0
@@ -26557,18 +26556,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1822314236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f95db36b3a2252458ca901ca82424d9, type: 3}
+  m_Script: {fileID: 11500000, guid: db2503db047539a41bc0c28439603b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MenuDefault: {fileID: 847267060}
-  m_StartButton: {fileID: 1737646155}
-  m_QuitButton: {fileID: 2101500476}
-  m_OptionButton: {fileID: 678520335}
-  m_CreditsButton: {fileID: 982920527}
-  m_Audio: {fileID: 1822314239}
-  m_Animator: {fileID: 519693161}
-  m_Volume: {fileID: 519693162}
-  m_EscMenu: {fileID: 2022653350}
+  m_startButton: {fileID: 0}
+  m_quitButton: {fileID: 0}
+  m_optionButton: {fileID: 0}
+  m_creditButton: {fileID: 0}
+  m_audio: {fileID: 0}
+  m_animator: {fileID: 0}
+  m_volume: {fileID: 0}
+  m_EscMenu: {fileID: 0}
 --- !u!82 &1822314239
 AudioSource:
   m_ObjectHideFlags: 0
@@ -27562,17 +27560,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015577027}
   m_CullTransparentMesh: 1
---- !u!114 &2022653350 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8662030329392664988, guid: aff265a8993ee1f43a43ebd3ec6894d2, type: 3}
-  m_PrefabInstance: {fileID: 3247517184986774431}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aca83a94c5c386446a7757dddbb4b750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2032392611
 GameObject:
   m_ObjectHideFlags: 0

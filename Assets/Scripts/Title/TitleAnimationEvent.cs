@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class T_AnimEventScript : MonoBehaviour
+public class TitleAnimationEvent : MonoBehaviour
 {
     public void OnGameQuit()
     {

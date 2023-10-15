@@ -1,35 +1,55 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using ZXing;
 using ZXing.QrCode;
 
-public class TweetManager : MonoBehaviour
+/// <summary>
+/// リザルトシーンのツイートを管理するクラス
+/// </summary>
+public class ResultTweetManager : MonoBehaviour
 {
-    [SerializeField] TMP_InputField m_TweetTextInputField;
-    [SerializeField] Button m_TweetButton;
-    [SerializeField] Button m_TweetForQRButton;
-    [SerializeField] RawImage m_RawImg;
+    [SerializeField] TMP_InputField m_tweetInputField;
+    [SerializeField] Button m_tweetButton;
+    [SerializeField] Button m_tweetForQRButton;
+    [SerializeField] RawImage m_rawImage;
 
     const string
-        m_NewText = "text=",
-        m_NewUrl = "&url=",
-        m_NewHashTag = "&hashtags=",
-        m_NewLine = "%0a",
-        m_Space = "%20",
-        m_Sharp = "%23";
+        NEWT_TEXT = "text=",
+        NEW_URL = "&url=",
+        NEW_HASHTAG = "&hashtags=",
+        NEW_LINE = "%0a",
+        SPACE = "%20",
+        SHARP = "%23";
 
-    readonly Vector2Int m_Size = new Vector2Int(256, 256);
+    // QR画像サイズ
+    readonly Vector2Int m_QR_IMAGE_SIZE = new Vector2Int(256, 256);
+
+    // 日本語は2バイト文字なので130字(バイト数で260となる)
+    // 通常140字までツイートできるがハッシュタグの差分と余裕をもって130字
+    const int TWEET_TEXT_BYTE_SIZE = 260;
 
     void Start()
     {
-        m_TweetButton.onClick.AddListener(() =>
+        m_tweetInputField.onValidateInput += (string text_, int index_, char add_) =>
         {
-            OpenURL(CreateTweetLink(m_TweetTextInputField.text));
+            var _encoding = Encoding.GetEncoding("Shift_JIS");
+            int _byteSize = _encoding.GetByteCount(text_);
+            if (_byteSize == TWEET_TEXT_BYTE_SIZE)
+            {
+                return '\0';
+            }
+            return add_;
+        };
+
+        m_tweetButton.onClick.AddListener(() =>
+        {
+            OpenURL(CreateTweetLink(m_tweetInputField.text));
         });
-        m_TweetForQRButton.onClick.AddListener(() =>
+        m_tweetForQRButton.onClick.AddListener(() =>
         {
-            m_RawImg.texture = CreateQRCode(CreateTweetLink(m_TweetTextInputField.text));
+            m_rawImage.texture = CreateQRCode(CreateTweetLink(m_tweetInputField.text));
         });
     }
 
@@ -54,7 +74,7 @@ public class TweetManager : MonoBehaviour
     /// <returns>ツイートリンク文字列</returns>
     string CreateTweetLink(string text_)
     {
-        return "https://twitter.com/intent/tweet?" // x.comでも機能するっぽいがxes?ツイートの言い換えが分からない　イーロンはなぜXに変えたのか
+        return "https://twitter.com/intent/tweet?" // x.comでも機能するっぽい　変える必要ある？イーロンはなぜXに変えたのか
             + "text=" + text_
             + NL_HashTag("BotonBoard")
             + NL_HashTag("BoB");
@@ -67,7 +87,7 @@ public class TweetManager : MonoBehaviour
     /// <returns>改行タグ文字列</returns>
     string NL_HashTag(string name_)
     {
-        return m_NewLine + m_Sharp + name_;
+        return NEW_LINE + SHARP + name_;
     }
 
     /// <summary>
@@ -83,14 +103,14 @@ public class TweetManager : MonoBehaviour
             Format = BarcodeFormat.QR_CODE,
             Options = new QrCodeEncodingOptions
             {
-                Width = m_Size.x,
-                Height = m_Size.y,
+                Width = m_QR_IMAGE_SIZE.x,
+                Height = m_QR_IMAGE_SIZE.y,
 
                 CharacterSet = "UTF-8",
             }
         };
 
-        var _tex = new Texture2D(m_Size.x, m_Size.y, TextureFormat.ARGB32, false);
+        var _tex = new Texture2D(m_QR_IMAGE_SIZE.x, m_QR_IMAGE_SIZE.y, TextureFormat.ARGB32, false);
         var _pattern = writer.Write(str_);
         _tex.SetPixels32(_pattern);
         _tex.Apply();

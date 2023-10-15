@@ -1164,7 +1164,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -1294,7 +1294,6 @@ RectTransform:
   m_Children:
   - {fileID: 1826738488}
   - {fileID: 280074611}
-  - {fileID: 1532148142}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1341,12 +1340,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532148141}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1521202526}
+  m_Father: {fileID: 1826738488}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1759,6 +1758,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1532148142}
   - {fileID: 1977465827}
   - {fileID: 1664623544}
   - {fileID: 1238595052}
@@ -1783,10 +1783,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39967e293e8b4f64d9fc88c81162fd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TweetTextInputField: {fileID: 1977465828}
-  m_TweetButton: {fileID: 1664623545}
-  m_TweetForQRButton: {fileID: 1238595053}
-  m_RawImg: {fileID: 900066431}
+  m_tweetInputField: {fileID: 0}
+  m_tweetButton: {fileID: 0}
+  m_tweetForQRButton: {fileID: 0}
+  m_rawImage: {fileID: 0}
 --- !u!1 &1870750827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,7 +1932,7 @@ MonoBehaviour:
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
-  m_LineType: 0
+  m_LineType: 2
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 0

@@ -148,13 +148,13 @@ public class SoundVolumeManager : MonoBehaviour
             UIVolume = m_UISlider.value
         };
 
-        JsonFileManager.Save(FilePath, save);
+        JsonFileSystem.Save(FilePath, save);
     }
 
     [ContextMenu("Load")]
     public void Load()
     {
-        if (false ==  JsonFileManager.Load<SaveData>(FilePath, out var save))
+        if (false ==  JsonFileSystem.Load<SaveData>(FilePath, out var save))
         {
             return;
         }
