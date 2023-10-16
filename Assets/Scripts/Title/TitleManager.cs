@@ -34,6 +34,7 @@ public class TitleManager : MonoBehaviour
     {
         if (m_isEntered == false)
         {
+            m_isEntered = true;
             m_pressAnyKey.Enter();
         }
     }
