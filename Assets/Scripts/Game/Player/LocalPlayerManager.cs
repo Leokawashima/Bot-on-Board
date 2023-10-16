@@ -24,13 +24,13 @@ public class LocalPlayerManager : MonoBehaviour
         GUIManager.Event_ButtonPlace -= OnButton_Place;
     }
 
-    void Start()
+    void Awake()
     {
         Singleton ??= this;
     }
     void OnDestroy()
     {
-       Singleton = null;
+        Singleton = null;
     }
 
     void OnMouse_MainClick()

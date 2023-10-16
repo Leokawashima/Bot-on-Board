@@ -43,7 +43,7 @@ public class GUIManager : MonoBehaviour
         GameSystem.Event_Turn_GameSet -= OnTurnGameSet;
     }
 
-    void Start()
+    void Awake()
     {
         Singleton ??= this;
     }
@@ -79,21 +79,22 @@ public class GUIManager : MonoBehaviour
     void OnTurnInitialize()
     {
         m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);
-        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, Event_TurnInitializeCutIn);
-
         foreach(var ui_ in m_PlayerUIArray)
             ui_.TurnInitialize();
+
+        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, () =>
+        {
+            Debug.Log("TurnCutinEnd");
+            Event_TurnInitializeCutIn?.Invoke();
+        });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex);
-        StartCoroutine(Co_Delay());
-
-        IEnumerator Co_Delay()
+        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex, () =>
         {
-            yield return new WaitForSeconds(1.0f);
+            Debug.Log("PlaceCutinEnd");
             m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
-        }
+        });
     }
     void OnTurnEnd()
     {

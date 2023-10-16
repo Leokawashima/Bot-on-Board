@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -280,7 +281,13 @@ public class GameSystem : MonoBehaviour
 
     void OnInitializeCutIn()
     {
-        TurnPlace();
+        StartCoroutine(Co_Delay());
+
+        IEnumerator Co_Delay()
+        {
+            yield return new WaitForSeconds(0.1f);
+            TurnPlace();
+        }
     }
 
     void OnButton_TurnEnd()

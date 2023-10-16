@@ -14,22 +14,27 @@ public class AnimatorManager : MonoBehaviour
     public void Play(string name_, Action callback_, int layer_ = 0)
     {
         m_animator.Play(name_, layer_);
+        // asyncは優秀な反面マルチスレッドやMonoBehaiviourに完全に紐づけられているわけではないので
+        // コルーチンでのコールバック呼び出し実装を行っている
+        StartCoroutine(Co());
+        
         IEnumerator Co()
         {
-            /*
-             * 一フレーム飛ばさないと正常にステート取得が行えない場合がある
-             * Animator内の設定次第な気がする…が終了コールバックを呼んであげる処理なので
-             * do whileで明示的に先に1フレーム飛ばしてから条件チェックしている
-             */
-            do
+            // アニメーションの再生時間の割合0~1で1以下ならアニメーション再生中
+            while (m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             {
                 yield return null;
             }
-            while (m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
-
+            /*
+             * Animator君はMakeTransitionを条件なしで動かすと
+             * normalizeTimeが1を超えないでステートが切り替わることがある
+             * 要するにアニメーションが終了したかを判定できずに勝手に遷移させてしまう
+             * なのでdefaultステートの名前をEmptyに固定、スピードは0で
+             * 遷移を完全にスクリプトベースで操作することで終了コールバックを実現している
+             */
+            m_animator.Play("Empty", 0);
             callback_();
         }
-        StartCoroutine(Co());
     }
 
     public void Play(string name_, int layer_ = 0)

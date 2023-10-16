@@ -1,19 +1,21 @@
 ﻿using UnityEngine;
 using TMPro;
 
-//完成
+/// <summary>
+/// AIのHPをUI表示するクラス
+/// </summary>
 public class AIHPUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI m_NameText;
-    [SerializeField] TextMeshProUGUI m_HPText;
+    [SerializeField] TextMeshProUGUI m_nameText;
+    [SerializeField] TextMeshProUGUI m_hpText;
 
     public void Initialize(string name_)
     {
-        m_NameText.text = name_;
+        m_nameText.text = name_;
     }
 
     public void SetHP(float hp_)
     {
-        m_HPText.text = hp_.ToString("F1");
+        m_hpText.text = hp_.ToString("F1");
     }
 }
