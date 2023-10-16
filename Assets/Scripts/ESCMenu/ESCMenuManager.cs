@@ -2,53 +2,54 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// EscMenuを管理するクラス
+/// </summary>
 public class EscMenuManager : MonoBehaviour
 {
-    [SerializeField] Canvas m_Canvas;
-    [SerializeField] AudioSource m_Audio;
-    [SerializeField] Button m_CloseButton;
-    [SerializeField] SoundVolumeManager m_SoundVolumeManager;
+    [SerializeField] Canvas m_canvas;
+    [SerializeField] AudioSource m_audio;
+    [SerializeField] Button m_closeButton;
+    [SerializeField] SoundVolumeManager m_soundVolumeManager;
 
     public static Action Event_EscMenuOpen;
     public static Action Event_EscMenuClose;
 
-    bool m_IsOpen = false;
+    bool m_isOpen = false;
 
     void Start()
     {
-        m_CloseButton.onClick.AddListener(Close);
+        m_closeButton.onClick.AddListener(Close);
 
-        m_SoundVolumeManager.Initialize();
-        m_SoundVolumeManager.Load();
+        // サウンド初期化とファイル読み込み
+        m_soundVolumeManager.Initialize();
+        m_soundVolumeManager.Load();
     }
 
     public void Switch()
     {
-        if(m_IsOpen == false)
-        {
+        // わかりやすさ重視
+        if(m_isOpen == false)
             Open();
-        }
         else
-        {
             Close();
-        }
     }
 
     void Open()
     {
-        m_Audio.Play();
-        m_IsOpen = true;
-        m_Canvas.gameObject.SetActive(true);
+        m_audio.Play();
+        m_isOpen = true;
+        m_canvas.gameObject.SetActive(true);
 
         Event_EscMenuOpen?.Invoke();
     }
 
     void Close()
     {
-        m_Audio.Play();
-        m_IsOpen = false;
-        if (m_SoundVolumeManager.IsDirty) m_SoundVolumeManager.Save();
-        m_Canvas.gameObject.SetActive(false);
+        m_audio.Play();
+        m_isOpen = false;
+        if (m_soundVolumeManager.IsDirty) m_soundVolumeManager.Save();
+        m_canvas.gameObject.SetActive(false);
 
         Event_EscMenuClose?.Invoke();
     }

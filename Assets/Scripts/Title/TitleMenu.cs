@@ -7,15 +7,17 @@ using UnityEngine.Rendering.Universal;
 
 public class TitleMenu : MonoBehaviour
 {
+    [Header("MenuParent")]
+    [SerializeField] GameObject m_menuParent;
     [Header("Button")]
-    [SerializeField] Button m_startButton;
+    [SerializeField] Button m_playButton;
     [SerializeField] Button m_quitButton;
     [SerializeField] Button m_optionButton;
     [SerializeField] Button m_creditButton;
     [Header("Sound")]
     [SerializeField] AudioSource m_audio;
     [Header("QuitAnim")]
-    [SerializeField] Animator m_animator;
+    [SerializeField] AnimatorManager m_animator;
     [Header("Profile")]
     [SerializeField] Volume m_volume;
     [Header("EscMenu")]
@@ -36,7 +38,7 @@ public class TitleMenu : MonoBehaviour
 
     public void Initialize()
     {
-        m_startButton.onClick.AddListener(OnButtonPlay);
+        m_playButton.onClick.AddListener(OnButtonPlay);
         m_quitButton.onClick.AddListener(OnButtonQuit);
         m_optionButton.onClick.AddListener(OnButtonOption);
         m_creditButton.onClick.AddListener(OnButtonCredit);
@@ -44,11 +46,11 @@ public class TitleMenu : MonoBehaviour
 
     public void Enable()
     {
-        gameObject.SetActive(true);
+        m_menuParent.SetActive(true);
     }
     public void Disable()
     {
-        gameObject.SetActive(false);
+        m_menuParent.SetActive(false);
     }
 
     #region Menu
@@ -56,7 +58,7 @@ public class TitleMenu : MonoBehaviour
     void OnButtonPlay()
     {
         m_audio.Play();
-        gameObject.SetActive(false);
+        m_menuParent.SetActive(false);
 
         StartCoroutine(Co_GoGameAnimation());
 
@@ -135,7 +137,14 @@ public class TitleMenu : MonoBehaviour
     void OnButtonQuit()
     {
         m_audio.Play();
-        m_animator.SetTrigger("Off");
+        m_animator.Play("Off", () =>
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+        });
     }
 
     void OnButtonOption()

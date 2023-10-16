@@ -1238,8 +1238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146287130a00b7f44862fbc2b461b225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InputField: {fileID: 7107231734662643494}
-  m_Max: 100
+  m_inputField: {fileID: 0}
+  m_valueMax: 100
 --- !u!1 &642632395815682040
 GameObject:
   m_ObjectHideFlags: 0
@@ -6124,7 +6124,7 @@ RectTransform:
   m_Children:
   - {fileID: 2720415377178660532}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6143,10 +6143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aca83a94c5c386446a7757dddbb4b750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Canvas: {fileID: 5825649770479556743}
-  m_Audio: {fileID: 31786754290561532}
-  m_CloseButton: {fileID: 1411115859546923023}
-  m_SoundVolumeManager: {fileID: 5962877677984202333}
+  m_canvas: {fileID: 5825649770479556743}
+  m_audio: {fileID: 31786754290561532}
+  m_closeButton: {fileID: 1411115859546923023}
+  m_soundVolumeManager: {fileID: 5962877677984202333}
 --- !u!82 &31786754290561532
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6536,7 +6536,7 @@ Canvas:
   m_GameObject: {fileID: 3847406406985975266}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 0
   m_PixelPerfect: 0
@@ -6601,16 +6601,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb31902fc5ad4448a9ce8dd39d0c9e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AudioMixer: {fileID: 24100000, guid: d180d20d197e33d4b81660ed23e57c0c, type: 2}
-  m_MasterSlider: {fileID: 7248122632291807118}
-  m_BGMSlider: {fileID: 2376894852538344556}
-  m_SESlider: {fileID: 1436610814151647306}
-  m_UISlider: {fileID: 10072694212680109}
-  m_MastertInputField: {fileID: 7107231734662643494}
-  m_BGMInputField: {fileID: 6804774531937639870}
-  m_SEInputField: {fileID: 3401132612209192616}
-  m_UIInputField: {fileID: 5734484012799898285}
-  m_MuteSoundToggle: {fileID: 6127129414810466557}
+  m_audioMixer: {fileID: 24100000, guid: d180d20d197e33d4b81660ed23e57c0c, type: 2}
+  m_masterSlider: {fileID: 7248122632291807118}
+  m_bgmSlider: {fileID: 2376894852538344556}
+  m_seSlider: {fileID: 1436610814151647306}
+  m_uiSlider: {fileID: 10072694212680109}
+  m_mastertInputField: {fileID: 7107231734662643494}
+  m_bgmInputField: {fileID: 6804774531937639870}
+  m_seInputField: {fileID: 3401132612209192616}
+  m_uiInputField: {fileID: 5734484012799898285}
+  m_muteSoundToggle: {fileID: 6127129414810466557}
 --- !u!114 &1200583576582390819
 MonoBehaviour:
   m_ObjectHideFlags: 0

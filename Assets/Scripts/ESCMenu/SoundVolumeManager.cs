@@ -1,35 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Audio;
+﻿using MyFileSystem;
 using TMPro;
-using MyFileSystem;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class SoundVolumeManager : MonoBehaviour
 {
     #region Fields
     [Header("AoudioMixier")]
-    [SerializeField] AudioMixer m_AudioMixer;
+    [SerializeField] AudioMixer m_audioMixer;
     [Header("Sliders")]
-    [SerializeField] Slider m_MasterSlider;
-    [SerializeField] Slider m_BGMSlider;
-    [SerializeField] Slider m_SESlider;
-    [SerializeField] Slider m_UISlider;
+    [SerializeField] Slider m_masterSlider;
+    [SerializeField] Slider m_bgmSlider;
+    [SerializeField] Slider m_seSlider;
+    [SerializeField] Slider m_uiSlider;
     [Header("InputFields")]
-    [SerializeField] TMP_InputField m_MastertInputField;
-    [SerializeField] TMP_InputField m_BGMInputField;
-    [SerializeField] TMP_InputField m_SEInputField;
-    [SerializeField] TMP_InputField m_UIInputField;
+    [SerializeField] TMP_InputField m_mastertInputField;
+    [SerializeField] TMP_InputField m_bgmInputField;
+    [SerializeField] TMP_InputField m_seInputField;
+    [SerializeField] TMP_InputField m_uiInputField;
     [Header("Toggle")]
-    [SerializeField] Toggle m_MuteSoundToggle;
+    [SerializeField] Toggle m_muteSoundToggle;
 
-    readonly string FilePath = Name.Setting.FilePath_Setting + "/SoundSetting.json";
+    readonly string m_FILEPATH = Name.Setting.FilePath_Setting + "/SoundSetting.json";
 
-    bool m_IsDirty = false;
+    // 値が変更されているかどうかのフラグ
+    // 変更したらフラグを立ててフラグの状態をプロパティで確認されたら自動的にフラグを折る
+    bool m_isDirty = false;
     public bool IsDirty { get {
-            var flag = m_IsDirty;
-            m_IsDirty = false;
+            var flag = m_isDirty;
+            m_isDirty = false;
             return flag;
         }
     }
@@ -51,65 +51,82 @@ public class SoundVolumeManager : MonoBehaviour
 
     public void Initialize()
     {
-        m_MuteSoundToggle.onValueChanged.AddListener((bool v) =>
+        m_muteSoundToggle.onValueChanged.AddListener((bool v) =>
         {
             AudioListener.volume = v ? 0 : 1;
-            m_IsDirty |= true;
+            m_isDirty |= true;
         });
 
         void Sliderf(float v, string name, TMP_InputField inputfield)
         {
-            m_AudioMixer.SetFloat(name, v);
+            m_audioMixer.SetFloat(name, v);
             inputfield.text = (v + 80).ToString();
-            m_IsDirty |= true;
+            m_isDirty |= true;
         }
         void InputFieldf(string str, string name, Slider slider)
         {
             if(str == string.Empty) str = "0";
-            m_AudioMixer.SetFloat(name, int.Parse(str) - 80);
+            m_audioMixer.SetFloat(name, int.Parse(str) - 80);
             slider.value = int.Parse(str) - 80;
-            m_IsDirty |= true;
+            m_isDirty |= true;
         }
 
+        void _Initialize(string name_, Slider slider_, TMP_InputField inputField_)
         {
-            m_AudioMixer.GetFloat(Name.AudioMixer.Volume.Master, out float value);
-            m_MasterSlider.value = value;
-            m_MasterSlider.onValueChanged.AddListener((float v) => { Sliderf(v, Name.AudioMixer.Volume.Master, m_MastertInputField); });
-            m_MastertInputField.text = (value + 80).ToString();
-            m_MastertInputField.onSelect.AddListener((string str) => { m_MastertInputField.text = string.Empty; });
-            m_MastertInputField.onEndEdit.AddListener((string str) => { InputFieldf(str, Name.AudioMixer.Volume.Master, m_MasterSlider); });
+            m_audioMixer.GetFloat(name_, out float _value);
+            slider_.value = _value;
+            slider_.onValueChanged.AddListener((float value_) => { Sliderf(value_, name_, inputField_); });
+            inputField_.text = (_value + 80).ToString();
+            inputField_.onSelect.AddListener((string str_) => { inputField_.text = string.Empty; });
+            inputField_.onEndEdit.AddListener((string str_) => { InputFieldf(str_, name_, slider_); });
+        }
+
+        _Initialize(Name.AudioMixer.Volume.Master, m_masterSlider, m_mastertInputField);
+        _Initialize(Name.AudioMixer.Volume.BGM, m_bgmSlider, m_bgmInputField);
+        _Initialize(Name.AudioMixer.Volume.SE, m_seSlider, m_seInputField);
+        _Initialize(Name.AudioMixer.Volume.UI, m_uiSlider, m_uiInputField);
+
+        /*
+         *         {
+            m_audioMixer.GetFloat(Name.AudioMixer.Volume.Master, out float _value);
+            m_masterSlider.value = _value;
+            m_masterSlider.onValueChanged.AddListener((float value_) => { Sliderf(value_, Name.AudioMixer.Volume.Master, m_mastertInputField); });
+            m_mastertInputField.text = (_value + 80).ToString();
+            m_mastertInputField.onSelect.AddListener((string str_) => { m_mastertInputField.text = string.Empty; });
+            m_mastertInputField.onEndEdit.AddListener((string str_) => { InputFieldf(str_, Name.AudioMixer.Volume.Master, m_masterSlider); });
         }
         {
-            m_AudioMixer.GetFloat(Name.AudioMixer.Volume.BGM, out float value);
-            m_BGMSlider.value = value;
-            m_BGMSlider.onValueChanged.AddListener((float v) => { Sliderf(v, Name.AudioMixer.Volume.BGM, m_BGMInputField); });
-            m_BGMInputField.text = (value + 80).ToString();
-            m_BGMInputField.onSelect.AddListener((string str) => { m_BGMInputField.text = string.Empty; });
-            m_BGMInputField.onEndEdit.AddListener((string str) => { InputFieldf(str, Name.AudioMixer.Volume.BGM, m_BGMSlider); });
+            m_audioMixer.GetFloat(Name.AudioMixer.Volume.BGM, out float _value);
+            m_bgmSlider.value = _value;
+            m_bgmSlider.onValueChanged.AddListener((float value_) => { Sliderf(value_, Name.AudioMixer.Volume.BGM, m_bgmInputField); });
+            m_bgmInputField.text = (_value + 80).ToString();
+            m_bgmInputField.onSelect.AddListener((string str_) => { m_bgmInputField.text = string.Empty; });
+            m_bgmInputField.onEndEdit.AddListener((string str_) => { InputFieldf(str_, Name.AudioMixer.Volume.BGM, m_bgmSlider); });
         }
         {
-            m_AudioMixer.GetFloat(Name.AudioMixer.Volume.SE, out float value);
-            m_SESlider.value = value;
-            m_SESlider.onValueChanged.AddListener((float v) => { Sliderf(v, Name.AudioMixer.Volume.SE, m_SEInputField); });
-            m_SEInputField.text = (value + 80).ToString();
-            m_SEInputField.onSelect.AddListener((string str) => { m_SEInputField.text = string.Empty; });
-            m_SEInputField.onEndEdit.AddListener((string str) => { InputFieldf(str, Name.AudioMixer.Volume.SE, m_SESlider); });
+            m_audioMixer.GetFloat(Name.AudioMixer.Volume.SE, out float _value);
+            m_seSlider.value = _value;
+            m_seSlider.onValueChanged.AddListener((float value_) => { Sliderf(value_, Name.AudioMixer.Volume.SE, m_seInputField); });
+            m_seInputField.text = (_value + 80).ToString();
+            m_seInputField.onSelect.AddListener((string str_) => { m_seInputField.text = string.Empty; });
+            m_seInputField.onEndEdit.AddListener((string str_) => { InputFieldf(str_, Name.AudioMixer.Volume.SE, m_seSlider); });
         }
         {
-            m_AudioMixer.GetFloat(Name.AudioMixer.Volume.UI, out float value);
-            m_UISlider.value = value;
-            m_UISlider.onValueChanged.AddListener((float v) => { Sliderf(v, Name.AudioMixer.Volume.UI, m_UIInputField); });
-            m_UIInputField.text = (value + 80).ToString();
-            m_UIInputField.onSelect.AddListener((string str) => { m_UIInputField.text = string.Empty; });
-            m_UIInputField.onEndEdit.AddListener((string str) => { InputFieldf(str, Name.AudioMixer.Volume.UI, m_UISlider); });
+            m_audioMixer.GetFloat(Name.AudioMixer.Volume.UI, out float _value);
+            m_uiSlider.value = _value;
+            m_uiSlider.onValueChanged.AddListener((float value_) => { Sliderf(value_, Name.AudioMixer.Volume.UI, m_uiInputField); });
+            m_uiInputField.text = (_value + 80).ToString();
+            m_uiInputField.onSelect.AddListener((string str_) => { m_uiInputField.text = string.Empty; });
+            m_uiInputField.onEndEdit.AddListener((string str_) => { InputFieldf(str_, Name.AudioMixer.Volume.UI, m_uiSlider); });
         }
+         */
 
         #region 悲しみのforナシ直書きの理由
 
         /*
-        var names = new string[4] { Name.AudioMixer.Volume.Master, Name.AudioMixer.Volume.BGM, Name.AudioMixer.Volume.SE, Name.AudioMixer.Volume.UI };
-        var sliders = new Slider[4] { m_MasterSlider, m_BGMSlider, m_SESlider, m_UISlider };
-        var inputfields = new TMP_InputField[4] { m_MastertInputField, m_BGMInputField, m_SEInputField, m_UIInputField };
+        var names_ = new string[4] { Name.AudioMixer.Volume.Master, Name.AudioMixer.Volume.BGM, Name.AudioMixer.Volume.SE, Name.AudioMixer.Volume.UI };
+        var sliders_ = new Slider[4] { m_masterSlider, m_bgmSlider, m_seSlider, m_uiSlider };
+        var inputfields_ = new TMP_InputField[4] { m_MastertInputField, m_BGMInputField, m_SEInputField, m_UIInputField };
 
         for(int i = 0; i < names.Length; ++i)
         {
@@ -129,8 +146,9 @@ public class SoundVolumeManager : MonoBehaviour
                 sliders[i].value = int.Parse(str) - 80;
             });
         }
-        本来であればこのようにforでまとめて書きたかったがコールバックを登録している都合上関数内部に配列からインデックスで取り出している変数があるのがよろしくなく実行するとエラーがでる
-        関数配列で実装のほうが関数以外の場所は処理をまとめて実装できるがdelegateによる関数型宣言もろもろ含めてフィールド等へのコードが散見してしまうので泣きながらそれぞれ別に記述
+         * 本来であればこのようにforでまとめて書きたかったがコールバックを登録している都合上
+         * 関数内部に配列からインデックスで取り出している変数があるのがよろしくないのか実行するとエラーがでる
+         * 関数配列で実装のほうが関数以外の場所は処理をまとめて実装できるがフィールド等へのコードが散見してしまったり実質的な記述量はむしろ増えるので泣きながらそれぞれ別に記述
          */
 
         #endregion 悲しみのforナシ直書きの理由
@@ -141,29 +159,29 @@ public class SoundVolumeManager : MonoBehaviour
     {
         var save = new SaveData
         {
-            MuteSound = m_MuteSoundToggle.isOn,
-            MasterVolume = m_MasterSlider.value,
-            BGMVolume = m_BGMSlider.value,
-            SEVolume = m_SESlider.value,
-            UIVolume = m_UISlider.value
+            MuteSound = m_muteSoundToggle.isOn,
+            MasterVolume = m_masterSlider.value,
+            BGMVolume = m_bgmSlider.value,
+            SEVolume = m_seSlider.value,
+            UIVolume = m_uiSlider.value
         };
 
-        JsonFileSystem.Save(FilePath, save);
+        JsonFileSystem.Save(m_FILEPATH, save);
     }
 
     [ContextMenu("Load")]
     public void Load()
     {
-        if (false ==  JsonFileSystem.Load<SaveData>(FilePath, out var save))
+        if (false == JsonFileSystem.Load<SaveData>(m_FILEPATH, out var save))
         {
             return;
         }
 
-        m_MuteSoundToggle.isOn = save.MuteSound;
-        m_MasterSlider.value = save.MasterVolume;
-        m_BGMSlider.value = save.BGMVolume;
-        m_SESlider.value = save.SEVolume;
-        m_UISlider.value = save.UIVolume;
+        m_muteSoundToggle.isOn = save.MuteSound;
+        m_masterSlider.value = save.MasterVolume;
+        m_bgmSlider.value = save.BGMVolume;
+        m_seSlider.value = save.SEVolume;
+        m_uiSlider.value = save.UIVolume;
     }
     #endregion Functions
 }
