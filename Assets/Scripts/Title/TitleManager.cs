@@ -1,82 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// タイトルシーンを管理するクラス
+/// </summary>
 public class TitleManager : MonoBehaviour
 {
-    public enum State { WaitAnyInput, WaitMenu, WaitCredits, }
-    public State state { get; private set; } = State.WaitAnyInput;
-    [SerializeField] GameObject menu;
-    [SerializeField] GameObject room;
+    [SerializeField] TitlePressAnyKey m_pressAnyKey;
+    [SerializeField] TitleMenu m_menu;
+    [SerializeField] TitleCredit m_credit;
+    [SerializeField] FadePanelSystem m_creditFadePanelSystem;
 
-    [SerializeField] T_PressAnyKeyScript m_PressAnyKey;
-    [SerializeField] T_MenuScript m_Menu;
-    [SerializeField] T_CreditsScript m_Credits;
-    [SerializeField] FadePanelSystem m_FadePanelSystem;
+#if UNITY_EDITOR
+    [Header("Debug"), SerializeField]
+#endif
+    bool m_isEntered = false;
+
+    InputActionMapSettings m_input;
 
     void OnEnable()
     {
-        var map = new InputActionMapSettings();
-        map.UI.Any.started += OnClick_AnyInput;
-        map.Enable();
+        m_input = new();
+        m_input.UI.Any.started += OnClickAnyInput;
+        m_input.Enable();
     }
     void OnDisable()
     {
-        var map = new InputActionMapSettings();
-        map.UI.Any.started -= OnClick_AnyInput;
-        map.Disable();
+        m_input.UI.Any.started -= OnClickAnyInput;
+        m_input.Disable();
     }
 
-    void OnClick_AnyInput(InputAction.CallbackContext context)
+    void OnClickAnyInput(InputAction.CallbackContext context_)
     {
-        if (state == State.WaitAnyInput)
+        if (m_isEntered == false)
         {
-            SetState(state);
+            m_isEntered = true;
+            m_pressAnyKey.Enter();
         }
     }
 
     void Start()
     {
-        m_PressAnyKey.Enable();
-        m_Menu.Disable();
-        m_Credits.Disable();
-        m_FadePanelSystem.Disable();
+        m_pressAnyKey.Enable();
+        m_menu.Disable();
+        m_credit.Disable();
+        m_creditFadePanelSystem.Disable();
 
-        m_PressAnyKey.Flash.OnFlashFinish += m_Menu.Enable;
-        m_PressAnyKey.Flash.OnFlashFinish += m_PressAnyKey.Disable;
+        m_pressAnyKey.Initialize();
+        m_menu.Initialize();
+        m_credit.Initialize();
 
-        m_Menu.OnMenuCredits += () =>
+        m_pressAnyKey.FlashSystem.OnFlashFinished += () =>
         {
-            m_FadePanelSystem.Fade();
-            m_FadePanelSystem.OnFadeComplete += m_Credits.Enable;
-            m_FadePanelSystem.OnFadeEnd += () =>
+            m_menu.Enable();
+            m_pressAnyKey.Disable();
+        };
+
+        m_menu.OnShowCredit += () =>
+        {
+            m_creditFadePanelSystem.Fade();
+            m_creditFadePanelSystem.OnFadeInCompleted += m_credit.Enable;
+            m_creditFadePanelSystem.OnFadeFinished += () =>
             {
-                m_FadePanelSystem.OnFadeComplete -= m_Credits.Enable;
+                m_creditFadePanelSystem.OnFadeInCompleted -= m_credit.Enable;
             };
         };
 
-        m_Credits.OnHideCredits += () =>
+        m_credit.OnHideCredit += () =>
         {
-            m_FadePanelSystem.Fade();
-            m_FadePanelSystem.OnFadeComplete += m_Credits.Disable;
-            m_FadePanelSystem.OnFadeEnd += () =>
+            m_creditFadePanelSystem.Fade();
+            m_creditFadePanelSystem.OnFadeInCompleted += m_credit.Disable;
+            m_creditFadePanelSystem.OnFadeFinished += () =>
             {
-                m_FadePanelSystem.OnFadeComplete -= m_Credits.Disable;
+                m_creditFadePanelSystem.OnFadeInCompleted -= m_credit.Disable;
             };
         }; 
-    }
-
-    void SetState(State state_)
-    {
-        switch(state_)
-        {
-            case State.WaitAnyInput:
-                m_PressAnyKey.EnterEvent();
-                state = State.WaitMenu;
-                break;
-            case State.WaitMenu:
-                break;
-        }
     }
 }

@@ -101,14 +101,14 @@ public class Rebind : MonoBehaviour
         // InputActionAssetの上書き情報の保存
         var json = _actionAsset.SaveBindingOverridesAsJson();
 
-        JsonFileManager.Save(m_FilePath, json);
+        JsonFileSystem.Save(m_FilePath, json);
     }
 
     public void Load()
     {
         if(_actionAsset == null) return;
 
-        if (false == JsonFileManager.Load(m_FilePath, out var _str))
+        if (false == JsonFileSystem.Load(m_FilePath, out var _str))
         {
             return;
         }

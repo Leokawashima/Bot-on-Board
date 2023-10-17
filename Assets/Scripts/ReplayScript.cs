@@ -39,7 +39,7 @@ public class ReplayScript : MonoBehaviour
             data = frames.ToArray(),
         };
 
-        JsonFileManager.Save(m_FilePath, save);
+        JsonFileSystem.Save(m_FilePath, save);
 
         Debug.Log("Saved");
     }
@@ -52,7 +52,7 @@ public class ReplayScript : MonoBehaviour
 
     public IEnumerator LoadReplay()
     {
-        if(!JsonFileManager.Load<ReplayData>(m_FilePath, out var save))
+        if(!JsonFileSystem.Load<ReplayData>(m_FilePath, out var save))
         {
 #if UNITY_EDITOR
             Debug.Log("セーブないぞ");

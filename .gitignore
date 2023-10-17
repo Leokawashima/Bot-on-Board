@@ -1,13 +1,13 @@
 *.csproj
 *.sln
 *.suo
+.vsconfig
+.vscode/
 Library/
 Logs/
 obj/
 UserSettings/
 Temp/
 .vs/
-Assets/System/TMPFonts/
 Assets/Systems/TMPFonts/
-Assets/System/TMPFonts.meta
-Assets/System.meta
+Assets/Downloads/ProPixelizer/

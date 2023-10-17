@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/22CI0201/22CI0201_Test.unity.meta
+guid: f8f16aa5783361544832cfa98d221eb8
+========
 guid: 5894ea2c40f800e49be1171beb5eae0f
+>>>>>>>> Alpha:Assets/Scenes/Result.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

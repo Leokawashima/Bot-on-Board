@@ -9,7 +9,7 @@ public class FlashSystem : MonoBehaviour
     [SerializeField] int m_Cnt = 4;
     [SerializeField] float m_Time = 1;
 
-    public event Action OnFlashFinish;
+    public event Action OnFlashFinished;
     
     public void Flash()
     {
@@ -27,6 +27,6 @@ public class FlashSystem : MonoBehaviour
             yield return new WaitForSeconds(perFlashTime);
         }
 
-        OnFlashFinish?.Invoke();
+        OnFlashFinished?.Invoke();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -19,6 +20,7 @@ public class GUIManager : MonoBehaviour
 #endif
     PlayerUIManager[] m_PlayerUIArray;
 
+    public static event Action Event_TurnInitializeCutIn;
     public static event Action Event_ButtonPlace;
     public static event Action Event_ButtonTurnEnd;
 
@@ -27,6 +29,7 @@ public class GUIManager : MonoBehaviour
         GameSystem.Event_Initialize += OnInitialize;
         GameSystem.Event_Turn_Place += OnTurnPlace;
         GameSystem.Event_Turn_TurnEnd += OnTurnEnd;
+        GameSystem.Event_Turn_AIAction += OnAIAction;
         GameSystem.Event_Turn_Initialize += OnTurnInitialize;
         GameSystem.Event_Turn_GameSet += OnTurnGameSet;
     }
@@ -35,11 +38,12 @@ public class GUIManager : MonoBehaviour
         GameSystem.Event_Initialize -= OnInitialize;
         GameSystem.Event_Turn_Place -= OnTurnPlace;
         GameSystem.Event_Turn_TurnEnd -= OnTurnEnd;
+        GameSystem.Event_Turn_AIAction -= OnAIAction;
         GameSystem.Event_Turn_Initialize -= OnTurnInitialize;
         GameSystem.Event_Turn_GameSet -= OnTurnGameSet;
     }
 
-    void Start()
+    void Awake()
     {
         Singleton ??= this;
     }
@@ -75,20 +79,30 @@ public class GUIManager : MonoBehaviour
     void OnTurnInitialize()
     {
         m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);
-        m_CutInManager.CutIn("GameStart");
-
         foreach(var ui_ in m_PlayerUIArray)
             ui_.TurnInitialize();
-        m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
+
+        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, () =>
+        {
+            Debug.Log("TurnCutinEnd");
+            Event_TurnInitializeCutIn?.Invoke();
+        });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex);
+        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex, () =>
+        {
+            Debug.Log("PlaceCutinEnd");
+            m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
+        });
     }
     void OnTurnEnd()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex);
-        m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
+
+    }
+    void OnAIAction()
+    {
+        m_CutInManager.CutIn("AIAction");
     }
     void OnTurnGameSet()
     {

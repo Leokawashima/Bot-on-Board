@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -41,11 +42,13 @@ public class GameSystem : MonoBehaviour
     {
         //演出系の処理を作ったらそっちのコールバックイベント等につなぎを任せる
         MapManager.Event_MapCreated += OnMapCreated;
+        GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
     }
     void OnDisable()
     {
         MapManager.Event_MapCreated -= OnMapCreated;
+        GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
     }
 #endregion EventSubscribe
@@ -105,8 +108,6 @@ public class GameSystem : MonoBehaviour
 
         m_BattleState = BattleState.Initialize;
         Event_Turn_Initialize?.Invoke();
-
-        TurnPlace();
     }
     void TurnPlace()
     {
@@ -118,9 +119,15 @@ public class GameSystem : MonoBehaviour
         m_BattleState = BattleState.AIAction;
         Event_Turn_AIAction?.Invoke();
 
-        m_AIManager.AIAction();
+        StartCoroutine(Co_Delay());
 
-        TurnFinalize();
+        IEnumerator Co_Delay()
+        {
+            yield return new WaitForSeconds(0.5f);
+            m_AIManager.AIAction();
+            yield return new WaitForSeconds(0.5f);
+            TurnFinalize();
+        }
     }
     void TurnFinalize()
     {
@@ -272,11 +279,24 @@ public class GameSystem : MonoBehaviour
         TurnInitialize();
     }
 
+    void OnInitializeCutIn()
+    {
+        StartCoroutine(Co_Delay());
+
+        IEnumerator Co_Delay()
+        {
+            yield return new WaitForSeconds(0.1f);
+            TurnPlace();
+        }
+    }
+
     void OnButton_TurnEnd()
     {
         if (++m_PlayerIndex < 2)//人数に応じたものにする
         {
             Event_Turn_TurnEnd?.Invoke();
+
+            TurnPlace();
         }
         else
         {
