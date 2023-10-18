@@ -41,7 +41,7 @@ public class PlayerUIManager : MonoBehaviour
         var _chip = LocalPlayerManager.Singleton.m_SelectChip;
         if(_chip != null)
         {
-            if(MapManager.Singleton.m_ObjStates[_chip.m_Pos.y, _chip.m_Pos.x] == -1)
+            if(MapManager.Singleton.m_ObjStates[_chip.m_position.y, _chip.m_position.x] == -1)
             {
                 var _cost = 0; //仮実装しないと提出できないのでマップのコストをここで設定
                                //本実装では　オブジェクト依存のコスト設定　賢さに応じての倍率補正設定　＆図鑑ナンバーのようなインデックスが必須
@@ -54,7 +54,7 @@ public class PlayerUIManager : MonoBehaviour
                     case 3: _cost = -100; break;
                     case 4: _cost = 10000; break;
                 }
-                MapManager.Singleton.SetObjState(_chip.m_Pos, _cost);
+                MapManager.Singleton.SetObjState(_chip.m_position, _cost);
 
                 m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
                 m_CardManager.GetSelectCard.Trash();

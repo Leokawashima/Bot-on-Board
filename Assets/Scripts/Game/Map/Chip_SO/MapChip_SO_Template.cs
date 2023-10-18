@@ -22,7 +22,7 @@ public abstract class MapChip_SO_Template : ScriptableObject
         var _mc = _go.AddComponent<MapChip>();
         _mc.m_SO = this;
 
-        _mc.m_Pos = posdata_;
+        _mc.m_position = posdata_;
 
         return _mc;
     }
