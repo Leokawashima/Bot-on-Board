@@ -152,23 +152,42 @@ namespace PlayerData
   これはAwakeが呼び出されるときに他のオブジェクトの生成処理が終わっていない可能性を考慮し、  
   Awakeでは他のコンポーネントを参照、取得以外の初期化を行い、  
   StartではAwakeでできなかった初期化処理を記述します。  
-  ``` CSharp
-    [SerializeField] int m_MapSizeX = 10;
-    [SerializeField] int m_MapSizeY = 5;
-    readonly Vector2Int m_MAP_SIZE;
-    // MapManager 型
-    readonly MapManager m_MAP_MANAGER;
-  
-    void Awake()
-    {
-      // 参照、取得なしでできる初期化を行う(Vector2Intを[SerializeField]しろは言わないでね)
-      m_MAP_SIZE = new Vector2Int(m_MapSizeX, m_MapSizeY);
-    }
+``` CSharp
+  [SerializeField] int m_MapSizeX = 10;
+  [SerializeField] int m_MapSizeY = 5;
+  readonly Vector2Int m_MAP_SIZE;
+  // MapManager 型
+  readonly MapManager m_MAP_MANAGER;
 
-    void Start()
-    {
-  　　// 相手のシングルトンインスタンスを取得する
-      // MapManager.Singleton はAwakeで初期化されている
-      m_MAP_MANAGER = MapManager.Singleton;
-    }
-  ```
+  void Awake()
+  {
+    // 参照、取得なしでできる初期化を行う(Vector2Intを[SerializeField]しろは言わないでね)
+    m_MAP_SIZE = new Vector2Int(m_MapSizeX, m_MapSizeY);
+  }
+
+   void Start()
+  {
+　　// 相手のシングルトンインスタンスを取得する
+    // MapManager.Singleton はAwakeで初期化されている
+    m_MAP_MANAGER = MapManager.Singleton;
+  }
+```
+  * varやnew()のような型推論、初期化を省略する書き方について。
+    原則この記述を積極的に活用してコーディングします。
+    これはコードの修正が必要な場面等でクラス型などを使用している場合は修正箇所を減らすことができ、  
+    宣言時も型名が著しく長くなってしまい変数名を追いづらくなる事態を避けることができる為です。  
+    しかし、int, float, double等の数値の取り扱いをvarで記述すると初期化する値次第でヒューマンエラーが発生します。  
+    もちろんvarで宣言したほうが簡潔であったり複数の変数を宣言したい場合名前の開始位置を統一できる等活用すべき時もあります。  
+    そのため、この記述に関してはコードライターに委ねます。  
+    読み手にとって理解しやすいか、読みやすいかを意識して記述することを念頭に置いてください。
+    また、変数宣言を行うときは念入りにバグが発生することのないように読み返すこと。  
+``` CSharp
+  // この場合はクラス名にも問題はあるがvarを積極採用
+  var _classObject = new TooLongClassNameHogeHuga();
+  // この場合はvar宣言を推奨するがAStarArgorithm型で宣言しても良い。
+  var _classObject = new AStarAlgorithm();
+
+  // この場合は_playerHPは本当に0で初期化していいのか？0.0fじゃなくていいのか？
+  var _playerIndex = 0;
+  var _playerHP = 0;
+ ```
