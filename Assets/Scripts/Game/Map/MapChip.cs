@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class MapChip : MonoBehaviour
 {
     public MapChip_SO_Template m_SO;
-    public Vector2Int m_Pos = Vector2Int.zero;
+    public Vector2Int m_position = Vector2Int.zero;
 
-    Material m_Material;
-    bool m_Flag = false;
+    Material m_material;
+    bool m_isContinue = false;
 
     void Start()
     {
-        m_Material = GetComponent<Renderer>().material;
+        m_material = GetComponent<Renderer>().material;
     }
 
     public void HighLight()
@@ -21,24 +21,26 @@ public class MapChip : MonoBehaviour
     }
     public void Stop()
     {
-        m_Flag = false;
+        m_isContinue = false;
     }
 
     IEnumerator CoHighLight()
     {
-        m_Flag = true;
-        float h, s, v;
-        Color.RGBToHSV(m_Material.color, out h,  out s, out v);
-        var outline = m_Material.GetColor("_OutlineColor");
+        m_isContinue = true;
 
-        while(m_Flag)
+        float _h, _s, _v;
+        Color.RGBToHSV(m_material.color, out _h,  out _s, out _v);
+        var _outLine = m_material.GetColor("_OutlineColor");
+
+        m_material.SetColor("_OutlineColor", Color.blue);
+
+        while (m_isContinue)
         {
-            m_Material.color = Color.HSVToRGB(h, Time.time % 1, v);
-            m_Material.SetColor("_OutlineColor", Color.blue);
+            m_material.color = Color.HSVToRGB(_h, Time.time % 1, _v);
             yield return new WaitForSeconds(0.1f);
         }
 
-        m_Material.color = Color.HSVToRGB(h, s, v);
-        m_Material.SetColor("_OutlineColor", outline);
+        m_material.color = Color.HSVToRGB(_h, _s, _v);
+        m_material.SetColor("_OutlineColor", _outLine);
     }
 }
