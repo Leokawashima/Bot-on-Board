@@ -1,104 +1,131 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+// UniTask非同期処理を扱う名前空間
+// プロジェクトに自分でUniTaskというGitのパッケージを導入する必要がある
+// 参考のURL： https://shibuya24.info/entry/unity-start-unitask
 using UnityEngine;
 using UnityEngine.Networking;
+// HTTPネットワークを扱う名前空間
+// 参考： https://kan-kikuchi.hatenablog.com/entry/UnityWebRequest
 
+/// <summary>
+/// ChatGPTのAPIを使用してやり取りするクラス
+/// </summary>
+/// 命名規則やクラスを構造体などに変えているが基本は以下から転用
+/// 用途に合わせて改善、エラー処理の対策を施していく
+/// ソース元URL： https://note.com/negipoyoc/n/n88189e590ac3
 public class ChatGPTConnection
 {
-    const string _apiUrl = "https://api.openai.com/v1/chat/completions";
-    readonly string _apiKey;
-    readonly List<ChatGPTMessageModel> _messageList;
-    Dictionary<string, string> _headers { get{
-            return new Dictionary<string, string>
-            {
-                {"Authorization", "Bearer " + _apiKey},
-                {"Content-type", "application/json"},
-                {"X-Slack-No-Retry", "1"}
-            };}
+    /*
+     * 使用するAPIキー コンストラクタで初期化する
+     * APIキーについてはまずこれを読むべし： https://udemy.benesse.co.jp/design/3d/chatgpt-unity.html
+     * 少しスクロールするとIキーを発行する方法がのっている
+     */
+    readonly string m_API_KEY;
+
+    //会話履歴を保持するリスト
+    readonly List<ChatGPTMessageModel> m_MESSAGE_LIST = new();
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
+    /// <param name="apiKey_">使用するAPIKey</param>
+    /// <param name="content_">ルール設定コンテンツ</param>
+    public ChatGPTConnection(string apiKey_, string content_)
+    {
+        m_API_KEY = apiKey_;
+        //送るメッセージの先頭に文言を追加
+        //ここでは role = "system" で要はプロンプトを指定
+        //ユーザーの発言ではなく、こういうていで話してねとか、口調で話してとか
+        //そういうのをユーザーからお願いするのではなくルールを定義するようにsystemから指定する
+        m_MESSAGE_LIST.Add(new ChatGPTMessageModel()
+        {
+            role = "system",
+            content = content_
+        });
     }
 
-    public ChatGPTConnection(string apiKey, string content)
+    /// <summary>
+    /// /非同期でAPIのメッセージを受け取りデータ構造体として返す
+    /// </summary>
+    /// <param name="userMessage_"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception">WebRequestのエラー</exception>
+    public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage_)
     {
-        _apiKey = apiKey;
-        _messageList = new List<ChatGPTMessageModel>() { new ChatGPTMessageModel() { role = "system", content = content } };
-    }
+        //文章生成AIのAPIのエンドポイントを設定
+        var _apiUrl = "https://api.openai.com/v1/chat/completions";
 
-    public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage)
-    {
-        _messageList.Add(new ChatGPTMessageModel { role = "user", content = userMessage });
+        // ユーザーメッセージを追加
+        // 発言ルールを設定できる
+        m_MESSAGE_LIST.Add(new ChatGPTMessageModel { role = "user", content = userMessage_ });
 
-        var options = new ChatGPTCompletionRequestModel()
+        //文章生成で利用するモデルやトークン上限、プロンプトをオプションに設定
+        var _options = new ChatGPTCompletionRequestModel()
         {
             model = "gpt-3.5-turbo",
-            messages = _messageList
+            messages = m_MESSAGE_LIST
         };
-        var jsonOptions = JsonUtility.ToJson(options);
+        var jsonOptions = JsonUtility.ToJson(_options);
 
-        Debug.Log("自分:" + userMessage);
-
-        using var request = new UnityWebRequest(_apiUrl, "POST")
+        // OpenAIの文章生成(Completion)にAPIリクエストを送るための構造体
+        // usingなのでメソッド終了時に自動的に破棄される
+        using var _request = new UnityWebRequest(_apiUrl, "POST")
         {
             uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonOptions)),
             downloadHandler = new DownloadHandlerBuffer()
         };
 
-        foreach(var header in _headers)
+        // OpenAIのAPIリクエストに必要なヘッダー情報を設定
+        var _headers = new Dictionary<string, string>
+            {
+                {"Authorization", "Bearer " + m_API_KEY},
+                {"Content-type", "application/json"},
+                {"X-Slack-No-Retry", "1"}
+            };
+
+        // ヘッダー情報を作成したリクエスト構造体にセット
+        foreach(var _header in _headers)
         {
-            request.SetRequestHeader(header.Key, header.Value);
+            _request.SetRequestHeader(_header.Key, _header.Value);
         }
 
-        await request.SendWebRequest();
+        // リクエストを送る(非同期)
+        await _request.SendWebRequest();
 
-        if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        // エラーが発生した場合
+        if(_request.result == UnityWebRequest.Result.ConnectionError ||
+            _request.result == UnityWebRequest.Result.ProtocolError)
         {
-            Debug.LogError(request.error);
+#if UNITY_EDITOR
+            Debug.LogError(_request.error);
+#endif
             throw new Exception();
         }
+        // 受け取ったメッセージをJSONから変換し返す
         else
         {
-            var responseString = request.downloadHandler.text;
-            var responseObject = JsonUtility.FromJson<ChatGPTResponseModel>(responseString);
-
-            //元の文字列
-            Debug.Log("<color=red>ChatGPT:" + responseObject.choices[0].message.content + "</color>");
-            //数字に正規化された文字列
-            Debug.Log("<color=yellow>ChatGPT:" + StrNomalizeToNumber(responseObject.choices[0].message.content) + "</color>");
-
-            _messageList.Add(responseObject.choices[0].message);
-            return responseObject;
-        }
-
-        string StrNomalizeToNumber(string str)
-        {
-            //数字のみに正規化するパターン(詳しくはggr)
-            string pattern = @"\d+";
-            //数字のみを抜き出した文字配列として返す　実質string[]
-            MatchCollection match = Regex.Matches(str, pattern);
-            //数字の間にいれる接続文字
-            string conection = ",";
-            //単体の文字列型に直して返す
-            return string.Join(conection, match);
+            var _responseJson = _request.downloadHandler.text;
+            var _responseObject = JsonUtility.FromJson<ChatGPTResponseModel>(_responseJson);
+            // 帰ってきたメッセージをメッセージリストに格納している
+            // 要するに会話の履歴を送って会話しているので履歴の数に上限を設けないとすぐTokenがあの世いき
+            m_MESSAGE_LIST.Add(_responseObject.choices[0].message);
+            return _responseObject;
         }
     }
 }
 
-#region ChatGPT Models
-/// <summary>
-/// メッセージ一回単位の構造体
-/// </summary>
+// 発言単位のデータを格納するための構造体
 [Serializable]
-public struct ChatGPTMessageModel
+ public struct ChatGPTMessageModel
 {
     public string role;
     public string content;
 }
 
-/// <summary>
-/// リクエスト送信用の構造体
-/// </summary>
+// ChatGPT APIにRequestを送るための構造体
 [Serializable]
 public struct ChatGPTCompletionRequestModel
 {
@@ -106,9 +133,7 @@ public struct ChatGPTCompletionRequestModel
     public List<ChatGPTMessageModel> messages;
 }
 
-/// <summary>
-/// レスポンスを受け取るための構造体
-/// </summary>
+// ChatGPT APIからのResponseを受け取るための構造体
 [Serializable]
 public struct ChatGPTResponseModel
 {
@@ -118,9 +143,8 @@ public struct ChatGPTResponseModel
     public Choice[] choices;
     public Usage usage;
 
-    /// <summary>
-    /// レスポンスの文字列構造体
-    /// </summary>
+    // 会話単位の構造体
+    // 恐らくメッセージを再生成したりした時に配列が伸びていく
     [Serializable]
     public struct Choice
     {
@@ -129,9 +153,7 @@ public struct ChatGPTResponseModel
         public string finish_reason;
     }
 
-    /// <summary>
-    /// トークン使用量の構造体
-    /// </summary>
+    // トークン情報
     [Serializable]
     public struct Usage
     {
@@ -140,4 +162,3 @@ public struct ChatGPTResponseModel
         public int total_tokens;
     }
 }
-#endregion
