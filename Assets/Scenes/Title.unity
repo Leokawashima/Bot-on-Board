@@ -7691,6 +7691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 519693161}
+  m_defaultStateName: New State
 --- !u!1 &524836504
 GameObject:
   m_ObjectHideFlags: 0
@@ -28420,6 +28421,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1995572905}
+    - target: {fileID: 5825649770479556743, guid: aff265a8993ee1f43a43ebd3ec6894d2, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6165904561354725140, guid: aff265a8993ee1f43a43ebd3ec6894d2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
