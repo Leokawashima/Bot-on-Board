@@ -10,6 +10,8 @@ public abstract class MapObject_SO_Template : ScriptableObject
         m_Destroy_MaxTurn = 10,
         m_Destroy_SpawnTurn = 10;
 
+    public int m_cost = 0;
+
     public bool m_IsCollider = false;
 
     public GameObject m_Prefab;
@@ -18,9 +20,10 @@ public abstract class MapObject_SO_Template : ScriptableObject
     const float CardSelectOffset = 50.0f;
 
     Animator m_Animator;
-    protected Animator GetAnimator {
-        get { 
-            return m_Animator ? m_Animator = m_Prefab.GetComponent<Animator>() : m_Animator;
+    protected Animator GetAnimator
+    { get
+        { 
+            return m_Animator == null ? m_Animator = m_Prefab.GetComponent<Animator>() : m_Animator;
         }
     }
 
@@ -31,6 +34,7 @@ public abstract class MapObject_SO_Template : ScriptableObject
         mo.m_SO = this;
 
         mo.m_Pos = posdata_;
+        mo.NowTurn = m_Destroy_SpawnTurn;
 
         return mo;
     }
@@ -55,7 +59,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
         return moc;
     }
-    public virtual void TrunUpDate() { }
     public virtual void Destry() { }
 }
 

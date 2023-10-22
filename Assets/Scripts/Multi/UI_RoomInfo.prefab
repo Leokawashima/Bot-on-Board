@@ -150,10 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3f3d175c2c356e4ab2cb6478754b543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNameText: {fileID: 8625833576552403558}
-  roomOptionText: {fileID: 7069917209832636127}
-  roomPasswardImage: {fileID: 5447227208888228827}
-  roomUserText: {fileID: 3020791668674609658}
+  m_button: {fileID: 7412754329941126202}
+  m_nameText: {fileID: 8625833576552403558}
+  m_optionText: {fileID: 7069917209832636127}
+  m_passwardImage: {fileID: 4095641692027804901}
+  m_UserText: {fileID: 3020791668674609658}
 --- !u!1 &2923252812954705176
 GameObject:
   m_ObjectHideFlags: 0

@@ -61,15 +61,15 @@ public class AIManager : MonoBehaviour
             _ai.Action();
 
         //以下AI2体前提処理　時間が足りないのでこのまま
-        var _flag = false;
-        if(m_AIList[0].m_Position == m_AIList[1].m_Position) _flag = true;//完全に同一のマスにいる
-        if(m_AIList[0].m_Position == m_AIList[1].m_PrePosition)//[0]が[1]の移動前にいた場所にがいる
+        var _isHit = false;
+        if(m_AIList[0].Position == m_AIList[1].Position) _isHit = true;//完全に同一のマスにいる
+        if(m_AIList[0].Position == m_AIList[1].PrePosition)//[0]が[1]の移動前にいた場所にいる
         {
-            if(m_AIList[0].m_PrePosition == m_AIList[1].m_Position)//[1]が[0]の移動前にいた場所にいる
-                _flag = true;//つまりすれ違っているのでHit判定
+            if(m_AIList[0].PrePosition == m_AIList[1].Position)//[1]が[0]の移動前にいた場所にいる
+                _isHit = true;//つまりすれ違っているのでHit判定
         }
 
-        if(_flag)
+        if(_isHit)
         {
             for(int i = 0; i < 2; ++i)
             {
@@ -79,5 +79,10 @@ public class AIManager : MonoBehaviour
             }
         }
         //ここまでAI2体前提処理
+
+        foreach(var _ai in m_AIList)
+        {
+            MapManager.Singleton.AIHitObject(_ai.Position, _ai);
+        }
     }
 }

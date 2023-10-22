@@ -8,7 +8,7 @@ using ZXing.QrCode;
 /// <summary>
 /// リザルトシーンのツイートを管理するクラス
 /// </summary>
-public class ResultTweetManager : MonoBehaviour
+public class ResultTweet : MonoBehaviour
 {
     [SerializeField] TMP_InputField m_tweetInputField;
     [SerializeField] Button m_tweetButton;

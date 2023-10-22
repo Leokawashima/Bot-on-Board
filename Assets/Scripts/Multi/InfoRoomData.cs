@@ -1,49 +1,49 @@
-﻿using System.Net;
+﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using RoomUDPSystem;
 
 /// <summary>
-/// Roomの情報を格納するクラス
+/// Room単位の情報を表示、保持するクラス
 /// </summary>
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class InfoRoomData : MonoBehaviour
 {
-    RoomListManager list;
+    RoomData m_roomData;
+    public RoomData RoomData => m_roomData;
 
-    public RoomData roomData = new();
+    [SerializeField] Button m_button;
+    [SerializeField] TMP_Text m_nameText;
+    [SerializeField] TMP_Text m_optionText;
+    [SerializeField] Image m_passwardImage;
+    [SerializeField] TMP_Text m_UserText;
 
-    [SerializeField] TextMeshProUGUI roomNameText;
-    [SerializeField] TextMeshProUGUI roomOptionText;
-    [SerializeField] GameObject roomPasswardImage;
-    [SerializeField] TextMeshProUGUI roomUserText;
+    public event Action<InfoRoomData> Event_Button;
 
-    public void OnClickInfo()
+    /// <summary>
+    /// 初期化関数
+    /// </summary>
+    /// <param name="roomData_">初期化に使用するRoomの情報</param>
+    public void Initialize(RoomData roomData_)
     {
-        list.SetSelectRoomInfo(this);
+        // フィールド設定
+        m_roomData = roomData_;
+        // イベントハンドラをボタンに登録
+        m_button.onClick.AddListener(OnButton);
+
+        // 表示情報設定
+        m_nameText.text = roomData_.Name;
+        m_passwardImage.enabled = (roomData_.HasPassward);
+        m_optionText.text = roomData_.Option;
+        m_UserText.text = roomData_.UserMax + "/" + roomData_.UserCount;
     }
 
-    public void SetInfo(RoomListManager list_, UDPMessage_RoomData data_)
+    /// <summary>
+    /// ボタンが押された時のイベントハンドラ
+    /// </summary>
+    void OnButton()
     {
-        list = list_;
-        roomData.address = data_.address;
-        roomData.name = data_.name;
-        roomNameText.text = data_.name;
-        roomData.passward = data_.passwardFlag;
-        roomPasswardImage.SetActive(data_.passwardFlag);
-        roomData.option = data_.option;
-        roomOptionText.text = data_.option;
-        roomData.userMax = data_.userMax;//最大人数
-        roomData.userCnt = data_.userCnt;//現在の人数
-        roomUserText.text = data_.userMax + "/" + data_.userCnt; 
+        Event_Button?.Invoke(this);
     }
-}
-
-public struct RoomData
-{
-    public IPAddress address;
-    public string name;
-    public string option;
-    public bool passward;
-    public int userMax;
-    public int userCnt;
 }

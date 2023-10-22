@@ -10,9 +10,9 @@ public class MapObjectCard : MonoBehaviour
     public Toggle m_Toggle;
     public CardManager m_CardManager;
 
-    public void ObjectSpawn(MapChip chip_, MapManager map_)
+    public MapObject ObjectSpawn(MapChip chip_, MapManager map_)
     {
-        m_SO.ObjectSpawn(chip_.m_position, chip_.transform.position + Vector3.up, map_.transform);
+        return m_SO.ObjectSpawn(chip_.m_position, chip_.transform.position + Vector3.up, map_.transform);
     }
 
     public void Trash()

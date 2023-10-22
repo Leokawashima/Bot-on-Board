@@ -11,6 +11,8 @@ public class InputFieldOnNumberOnly : MonoBehaviour
     [SerializeField] TMP_InputField m_inputField;
     [SerializeField] int m_valueMax = 100;
 
+    const char NULL = '\0';
+
     void Start()
     {
         m_inputField.onValidateInput += OnValidateInputField;
@@ -23,22 +25,25 @@ public class InputFieldOnNumberOnly : MonoBehaviour
     {
         // 数値か文字かどうかを判定する 数値以外は入力を行わない
         if(char.IsDigit(add_) == false)
-            return '\0';
+            return NULL;
 
         // 文字列が空じゃないかどうか判定する
         if(m_inputField.text != string.Empty)
         {
+            // 文字列を数値化
+            var _value = int.Parse(m_inputField.text);
+
             // 文字列が既に最大値を上回っている時 最大値に固定
-            if(int.Parse(m_inputField.text) > m_valueMax)
+            if(_value > m_valueMax)
             {
                 m_inputField.text = m_valueMax.ToString();
-                return '\0';
+                return NULL;
             }
-            // 文字列と入力した値の合計が最大値を上回っている時 最大値に固定
-            if(int.Parse(m_inputField.text) * 10 + char.GetNumericValue(add_) > m_valueMax)
+            // 文字列を一桁繰り上げて、入力した値の合計が最大値を上回っている時 最大値に固定
+            else if(_value * 10 + char.GetNumericValue(add_) > m_valueMax)
             {
                 m_inputField.text = m_valueMax.ToString();
-                return '\0';
+                return NULL;
             }
         }
 

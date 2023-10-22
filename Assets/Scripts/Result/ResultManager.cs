@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ResultManager : MonoBehaviour
 {
-    [SerializeField] Button TitleButton;
+    [SerializeField] Button m_titleButton;
 
     void Start()
     {
-        TitleButton.onClick.AddListener(OnButton_Title);
+        m_titleButton.onClick.AddListener(OnButtonTitle);
     }
 
-    void OnButton_Title()
+    void OnButtonTitle()
     {
         Initiate.Fade(Name.Scene.Title, Color.black, 1.0f);
     }

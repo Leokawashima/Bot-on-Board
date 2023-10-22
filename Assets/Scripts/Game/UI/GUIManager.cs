@@ -84,7 +84,6 @@ public class GUIManager : MonoBehaviour
 
         m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, () =>
         {
-            Debug.Log("TurnCutinEnd");
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
@@ -92,7 +91,6 @@ public class GUIManager : MonoBehaviour
     {
         m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex, () =>
         {
-            Debug.Log("PlaceCutinEnd");
             m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
         });
     }

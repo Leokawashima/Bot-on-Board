@@ -1,11 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Text;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using TMPro;
-using System.Net.Sockets;
+using RoomUDPSystem;
 
 /// <summary>
 /// RoomのUIを管理するクラス
@@ -23,9 +18,9 @@ public class RoomUIManager : MonoBehaviour
     [SerializeField] GameObject connectUI;
     [Header("アタッチ")]
     [SerializeField] RoomManager roomManager;
-    [SerializeField] RoomLogManager roomLog;
+    [SerializeField] LogSystem roomLog;
     [SerializeField] RoomListManager roomList;
-    [SerializeField] RoomConnectManager roomConnect;
+    [SerializeField] RoomConnectionManager roomConnect;
     public TMP_InputField nameText;
 
     public enum UIState { Select, MakeRoom, Host, Client }
@@ -34,7 +29,7 @@ public class RoomUIManager : MonoBehaviour
     {
         SetUI(UIState.Select);
 
-        roomList.Initialize();
+        roomList.Clear();
     }
 
     public void OnClick_Host()
@@ -91,7 +86,7 @@ public class RoomUIManager : MonoBehaviour
     {
         //テスト実装　通信処理を挟む
         RoomUDP.SetRoomState(RoomUDP.RoomState.Client);
-        RoomUDP.SetRoomIPAddress(roomList.selectRoom.roomData.address);
+        RoomUDP.SetRoomIPAddress(roomList.SelectInfoRoomData.RoomData.Address);
         //RoomUDP.SetRoomIPAddress(new IPAddress(new byte[] {127, 0, 0, 1}));
         Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
     }

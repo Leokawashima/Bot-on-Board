@@ -1314,7 +1314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 408ce2e8e2272c34ab7a1259d0251537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TitleButton: {fileID: 280074608}
+  m_titleButton: {fileID: 280074608}
 --- !u!1 &1532148141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,10 +1783,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39967e293e8b4f64d9fc88c81162fd60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tweetInputField: {fileID: 0}
-  m_tweetButton: {fileID: 0}
-  m_tweetForQRButton: {fileID: 0}
-  m_rawImage: {fileID: 0}
+  m_tweetInputField: {fileID: 1977465828}
+  m_tweetButton: {fileID: 1664623545}
+  m_tweetForQRButton: {fileID: 1238595053}
+  m_rawImage: {fileID: 900066431}
 --- !u!1 &1870750827
 GameObject:
   m_ObjectHideFlags: 0

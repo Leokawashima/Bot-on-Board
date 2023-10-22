@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ObjectName: "\u4E38\u592A"
   m_Info: "\u7F6E\u3044\u305F\u5834\u6240\u306F\u901A\u308C\u306A\u304F\u306A\u308B\u3002\u65A7\u3067\u65E9\u304F\u58CA\u305B\u308B\u3002"
+  m_Destroy_MaxTurn: 8
+  m_Destroy_SpawnTurn: 8
+  m_cost: 10000
+  m_IsCollider: 1
   m_Prefab: {fileID: 486553090382227240, guid: 2ba7ac26880514a4baeba85c2d2d5e74, type: 3}
   m_Card: {fileID: 8618209698020002616, guid: 799d8bd86af92f04d9eeb6978b963fee, type: 3}
-  m_IsCollider: 1
-  m_Destry_MaxTurn: 8
-  m_Destroy_NowTurn: 8
