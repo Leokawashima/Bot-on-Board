@@ -6281,7 +6281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 519693161}
-  m_defaultStateName: New State
+  m_defaultStateName: On
 --- !u!1 &575659613
 GameObject:
   m_ObjectHideFlags: 0
