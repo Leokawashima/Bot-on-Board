@@ -42,6 +42,11 @@ public class PlayerUIManager : MonoBehaviour
         {
             if(MapManager.Singleton.m_ObjStates[_chip.m_position.y, _chip.m_position.x] == -1)
             {
+                for (int i = 0; i < MapManager.Singleton.m_AIManagerList.Count; ++i)
+                {
+                    if (MapManager.Singleton.m_AIManagerList[i].Position == _chip.m_position)
+                        return;
+                }
                 var _mo = m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
                 _mo.Initialize(MapManager.Singleton);
                 m_CardManager.GetSelectCard.Trash();

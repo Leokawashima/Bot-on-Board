@@ -25,6 +25,8 @@ public class MapObject : MonoBehaviour
     public void ObjectDestroy(MapManager mapManager_)
     {
         mapManager_.MapObjectList.Remove(this);
+        mapManager_.SetObjState(m_Pos, -1);
+        mapManager_.SetCollisionState(m_Pos, false);
         Destroy(gameObject);
     }
 }
