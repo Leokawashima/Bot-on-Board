@@ -44,12 +44,14 @@ public class GameSystem : MonoBehaviour
         MapManager.Event_MapCreated += OnMapCreated;
         GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
+        GUIManager.Event_AnimGameSet += SystemFinalize;
     }
     void OnDisable()
     {
         MapManager.Event_MapCreated -= OnMapCreated;
         GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
+        GUIManager.Event_AnimGameSet -= SystemFinalize;
     }
 #endregion EventSubscribe
 
@@ -125,7 +127,7 @@ public class GameSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
             m_AIManager.AIAction();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.6f);
             TurnFinalize();
         }
     }
@@ -137,7 +139,7 @@ public class GameSystem : MonoBehaviour
         if (m_AIManager.CheckAIIsDead())
             TurnGameSet();
 
-        if(m_ElapsedTurn < m_ForceFinishTurn)
+        else if(m_ElapsedTurn < m_ForceFinishTurn)
         {
             m_ElapsedTurn++;
 
@@ -152,8 +154,6 @@ public class GameSystem : MonoBehaviour
     {
         m_GameState = GameState.GameSet;
         Event_Turn_GameSet?.Invoke();
-
-        SystemFinalize();
     }
 
     void TutorialModeInitialize()

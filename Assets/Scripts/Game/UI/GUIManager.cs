@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using ZXing.OneD;
 
 /// <summary>
 /// GUIを管理するクラス
@@ -14,7 +15,7 @@ public class GUIManager : MonoBehaviour
     [SerializeField] AIHPUIManager m_AIHPUIManager;//完成
     [SerializeField] PlayerUIManager m_PlayerUIManager;
     [SerializeField] CutInManager m_CutInManager;//完成
-
+    [SerializeField] AudioSource m_audio;
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
 #endif
@@ -23,6 +24,8 @@ public class GUIManager : MonoBehaviour
     public static event Action Event_TurnInitializeCutIn;
     public static event Action Event_ButtonPlace;
     public static event Action Event_ButtonTurnEnd;
+    public static event Action Event_AICutInFinish;
+    public static event Action Event_AnimGameSet;
 
     void OnEnable()
     {
@@ -100,11 +103,18 @@ public class GUIManager : MonoBehaviour
     }
     void OnAIAction()
     {
-        m_CutInManager.CutIn("AIAction");
+        m_CutInManager.CutIn("AIAction", () =>
+        {
+            Event_AICutInFinish?.Invoke();
+        });
     }
     void OnTurnGameSet()
     {
-        m_CutInManager.CutIn("GameSet");
+        m_audio.Play();
+        m_CutInManager.CutIn("GameSet", () =>
+        {
+            Event_AnimGameSet?.Invoke();
+        });
     }
 
     public void OnSetHPText(int index_, float hp_)

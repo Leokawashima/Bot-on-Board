@@ -49,6 +49,9 @@ MonoBehaviour:
   m_HP: 0
   m_Attack: 1
   m_Path: []
+  <m_PowWeapon>k__BackingField: 0
+  <m_UseWeapon>k__BackingField: 0
+  <m_Stan>k__BackingField: 0
 --- !u!1001 &7622101124098121766
 PrefabInstance:
   m_ObjectHideFlags: 0
