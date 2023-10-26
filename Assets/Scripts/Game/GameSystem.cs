@@ -45,6 +45,7 @@ public class GameSystem : MonoBehaviour
         GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet += SystemFinalize;
+        AIManager.Event_AiActioned += TurnFinalize;
     }
     void OnDisable()
     {
@@ -52,6 +53,7 @@ public class GameSystem : MonoBehaviour
         GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet -= SystemFinalize;
+        AIManager.Event_AiActioned -= TurnFinalize;
     }
 #endregion EventSubscribe
 
@@ -120,16 +122,6 @@ public class GameSystem : MonoBehaviour
     {
         m_BattleState = BattleState.AIAction;
         Event_Turn_AIAction?.Invoke();
-
-        StartCoroutine(Co_Delay());
-
-        IEnumerator Co_Delay()
-        {
-            yield return new WaitForSeconds(0.5f);
-            m_AIManager.AIAction();
-            yield return new WaitForSeconds(0.6f);
-            TurnFinalize();
-        }
     }
     void TurnFinalize()
     {

@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 public class DiceSystem : MonoBehaviour
 {
     [Header("Attach")]
-    [SerializeField] Rigidbody m_RB;
+    [SerializeField] private Rigidbody m_RB;
     [Header("DiceSetting")]
-    [SerializeField] Transform[] m_Direction = new Transform[6];
-    [SerializeField] int[] m_Value = { 1, 2, 3, 4, 5, 6 };
+    [SerializeField] private Transform[] m_Direction = new Transform[6];
+    [SerializeField] private int[] m_Value = { 1, 2, 3, 4, 5, 6 };
     [Header("RollSetting")]
-    [SerializeField] Vector2 m_RandomPowY = new Vector2(6, 14);
-    [SerializeField] Vector2 m_RandomRotX = new Vector2(50, 200);
-    [SerializeField] Vector2 m_RandomRotY = new Vector2(50, 200);
-    [SerializeField] int m_StopDelay = 100;
-    [SerializeField] int m_StartDelay = 2000;
+    [SerializeField] private Vector2 m_RandomPowY = new Vector2(6, 14);
+    [SerializeField] private Vector2 m_RandomRotX = new Vector2(50, 200);
+    [SerializeField] private Vector2 m_RandomRotY = new Vector2(50, 200);
+    [SerializeField] private int m_StopDelay = 100;
+    [SerializeField] private int m_StartDelay = 2000;
 
-    bool m_IsHit = false;
-    Vector3 m_Pos;
-    Quaternion m_Rot;
+    private bool m_IsHit = false;
+    private Vector3 m_Pos;
+    private Quaternion m_Rot;
 
-    void Start()
+    private void Start()
     {
         m_Pos = transform.position;
         m_Rot = transform.rotation;
     }
 
-    async Task Roll()
+    private async Task Roll()
     {
         m_RB.isKinematic = false;
 
