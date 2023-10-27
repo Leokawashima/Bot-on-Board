@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-public class TCP : MonoBehaviour
+public class TCPAndUDPTest : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI text;
     [SerializeField] TMPro.TMP_InputField inputField;
