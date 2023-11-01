@@ -6,7 +6,7 @@ public abstract class MapObject_SO_Template : ScriptableObject
     public string m_ObjectName = string.Empty;
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
 
-    public int m_cost = 0;
+    [field: SerializeField] public int Cost { get; private set; } = 0;
 
     public bool m_IsCollider = false;
 
@@ -15,24 +15,16 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
     const float CardSelectOffset = 50.0f;
 
-    Animator m_Animator;
-    protected Animator GetAnimator
-    { get
-        { 
-            return m_Animator == null ? m_Animator = m_Prefab.GetComponent<Animator>() : m_Animator;
-        }
-    }
-
     public virtual MapObject ObjectSpawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
         var go = Instantiate(m_Prefab, tf_.position + pos_, m_Prefab.transform.rotation, tf_);
         var mo = go.AddComponent<MapObject>();
-        mo.m_MapObjectSO = this;
+        mo.MapObjectSO = this;
 
-        mo.m_Pos = posdata_;
+        mo.Position = posdata_;
 
         return mo;
-    }
+    } 
     public virtual MapObjectCard CardCreate(int index_, Transform tf_, ToggleGroup group_, CardManager cardManager_)
     {
         var moc = Instantiate(m_Card, tf_);

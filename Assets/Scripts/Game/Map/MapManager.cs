@@ -27,20 +27,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
     public List<AISystem> m_AIManagerList { get; private set; } = new();
 
-    // 雑にコストマップのようなマップを複数用意して判定している
-    // 将来的にコンポーネントでないクラスに分けて保持させる
-    public int[,] m_MapStates { get; private set; }
-    public int[,] m_ObjStates { get; private set; }
-    public void SetObjState(Vector2Int pos_, int cost_)
-    {
-        // #if UnityEditorでOutOfIndexしないかチェックするようにした方が安全
-        m_ObjStates[pos_.y, pos_.x] = cost_;
-    }
-    public bool[,] m_CollisionState { get; private set; }
-    public void SetCollisionState(Vector2Int pos_, bool isCollision_)
-    {
-        m_CollisionState[pos_.y, pos_.x] = isCollision_;
-    }
+    public MapStateManager MapState { get; private set; }
 
     [field: SerializeField] public List<MapObject> MapObjectList { get; private set; } = new();
 
@@ -74,23 +61,21 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Awake()
     {
         Singleton ??= this;
     }
-    void OnDestroy()
+    private void OnDestroy()
     {
         Singleton = null;
     }
 
     void MapCreate()
     {
+        MapState = new(m_MapDataSO.Size);
+
         IEnumerator CoMapCreate()
         {
-            m_MapStates = new int[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
-            m_ObjStates = new int[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
-            m_CollisionState = new bool[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
-
             var _mapOffset = Offset;
             var _cnt = 0;
 
@@ -100,14 +85,15 @@ public class MapManager : MonoBehaviour
                 {
                     for(int x = 0; x < m_MapDataSO.Size.x; ++x)
                     {
-                        if(_cnt == x + z)//斜めに順生成するための判定
+                        if(_cnt == x + z)// 斜めに順生成するための判定
                         {
                             int _index = z * m_MapDataSO.Size.x + x;
                             if(m_MapDataSO.MapChip[_index] != -1)
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset;
-                                m_MapChipTable.m_Table[m_MapDataSO.MapChip[_index]]
+                                var mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
                                     .MapCreate(new Vector2Int(x, z), _pos, transform);
+                                //mc.Initialize(this);
                             }
                             if(m_MapDataSO.MapObject[_index] != -1)
                             {
@@ -116,14 +102,11 @@ public class MapManager : MonoBehaviour
                                     .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
                                 _mo.Initialize(this);
                             }
-
-                            m_MapStates[z, x] = m_MapDataSO.MapChip[z * m_MapDataSO.Size.x + x];
-                            m_ObjStates[z, x] = m_MapDataSO.MapObject[z * m_MapDataSO.Size.x + x];
                         }
                     }
                 }
-                _cnt++;//++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので好きでない
-                       //頂点位置計算等の数学フィジカルごり押しプログラムなら良いと思う
+                _cnt++;// ++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので使用しない
+                       // 頂点位置計算等の数学フィジカルごり押しプログラムなら良いと思う
 
                 if(_cnt == m_MapDataSO.Size.x + m_MapDataSO.Size.y) break;
 
@@ -137,25 +120,25 @@ public class MapManager : MonoBehaviour
     }
     public void AIHitObject(Vector2Int pos_, AISystem _ai)
     {
-        if (m_ObjStates[pos_.y, pos_.x] != -1)
+        if (MapState.MapObjectState[pos_.y, pos_.x] != -1)
         {
             // foreachじゃないのはループ中に要素を削除することができないから
             for (int i = 0; i < MapObjectList.Count; ++i)
             {
-                if (MapObjectList[i].m_Pos == pos_)
+                if (MapObjectList[i].Position == pos_)
                 {
                     // 本来こんな書き方でアイテムの効果を出すわけがないが、
                     // オブジェクト志向の組み方をしている暇がないので一旦回復アイテムはこれ
-                    if (m_ObjStates[pos_.y, pos_.x] == -50)
+                    if (MapState.MapObjectState[pos_.y, pos_.x] == -50)
                     {
                         _ai.HealHP(3);
                     }
-                    else if (m_ObjStates[pos_.y, pos_.x] == -100)
+                    else if (MapState.MapObjectState[pos_.y, pos_.x] == -100)
                     {
                         _ai.m_PowWeapon = 3;
                         _ai.m_UseWeapon = 2;
                     }
-                    else if (m_ObjStates[pos_.y, pos_.x] == 50)
+                    else if (MapState.MapObjectState[pos_.y, pos_.x] == 50)
                     {
                         _ai.m_Stan = 1;
                     }
@@ -180,7 +163,7 @@ public class MapManager : MonoBehaviour
 
         if (m_DrawObjGizmos)
         {
-            if (m_ObjStates != null)
+            if (MapState.MapObjectState != null)
             {
                 var _offset = new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 1, -m_MapDataSO.Size.y / 2.0f + 0.5f);
                 //二重ループなのでちょっと重い
@@ -188,9 +171,9 @@ public class MapManager : MonoBehaviour
                 {
                     for(int x = 0; x < m_MapDataSO.Size.x; ++x)
                     {
-                        if (m_ObjStates[y, x] != -1)
+                        if (MapState.MapObjectState[y, x] != -1)
                         {
-                            Gizmos.color = Color.HSVToRGB(m_ObjStates[y, x] / 36.0f % 1, 1, 1);
+                            Gizmos.color = Color.HSVToRGB(MapState.MapObjectState[y, x] / 36.0f % 1, 1, 1);
                             Gizmos.DrawWireCube(transform.position + _offset + new Vector3(x, 0, y), Vector3.one);
                         }
                     }

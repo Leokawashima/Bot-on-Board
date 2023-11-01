@@ -63,7 +63,7 @@ public class AISystem : MonoBehaviour
         var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
         enemy.Remove(this);
 
-        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.m_ObjStates);
+        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.MapState.MapObjectCost);
         m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
         if (m_Stan > 0)
         {
@@ -148,7 +148,7 @@ public class AISystem : MonoBehaviour
     void Move()
     {
         // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムの方がいい
-        if(MapManager.Singleton.m_CollisionState[m_Path[1].y, m_Path[1].x]) return;
+        if(MapManager.Singleton.MapState.MapCollisionState[m_Path[1].y, m_Path[1].x]) return;
 
         // 経路は[0]が現在地点なので[1]が次のチップ
         transform.localPosition = new Vector3(m_Path[1].x, 0, m_Path[1].y) + MapManager.Singleton.Offset + Vector3.up;
