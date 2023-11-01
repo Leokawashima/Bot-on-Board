@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// AI一体当たりのシステム
+/// </summary>
 public class AISystem : MonoBehaviour
 {
     [field: SerializeField] public int Index { get; private set; } = 0;//仮持たせ　Playerへの参照を取ってPlayerにIndexを持たせる方が都合がいい
@@ -47,7 +50,7 @@ public class AISystem : MonoBehaviour
         PrePosition = posData_;
         transform.position = new Vector3(posData_.x, 0, posData_.y) + MapManager.Singleton.Offset + Vector3.up;
 
-        m_MapSize = new Vector2Int(MapManager.Singleton.Data_SO.y, MapManager.Singleton.Data_SO.x);
+        m_MapSize = MapManager.Singleton.MapDataSize;
 
         MapManager.Singleton.m_AIManagerList.Add(this);
     }

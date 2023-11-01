@@ -6,10 +6,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
     public string m_ObjectName = string.Empty;
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
 
-    public uint
-        m_Destroy_MaxTurn = 10,
-        m_Destroy_SpawnTurn = 10;
-
     public int m_cost = 0;
 
     public bool m_IsCollider = false;
@@ -31,10 +27,9 @@ public abstract class MapObject_SO_Template : ScriptableObject
     {
         var go = Instantiate(m_Prefab, tf_.position + pos_, m_Prefab.transform.rotation, tf_);
         var mo = go.AddComponent<MapObject>();
-        mo.m_SO = this;
+        mo.m_MapObjectSO = this;
 
         mo.m_Pos = posdata_;
-        mo.NowTurn = m_Destroy_SpawnTurn;
 
         return mo;
     }
@@ -75,4 +70,17 @@ public abstract class MO_SO_Weapon : MapObject_SO_Template
 public abstract class MO_SO_Heal : MapObject_SO_Template
 {
     public int m_HealPow = 1;
+}
+
+public interface IDestroy
+{
+    public uint TurnMax { get; set; }
+    public uint TurnSpawn { get; set; }
+}
+
+public interface IWeapon
+{
+    public int AttackPow { get; set; }
+    public abstract bool CheckAttackCollider();
+    public abstract void Attack();
 }

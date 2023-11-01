@@ -2763,9 +2763,9 @@ MonoBehaviour:
   m_DrawGizmos: 1
   m_DrawMapGizmos: 1
   m_DrawObjGizmos: 1
-  m_Data_SO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
+  m_MapDataSO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
   m_MapChipTable: {fileID: 11400000, guid: 09abf90a4512e7942988897314854d46, type: 2}
-  <m_MapObjectTable>k__BackingField: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
+  m_MapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_WaitOnePlaceSecond: 0.05
   <MapObjectList>k__BackingField: []
 --- !u!1 &718842888
@@ -3793,9 +3793,9 @@ MonoBehaviour:
   m_AIManager: {fileID: 137300151}
   m_GameState: 0
   m_BattleState: 0
-  m_ElapsedTurn: 1
-  m_PlayerIndex: 0
-  m_ForceFinishTurn: 50
+  <ElapsedTurn>k__BackingField: 1
+  <PlayerIndex>k__BackingField: 0
+  <ForceFinishTurn>k__BackingField: 50
 --- !u!82 &1004095213
 AudioSource:
   m_ObjectHideFlags: 0

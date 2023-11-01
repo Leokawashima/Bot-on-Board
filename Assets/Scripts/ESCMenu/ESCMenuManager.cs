@@ -7,10 +7,10 @@ using UnityEngine.UI;
 /// </summary>
 public class EscMenuManager : MonoBehaviour
 {
-    [SerializeField] Canvas m_canvas;
-    [SerializeField] AudioSource m_audio;
-    [SerializeField] Button m_closeButton;
-    [SerializeField] SoundVolumeManager m_soundVolumeManager;
+    [SerializeField] private Canvas m_canvas;
+    [SerializeField] private AudioSource m_audio;
+    [SerializeField] private Button m_closeButton;
+    [SerializeField] private SoundVolumeManager m_soundVolumeManager;
 
     public static Action Event_EscMenuOpen;
     public static Action Event_EscMenuClose;
@@ -29,7 +29,7 @@ public class EscMenuManager : MonoBehaviour
     public void Switch()
     {
         // わかりやすさ重視
-        if(m_isOpen == false)
+        if(false == m_isOpen)
             Open();
         else
             Close();

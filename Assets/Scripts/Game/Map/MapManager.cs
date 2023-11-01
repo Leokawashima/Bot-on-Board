@@ -18,20 +18,22 @@ public class MapManager : MonoBehaviour
 #endif
     public static MapManager Singleton { get; private set; }
 
-    [Header("Data")]
-    [SerializeField] MapData_SO m_Data_SO;
-    public MapData_SO Data_SO => m_Data_SO;
+    [SerializeField] MapData_SO m_MapDataSO;
+    public Vector2Int MapDataSize => m_MapDataSO.Size;
 
     [SerializeField] MapChipTable_SO m_MapChipTable;
-    [field: SerializeField] public MapObjectTable_SO m_MapObjectTable { get; private set; }
+    [SerializeField] MapObjectTable_SO m_MapObjectTable;
 
     [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
     public List<AISystem> m_AIManagerList { get; private set; } = new();
 
+    // 雑にコストマップのようなマップを複数用意して判定している
+    // 将来的にコンポーネントでないクラスに分けて保持させる
     public int[,] m_MapStates { get; private set; }
     public int[,] m_ObjStates { get; private set; }
     public void SetObjState(Vector2Int pos_, int cost_)
     {
+        // #if UnityEditorでOutOfIndexしないかチェックするようにした方が安全
         m_ObjStates[pos_.y, pos_.x] = cost_;
     }
     public bool[,] m_CollisionState { get; private set; }
@@ -44,7 +46,7 @@ public class MapManager : MonoBehaviour
 
     public static event Action Event_MapCreated;
 
-    public Vector3 Offset => new Vector3(-m_Data_SO.x / 2.0f + 0.5f, 0, -m_Data_SO.y / 2.0f + 0.5f) + transform.position;
+    public Vector3 Offset => new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f) + transform.position;
 
     void OnEnable()
     {
@@ -85,45 +87,45 @@ public class MapManager : MonoBehaviour
     {
         IEnumerator CoMapCreate()
         {
-            m_MapStates = new int[m_Data_SO.y, m_Data_SO.x];
-            m_ObjStates = new int[m_Data_SO.y, m_Data_SO.x];
-            m_CollisionState = new bool[m_Data_SO.y, m_Data_SO.x];
+            m_MapStates = new int[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
+            m_ObjStates = new int[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
+            m_CollisionState = new bool[m_MapDataSO.Size.y, m_MapDataSO.Size.x];
 
             var _mapOffset = Offset;
             var _cnt = 0;
 
             while(true)
             {
-                for(int z = 0; z < m_Data_SO.y; ++z)
+                for(int z = 0; z < m_MapDataSO.Size.y; ++z)
                 {
-                    for(int x = 0; x < m_Data_SO.x; ++x)
+                    for(int x = 0; x < m_MapDataSO.Size.x; ++x)
                     {
                         if(_cnt == x + z)//斜めに順生成するための判定
                         {
-                            int _index = z * m_Data_SO.x + x;
-                            if(m_Data_SO.mapChip[_index] != -1)
+                            int _index = z * m_MapDataSO.Size.x + x;
+                            if(m_MapDataSO.MapChip[_index] != -1)
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset;
-                                m_MapChipTable.m_Table[m_Data_SO.mapChip[_index]]
+                                m_MapChipTable.m_Table[m_MapDataSO.MapChip[_index]]
                                     .MapCreate(new Vector2Int(x, z), _pos, transform);
                             }
-                            if(m_Data_SO.objChip[_index] != -1)
+                            if(m_MapDataSO.MapObject[_index] != -1)
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
-                                var _mo = m_MapObjectTable.m_Table[m_Data_SO.objChip[_index]]
+                                var _mo = m_MapObjectTable.m_Table[m_MapDataSO.MapObject[_index]]
                                     .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
                                 _mo.Initialize(this);
                             }
 
-                            m_MapStates[z, x] = m_Data_SO.mapChip[z * m_Data_SO.x + x];
-                            m_ObjStates[z, x] = m_Data_SO.objChip[z * m_Data_SO.x + x];
+                            m_MapStates[z, x] = m_MapDataSO.MapChip[z * m_MapDataSO.Size.x + x];
+                            m_ObjStates[z, x] = m_MapDataSO.MapObject[z * m_MapDataSO.Size.x + x];
                         }
                     }
                 }
                 _cnt++;//++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので好きでない
                        //頂点位置計算等の数学フィジカルごり押しプログラムなら良いと思う
 
-                if(_cnt == m_Data_SO.x + m_Data_SO.y) break;
+                if(_cnt == m_MapDataSO.Size.x + m_MapDataSO.Size.y) break;
 
                 yield return new WaitForSeconds(m_WaitOnePlaceSecond);
             }
@@ -172,7 +174,7 @@ public class MapManager : MonoBehaviour
 
         if (m_DrawMapGizmos)
         {
-            var _size = new Vector3(m_Data_SO.x, 1, m_Data_SO.y);
+            var _size = new Vector3(m_MapDataSO.Size.x, 1, m_MapDataSO.Size.y);
             Gizmos.DrawWireCube(transform.position, _size);
         }
 
@@ -180,11 +182,11 @@ public class MapManager : MonoBehaviour
         {
             if (m_ObjStates != null)
             {
-                var _offset = new Vector3(-Data_SO.x / 2.0f + 0.5f, 1, -Data_SO.y / 2.0f + 0.5f);
+                var _offset = new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 1, -m_MapDataSO.Size.y / 2.0f + 0.5f);
                 //二重ループなのでちょっと重い
-                for(int y = 0; y < m_Data_SO.y; ++y)
+                for(int y = 0; y < m_MapDataSO.Size.y; ++y)
                 {
-                    for(int x = 0; x < m_Data_SO.x; ++x)
+                    for(int x = 0; x < m_MapDataSO.Size.x; ++x)
                     {
                         if (m_ObjStates[y, x] != -1)
                         {
@@ -196,7 +198,7 @@ public class MapManager : MonoBehaviour
             }
             else
             {
-                var _size = new Vector3(m_Data_SO.x, 1, m_Data_SO.y);
+                var _size = new Vector3(m_MapDataSO.Size.x, 1, m_MapDataSO.Size.y);
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireCube(transform.position + Vector3.up, _size);
             }

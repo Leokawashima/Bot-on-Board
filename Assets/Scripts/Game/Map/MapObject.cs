@@ -2,15 +2,15 @@
 
 public class MapObject : MonoBehaviour
 {
-    public MapObject_SO_Template m_SO;
+    public MapObject_SO_Template m_MapObjectSO { get; set; }
     public Vector2Int m_Pos = Vector2Int.zero;
     public uint NowTurn;
-    
+
     public void Initialize(MapManager mapManager_)
     {
         mapManager_.MapObjectList.Add(this);
-        mapManager_.SetObjState(m_Pos, m_SO.m_cost);
-        mapManager_.SetCollisionState(m_Pos, m_SO.m_IsCollider);
+        mapManager_.SetObjState(m_Pos, m_MapObjectSO.m_cost);
+        mapManager_.SetCollisionState(m_Pos, m_MapObjectSO.m_IsCollider);
     }
 
     public bool ObjectUpdate(MapManager mapManager_)

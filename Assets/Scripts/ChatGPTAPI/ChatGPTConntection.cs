@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 // UniTask非同期処理を扱う名前空間
 // プロジェクトに自分でUniTaskというGitのパッケージを導入する必要がある
 // 参考のURL： https://shibuya24.info/entry/unity-start-unitask
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 // HTTPネットワークを扱う名前空間
 // 参考： https://kan-kikuchi.hatenablog.com/entry/UnityWebRequest
+using UnityEngine.Networking;
 
 /// <summary>
 /// ChatGPTのAPIを使用してやり取りするクラス
@@ -18,15 +18,13 @@ using UnityEngine.Networking;
 /// ソース元URL： https://note.com/negipoyoc/n/n88189e590ac3
 public class ChatGPTConnection
 {
-    /*
-     * 使用するAPIキー コンストラクタで初期化する
-     * APIキーについてはまずこれを読むべし： https://udemy.benesse.co.jp/design/3d/chatgpt-unity.html
-     * 少しスクロールするとIキーを発行する方法がのっている
-     */
-    readonly string m_API_KEY;
+    // 使用するAPIキー コンストラクタで初期化する
+    // APIキーについてはまずこれを読むべし： https://udemy.benesse.co.jp/design/3d/chatgpt-unity.html
+    // 少しスクロールするとIキーを発行する方法がのっている
+    private readonly string m_API_KEY;
 
     //会話履歴を保持するリスト
-    readonly List<ChatGPTMessageModel> m_MESSAGE_LIST = new();
+    private readonly List<ChatGPTMessageModel> m_MESSAGE_LIST = new();
 
     /// <summary>
     /// コンストラクタ
@@ -36,10 +34,10 @@ public class ChatGPTConnection
     public ChatGPTConnection(string apiKey_, string content_)
     {
         m_API_KEY = apiKey_;
-        //送るメッセージの先頭に文言を追加
-        //ここでは role = "system" で要はプロンプトを指定
-        //ユーザーの発言ではなく、こういうていで話してねとか、口調で話してとか
-        //そういうのをユーザーからお願いするのではなくルールを定義するようにsystemから指定する
+        // 送るメッセージの先頭に文言を追加
+        // ここでは role = "system" 要はプロンプトを指定
+        // ユーザーの発言ではなく、こういうていで話してねとか、口調で話してとか
+        // そういうのをユーザーからお願いするのではなくルールを定義するようにsystemから指定する
         m_MESSAGE_LIST.Add(new ChatGPTMessageModel()
         {
             role = "system",
@@ -51,11 +49,11 @@ public class ChatGPTConnection
     /// /非同期でAPIのメッセージを受け取りデータ構造体として返す
     /// </summary>
     /// <param name="userMessage_"></param>
-    /// <returns></returns>
+    /// <returns>帰ってきた会話データ</returns>
     /// <exception cref="Exception">WebRequestのエラー</exception>
     public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage_)
     {
-        //文章生成AIのAPIのエンドポイントを設定
+        // 文章生成AIのAPIのエンドポイントを設定
         var _apiUrl = "https://api.openai.com/v1/chat/completions";
 
         // ユーザーメッセージを追加
