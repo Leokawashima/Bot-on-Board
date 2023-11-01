@@ -180,9 +180,7 @@ namespace PlayerData
 * public変数、プロパティ、カプセル化について。
   このプロジェクトではカプセル化を重視して変数を取り扱うため、アクセス権を限界まで抑えることを意識します。
 1. public int PlayerIndex;  
-2. [SerializeField]  
-int m_playerIndex;  
-public int PlayerIndex { get; set; }  
+2. [field: SerializeField] int playerIndex { get; set; }  
 
     1番は2番のように書き換えることができます。  
     しかし、このように書き換えるだけでは行数が増えるだけであり、機能としてはまるで意味を持ちません。  
