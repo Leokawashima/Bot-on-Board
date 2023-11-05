@@ -8,14 +8,14 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
     [field: SerializeField] public int Cost { get; private set; } = 0;
 
-    public bool m_IsCollider = false;
+    [field: SerializeField] public bool IsCollider { get; private set; } = false;
 
     public GameObject m_Prefab;
     public MapObjectCard m_Card;
 
     const float CardSelectOffset = 50.0f;
 
-    public virtual MapObject ObjectSpawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
+    public virtual MapObject Spawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
         var go = Instantiate(m_Prefab, tf_.position + pos_, m_Prefab.transform.rotation, tf_);
         var mo = go.AddComponent<MapObject>();
@@ -39,8 +39,7 @@ public abstract class MapObject_SO_Template : ScriptableObject
             rect.anchoredPosition = new Vector2(
                 rect.anchoredPosition.x,
                 isOn_ ?
-                rect.anchoredPosition.y + CardSelectOffset :
-                rect.anchoredPosition.y - CardSelectOffset
+                rect.anchoredPosition.y + CardSelectOffset : rect.anchoredPosition.y - CardSelectOffset
                 );
         });
 
@@ -51,13 +50,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
 //以下継承クラス　インターフェース化する方がデータ設計が楽だが、
 //プロパティは通常のインスペクターから見えない為後々編集エディターを作るまでクラス実装
-
-public abstract class MO_SO_Weapon : MapObject_SO_Template
-{
-    public int m_AttackPow = 1;
-    public abstract bool CheckAttackCollider();
-    public abstract void Attack();
-}
 
 public abstract class MO_SO_Heal : MapObject_SO_Template
 {
@@ -72,7 +64,14 @@ public interface IDestroy
 
 public interface IWeapon
 {
-    public int AttackPow { get; set; }
-    public abstract bool CheckAttackCollider();
-    public abstract void Attack();
+    public uint AttackPower { get; set; }
+    public bool CheckAttackCollider();
+    public void Attack();
+}
+
+public interface IHeal
+{
+    public uint HealPower { get; set; }
+    public bool CheckHealCollider();
+    public void Heal();
 }

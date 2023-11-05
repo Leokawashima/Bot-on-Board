@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapStateManager
 {
+    // 増やしたい情報に応じて配列の変数を増やしていくとクソプログラムになってしまうので
+    // オブジェクトとチップの配列だけを保持してどのインターフェースを持っているかで管理するようにする
+
     // オブジェクトのインデックスを格納する配列　恐らく今後消す
     public int[,] MapChipState { get; private set; }
     public int[,] MapObjectState { get; private set; }
@@ -50,7 +53,7 @@ public class MapStateManager
     {
         MapObjectState[pos_.y, pos_.x] = 1;
         MapObjectCost[pos_.y, pos_.x] = mapObject_.Cost;
-        MapCollisionState[pos_.y, pos_.x] = mapObject_.m_IsCollider;
+        MapCollisionState[pos_.y, pos_.x] = mapObject_.IsCollider;
     }
 
     public void ReSetMapObject(Vector2Int pos_)

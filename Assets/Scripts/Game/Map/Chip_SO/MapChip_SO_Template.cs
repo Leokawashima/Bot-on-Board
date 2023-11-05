@@ -8,16 +8,15 @@ public abstract class MapChip_SO_Template : ScriptableObject
 
     [field: SerializeField] public int Cost { get; private set; } = 0;
 
-    [field: SerializeField] public GameObject Prefab { get; private set; }
+    [field: SerializeField] public MapChip Prefab { get; private set; }
 
-    public virtual MapChip MapCreate(Vector2Int posdata_, Vector3 pos_, Transform tf_)
+    public virtual MapChip Spawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
         var _go = Instantiate(Prefab, tf_.position + pos_, Prefab.transform.rotation, tf_);
-        var _mc = _go.AddComponent<MapChip>();
-        _mc.m_SO = this;
+        _go.m_SO = this;
 
-        _mc.m_position = posdata_;
+        _go.m_position = posdata_;
 
-        return _mc;
+        return _go;
     }
 }

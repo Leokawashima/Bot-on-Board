@@ -92,14 +92,14 @@ public class MapManager : MonoBehaviour
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset;
                                 var mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
-                                    .MapCreate(new Vector2Int(x, z), _pos, transform);
+                                    .Spawn(new Vector2Int(x, z), _pos, transform);
                                 //mc.Initialize(this);
                             }
                             if(m_MapDataSO.MapObject[_index] != -1)
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
                                 var _mo = m_MapObjectTable.m_Table[m_MapDataSO.MapObject[_index]]
-                                    .ObjectSpawn(new Vector2Int(z, x), _pos, transform);
+                                    .Spawn(new Vector2Int(z, x), _pos, transform);
                                 _mo.Initialize(this);
                             }
                         }
@@ -150,6 +150,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    #region Gizmos
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
@@ -163,7 +164,7 @@ public class MapManager : MonoBehaviour
 
         if (m_DrawObjGizmos)
         {
-            if (MapState.MapObjectState != null)
+            if (MapState != null)
             {
                 var _offset = new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 1, -m_MapDataSO.Size.y / 2.0f + 0.5f);
                 //二重ループなのでちょっと重い
@@ -188,4 +189,5 @@ public class MapManager : MonoBehaviour
         }
     }
 #endif
+    #endregion Gizmos
 }
