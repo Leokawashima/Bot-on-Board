@@ -3,22 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// AI一体当たりのシステム
+/// </summary>
 public class AISystem : MonoBehaviour
 {
-    public int m_Index { get; private set; } = 0;//仮持たせ　Playerへの参照を取ってPlayerにIndexを持たせる方が都合がいい
-    public enum Dir_FB { Non = 0, Forward = 1, Back = -1 }
-    public enum Dir_RL { Non = 0, Right = 1, Left = -1 }
-    public enum State { Non, Alive, Dead }
+    [field: SerializeField] public int Index { get; private set; } = 0;//仮持たせ　Playerへの参照を取ってPlayerにIndexを持たせる方が都合がいい
+    public enum DirectionFrontBack { Non = 0, Forward = 1, Back = -1 }
+    public enum DirectionRightLeft { Non = 0, Right = 1, Left = -1 }
+    public enum AliveState { Non, Alive, Dead }
     public enum ThinkState { Non, Attack, Move, CantMove, CollisionPredict }
 
-    public Dir_FB Direction_FrontBack { get; private set; } = Dir_FB.Non;
-    public Dir_RL Direction_RightLeft { get; private set; } = Dir_RL.Non;
-    public State m_State { get; private set; } = State.Non;
-    public ThinkState m_ThinkState { get; private set; } = ThinkState.Non;
+    [field: SerializeField] public DirectionFrontBack AIDirectionVertical { get; private set; } = DirectionFrontBack.Non;
+    [field: SerializeField] public DirectionRightLeft AIDirectionHorizontal { get; private set; } = DirectionRightLeft.Non;
+    [field: SerializeField] public AliveState AIAliveState { get; private set; } = AliveState.Non;
+    [field: SerializeField] public ThinkState AIThinkState { get; private set; } = ThinkState.Non;
 
-    public Vector2Int Position { get; private set; } = Vector2Int.zero;
-    public Vector2Int PrePosition { get; private set; } = Vector2Int.zero;
-    public Vector2Int Direction { get { return new Vector2Int((int)Direction_RightLeft, (int)Direction_FrontBack); } }
+    [field: SerializeField] public Vector2Int Position { get; private set; } = Vector2Int.zero;
+    [field: SerializeField] public Vector2Int PrePosition { get; private set; } = Vector2Int.zero;
+    public Vector2Int Direction { get { return new Vector2Int((int)AIDirectionHorizontal, (int)AIDirectionVertical); } }
 
     //本実装するなら初期化の値をどこかで決めて引数で設定すべき デバッグ用にシリアライズ
     [SerializeField] float m_HPMax = 10.0f;
@@ -40,14 +43,14 @@ public class AISystem : MonoBehaviour
     public void Spawn(int index_, string name_, Vector2Int posData_)
     {
         m_HP = m_HPMax;
-        m_State = State.Alive;
-        m_Index = index_;
+        AIAliveState = AliveState.Alive;
+        Index = index_;
         name = name_;
         Position = posData_;
         PrePosition = posData_;
         transform.position = new Vector3(posData_.x, 0, posData_.y) + MapManager.Singleton.Offset + Vector3.up;
 
-        m_MapSize = new Vector2Int(MapManager.Singleton.Data_SO.y, MapManager.Singleton.Data_SO.x);
+        m_MapSize = MapManager.Singleton.MapDataSize;
 
         MapManager.Singleton.m_AIManagerList.Add(this);
     }
@@ -60,30 +63,30 @@ public class AISystem : MonoBehaviour
         var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
         enemy.Remove(this);
 
-        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.m_ObjStates);
+        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.MapState.MapObjectCost);
         m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
         if (m_Stan > 0)
         {
             --m_Stan;
-            m_ThinkState = ThinkState.CantMove;
+            AIThinkState = ThinkState.CantMove;
         }
         else if (m_Path.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
         {
-            m_ThinkState = ThinkState.Attack;
+            AIThinkState = ThinkState.Attack;
         }
         else if (m_Path.Count == 3)
         {
-            m_ThinkState= ThinkState.CollisionPredict;
+            AIThinkState= ThinkState.CollisionPredict;
         }
         else
         {
-            m_ThinkState = ThinkState.Move;
+            AIThinkState = ThinkState.Move;
         }
     }
 
     public void Action()
     {
-        switch(m_ThinkState)
+        switch(AIThinkState)
         {
             case ThinkState.Attack:
                 // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
@@ -133,19 +136,19 @@ public class AISystem : MonoBehaviour
     {
         m_HP = Mathf.Max(m_HP - damage_, 0.0f);//HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に変える...？のか？
         if(m_HP == 0.0f)
-            m_State = State.Dead;
-        Event_DamageHP?.Invoke(m_Index, m_HP);
+            AIAliveState = AliveState.Dead;
+        Event_DamageHP?.Invoke(Index, m_HP);
     }
     public void HealHP(float heal_)
     {
         m_HP = Mathf.Min(m_HP + heal_, m_HPMax);
-        Event_HealHP?.Invoke(m_Index, m_HP);
+        Event_HealHP?.Invoke(Index, m_HP);
     }
 
     void Move()
     {
         // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムの方がいい
-        if(MapManager.Singleton.m_CollisionState[m_Path[1].y, m_Path[1].x]) return;
+        if(MapManager.Singleton.MapState.MapCollisionState[m_Path[1].y, m_Path[1].x]) return;
 
         // 経路は[0]が現在地点なので[1]が次のチップ
         transform.localPosition = new Vector3(m_Path[1].x, 0, m_Path[1].y) + MapManager.Singleton.Offset + Vector3.up;

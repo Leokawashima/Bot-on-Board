@@ -12,7 +12,7 @@ public class MapObjectCard : MonoBehaviour
 
     public MapObject ObjectSpawn(MapChip chip_, MapManager map_)
     {
-        return m_SO.ObjectSpawn(chip_.m_position, chip_.transform.position + Vector3.up, map_.transform);
+        return m_SO.Spawn(chip_.m_position, chip_.transform.position + Vector3.up, map_.transform);
     }
 
     public void Trash()

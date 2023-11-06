@@ -40,7 +40,7 @@ public class PlayerUIManager : MonoBehaviour
         var _chip = LocalPlayerManager.Singleton.m_SelectChip;
         if(_chip != null)
         {
-            if(MapManager.Singleton.m_ObjStates[_chip.m_position.y, _chip.m_position.x] == -1)
+            if(MapManager.Singleton.MapState.MapObjectState[_chip.m_position.y, _chip.m_position.x] == -1)
             {
                 for (int i = 0; i < MapManager.Singleton.m_AIManagerList.Count; ++i)
                 {

@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ObjectName: "\u9244\u30D1\u30A4\u30D7"
   m_Info: "\u6B63\u9762\u4E09\u30DE\u30B9\u306E\u3069\u3053\u304B\u306B\u653B\u6483\u3067\u304D\u308B\u3002\u4E8C\u56DE\u547D\u4E2D\u3067\u58CA\u308C\u308B\u3002"
-  m_Destroy_MaxTurn: 3
-  m_Destroy_SpawnTurn: 3
-  m_cost: -100
-  m_IsCollider: 0
+  <Cost>k__BackingField: -100
+  <IsCollider>k__BackingField: 0
   m_Prefab: {fileID: 1933853278335757198, guid: 03edbfdfe859f974dab9e3ba5c628c4d, type: 3}
   m_Card: {fileID: 8618209698020002616, guid: 799d8bd86af92f04d9eeb6978b963fee, type: 3}
   m_AttackPow: 3

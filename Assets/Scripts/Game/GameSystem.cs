@@ -22,11 +22,10 @@ public class GameSystem : MonoBehaviour
     public enum BattleState { Non, Initialize, Place, AIAction, Finalize, GameSet }
     public BattleState m_BattleState = BattleState.Non;
 
-    //デバッグ用にプロパティを外しているだけ
-    public int m_ElapsedTurn = 1;
-    public int m_PlayerIndex = 0;
-    //public int m_SuddenDeathTurn  = 30;
-    public int m_ForceFinishTurn = 50;
+    [field: SerializeField] public int ElapsedTurn { get; private set; } = 1;
+    [field: SerializeField] public int PlayerIndex { get; private set; } = 0;
+    //[field: SerializeField] public int m_SuddenDeathTurn { get; private set; } = 30;
+    [field: SerializeField] public int ForceFinishTurn { get; private set; } = 50;
 
     public static event Action Event_Initialize;
     public static event Action Event_Turn_Initialize;
@@ -45,6 +44,7 @@ public class GameSystem : MonoBehaviour
         GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet += SystemFinalize;
+        AIManager.Event_AiActioned += TurnFinalize;
     }
     void OnDisable()
     {
@@ -52,6 +52,7 @@ public class GameSystem : MonoBehaviour
         GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
         GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet -= SystemFinalize;
+        AIManager.Event_AiActioned -= TurnFinalize;
     }
 #endregion EventSubscribe
 
@@ -74,7 +75,7 @@ public class GameSystem : MonoBehaviour
     void SystemInitalize()
     {
         m_BattleState = BattleState.Non;
-        UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
         CameraManager.Singleton.SetFreeLookCamIsMove(false);
 
         GlobalSystem.SetMatchState(GlobalSystem.MatchState.Local);
@@ -106,7 +107,7 @@ public class GameSystem : MonoBehaviour
 
     void TurnInitialize()
     {
-        m_PlayerIndex = 0;
+        PlayerIndex = 0;
 
         m_BattleState = BattleState.Initialize;
         Event_Turn_Initialize?.Invoke();
@@ -120,16 +121,6 @@ public class GameSystem : MonoBehaviour
     {
         m_BattleState = BattleState.AIAction;
         Event_Turn_AIAction?.Invoke();
-
-        StartCoroutine(Co_Delay());
-
-        IEnumerator Co_Delay()
-        {
-            yield return new WaitForSeconds(0.5f);
-            m_AIManager.AIAction();
-            yield return new WaitForSeconds(0.6f);
-            TurnFinalize();
-        }
     }
     void TurnFinalize()
     {
@@ -139,9 +130,9 @@ public class GameSystem : MonoBehaviour
         if (m_AIManager.CheckAIIsDead())
             TurnGameSet();
 
-        else if(m_ElapsedTurn < m_ForceFinishTurn)
+        else if(ElapsedTurn < ForceFinishTurn)
         {
-            m_ElapsedTurn++;
+            ElapsedTurn++;
 
             TurnInitialize();
         }
@@ -292,7 +283,7 @@ public class GameSystem : MonoBehaviour
 
     void OnButton_TurnEnd()
     {
-        if (++m_PlayerIndex < 2)//人数に応じたものにする
+        if (++PlayerIndex < 2)//人数に応じたものにする
         {
             Event_Turn_TurnEnd?.Invoke();
 

@@ -2,15 +2,14 @@
 
 public class MapObject : MonoBehaviour
 {
-    public MapObject_SO_Template m_SO;
-    public Vector2Int m_Pos = Vector2Int.zero;
+    public MapObject_SO_Template MapObjectSO { get; set; }
+    public Vector2Int Position = Vector2Int.zero;
     public uint NowTurn;
-    
+
     public void Initialize(MapManager mapManager_)
     {
         mapManager_.MapObjectList.Add(this);
-        mapManager_.SetObjState(m_Pos, m_SO.m_cost);
-        mapManager_.SetCollisionState(m_Pos, m_SO.m_IsCollider);
+        mapManager_.MapState.SetMapObject(Position, MapObjectSO);
     }
 
     public bool ObjectUpdate(MapManager mapManager_)
@@ -25,8 +24,7 @@ public class MapObject : MonoBehaviour
     public void ObjectDestroy(MapManager mapManager_)
     {
         mapManager_.MapObjectList.Remove(this);
-        mapManager_.SetObjState(m_Pos, -1);
-        mapManager_.SetCollisionState(m_Pos, false);
+        mapManager_.MapState.ReSetMapObject(Position);
         Destroy(gameObject);
     }
 }

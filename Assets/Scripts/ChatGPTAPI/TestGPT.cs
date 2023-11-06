@@ -6,15 +6,15 @@
 public class TestGPT : MonoBehaviour
 {
     [SerializeField]
-    bool m_onGPT = false;
+    private bool m_onGPT = false;
     [SerializeField, TextArea, Tooltip("APIキーを入力")]
-    string _useAPIKey;
+    private string _useAPIKey;
     [SerializeField, TextArea, Tooltip("ルールを決めてあげる")]
-    string m_rule = "語尾に「にゃ」をつけて";
+    private string m_rule = "語尾に「にゃ」をつけて";
     [SerializeField, TextArea, Tooltip("送りたいメッセージ")]
-    string m_message = "こんにちは？";
+    private string m_message = "こんにちは？";
 
-    async void Start()
+    private async void Start()
     {
         if (m_onGPT)
         {

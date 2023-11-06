@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.47386742, g: 0.4747489, b: 0.47386742, a: 1}
+  m_IndirectSpecularColor: {r: 0.12618816, g: 0.47724903, b: 0.3753705, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2174,6 +2174,51 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 99eb2cba7f783d24b8cdc13381ad1490, type: 2}
+--- !u!1 &584838097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584838099}
+  - component: {fileID: 584838098}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &584838098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584838097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ee48156e3c8814ca14fc38f1adeafb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  test: {fileID: 0}
+--- !u!4 &584838099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584838097}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.44614697, y: 5.482392, z: 1.0743885}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &589895015
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,9 +2808,9 @@ MonoBehaviour:
   m_DrawGizmos: 1
   m_DrawMapGizmos: 1
   m_DrawObjGizmos: 1
-  m_Data_SO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
+  m_MapDataSO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
   m_MapChipTable: {fileID: 11400000, guid: 09abf90a4512e7942988897314854d46, type: 2}
-  <m_MapObjectTable>k__BackingField: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
+  m_MapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_WaitOnePlaceSecond: 0.05
   <MapObjectList>k__BackingField: []
 --- !u!1 &718842888
@@ -3280,7 +3325,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3793,9 +3838,9 @@ MonoBehaviour:
   m_AIManager: {fileID: 137300151}
   m_GameState: 0
   m_BattleState: 0
-  m_ElapsedTurn: 1
-  m_PlayerIndex: 0
-  m_ForceFinishTurn: 50
+  <ElapsedTurn>k__BackingField: 1
+  <PlayerIndex>k__BackingField: 0
+  <ForceFinishTurn>k__BackingField: 50
 --- !u!82 &1004095213
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6835,7 +6880,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033371890}
-  m_LocalRotation: {x: 0.1919741, y: 0.21600763, z: -0.043360535, w: 0.9563506}
+  m_LocalRotation: {x: 0.19197412, y: 0.21600766, z: -0.043360543, w: 0.9563506}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -57,7 +57,7 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);//下層は完成
+        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);//下層は完成
         m_AIHPUIManager.Initialize(2, 10);//2人　HP 10で初期化 下層は完成
 
         //ローカルの場合は人数分
@@ -81,20 +81,20 @@ public class GUIManager : MonoBehaviour
     }
     void OnTurnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);
+        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);
         foreach(var ui_ in m_PlayerUIArray)
             ui_.TurnInitialize();
 
-        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, () =>
+        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.ElapsedTurn, () =>
         {
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex, () =>
+        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.PlayerIndex, () =>
         {
-            m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
+            m_PlayerUIArray[GameSystem.Singleton.PlayerIndex].gameObject.SetActive(true);
         });
     }
     void OnTurnEnd()

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Map/MC_Table_SO")]
+[CreateAssetMenu(menuName = "Map/Table/MC_Table_SO")]
 public class MapChipTable_SO : ScriptableObject
 {
-    public MapChip_SO_Template[] m_Table;
+    public MapChip_SO_Template[] Table;
 }

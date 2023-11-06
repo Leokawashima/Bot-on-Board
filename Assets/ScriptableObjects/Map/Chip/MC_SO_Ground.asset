@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a9918fadcbdcf4f941c6bc937a8704, type: 3}
   m_Name: MC_SO_Ground
   m_EditorClassIdentifier: 
-  m_ChipName: Box
-  m_Prefab: {fileID: 288836546640084954, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}
+  <Name>k__BackingField: Ground
+  <Cost>k__BackingField: 0
+  <Prefab>k__BackingField: {fileID: -7855295089463768574, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}

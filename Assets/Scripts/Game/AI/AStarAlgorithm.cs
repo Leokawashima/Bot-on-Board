@@ -1,29 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Astar探索ロジッククラス
+/// </summary>
 public class AStarAlgorithm
 {
-    public int[,] m_MapCost;
-    public int m_CostMove = 1;
-    public Vector2Int m_MapSize;
+    private int[,] m_MapCost;
+    private int m_MoveCost = 1;
+    private Vector2Int m_MapSize;
 
-    List<Node> m_OpenList = new();
-
-    Vector2Int[] SearchPos { get { return new Vector2Int[4] { new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0) }; } }
+    // ノードを開ける順番　up downのような順だと無限にお互いの場所へ探索できない状態が生まれる
+    readonly private Vector2Int[] SearchPosition = new Vector2Int[4]
+    {
+        Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left
+    };
 
     public class Node
     {
         public enum State { Non, Open, Close }
         public State state;
-        public Vector2Int pos;
+        public Vector2Int positon;
         public Node orizin;
         public int actualCost, estimatedCost, score;
 
         public void OpenStartNode(Vector2Int start_, Vector2Int target_, int actualCost_, List<Node> list_)
         {
             state = State.Open;
-            pos = start_;
+            positon = start_;
             actualCost = actualCost_;
             estimatedCost = Mathf.Abs(target_.x - start_.x + target_.y - start_.y);
             score = actualCost + estimatedCost;
@@ -35,7 +39,7 @@ public class AStarAlgorithm
             if(state != State.Non) return false;
 
             state = State.Open;
-            pos = coordinate_;
+            positon = coordinate_;
             orizin = orizin_;
             actualCost = actualCost_;
             estimatedCost = Mathf.Abs(target_.x - start_.x + target_.y - start_.y);
@@ -47,7 +51,7 @@ public class AStarAlgorithm
 
         public void GetPath(List<Vector2Int> list_)
         {
-            list_.Add(pos);
+            list_.Add(positon);
 
             if(orizin != null)
             {
@@ -62,54 +66,56 @@ public class AStarAlgorithm
         m_MapCost = mapCost_;
     }
 
-    public List<Vector2Int> Search(Vector2Int start_, Vector2Int target_)
+    private Node SearchNode(Vector2Int orizin_, Vector2Int target_)
     {
-        var map = new Node[m_MapSize.y, m_MapSize.x];
-        m_OpenList.Clear();
+        var _nodeMap = new Node[m_MapSize.y, m_MapSize.x];
+        var _openList = new List<Node>();
+        int _cost = 0;
 
-        int cost = 0;
+        _nodeMap[orizin_.y, orizin_.x] = new Node();
+        _nodeMap[orizin_.y, orizin_.x].OpenStartNode(orizin_, target_, _cost, _openList);
 
-        map[start_.y, start_.x] = new Node();
-        map[start_.y, start_.x].OpenStartNode(start_, target_, cost, m_OpenList);
-
-        Node SearchNode()
+        while(true)
         {
-            while(true)
+            _cost += m_MoveCost;
+
+            if(_openList.Count == 0) return null;
+
+            // 開く原点を決める
+            Node _baseNode = _openList[0];
+            for(int i = 1; i < _openList.Count; ++i)
             {
-                cost += m_CostMove;
-
-                if (m_OpenList.Count == 0) return null;
-
-                Node Base = m_OpenList[0];
-                for (int i = 1; i < m_OpenList.Count; ++i)
-                {
-                    if (m_OpenList[i].score < Base.score)
-                        Base = m_OpenList[i];
-                    else if (m_OpenList[i].actualCost < Base.actualCost)
-                        Base = m_OpenList[i];
-                }
-
-                for(int i = 0; i < 4; ++i)
-                {
-                    var pos = Base.pos + SearchPos[i];
-                    if(0 <= pos.y && 0 <= pos.x && m_MapSize.y > pos.y && m_MapSize.x > pos.x)
-                    {
-                        map[pos.y, pos.x] ??= new Node();
-                        if(map[pos.y, pos.x].OpenNode(pos, start_, target_, cost + m_MapCost[pos.y, pos.x], Base, m_OpenList))
-                            return map[pos.y, pos.x];
-                    }
-                }
-
-                Base.state = Node.State.Close;
-                m_OpenList.Remove(Base);
+                // スコアが一番低いもの
+                if(_openList[i].score < _baseNode.score)
+                    _baseNode = _openList[i];
+                else if(_openList[i].actualCost < _baseNode.actualCost)
+                    _baseNode = _openList[i];
             }
+
+            // 上　右　下　左　の順で探索する　キャラの向きからこの向きで探索すると面白いかも
+            for(int i = 0; i < SearchPosition.Length; ++i)
+            {
+                var _serachPos = _baseNode.positon + SearchPosition[i];
+                if(0 <= _serachPos.y && 0 <= _serachPos.x && m_MapSize.y > _serachPos.y && m_MapSize.x > _serachPos.x)
+                {
+                    _nodeMap[_serachPos.y, _serachPos.x] ??= new Node();
+                    if(_nodeMap[_serachPos.y, _serachPos.x].OpenNode(_serachPos, orizin_, target_, _cost + m_MapCost[_serachPos.y, _serachPos.x], _baseNode, _openList))
+                        return _nodeMap[_serachPos.y, _serachPos.x];
+                }
+            }
+
+            _baseNode.state = Node.State.Close;
+            _openList.Remove(_baseNode);
         }
+    }
 
-        List<Vector2Int> path = new();
+    public List<Vector2Int> Search(Vector2Int orizin_, Vector2Int target_)
+    {
+        List<Vector2Int> _path = new();
 
-        SearchNode()?.GetPath(path);
-        path.Reverse();
+        SearchNode(orizin_, target_)?.GetPath(_path);
+        _path.Reverse();
 
-        return path;
+        return _path;
     }
 }
