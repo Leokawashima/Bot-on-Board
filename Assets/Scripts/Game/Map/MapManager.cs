@@ -12,9 +12,9 @@ public class MapManager : MonoBehaviour
 {
 #if UNITY_EDITOR
     [Header("Gizmos")]
-    [SerializeField] bool m_DrawGizmos = true;
-    [SerializeField] bool m_DrawMapGizmos = true;
-    [SerializeField] bool m_DrawObjGizmos = true;
+    [SerializeField] bool m_drawGizmos = true;
+    [SerializeField] bool m_drawChipGizmos = true;
+    [SerializeField] bool m_drawObjectGizmos = true;
 #endif
     public static MapManager Singleton { get; private set; }
 
@@ -154,15 +154,15 @@ public class MapManager : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        if(!m_DrawGizmos) return;
+        if(!m_drawGizmos) return;
 
-        if (m_DrawMapGizmos)
+        if (m_drawChipGizmos)
         {
             var _size = new Vector3(m_MapDataSO.Size.x, 1, m_MapDataSO.Size.y);
             Gizmos.DrawWireCube(transform.position, _size);
         }
 
-        if (m_DrawObjGizmos)
+        if (m_drawObjectGizmos)
         {
             if (MapState != null)
             {
