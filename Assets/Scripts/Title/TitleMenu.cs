@@ -14,6 +14,7 @@ public class TitleMenu : MonoBehaviour
     [SerializeField] Button m_quitButton;
     [SerializeField] Button m_optionButton;
     [SerializeField] Button m_creditButton;
+    [SerializeField] Button m_tutorialButton;
     [Header("Sound")]
     [SerializeField] AudioSource m_audio;
     [Header("QuitAnim")]
@@ -24,6 +25,7 @@ public class TitleMenu : MonoBehaviour
     [SerializeField] EscMenuManager m_EscMenu;
 
     public event Action OnShowCredit;
+    public event Action OnShowTutorial;
 
     void OnEnable()
     {
@@ -42,6 +44,7 @@ public class TitleMenu : MonoBehaviour
         m_quitButton.onClick.AddListener(OnButtonQuit);
         m_optionButton.onClick.AddListener(OnButtonOption);
         m_creditButton.onClick.AddListener(OnButtonCredit);
+        m_tutorialButton.onClick.AddListener(OnButtonTutorial);
     }
 
     public void Enable()
@@ -156,6 +159,12 @@ public class TitleMenu : MonoBehaviour
     {
         m_audio.Play();
         OnShowCredit?.Invoke();
+    }
+
+    void OnButtonTutorial()
+    {
+        m_audio.Play();
+        OnShowTutorial?.Invoke();
     }
 
     #endregion Menu

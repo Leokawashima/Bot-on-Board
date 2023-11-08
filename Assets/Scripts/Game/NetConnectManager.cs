@@ -2,6 +2,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using RoomUDPSystem;
 
 /// <summary>
 /// NGO接続を管理するクラス
@@ -29,7 +30,7 @@ public class NetConnectManager : MonoBehaviour
         var _transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
         if(_transport is UnityTransport _unityTransport)
         {
-            //RoomUDP.ConnectionIPAddressは初期化しない場合127.0.0.1になる
+            // RoomUDP.ConnectionIPAddressは初期化しない場合127.0.0.1になる
             _unityTransport.SetConnectionData(RoomUDP.ConnectIPAddress, RoomUDP.Port);
         }
         AddCallBacks();
@@ -60,7 +61,7 @@ public class NetConnectManager : MonoBehaviour
         response_.CreatePlayerObject = true;
         response_.PlayerPrefabHash = null;
 
-        //s生成座標
+        // 生成座標
         response_.Position = new Vector3(NetworkManager.Singleton.ConnectedClients.Count, 0, 0);
 
         response_.Pending = false;
@@ -68,7 +69,7 @@ public class NetConnectManager : MonoBehaviour
 
     void OnConnectedCallBack(ulong count_)
     {
-        //接続時に全員接続完了しているか確認してからの処理を呼ぶので?.Invokeは必要ない
+        // 接続時に全員接続完了しているか確認してからの処理を呼ぶので?.Invokeは必要ない
         if ((int)++count_ == 2)
             Event_PlayersConnected();
     }

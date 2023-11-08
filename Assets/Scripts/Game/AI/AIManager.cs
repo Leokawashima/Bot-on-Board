@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,17 @@ public class AIManager : MonoBehaviour
     [Header("Debug"), SerializeField]
 #endif
     List<AISystem> m_AIList = new();
+
+    public static event Action Event_AiActioned;
+
+    private void OnEnable()
+    {
+        GameSystem.Event_Turn_AIAction += AIAction;
+    }
+    private void OnDisable()
+    {
+        GameSystem.Event_Turn_AIAction -= AIAction;
+    }
 
     void Awake()
     {
@@ -39,11 +51,11 @@ public class AIManager : MonoBehaviour
         }
     }
 
-    public bool CheckAIIsDead()//誰か死んだ時点でtrueを返しているので人数が増えた場合
+    public bool CheckAIIsDead()//誰か死んだ時点でtrueを返している
     {
         foreach(var _ai in m_AIList)
         {
-            if(_ai.m_State == AISystem.State.Dead)
+            if(_ai.AIAliveState == AISystem.AliveState.Dead)
             {
                 return true;
             }
@@ -61,15 +73,15 @@ public class AIManager : MonoBehaviour
             _ai.Action();
 
         //以下AI2体前提処理　時間が足りないのでこのまま
-        var _flag = false;
-        if(m_AIList[0].m_Position == m_AIList[1].m_Position) _flag = true;//完全に同一のマスにいる
-        if(m_AIList[0].m_Position == m_AIList[1].m_PrePosition)//[0]が[1]の移動前にいた場所にがいる
+        var _isHit = false;
+        if(m_AIList[0].Position == m_AIList[1].Position) _isHit = true;//完全に同一のマスにいる
+        if(m_AIList[0].Position == m_AIList[1].PrePosition)//[0]が[1]の移動前にいた場所にいる
         {
-            if(m_AIList[0].m_PrePosition == m_AIList[1].m_Position)//[1]が[0]の移動前にいた場所にいる
-                _flag = true;//つまりすれ違っているのでHit判定
+            if(m_AIList[0].PrePosition == m_AIList[1].Position)//[1]が[0]の移動前にいた場所にいる
+                _isHit = true;//つまりすれ違っているのでHit判定
         }
 
-        if(_flag)
+        if(_isHit)
         {
             for(int i = 0; i < 2; ++i)
             {
@@ -79,5 +91,30 @@ public class AIManager : MonoBehaviour
             }
         }
         //ここまでAI2体前提処理
+
+        foreach(var _ai in m_AIList)
+        {
+            MapManager.Singleton.AIHitObject(_ai.Position, _ai);
+        }
+
+        StartCoroutine(Co_DelayMove());
+        
+        IEnumerator Co_DelayMove()
+        {
+            for(int i = 1; i <= 10; ++i)
+            {
+                foreach(var _ai in m_AIList)
+                {
+                    Vector2 prepos = _ai.PrePosition;
+                    Vector2 pos = _ai.Position;
+                    Vector2 _offset = (pos - prepos) * i / 10.0f;
+                    _ai.transform.localPosition = new Vector3(_ai.PrePosition.x, 1, _ai.PrePosition.y) + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
+                }
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            Event_AiActioned?.Invoke();
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using MyFileSystem;
 
 /// <summary>
-/// まだ調整中
+/// まだ調整中 キーバインドを管理するクラス　ボタンで操作するので恐らく必要なくなる
 /// 参考　https://nekojara.city/unity-input-system-rebinding
 /// </summary>
 public class Rebind : MonoBehaviour

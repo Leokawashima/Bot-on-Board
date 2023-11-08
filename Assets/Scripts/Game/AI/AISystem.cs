@@ -3,22 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// AI一体当たりのシステム
+/// </summary>
 public class AISystem : MonoBehaviour
 {
-    public int m_Index { get; private set; } = 0;//仮持たせ　Playerへの参照を取ってPlayerにIndexを持たせる方が都合がいい
-    public enum Dir_FB { Non = 0, Forward = 1, Back = -1 }
-    public enum Dir_RL { Non = 0, Right = 1, Left = -1 }
-    public enum State { Non, Alive, Dead }
-    public enum ThinkState { Non, Attack, Move, CollisionPredict }
+    [field: SerializeField] public int Index { get; private set; } = 0;//仮持たせ　Playerへの参照を取ってPlayerにIndexを持たせる方が都合がいい
+    public enum DirectionFrontBack { Non = 0, Forward = 1, Back = -1 }
+    public enum DirectionRightLeft { Non = 0, Right = 1, Left = -1 }
+    public enum AliveState { Non, Alive, Dead }
+    public enum ThinkState { Non, Attack, Move, CantMove, CollisionPredict }
 
-    public Dir_FB m_Dir_FB { get; private set; } = Dir_FB.Non;
-    public Dir_RL m_Dir_RL { get; private set; } = Dir_RL.Non;
-    public State m_State { get; private set; } = State.Non;
-    public ThinkState m_ThinkState { get; private set; } = ThinkState.Non;
+    [field: SerializeField] public DirectionFrontBack AIDirectionVertical { get; private set; } = DirectionFrontBack.Non;
+    [field: SerializeField] public DirectionRightLeft AIDirectionHorizontal { get; private set; } = DirectionRightLeft.Non;
+    [field: SerializeField] public AliveState AIAliveState { get; private set; } = AliveState.Non;
+    [field: SerializeField] public ThinkState AIThinkState { get; private set; } = ThinkState.Non;
 
-    public Vector2Int m_Position { get; private set; } = Vector2Int.zero;
-    public Vector2Int m_PrePosition { get; private set; } = Vector2Int.zero;
-    public Vector2Int m_Direction { get { return new Vector2Int((int)m_Dir_RL, (int)m_Dir_FB); } }
+    [field: SerializeField] public Vector2Int Position { get; private set; } = Vector2Int.zero;
+    [field: SerializeField] public Vector2Int PrePosition { get; private set; } = Vector2Int.zero;
+    public Vector2Int Direction { get { return new Vector2Int((int)AIDirectionHorizontal, (int)AIDirectionVertical); } }
 
     //本実装するなら初期化の値をどこかで決めて引数で設定すべき デバッグ用にシリアライズ
     [SerializeField] float m_HPMax = 10.0f;
@@ -26,6 +29,10 @@ public class AISystem : MonoBehaviour
     [SerializeField] float m_Attack = 1.0f;
 
     [SerializeField] List<Vector2Int> m_Path;
+
+    [field: SerializeField] public int m_PowWeapon { get; set; }
+    [field: SerializeField] public int m_UseWeapon { get; set; }
+    [field: SerializeField] public int m_Stan { get; set; }
 
     Vector2Int m_MapSize = Vector2Int.zero;
 
@@ -36,53 +43,57 @@ public class AISystem : MonoBehaviour
     public void Spawn(int index_, string name_, Vector2Int posData_)
     {
         m_HP = m_HPMax;
-        m_State = State.Alive;
-        m_Index = index_;
+        AIAliveState = AliveState.Alive;
+        Index = index_;
         name = name_;
-        m_Position = posData_;
-        m_PrePosition = posData_;
+        Position = posData_;
+        PrePosition = posData_;
         transform.position = new Vector3(posData_.x, 0, posData_.y) + MapManager.Singleton.Offset + Vector3.up;
 
-        m_MapSize = new Vector2Int(MapManager.Singleton.Data_SO.y, MapManager.Singleton.Data_SO.x);
+        m_MapSize = MapManager.Singleton.MapDataSize;
 
         MapManager.Singleton.m_AIManagerList.Add(this);
     }
 
     public void Think()
     {
-        m_PrePosition = m_Position;
+        PrePosition = Position;
         
         //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
         var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
         enemy.Remove(this);
 
-        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.m_ObjStates);
-        m_Path = _aStar.Search(m_Position, enemy[0].m_Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
-
-        if (m_Path.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
+        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.MapState.MapObjectCost);
+        m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
+        if (m_Stan > 0)
         {
-            m_ThinkState = ThinkState.Attack;
+            --m_Stan;
+            AIThinkState = ThinkState.CantMove;
+        }
+        else if (m_Path.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
+        {
+            AIThinkState = ThinkState.Attack;
         }
         else if (m_Path.Count == 3)
         {
-            m_ThinkState= ThinkState.CollisionPredict;
+            AIThinkState= ThinkState.CollisionPredict;
         }
         else
         {
-            m_ThinkState = ThinkState.Move;
+            AIThinkState = ThinkState.Move;
         }
     }
 
     public void Action()
     {
-        var _random = UnityEngine.Random.Range(0, 10);
-        switch(m_ThinkState)
+        switch(AIThinkState)
         {
             case ThinkState.Attack:
-                if(_random != 0)//10%で移動するかも(アホ)
+                // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
+                if(GetRandomWeightedProbability(9, 1) == 0)// 10%で移動するかも(アホ)
                 {
-                    //仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
-                    //で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
+                    // 仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
+                    // で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
                     Attack();
                 }
                 else
@@ -91,7 +102,7 @@ public class AISystem : MonoBehaviour
                 }
                 break;
             case ThinkState.Move:
-                if(_random != 0)//10%で攻撃する(アホ)
+                if(GetRandomWeightedProbability(9, 1) == 0)// 10%で攻撃する(アホ)
                 {
                     Move();
                 }
@@ -100,8 +111,11 @@ public class AISystem : MonoBehaviour
                     Attack();
                 }
                 break;
+            case ThinkState.CantMove:
+                break;
             case ThinkState.CollisionPredict:
-                if((int)(_random / 2) == 0)//移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
+                // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
+                if(GetRandomWeightedProbability(5, 5) == 0)
                 {
                     Move();
                 }
@@ -115,28 +129,31 @@ public class AISystem : MonoBehaviour
 
     public void BackPosition()
     {
-        m_Position = m_PrePosition;
-        transform.localPosition = new Vector3(m_PrePosition.x, 0, m_PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
+        Position = PrePosition;
+        transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
     }
     public void DamageHP(float damage_)
     {
         m_HP = Mathf.Max(m_HP - damage_, 0.0f);//HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に変える...？のか？
         if(m_HP == 0.0f)
-            m_State = State.Dead;
-        Event_DamageHP?.Invoke(m_Index, m_HP);
+            AIAliveState = AliveState.Dead;
+        Event_DamageHP?.Invoke(Index, m_HP);
     }
     public void HealHP(float heal_)
     {
         m_HP = Mathf.Min(m_HP + heal_, m_HPMax);
-        Event_HealHP?.Invoke(m_Index, m_HP);
+        Event_HealHP?.Invoke(Index, m_HP);
     }
 
     void Move()
     {
-        //経路は[0]が現在地点なので[1]が次のチップ
+        // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムの方がいい
+        if(MapManager.Singleton.MapState.MapCollisionState[m_Path[1].y, m_Path[1].x]) return;
+
+        // 経路は[0]が現在地点なので[1]が次のチップ
         transform.localPosition = new Vector3(m_Path[1].x, 0, m_Path[1].y) + MapManager.Singleton.Offset + Vector3.up;
-        m_Position = m_Path[1];
-        var _dir = m_Position - m_PrePosition;
+        Position = m_Path[1];
+        var _dir = Position - PrePosition;
         transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
     }
 
@@ -147,12 +164,45 @@ public class AISystem : MonoBehaviour
         enemy.Remove(this);
 
         //2人前提で[0]に攻撃判定
-        var pos = m_Position - enemy[0].m_Position;
+        var pos = Position - enemy[0].Position;
         var flag = false;
         if (pos.x == 0 && Mathf.Abs(pos.y) == 1) flag = true;//前後一マスずれにいるか否か
         else if (Mathf.Abs(pos.x) == 1 && pos.y == 0) flag = true;//左右一マスズレにいるか否か
 
-        if (flag)
-            enemy[0].DamageHP(m_Attack);
+        if(flag)
+        {
+            float _attackPow = m_Attack;
+            if (m_UseWeapon > 0)
+            {
+                _attackPow = m_PowWeapon;
+                if(--m_UseWeapon == 0) m_PowWeapon = 0;
+
+            }
+            enemy[0].DamageHP(_attackPow);
+        }
+    }
+
+    int GetRandomWeightedProbability(params int[] weight_)
+    {
+        int _total = 0;
+        foreach(var _value in weight_)
+            _total += _value;
+
+        float _random = _total * UnityEngine.Random.value;
+
+        for(int i = 0; i < weight_.Length; ++i)
+        {
+            // ランダムポイントが重みより小さいなら
+            if(_random < weight_[i])
+            {
+                return i;
+            }
+            else
+            {
+                // ランダムポイントが重みより大きいならその値を引いて次の要素へ
+                _random -= weight_[i];
+            }
+        }
+        return default;
     }
 }

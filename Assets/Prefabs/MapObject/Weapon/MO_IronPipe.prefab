@@ -45,6 +45,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 435c7cd989344fb46ba4c17e6d658311, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 435c7cd989344fb46ba4c17e6d658311, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -88,6 +92,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7c4aa77e57a9d8f48931ae7fd2d6f379, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 435c7cd989344fb46ba4c17e6d658311, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: c22b3db4c4d966b42b31742c7f045ec7, type: 2}
     - target: {fileID: 919132149155446097, guid: 435c7cd989344fb46ba4c17e6d658311, type: 3}
       propertyPath: m_Name
       value: IronPipe

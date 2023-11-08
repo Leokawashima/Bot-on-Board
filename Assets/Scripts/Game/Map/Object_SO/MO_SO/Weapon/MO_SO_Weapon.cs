@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "MO_SO/ShortSword")]
-public class MO_SO_ShortSword : MO_SO_Weapon
+public class MO_SO_ShortSword : MapObject_SO_Template, IDestroy, IWeapon
 {
-    public override bool CheckAttackCollider()
+    [field: SerializeField] public uint TurnMax { get; set; }
+    [field: SerializeField] public uint TurnSpawn { get; set; }
+
+    [field: SerializeField] public uint AttackPower { get; set; }
+
+    public bool CheckAttackCollider()
     {
         return true;
     }
 
-    public override void Attack()
+    public void Attack()
     {
 
     }

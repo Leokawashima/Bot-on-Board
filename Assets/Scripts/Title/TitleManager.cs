@@ -9,7 +9,8 @@ public class TitleManager : MonoBehaviour
     [SerializeField] TitlePressAnyKey m_pressAnyKey;
     [SerializeField] TitleMenu m_menu;
     [SerializeField] TitleCredit m_credit;
-    [SerializeField] FadePanelSystem m_creditFadePanelSystem;
+    [SerializeField] TitleCredit m_tutorial;
+    [SerializeField] FadePanelSystem m_fadePanelSystem;
 
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
@@ -44,11 +45,13 @@ public class TitleManager : MonoBehaviour
         m_pressAnyKey.Enable();
         m_menu.Disable();
         m_credit.Disable();
-        m_creditFadePanelSystem.Disable();
+        m_tutorial.Disable();
+        m_fadePanelSystem.Disable();
 
         m_pressAnyKey.Initialize();
         m_menu.Initialize();
         m_credit.Initialize();
+        m_tutorial.Initialize();
 
         m_pressAnyKey.FlashSystem.OnFlashFinished += () =>
         {
@@ -58,22 +61,42 @@ public class TitleManager : MonoBehaviour
 
         m_menu.OnShowCredit += () =>
         {
-            m_creditFadePanelSystem.Fade();
-            m_creditFadePanelSystem.OnFadeInCompleted += m_credit.Enable;
-            m_creditFadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Fade();
+            m_fadePanelSystem.OnFadeInCompleted += m_credit.Enable;
+            m_fadePanelSystem.OnFadeFinished += () =>
             {
-                m_creditFadePanelSystem.OnFadeInCompleted -= m_credit.Enable;
+                m_fadePanelSystem.OnFadeInCompleted -= m_credit.Enable;
+            };
+        };
+
+        m_menu.OnShowTutorial += () =>
+        {
+            m_fadePanelSystem.Fade();
+            m_fadePanelSystem.OnFadeInCompleted += m_tutorial.Enable;
+            m_fadePanelSystem.OnFadeFinished += () =>
+            {
+                m_fadePanelSystem.OnFadeInCompleted -= m_tutorial.Enable;
             };
         };
 
         m_credit.OnHideCredit += () =>
         {
-            m_creditFadePanelSystem.Fade();
-            m_creditFadePanelSystem.OnFadeInCompleted += m_credit.Disable;
-            m_creditFadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Fade();
+            m_fadePanelSystem.OnFadeInCompleted += m_credit.Disable;
+            m_fadePanelSystem.OnFadeFinished += () =>
             {
-                m_creditFadePanelSystem.OnFadeInCompleted -= m_credit.Disable;
+                m_fadePanelSystem.OnFadeInCompleted -= m_credit.Disable;
             };
-        }; 
+        };
+
+        m_tutorial.OnHideCredit += () =>
+        {
+            m_fadePanelSystem.Fade();
+            m_fadePanelSystem.OnFadeInCompleted += m_tutorial.Disable;
+            m_fadePanelSystem.OnFadeFinished += () =>
+            {
+                m_fadePanelSystem.OnFadeInCompleted -= m_tutorial.Disable;
+            };
+        };
     }
 }

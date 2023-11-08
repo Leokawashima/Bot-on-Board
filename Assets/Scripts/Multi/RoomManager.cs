@@ -4,23 +4,33 @@ using System.Net;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using RoomUDPSystem;
 
 // 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class RoomManager : MonoBehaviour
 {
     [SerializeField] RoomUIManager roomUI;
-    [SerializeField] RoomLogManager roomLog;
+    [SerializeField] LogSystem roomLog;
     [SerializeField] RoomListManager roomList;
     [SerializeField] RoomMakeManager roomMake;
-    [SerializeField] RoomConnectManager roomConnect;
+    [SerializeField] RoomConnectionManager roomConnect;
 
-    RoomData MyRoom;
+    RoomData m_hostRoomData;
     List<HostResponseData> connections = new();
 
-    enum MessageState { Error = -1, R_Open, R_Request, R_Response, H_Subscribe, H_GameStart, C_Subscribe, C_GameReady }
-    public enum HostState { Close, Host, GameReady }
+    enum MessageState
+    {
+        Error = -1, R_Open, R_Request, R_Response, H_Subscribe, H_GameStart, C_Subscribe, C_GameReady
+    }
+    public enum HostState
+    {
+        Close, Host, GameReady
+    }
     public HostState hostState = HostState.Close;
-    public enum ClientState { Close, Search, ConnectRequest, Subscribe, Ready, Quit }
+    public enum ClientState
+    {
+        Close, Search, ConnectRequest, Subscribe, Ready, Quit
+    }
     public ClientState clientState = ClientState.Close;
 
     void OnDestroy()
@@ -30,24 +40,11 @@ public class RoomManager : MonoBehaviour
 
     public async void Host()
     {
-        MyRoom = new RoomData()
-        {
-            address = RoomUDP.GetLocalIPAddress(),
-            name = roomMake.getName,
-            option = roomMake.getOption,
-            passward = roomMake.getPasswardIsOn,
-            userMax = roomMake.getUserMax,
-            userCnt = 1
-        };
-        RoomUDP.SetRoomUserMax(MyRoom.userMax);
+        m_hostRoomData = new RoomData(RoomUDP.GetLocalIPAddress(), roomMake.Name, roomMake.Option, roomMake.HasPassward, roomMake.UserMax, 1);
+        RoomUDP.SetRoomUserMax(m_hostRoomData.UserMax);
 
-        var host = new MemberData()
-        {
-            address = RoomUDP.GetLocalIPAddress(),
-            name = roomUI.nameText.text + "(Host)",
-            ready = false
-        };
-        roomList.Add_MemberInfo(host);
+        var host = new MemberData(RoomUDP.GetLocalIPAddress(), roomUI.nameText.text + "(Host)", false);
+        roomList.AddMemberInfo(host);
 
         hostState = HostState.Host;
         RoomUDP.CreateUdp();
@@ -59,7 +56,7 @@ public class RoomManager : MonoBehaviour
             {
                 case HostState.Host:
                     {
-                        if(MyRoom.userMax > MyRoom.userCnt)
+                        if(m_hostRoomData.UserMax > m_hostRoomData.UserCount)
                         {
                             var buffer = Encoding.UTF8.GetBytes(Convert_RoomData());
                             var endP = RoomUDP.buildEndP;
@@ -70,13 +67,13 @@ public class RoomManager : MonoBehaviour
                             }
                         }
 
-                        if(MyRoom.userCnt > 1)
+                        if(m_hostRoomData.UserCount > 1)
                         {
                             var buffer = Encoding.UTF8.GetBytes(Convert_HostScbscribeData());
 
-                            foreach(var member in roomList.members)
+                            foreach(var member in roomList.MemberList)
                             {
-                                if(await RoomUDP.Send(buffer, member.memberEndP) == false)
+                                if(await RoomUDP.Send(buffer, member.EndPoint) == false)
                                 {
                                     hostState = HostState.Close;
                                     break;
@@ -88,10 +85,10 @@ public class RoomManager : MonoBehaviour
                         {
                             for(int i = 0; i < connections.Count; ++i)
                             {
-                                if (connections[i].connectCnt < RoomUDP.MessageCount)
+                                if (connections[i].ConnectionCount < RoomUDP.MessageCount)
                                 {
-                                    var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(connections[i].connectFlag));
-                                    if (await RoomUDP.Send(buffer, connections[i].connectEndP))
+                                    var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(connections[i].CanConnection));
+                                    if (await RoomUDP.Send(buffer, connections[i].ConnectionEndPoint))
                                     {
                                         connections[i].AddCnt();
                                     }
@@ -136,19 +133,19 @@ public class RoomManager : MonoBehaviour
             case MessageState.R_Request:
                 {
                     var data = Get_ConectRequestData(endP_, buffer_);
-                    var flag = !roomMake.getPasswardIsOn && data.passward == roomMake.getPassward;
+                    var flag = !roomMake.HasPassward && data.Passward == roomMake.Passward;
                     if(flag)
                     {
-                        roomList.Add_MemberInfo(endP_.Address, data);
-                        MyRoom.userCnt++;
-                        roomLog.LogPush(data.name + " joined");
+                        roomList.AddMemberInfo(endP_.Address, data);
+                        m_hostRoomData.AddUserCount();
+                        roomLog.LogPush(data.Name + " joined");
                     }
 
                     var response = new HostResponseData()
                     {
-                        connectEndP = endP_,
-                        connectFlag = flag,
-                        connectCnt = 0
+                        ConnectionEndPoint = endP_,
+                        CanConnection= flag,
+                        ConnectionCount = 0
                     };
                     connections.Add(response);
                     var buffer = Encoding.UTF8.GetBytes(Convert_FlagData(flag));
@@ -160,7 +157,7 @@ public class RoomManager : MonoBehaviour
                     var data = Get_ClientSubscribeData(endP_, buffer_);
                     for (int i = 0; i < connections.Count; ++i)
                     {
-                        if (connections[i].connectEndP.Equals(endP_))
+                        if (connections[i].ConnectionEndPoint.Equals(endP_))
                         {
                             connections.Remove(connections[i]);
                         }
@@ -194,7 +191,7 @@ public class RoomManager : MonoBehaviour
                     break;
                 case ClientState.ConnectRequest:
                     {
-                        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
+                        var endP = new IPEndPoint(roomList.SelectInfoRoomData.RoomData.Address, RoomUDP.Port);
                         var buffer = Encoding.UTF8.GetBytes(Convert_ConectRequestData());
 
                         if(await RoomUDP.Send(buffer, endP) == false)
@@ -210,7 +207,7 @@ public class RoomManager : MonoBehaviour
                     break;
                 case ClientState.Subscribe:
                     {
-                        var endP = new IPEndPoint(roomList.selectRoom.roomData.address, RoomUDP.Port);
+                        var endP = new IPEndPoint(roomList.SelectInfoRoomData.RoomData.Address, RoomUDP.Port);
                         var buffer = Encoding.UTF8.GetBytes(Convert_ClientSubscribeData());
 
                         if(await RoomUDP.Send(buffer, endP) == false)
@@ -235,7 +232,7 @@ public class RoomManager : MonoBehaviour
         {
             var data = Get_RoomData(endP_, buffer_);
             if(endP_.Address != RoomUDP.GetLocalIPAddress())
-                roomList.Add_RoomInfo(endP_.Address, data);
+                roomList.AddRoomInfo(endP_.Address, data);
         }
     }
     void ClientReceive_ConnectRequest(IPEndPoint endP_, string buffer_)
@@ -243,12 +240,12 @@ public class RoomManager : MonoBehaviour
         if(CheckMessageState(ref buffer_) == MessageState.R_Response)
         {
             var data = Get_FlagData(endP_, buffer_);
-            if(data.flag)
+            if(data.CanConnection)
             {
                 clientState = ClientState.Subscribe;
                 roomLog.LogPush("Connect Room");
 
-                roomList.RemoveAll_RoomInfo();
+                roomList.ClearRoomInfo();
             }
             else
             {
@@ -263,9 +260,9 @@ public class RoomManager : MonoBehaviour
         if (CheckMessageState(ref  buffer_) == MessageState.H_Subscribe)
         {
             var data = Get_HostSubscribeData(endP_, buffer_);
-            roomList.RemoveAll_MemberInfo();
-            foreach(var member in data.members)
-                roomList.Add_MemberInfo(member);
+            roomList.ClearMemberInfo();
+            foreach(var member in data.Members)
+                roomList.AddMemberInfo(member);
         }
     }
     public void Close()
@@ -296,60 +293,68 @@ public class RoomManager : MonoBehaviour
 
     string Convert_RoomData()
     {
-        return (int)MessageState.R_Open + "_" + MyRoom.name + "_" + MyRoom.option.Length + "_" + MyRoom.option + "_" + MyRoom.passward + "_" + MyRoom.userMax + "_" + MyRoom.userCnt;
+        return (int)MessageState.R_Open + "_" + m_hostRoomData.Name + "_"
+            + m_hostRoomData.Option.Length + "_" + m_hostRoomData.Option + "_"
+            + m_hostRoomData.HasPassward + "_" + m_hostRoomData.UserMax + "_" + m_hostRoomData.UserCount;
     }
-    UDPMessage_RoomData Get_RoomData(IPEndPoint endP_, string buffer_)
+    RoomData Get_RoomData(IPEndPoint endP_, string buffer_)
     {
-        //Matching等を使いたかったがOptionの文字まで切り出す可能性がある為SubStringで切り出し
-        var data = new UDPMessage_RoomData();
-        data.address = endP_.Address;
-        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
+        // Matching等を使いたかったがOptionの文字に制限を設けていないので、
+        // Optionの文字まで切り出す可能性がある為SubStringで切り出しを行っている
+        var _address = endP_.Address;
+        var _name = buffer_.Substring(0, buffer_.IndexOf("_"));
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        var length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        var _length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        data.option = buffer_.Substring(0, length);
+        var _option = buffer_.Substring(0, _length);
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        data.passwardFlag = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        var _passwardFlag = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
         buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-        data.userMax = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
-        data.userCnt = int.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
-        return data;
+        var _userMax = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+        var _userCnt = int.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
+
+        return new RoomData(_address, _name, _option, _passwardFlag, _userMax, _userCnt);
     }
     string Convert_ConectRequestData()
     {
-        return (int)MessageState.R_Request + "_" + roomUI.nameText.text + "_" + roomConnect.getPaswardText.text;
+        return (int)MessageState.R_Request + "_" + roomUI.nameText.text + "_" + roomConnect.PasswardInputField.text;
     }
-    UDPMessage_ConnectRequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
+    ConnectionRequestData Get_ConectRequestData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_ConnectRequestData();
-        data.address = endP_.Address;
-        data.name = buffer_.Substring(0, buffer_.IndexOf("_"));
-        data.passward = buffer_.Substring(buffer_.IndexOf("_") + 1);
+        var data = new ConnectionRequestData();
+        data.Address = endP_.Address;
+        data.Name = buffer_.Substring(0, buffer_.IndexOf("_"));
+        data.Passward = int.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
         return data;
     }
     string Convert_HostScbscribeData()
     {
-        var str = (int)MessageState.H_Subscribe + "_" + roomList.members.Count + "_";
-        foreach(var member in roomList.members)
-            str += member.memberAddress + "_" + member.memberName.Length + "_" + member.memberName + "_" + member.memberReady + "_";
+        var str = (int)MessageState.H_Subscribe + "_" + roomList.MemberList.Count + "_";
+        foreach(var member in roomList.MemberList)
+        {
+            var _memberData = member.MemberData;
+            str += _memberData.Address + "_" + _memberData.Name.Length + "_" + _memberData.Name + "_" + _memberData.IsReady + "_";
+        }
         return str;
     }
-    UDPMessage_HostSubscribeData Get_HostSubscribeData(IPEndPoint endP_, string buffer_)
+    HostSubscribeData Get_HostSubscribeData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_HostSubscribeData();
-        data.address = endP_.Address;
-        data.members = new MemberData[int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")))];
-        for(int i = 0; i < data.members.Length; ++i)
+        var data = new HostSubscribeData
         {
-            data.members[i] = new MemberData();
+            Address = endP_.Address,
+            Members = new MemberData[int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")))]
+        };
+        for(int i = 0; i < data.Members.Length; ++i)
+        {
             buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-            data.members[i].address = IPAddress.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            var _address = IPAddress.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
             buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
             var length = int.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
             buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-            data.members[i].name = buffer_.Substring(0, length);
+            var _name = buffer_.Substring(0, length);
             buffer_ = buffer_.Substring(buffer_.IndexOf("_") + 1);
-            data.members[i].ready = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            var _isReady = bool.Parse(buffer_.Substring(0, buffer_.IndexOf("_")));
+            data.Members[i] = new MemberData(_address, _name, _isReady);
         }
         return data;
     }
@@ -357,22 +362,27 @@ public class RoomManager : MonoBehaviour
     {
         return (int)MessageState.C_Subscribe + "_" + roomUI.nameText.text;
     }
-    UDPMessage_ClientSubscribeData Get_ClientSubscribeData(IPEndPoint endP_, string buffer_)
+    ClientSubscribeData Get_ClientSubscribeData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_ClientSubscribeData();
-        data.address = endP_.Address;
-        data.name = buffer_;
+        var data = new ClientSubscribeData()
+        {
+            Address = endP_.Address,
+            Name = buffer_,
+        };
+
         return data;
     }
     string Convert_FlagData(bool flag_)
     {
         return (int)MessageState.R_Response + "_" + flag_;
     }
-    UDPMessage_FlagData Get_FlagData(IPEndPoint endP_, string buffer_)
+    ConnectionResponseData Get_FlagData(IPEndPoint endP_, string buffer_)
     {
-        var data = new UDPMessage_FlagData();
-        data.address = endP_.Address;
-        data.flag = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1));
+        var data = new ConnectionResponseData
+        {
+            Address = endP_.Address,
+            CanConnection = bool.Parse(buffer_.Substring(buffer_.IndexOf("_") + 1))
+        };
         return data;
     }
     #endregion

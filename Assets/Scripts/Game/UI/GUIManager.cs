@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using ZXing.OneD;
 
 /// <summary>
 /// GUIを管理するクラス
@@ -14,7 +15,7 @@ public class GUIManager : MonoBehaviour
     [SerializeField] AIHPUIManager m_AIHPUIManager;//完成
     [SerializeField] PlayerUIManager m_PlayerUIManager;
     [SerializeField] CutInManager m_CutInManager;//完成
-
+    [SerializeField] AudioSource m_audio;
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
 #endif
@@ -23,6 +24,8 @@ public class GUIManager : MonoBehaviour
     public static event Action Event_TurnInitializeCutIn;
     public static event Action Event_ButtonPlace;
     public static event Action Event_ButtonTurnEnd;
+    public static event Action Event_AICutInFinish;
+    public static event Action Event_AnimGameSet;
 
     void OnEnable()
     {
@@ -54,7 +57,7 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);//下層は完成
+        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);//下層は完成
         m_AIHPUIManager.Initialize(2, 10);//2人　HP 10で初期化 下層は完成
 
         //ローカルの場合は人数分
@@ -78,22 +81,20 @@ public class GUIManager : MonoBehaviour
     }
     void OnTurnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.m_ElapsedTurn);
+        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);
         foreach(var ui_ in m_PlayerUIArray)
             ui_.TurnInitialize();
 
-        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.m_ElapsedTurn, () =>
+        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.ElapsedTurn, () =>
         {
-            Debug.Log("TurnCutinEnd");
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.m_PlayerIndex, () =>
+        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.PlayerIndex, () =>
         {
-            Debug.Log("PlaceCutinEnd");
-            m_PlayerUIArray[GameSystem.Singleton.m_PlayerIndex].gameObject.SetActive(true);
+            m_PlayerUIArray[GameSystem.Singleton.PlayerIndex].gameObject.SetActive(true);
         });
     }
     void OnTurnEnd()
@@ -102,11 +103,18 @@ public class GUIManager : MonoBehaviour
     }
     void OnAIAction()
     {
-        m_CutInManager.CutIn("AIAction");
+        m_CutInManager.CutIn("AIAction", () =>
+        {
+            Event_AICutInFinish?.Invoke();
+        });
     }
     void OnTurnGameSet()
     {
-        m_CutInManager.CutIn("GameSet");
+        m_audio.Play();
+        m_CutInManager.CutIn("GameSet", () =>
+        {
+            Event_AnimGameSet?.Invoke();
+        });
     }
 
     public void OnSetHPText(int index_, float hp_)

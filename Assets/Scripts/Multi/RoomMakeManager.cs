@@ -2,17 +2,24 @@
 using UnityEngine.UI;
 using TMPro;
 
-// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
+/// <summary>
+/// Roomを作る(Hostする)のを管理するクラス
+/// </summary>
+/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class RoomMakeManager : MonoBehaviour
 {
-    [SerializeField] TMP_InputField nameText;
-    public string getName { get { return nameText.text; } }
-    [SerializeField] TMP_InputField optionText;
-    public string getOption { get { return optionText.text; } }
-    [SerializeField] Toggle passwardToggle;
-    public bool getPasswardIsOn { get { return passwardToggle.isOn; } }
-    [SerializeField] TMP_InputField passwardText;
-    public string getPassward { get { return passwardText.text; } }
-    [SerializeField] TMP_InputField userMaxText;
-    public int getUserMax { get { return int.Parse(userMaxText.text); } }
+    [SerializeField] TMP_InputField m_nameText;
+    public string Name => m_nameText.text;
+
+    [SerializeField] TMP_InputField m_optionText;
+    public string Option => m_optionText.text;
+
+    [SerializeField] Toggle m_passwardToggle;
+    public bool HasPassward => m_passwardToggle.isOn;
+
+    [SerializeField] TMP_InputField m_passwardInputField;
+    public int Passward => int.Parse(m_passwardInputField.text);
+
+    [SerializeField] TMP_InputField m_userMaxInputField;
+    public int UserMax => int.Parse(m_userMaxInputField.text);
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using RoomUDPSystem;
 
 public static class GlobalSystem
 {

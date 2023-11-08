@@ -10,24 +10,24 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// まだ調整中
+/// まだ調整中　画面設定やクオリティを設定するクラス
 /// </summary>
 public class Quaorty : MonoBehaviour
 {
-    [SerializeField] TMP_Dropdown drop;
-    [SerializeField] TMP_Dropdown sizedrop;
-    [SerializeField] VolumeProfile volume;
-    [SerializeField] Slider slider;
+    [SerializeField] TMP_Dropdown m_drop;
+    [SerializeField] TMP_Dropdown m_sizedrop;
+    [SerializeField] VolumeProfile m_volume;
+    [SerializeField] Slider m_slider;
 
     void Start()
     {
         List<string> names = QualitySettings.names.ToList();
-        drop.options.Clear();
-        drop.AddOptions(names);
-        drop.onValueChanged.AddListener((int v) => { QualitySettings.SetQualityLevel(v); });
+        m_drop.options.Clear();
+        m_drop.AddOptions(names);
+        m_drop.onValueChanged.AddListener((int v) => { QualitySettings.SetQualityLevel(v); });
 
-        sizedrop.AddOptions(new List<string> { "FullScreen", "Window", "BoraderLess", "???", "Half", "Full" });
-        sizedrop.onValueChanged.AddListener((int v) =>
+        m_sizedrop.AddOptions(new List<string> { "FullScreen", "Window", "BoraderLess", "???", "Half", "Full" });
+        m_sizedrop.onValueChanged.AddListener((int v) =>
         {
 #if !UNITY_ANDROID
             switch(v)
@@ -54,9 +54,9 @@ public class Quaorty : MonoBehaviour
 #endif
         });
 
-        volume.TryGet(out ColorAdjustments light);
-        slider.value = light.postExposure.value;
-        slider.onValueChanged.AddListener((float v) =>
+        m_volume.TryGet(out ColorAdjustments light);
+        m_slider.value = light.postExposure.value;
+        m_slider.onValueChanged.AddListener((float v) =>
         {
             light.postExposure.value = v;
         });

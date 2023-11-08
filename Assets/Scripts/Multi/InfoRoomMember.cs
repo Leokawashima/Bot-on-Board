@@ -1,47 +1,66 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using RoomUDPSystem;
 
 /// <summary>
-/// Memberの情報を格納するクラス
+/// Member単位の情報を表示、保持するクラス
 /// </summary>
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class InfoRoomMember : MonoBehaviour
 {
-    RoomListManager list;
+    MemberData m_memberData;
+    public MemberData MemberData => m_memberData;
 
-    public IPEndPoint memberEndP { get; private set; }
-    public IPAddress memberAddress { get; private set; }
-    public string memberName { get; private set; }
-    public bool memberReady { get; private set; }
+    // 送受信ではIPAddressからではなくEndPointを経由しなければいけないので
+    // キャッシュ変数を持たせている
+    public IPEndPoint EndPoint { get; private set; }
+     
+    [SerializeField] Button m_button;
+    [SerializeField] TMP_Text m_nameText;
+    [SerializeField] Image m_readyImage;
 
-    [SerializeField] TextMeshProUGUI memberNameText;
-    [SerializeField] GameObject memberReadyImage;
+    public event Action<InfoRoomMember> Event_Button;
 
-    public void OnClickInfo()
+    void Initialize(IPAddress address_, string name_, bool isReady_ = false)
     {
+        // フィールド設定
+        m_memberData = new MemberData(address_, name_, false);
+        EndPoint = new IPEndPoint(address_, RoomUDP.Port);
+        // イベントハンドラをボタンに登録
+        m_button.onClick.AddListener(OnButton);
 
+        // 表示情報設定
+        m_nameText.text = name_;
+        m_readyImage.enabled = isReady_;
+    }
+    public void Initialize(MemberData membderData_)
+    {
+        Initialize(membderData_.Address, membderData_.Name, membderData_.IsReady);
+    }
+    public void Initialize(ConnectionRequestData requestData_)
+    {
+        Initialize(requestData_.Address, requestData_.Name);
     }
 
-    public void InitializeInfo(RoomListManager list_, UDPMessage_ConnectRequestData data_)
+    /// <summary>
+    /// 表示情報を更新する関数
+    /// </summary>
+    /// <param name="memberData_">更新に使用するMmeberの情報</param>
+    public void UpdateReady(MemberData memberData_)
     {
-        list = list_;
-        memberEndP = new IPEndPoint(data_.address, RoomUDP.Port);
-        memberAddress = data_.address;
-        memberName = data_.name;
-        memberNameText.text = data_.name;
-        memberReady = false;
-        memberReadyImage.SetActive(false);
+        // 準備完了情報を更新
+        m_memberData.SetIsReady(memberData_.IsReady);
+        m_readyImage.enabled = memberData_.IsReady;
     }
 
-    public void UpdateInfo(RoomListManager list_, MemberData data_)
+    /// <summary>
+    /// ボタンが押された時のイベントハンドラ
+    /// </summary>
+    void OnButton()
     {
-        list = list_;
-        memberEndP = new IPEndPoint(data_.address, RoomUDP.Port);
-        memberAddress = data_.address;
-        memberName = data_.name;
-        memberNameText.text = data_.name;
-        memberReady = data_.ready;
-        memberReadyImage.SetActive(data_.ready);
+        Event_Button?.Invoke(this);
     }
 }
