@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class MapObject : MonoBehaviour
 {
     public MapObject_SO_Template MapObjectSO { get; set; }
     public Vector2Int Position = Vector2Int.zero;
-    public uint NowTurn;
+    public uint ElapsedTurn = 0;
 
     public void Initialize(MapManager mapManager_)
     {
@@ -14,11 +18,17 @@ public class MapObject : MonoBehaviour
 
     public bool ObjectUpdate(MapManager mapManager_)
     {
-        if (--NowTurn == 0)
+        ElapsedTurn++;
+
+        if (MapObjectSO is IDestroy _destroy)
         {
-            ObjectDestroy(mapManager_);
-            return false;
+            if (_destroy.TurnMax - ElapsedTurn <= 0)
+            {
+                ObjectDestroy(mapManager_);
+                return false;
+            }
         }
+
         return true;
     }
     public void ObjectDestroy(MapManager mapManager_)

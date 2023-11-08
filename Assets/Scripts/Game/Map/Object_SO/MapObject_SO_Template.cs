@@ -56,20 +56,22 @@ public abstract class MO_SO_Heal : MapObject_SO_Template
     public int m_HealPow = 1;
 }
 
-public interface IDestroy
+public interface IMapObject {}
+
+public interface IDestroy : IMapObject
 {
     public uint TurnMax { get; set; }
     public uint TurnSpawn { get; set; }
 }
 
-public interface IWeapon
+public interface IWeapon : IMapObject
 {
     public uint AttackPower { get; set; }
     public bool CheckAttackCollider();
     public void Attack();
 }
 
-public interface IHeal
+public interface IHeal : IMapObject
 {
     public uint HealPower { get; set; }
     public bool CheckHealCollider();
