@@ -1,5 +1,3 @@
-ぱくたそ［ https://www.pakutaso.com ］
-juntexture14961496.jpg
-
+[AI生成]
 https://huggingface.co/spaces/stabilityai/stable-diffusion
 stable_0.jpg
