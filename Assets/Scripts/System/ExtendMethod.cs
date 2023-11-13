@@ -3,8 +3,8 @@ using TMPro;
 
 /// <summary>
 /// このプロジェクトで必要な拡張メソッドをまとめるためのクラス
-/// 量が増えたり有用なものは別途切り分けてクラスを作る
 /// </summary>
+/// <remarks>量が増えたり有用なものは別途切り分けてクラスを作る</remarks>
 public static class ExtendMethod
 {
     /// <summary>

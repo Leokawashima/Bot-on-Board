@@ -6,7 +6,6 @@ namespace MyFileSystem
     /// <summary>
     /// Jsonファイル管理用クラス
     /// </summary>
-    /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
     public static class JsonFileSystem
     {
         /// <summary>

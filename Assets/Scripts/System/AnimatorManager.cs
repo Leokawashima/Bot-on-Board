@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// アニメーション再生をコーディングしたクラス
+/// アニメーション再生をラップしたクラス
 /// </summary>
 public class AnimatorManager : MonoBehaviour
 {
