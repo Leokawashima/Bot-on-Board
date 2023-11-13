@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &515907408
+--- !u!1 &938371639
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,9 +131,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 515907411}
-  - component: {fileID: 515907410}
-  - component: {fileID: 515907409}
+  - component: {fileID: 938371642}
+  - component: {fileID: 938371641}
+  - component: {fileID: 938371640}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -141,13 +141,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &515907409
+--- !u!114 &938371640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515907408}
+  m_GameObject: {fileID: 938371639}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
@@ -171,13 +171,13 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!114 &515907410
+--- !u!114 &938371641
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515907408}
+  m_GameObject: {fileID: 938371639}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
@@ -186,13 +186,13 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!4 &515907411
+--- !u!4 &938371642
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515907408}
+  m_GameObject: {fileID: 938371639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -211,7 +211,6 @@ GameObject:
   m_Component:
   - component: {fileID: 997657333}
   - component: {fileID: 997657335}
-  - component: {fileID: 997657336}
   - component: {fileID: 997657334}
   m_Layer: 5
   m_Name: Text_Message
@@ -337,31 +336,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997657332}
   m_CullTransparentMesh: 1
---- !u!114 &997657336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997657332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d92323150b9e0c42832ec0f106f3289, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Text: {fileID: 997657334}
-  m_Index: 0
-  m_IsFade: 0
-  m_FadeTime: 1
-  m_Message:
-  - "\u6CE8\u610F\\nCaution"
-  - "\u753B\u9762\u306E\u660E\u6EC5\u306B\u3054\u6CE8\u610F\u304F\u3060\u3055\u3044\u3002\\nPlease
-    be careful flashing lights."
-  - "\u307E\u305F\u3001\u3053\u306E\u30B2\u30FC\u30E0\u306F\u5B66\u751F\u4F5C\u54C1\u3067\u3059\u3002\\nAlso,
-    this game was created by students."
-  - " \u9177\u8A55\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044 ; )\\nPlease don't
-    criticize harshly ; )"
-  - "\u3067\u306F  ;D\\nenjoy  ;D "
 --- !u!1 &1133220323
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +431,7 @@ RectTransform:
   m_Children:
   - {fileID: 997657333}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -541,12 +515,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1166293988}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1166293992
 MonoBehaviour:
@@ -591,3 +565,59 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1 &1735374181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1735374183}
+  - component: {fileID: 1735374182}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1735374182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735374181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d92323150b9e0c42832ec0f106f3289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_text: {fileID: 997657334}
+  m_fadeTime: 1
+  m_messageList:
+  - "\u6CE8\u610F\r\nCaution"
+  - "\u753B\u9762\u306E\u660E\u6EC5\u306B\u3054\u6CE8\u610F\u304F\u3060\u3055\u3044\u3002\r\nPlease
+    be careful flashing lights."
+  - "\u307E\u305F\u3001\u3053\u306E\u30B2\u30FC\u30E0\u306F\u5B66\u751F\u4F5C\u54C1\u3067\u3059\u3002\r\nAlso,
+    this game was created by students."
+  - "\u9177\u8A55\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044 ; )\r\nPlease don't
+    criticize harshly ; )"
+  - "\u3067\u306F  ;D\r\nenjoy  ;D "
+  m_index: 0
+--- !u!4 &1735374183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735374181}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
