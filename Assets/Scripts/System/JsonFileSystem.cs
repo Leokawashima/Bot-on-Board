@@ -15,6 +15,7 @@ namespace MyFileSystem
         /// <param name="obj_">保存するデータ</param>
         public static void Save(string path_, object obj_)
         {
+            // Json文字列化してセーブする
             Save(path_, JsonUtility.ToJson(obj_));
         }
 
@@ -25,12 +26,15 @@ namespace MyFileSystem
         /// <param name="str_">保存する文字列</param>
         public static void Save(string path_, string str_)
         {
+            // セーブするディレクトリを探す
             if(!Directory.Exists($"{path_}/../"))
             {
+                // ないなら作る
                 Directory.CreateDirectory($"{path_}/../");
             }
-
+            // 書き込むためのインスタンス作成
             StreamWriter _sw = new StreamWriter(path_, false);
+            // 書き込み、反映、終了
             _sw.Write(str_);
             _sw.Flush();
             _sw.Close();
@@ -49,9 +53,11 @@ namespace MyFileSystem
         /// <returns>パスが存在するか否か</returns>
         public static bool Load<T>(string path_, out T data_)
         {
-            var _flag = Load(path_, out var str);
-            data_ = _flag ? JsonUtility.FromJson<T>(str) : default;
-            return _flag;
+            // 文字列をロードする
+            var _isLoaded = Load(path_, out var str);
+            // ロードできていたらオブジェクトに直す
+            data_ = _isLoaded ? JsonUtility.FromJson<T>(str) : default;
+            return _isLoaded;
         }
 
         /// <summary>
@@ -62,19 +68,23 @@ namespace MyFileSystem
         /// <returns>パスが存在するか否か</returns>
         public static bool Load(string path_, out string str_)
         {
+            // ディレクトリを探してないなら返す
             if(!Directory.Exists($"{path_}/../"))
             {
                 str_ = default;
                 return false;
             }
 
+            // ファイルを探してないなら返す
             if (!File.Exists(path_))
             {
                 str_ = default;
                 return false;
             }
 
+            // 読み込むためのインスタンス作成
             StreamReader _sr = new StreamReader(path_);
+            // 読み込み、終了
             str_ = _sr.ReadToEnd();
             _sr.Close();
 

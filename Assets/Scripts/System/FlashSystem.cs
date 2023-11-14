@@ -57,16 +57,9 @@ public class FlashSystem : MonoBehaviour
     /// </summary>
     public void Stop()
     {
-        if (m_activeCorutine != null)
-        {
-            StopCoroutine(m_activeCorutine);
-        }
-#if UNITY_EDITOR
-        else
-        {
-            Debug.Log("フラッシュ停止中にStopが呼び出されました");
-        }
-#endif
+        // ヌルなら例外がスローされるため独自に例外処理を組み込む必要はない
+        StopCoroutine(m_activeCorutine);
+        m_activeCorutine = null;
     }
 
     /// <summary>
