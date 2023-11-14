@@ -3,12 +3,23 @@ using UnityEngine.UI;
 
 public abstract class MapObject_SO_Template : ScriptableObject
 {
+    public enum Rarity
+    {
+        common = 0,
+        unCommon = 1,
+        Rare = 2,
+        Epic = 3,
+    }
+    public Rarity hasRarity = Rarity.common;
+
     public string m_ObjectName = string.Empty;
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
 
-    [field: SerializeField] public int Cost { get; private set; } = 0;
+    [field: SerializeField]
+    public int Cost { get; private set; } = 0;
 
-    [field: SerializeField] public bool IsCollider { get; private set; } = false;
+    [field: SerializeField]
+    public bool IsCollider { get; private set; } = false;
 
     public GameObject m_Prefab;
     public MapObjectCard m_Card;
@@ -50,11 +61,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
 //以下継承クラス　インターフェース化する方がデータ設計が楽だが、
 //プロパティは通常のインスペクターから見えない為後々編集エディターを作るまでクラス実装
-
-public abstract class MO_SO_Heal : MapObject_SO_Template
-{
-    public int m_HealPow = 1;
-}
 
 public interface IMapObject {}
 

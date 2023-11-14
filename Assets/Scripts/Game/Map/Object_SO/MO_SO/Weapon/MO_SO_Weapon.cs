@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "MO_SO/ShortSword")]
+[CreateAssetMenu(menuName = "MO_SO/Weapon")]
 public class MO_SO_ShortSword : MapObject_SO_Template, IDestroy, IWeapon
 {
     [field: SerializeField] public uint TurnMax { get; set; }
