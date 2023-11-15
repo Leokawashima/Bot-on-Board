@@ -12,17 +12,20 @@ public class MessageManager : MonoBehaviour
     /// <summary>
     /// メッセージテキスト
     /// </summary>
-    [SerializeField] TMP_Text m_text;
+    [SerializeField]
+    private TMP_Text m_text;
 
     /// <summary>
     /// a値0~1までの変化にかかる時間　秒単位
     /// </summary>
-    [SerializeField] float m_fadeTime = 1.0f;
+    [SerializeField]
+    private float m_fadeTime = 1.0f;
 
     /// <summary>
     /// 表示するメッセージ
     /// </summary>
-    [TextArea, SerializeField] List<string> m_messageList;
+    [TextArea, SerializeField]
+    private List<string> m_messageList;
 
     /// <summary>
     /// 現在表示している文字のインデックス
@@ -30,17 +33,17 @@ public class MessageManager : MonoBehaviour
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
 #endif
-    int m_index = 0;
+    private int m_index = 0;
 
     /// <summary>
     /// InputSystemの編集用マップ
     /// </summary>
-    InputActionMapSettings m_inputMap;
+    private InputActionMapSettings m_inputMap;
 
     /// <summary>
-    /// フェードで使用するコルーチンのアクティブなものを保持するフィールド
+    /// コルーチンのアクティブなものを保持するフィールド
     /// </summary>
-    Coroutine m_activeCoroutine;
+    private Coroutine m_activeCoroutine;
 
     /// <summary>
     /// 初期化処理

@@ -5461,9 +5461,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bddb9edde059a4d9f96b9ab7f73c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Text: {fileID: 232689785}
-  m_StartColor: {r: 1, g: 0, b: 0, a: 1}
-  m_Speed: 0.6
+  m_text: {fileID: 232689785}
+  m_startColor: {r: 1, g: 0, b: 0, a: 1}
+  m_speed: 1
 --- !u!114 &232689785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7066,9 +7066,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7426490b33a99134bb7a010ef23895f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Target: {fileID: 232689782}
-  m_Cnt: 4
-  m_Time: 1
+  m_target: {fileID: 232689782}
+  m_count: 4
+  m_time: 1
 --- !u!114 &818966759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18942,10 +18942,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_image: {fileID: 1369140699}
-  m_value: 0
   m_wholeTime: 1
   m_cutting: 10
   m_waitTime: 0.1
+  m_fadeValue: 0
 --- !u!1 &1403575214
 GameObject:
   m_ObjectHideFlags: 0

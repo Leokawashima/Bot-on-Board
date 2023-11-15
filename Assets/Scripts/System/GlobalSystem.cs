@@ -61,6 +61,7 @@ namespace Name
 #else
         public static readonly string AppFilePath = Application.dataPath + "/../";
 #endif
+        public static readonly string FilePath_Deck = Application.dataPath + "/Decks";
         public static readonly string FilePath_Setting = AppFilePath + "Settings";
         public static readonly string FilePath_ScreenShot = AppFilePath + "ScreenShots";
     }

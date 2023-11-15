@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Map/Object/Destroy")]
+[CreateAssetMenu(menuName = "MO_SO/Default")]
 public class MO_SO_Item : MapObject_SO_Template, IDestroy
 {
     [field: SerializeField] public uint TurnMax { get; set; }
