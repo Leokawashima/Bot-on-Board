@@ -19,7 +19,7 @@ public class Rebind : MonoBehaviour
     InputAction _action;
     InputActionRebindingExtensions.RebindingOperation _rebindOperation;
 
-    readonly string m_FilePath = Name.Setting.FilePath_Setting + "/KeyBind.json";
+    readonly string m_FilePath = Name.FilePath.FilePath_Setting + "/KeyBind.json";
 
     void Awake()
     {

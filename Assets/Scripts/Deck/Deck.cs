@@ -1,27 +1,25 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 public class Deck
 {
-    public enum State
-    {
-        isRarilyLimit = 1 << 0,
-        isSameBan = 1 << 1,
-    }
-
     /// <summary>
-    /// デッキのフィールド
+    /// デッキの名前
     /// </summary>
-    [field: SerializeField]
-    public List<int> CardIndexList { get; private set; } = new();
-
-    /// <summary>
-    /// デッキのサイズ
-    /// </summary>
-    public int MaxSize { get; private set; } = 10;
+    public string DeckName = "null";
 
     /// <summary>
     /// デッキの状態
     /// </summary>
-    public int HasState { get; private set; }
+    public int State = 0;
+
+    /// <summary>
+    /// デッキのフィールド
+    /// </summary>
+    public List<int> CardIndexList = new();
+
+    /// <summary>
+    /// デッキのサイズ
+    /// </summary>
+    public int MaxSize = 10;
 }

@@ -13,7 +13,7 @@ namespace MyFileSystem
         /// </summary>
         /// <param name="path_">保存先ファイルパス</param>
         /// <param name="obj_">保存するデータ</param>
-        public static void Save(string path_, object obj_)
+        public static void SaveToJson(string path_, object obj_)
         {
             // Json文字列化してセーブする
             Save(path_, JsonUtility.ToJson(obj_));
@@ -27,7 +27,7 @@ namespace MyFileSystem
         public static void Save(string path_, string str_)
         {
             // セーブするディレクトリを探す
-            if(!Directory.Exists($"{path_}/../"))
+            if (!Directory.Exists($"{path_}/../"))
             {
                 // ないなら作る
                 Directory.CreateDirectory($"{path_}/../");
@@ -57,6 +57,7 @@ namespace MyFileSystem
             var _isLoaded = Load(path_, out var str);
             // ロードできていたらオブジェクトに直す
             data_ = _isLoaded ? JsonUtility.FromJson<T>(str) : default;
+
             return _isLoaded;
         }
 
@@ -69,7 +70,7 @@ namespace MyFileSystem
         public static bool Load(string path_, out string str_)
         {
             // ディレクトリを探してないなら返す
-            if(!Directory.Exists($"{path_}/../"))
+            if (!Directory.Exists($"{path_}/../"))
             {
                 str_ = default;
                 return false;
@@ -87,6 +88,37 @@ namespace MyFileSystem
             // 読み込み、終了
             str_ = _sr.ReadToEnd();
             _sr.Close();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Jsonデリート処理
+        /// </summary>
+        /// <param name="path_">消去先ファイルパス</param>
+        /// /// <returns>パスが存在するか否か</returns>
+        public static bool Delete(string path_)
+        {
+            // ディレクトリを探してないなら返す
+            if (!Directory.Exists($"{path_}/../"))
+            {
+                return false;
+            }
+
+            // ファイルを探してないなら返す
+            if (!File.Exists(path_))
+            {
+                return false;
+            }
+
+            // ファイル削除
+            File.Delete(path_);
+
+#if UNITY_EDITOR
+            // metaファイルも削除
+            File.Delete(path_ + ".meta");
+            UnityEditor.AssetDatabase.Refresh();
+#endif
 
             return true;
         }

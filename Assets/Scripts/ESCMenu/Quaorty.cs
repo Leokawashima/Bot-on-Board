@@ -68,13 +68,13 @@ public class Quaorty : MonoBehaviour
 
     public void ScreenShot_Start()
     {
-        if(!Directory.Exists(Name.Setting.FilePath_ScreenShot))
+        if(!Directory.Exists(Name.FilePath.FilePath_ScreenShot))
         {
-            Directory.CreateDirectory(Name.Setting.FilePath_ScreenShot);
+            Directory.CreateDirectory(Name.FilePath.FilePath_ScreenShot);
         }
 
         var now = DateTime.Now;
         string photoname = now.Year.ToString() + "." + now.Month.ToString() + "." + now.Day.ToString() + "_" + now.Hour.ToString() + "." + now.Minute.ToString() + "." + now.Second.ToString();
-        ScreenCapture.CaptureScreenshot(Name.Setting.FilePath_ScreenShot + $"/{photoname}.png");
+        ScreenCapture.CaptureScreenshot(Name.FilePath.FilePath_ScreenShot + $"/{photoname}.png");
     }
 }

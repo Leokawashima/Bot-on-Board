@@ -54,14 +54,20 @@ namespace Name
         }
     }
 
-    public static class Setting
+    public static class FilePath
     {
 #if UNITY_EDITOR
-        public static readonly string AppFilePath = Application.dataPath + "/";
+        public static readonly string AppFilePath = Application.dataPath + "/Save/";
 #else
         public static readonly string AppFilePath = Application.dataPath + "/../";
 #endif
-        public static readonly string FilePath_Deck = Application.dataPath + "/Decks";
+
+#if UNITY_EDITOR
+        public static readonly string FilePath_Deck = AppFilePath + "/Decks";
+#else
+        public static readonly string FilePath_Deck = Application.dataPath + "Decks";
+#endif
+
         public static readonly string FilePath_Setting = AppFilePath + "Settings";
         public static readonly string FilePath_ScreenShot = AppFilePath + "ScreenShots";
     }
