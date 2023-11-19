@@ -6,9 +6,8 @@ using UnityEngine;
 /// </summary>
 public class AStarAlgorithm
 {
-    private int[,] m_MapCost;
+    private MapStateManager m_mapState;
     private int m_MoveCost = 1;
-    private Vector2Int m_MapSize;
 
     // ノードを開ける順番　up downのような順だと無限にお互いの場所へ探索できない状態が生まれる
     readonly private Vector2Int[] SearchPosition = new Vector2Int[4]
@@ -60,15 +59,14 @@ public class AStarAlgorithm
         }
     }
 
-    public AStarAlgorithm(Vector2Int mapSize_, int[,] mapCost_)
+    public AStarAlgorithm(MapStateManager mapState_)
     {
-        m_MapSize = mapSize_;
-        m_MapCost = mapCost_;
+        m_mapState = mapState_;
     }
 
     private Node SearchNode(Vector2Int orizin_, Vector2Int target_)
     {
-        var _nodeMap = new Node[m_MapSize.y, m_MapSize.x];
+        var _nodeMap = new Node[m_mapState.MapSize.y, m_mapState.MapSize.x];
         var _openList = new List<Node>();
         int _cost = 0;
 
@@ -96,10 +94,10 @@ public class AStarAlgorithm
             for(int i = 0; i < SearchPosition.Length; ++i)
             {
                 var _serachPos = _baseNode.positon + SearchPosition[i];
-                if(0 <= _serachPos.y && 0 <= _serachPos.x && m_MapSize.y > _serachPos.y && m_MapSize.x > _serachPos.x)
+                if(0 <= _serachPos.y && 0 <= _serachPos.x && m_mapState.MapSize.y > _serachPos.y && m_mapState.MapSize.x > _serachPos.x)
                 {
                     _nodeMap[_serachPos.y, _serachPos.x] ??= new Node();
-                    if(_nodeMap[_serachPos.y, _serachPos.x].OpenNode(_serachPos, orizin_, target_, _cost + m_MapCost[_serachPos.y, _serachPos.x], _baseNode, _openList))
+                    if(_nodeMap[_serachPos.y, _serachPos.x].OpenNode(_serachPos, orizin_, target_, _cost + m_mapState.MapObjectCost[_serachPos.y, _serachPos.x], _baseNode, _openList))
                         return _nodeMap[_serachPos.y, _serachPos.x];
                 }
             }

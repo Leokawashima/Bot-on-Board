@@ -33,7 +33,7 @@ public class MapManager : MonoBehaviour
 
     public static event Action Event_MapCreated;
 
-    public Vector3 Offset => new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f) + transform.position;
+    public Vector3 Offset => new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f);
 
     void OnEnable()
     {
