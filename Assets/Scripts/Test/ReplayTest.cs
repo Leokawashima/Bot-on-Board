@@ -10,7 +10,7 @@ public class ReplayScript : MonoBehaviour
     [SerializeField] float SaveLength = 5.0f;
     [SerializeField] float SaveDistance = 0.01f;
 
-    readonly string m_FilePath = Name.Setting.FilePath_Setting + "/Replay.json";
+    readonly string m_FilePath = Name.FilePath.FilePath_Setting + "/Replay.json";
 
     [ContextMenu("Save")]
     public void Save()
@@ -39,7 +39,7 @@ public class ReplayScript : MonoBehaviour
             data = frames.ToArray(),
         };
 
-        JsonFileSystem.Save(m_FilePath, save);
+        JsonFileSystem.SaveToJson(m_FilePath, save);
 
         Debug.Log("Saved");
     }

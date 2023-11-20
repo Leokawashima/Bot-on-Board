@@ -6,7 +6,7 @@ public class MapStateManager
 {
     // 増やしたい情報に応じて配列の変数を増やしていくとクソプログラムになってしまうので
     // オブジェクトとチップの配列だけを保持してどのインターフェースを持っているかで管理するようにする
-
+    public Vector2Int MapSize { get; private set; }
     // オブジェクトのインデックスを格納する配列　恐らく今後消す
     public int[,] MapChipState { get; private set; }
     public int[,] MapObjectState { get; private set; }
@@ -17,6 +17,8 @@ public class MapStateManager
 
     public MapStateManager(Vector2Int mapSize_)
     {
+        MapSize = mapSize_;
+
         MapChipState = new int[mapSize_.y, mapSize_.x];
         MapObjectState = new int[mapSize_.y,mapSize_.x];
 

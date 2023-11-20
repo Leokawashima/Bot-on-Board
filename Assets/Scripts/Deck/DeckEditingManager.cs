@@ -1,43 +1,101 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using MyFileSystem;
+using TMPro;
 
 public class DeckEditingManager : MonoBehaviour
 {
     [SerializeField]
     private MapObjectTable_SO m_mapObjectTable;
 
-    private List<Deck> m_presetDeckList;
+    private const int PRESET_DECK_SIZE = 10;
+
+    private List<Deck> m_presetDeckList = new(PRESET_DECK_SIZE);
 
     private Deck m_deckEdit;
 
-    private readonly string m_FILEPATH = Name.Setting.FilePath_Deck + "/Deck.json";
-
-    private void OpenDeck()
+    // Flags属性は例えばToStringしたときに数値出力せずに各々の状態に当てはまるか列挙してくれる
+    [Flags]
+    private enum State
     {
-        m_presetDeckList = new();
-
-        // ロード処理
+        Non = 0,
+        isRarilyLimit = 1 << 0,
+        isSameBan = 1 << 1,
     }
+    private int GetState(State state_) { return (int)state_; }
 
-    private void CloseDeck()
+    [ContextMenu("aaa")]
+    private void aaa()
     {
-
-    }
-
-    private void SaveDeck()
-    {
-        // 文字列を暗号化する処理～～
-        string _data = "a";
-        JsonFileSystem.Save(m_FILEPATH, _data);
-    }
-
-    private void LoadDeck()
-    {
-        if (false == JsonFileSystem.Load(m_FILEPATH, out string _data))
+        var test = new Deck()
         {
-            return;
+            DeckName = "test",
+            State = GetState(State.isRarilyLimit),
+            MaxSize = 10,
+        };
+        test.CardIndexList.AddRange(new int[10] {0,0,0,0,0,0,0,0,0,0});
+
+        SaveDeck(0, test);
+    }
+
+    [ContextMenu("bbb")]
+    private void bbb()
+    {
+        LoadDeck(0, out Deck _deck);
+        Debug.Log(_deck);
+    }
+
+    private void OpenDeckList()
+    {
+        m_presetDeckList = new(PRESET_DECK_SIZE);
+
+        for(int i = 0; i < PRESET_DECK_SIZE; ++i)
+        {
+            if(LoadDeck(i, out Deck _deck))
+            {
+                m_presetDeckList[i] = _deck;
+            }
         }
-        // 文字列を暗号化から戻す処理～～
+    }
+
+    private void CloseDeckList()
+    {
+        m_presetDeckList.Clear();
+    }
+
+    private void SaveDeck(int index_, Deck deck_)
+    {
+        var _str = JsonUtility.ToJson(deck_);
+
+        // 暗号化する処理
+        var _data = System.Text.Encoding.UTF8.GetBytes(_str);
+
+        JsonFileSystem.Save(GetDeckFilePath(index_), _str);
+    }
+
+    private bool LoadDeck(int index_, out Deck deck_)
+    {
+        if (false == JsonFileSystem.Load(GetDeckFilePath(index_), out byte[] _data))
+        {
+            deck_ = null;
+            return false;
+        }
+
+        // 暗号化から戻す処理
+        var _str = System.Text.Encoding.UTF8.GetString(_data);
+
+        deck_ = JsonUtility.FromJson<Deck>(_str);
+        return true;
+    }
+
+    private bool DeleteDeck(int index_)
+    {
+        return JsonFileSystem.Delete(GetDeckFilePath(index_));
+    }
+
+    private string GetDeckFilePath(int index_)
+    {
+        return Name.FilePath.FilePath_Deck + $"/Deck{index_}.json";
     }
 }

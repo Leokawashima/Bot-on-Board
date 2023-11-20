@@ -63,7 +63,7 @@ public class AISystem : MonoBehaviour
         var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
         enemy.Remove(this);
 
-        var _aStar = new AStarAlgorithm(m_MapSize, MapManager.Singleton.MapState.MapObjectCost);
+        var _aStar = new AStarAlgorithm(MapManager.Singleton.MapState);
         m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
         if (m_Stan > 0)
         {

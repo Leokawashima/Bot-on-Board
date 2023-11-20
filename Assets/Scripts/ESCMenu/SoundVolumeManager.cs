@@ -22,7 +22,7 @@ public class SoundVolumeManager : MonoBehaviour
     [Header("Toggle")]
     [SerializeField] Toggle m_muteSoundToggle;
 
-    readonly string m_FILEPATH = Name.Setting.FilePath_Setting + "/SoundSetting.json";
+    readonly string m_FILEPATH = Name.FilePath.FilePath_Setting + "/SoundSetting.json";
 
     // 値が変更されているかどうかのフラグ
     // 変更したらフラグを立ててフラグの状態をプロパティで確認されたら自動的にフラグを折る
@@ -99,7 +99,7 @@ public class SoundVolumeManager : MonoBehaviour
             UIVolume = m_uiSlider.value
         };
 
-        JsonFileSystem.Save(m_FILEPATH, save);
+        JsonFileSystem.SaveToJson(m_FILEPATH, save);
     }
 
     [ContextMenu("Load")]
