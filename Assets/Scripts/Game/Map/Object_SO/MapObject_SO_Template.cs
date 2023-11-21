@@ -56,6 +56,7 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
         return moc;
     }
+
     public virtual void Destry() { }
 }
 

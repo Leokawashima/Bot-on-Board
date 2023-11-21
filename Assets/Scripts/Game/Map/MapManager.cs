@@ -98,7 +98,7 @@ public class MapManager : MonoBehaviour
                             if(m_MapDataSO.MapObject[_index] != -1)
                             {
                                 var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
-                                var _mo = m_MapObjectTable.m_Table[m_MapDataSO.MapObject[_index]]
+                                var _mo = m_MapObjectTable.Data[m_MapDataSO.MapObject[_index]]
                                     .Spawn(new Vector2Int(z, x), _pos, transform);
                                 _mo.Initialize(this);
                             }

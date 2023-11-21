@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyFileSystem;
-using TMPro;
 
 public class DeckEditingManager : MonoBehaviour
 {
@@ -11,39 +10,13 @@ public class DeckEditingManager : MonoBehaviour
 
     private const int PRESET_DECK_SIZE = 10;
 
-    private List<Deck> m_presetDeckList = new(PRESET_DECK_SIZE);
+    private List<DeckData> m_presetDeckList = new(PRESET_DECK_SIZE);
 
-    private Deck m_deckEdit;
-
-    // Flags属性は例えばToStringしたときに数値出力せずに各々の状態に当てはまるか列挙してくれる
     [Flags]
-    private enum State
+    public enum DeckState
     {
-        Non = 0,
         isRarilyLimit = 1 << 0,
         isSameBan = 1 << 1,
-    }
-    private int GetState(State state_) { return (int)state_; }
-
-    [ContextMenu("aaa")]
-    private void aaa()
-    {
-        var test = new Deck()
-        {
-            DeckName = "test",
-            State = GetState(State.isRarilyLimit),
-            MaxSize = 10,
-        };
-        test.CardIndexList.AddRange(new int[10] {0,0,0,0,0,0,0,0,0,0});
-
-        SaveDeck(0, test);
-    }
-
-    [ContextMenu("bbb")]
-    private void bbb()
-    {
-        LoadDeck(0, out Deck _deck);
-        Debug.Log(_deck);
     }
 
     private void OpenDeckList()
@@ -52,7 +25,7 @@ public class DeckEditingManager : MonoBehaviour
 
         for(int i = 0; i < PRESET_DECK_SIZE; ++i)
         {
-            if(LoadDeck(i, out Deck _deck))
+            if(LoadDeck(i, out DeckData _deck))
             {
                 m_presetDeckList[i] = _deck;
             }
@@ -64,7 +37,7 @@ public class DeckEditingManager : MonoBehaviour
         m_presetDeckList.Clear();
     }
 
-    private void SaveDeck(int index_, Deck deck_)
+    private void SaveDeck(int index_, DeckData deck_)
     {
         var _str = JsonUtility.ToJson(deck_);
 
@@ -74,7 +47,7 @@ public class DeckEditingManager : MonoBehaviour
         JsonFileSystem.Save(GetDeckFilePath(index_), _str);
     }
 
-    private bool LoadDeck(int index_, out Deck deck_)
+    private bool LoadDeck(int index_, out DeckData deck_)
     {
         if (false == JsonFileSystem.Load(GetDeckFilePath(index_), out byte[] _data))
         {
@@ -85,7 +58,7 @@ public class DeckEditingManager : MonoBehaviour
         // 暗号化から戻す処理
         var _str = System.Text.Encoding.UTF8.GetString(_data);
 
-        deck_ = JsonUtility.FromJson<Deck>(_str);
+        deck_ = JsonUtility.FromJson<DeckData>(_str);
         return true;
     }
 

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class Deck
+public class DeckData
 {
     /// <summary>
     /// デッキの名前
     /// </summary>
-    public string DeckName = "null";
+    public string Name = "null";
 
     /// <summary>
     /// デッキの状態
     /// </summary>
-    public int State = 0;
+    public DeckEditingManager.DeckState State = 0;
 
     /// <summary>
     /// デッキのフィールド
