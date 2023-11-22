@@ -15,7 +15,7 @@ public class CardManager : MonoBehaviour
     }
 
     [SerializeField] List<int> m_Deck = new(m_DeckSize) {
-        0, 0, 1, 1, 2, 2, 3, 3, 4, 4,//デッキを組めるようになったらデッキをJson保存しそれらを呼び出して初期化する
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,//デッキを組めるようになったらデッキをJson保存しそれらを呼び出して初期化する
     };
 
     [SerializeField] MapObjectTable_SO m_MO_SO_Table;

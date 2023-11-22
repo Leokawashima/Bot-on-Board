@@ -21,4 +21,4 @@ MonoBehaviour:
   m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10
-  <AttackPower>k__BackingField: 0
+  <AttackPower>k__BackingField: 1.5

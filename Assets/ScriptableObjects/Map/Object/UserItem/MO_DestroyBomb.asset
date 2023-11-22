@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
+  m_Name: MO_DestroyBomb
+  m_EditorClassIdentifier: 
+  hasRarity: 0
+  m_ObjectName: "\u6D88\u53BB\u7206\u5F3E"
+  m_Info: "\u6D88\u53BB\u7206\u5F3E"
+  <Cost>k__BackingField: 0
+  <IsCollider>k__BackingField: 0
+  m_Prefab: {fileID: 8187926263752784300, guid: 20a3b0b3cdca01f45bddbfcf46efa322, type: 3}
+  m_Card: {fileID: 8618209698020002616, guid: df98dc636712a754d9f0cf92ac30a409, type: 3}
+  <TurnMax>k__BackingField: 0
+  <TurnSpawn>k__BackingField: 0

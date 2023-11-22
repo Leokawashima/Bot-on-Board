@@ -80,3 +80,27 @@ public interface IHeal : IMapObject
     public bool CheckHealCollider();
     public void Heal();
 }
+
+public interface IDirection : IMapObject
+{
+    public enum Vertical
+    {
+        Non = 0,
+        Forward = 1,
+        Backward = 2,
+    }
+
+    public enum Horizontal
+    {
+        Non = 0,
+        Right = 1,
+        Left = 2,
+    }
+
+    public Vertical VerticalDirection { get; set; }
+    public Horizontal HorizontalDirection { get; set; }
+    public Vector2 GetVector()
+    {
+        return new Vector2((int)HorizontalDirection, (int)VerticalDirection);
+    }
+}
