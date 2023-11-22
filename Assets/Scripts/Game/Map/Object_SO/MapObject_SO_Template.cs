@@ -59,10 +59,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
 
     public virtual void Destry() { }
 }
-
-//以下継承クラス　インターフェース化する方がデータ設計が楽だが、
-//プロパティは通常のインスペクターから見えない為後々編集エディターを作るまでクラス実装
-
 public interface IMapObject {}
 
 public interface IDestroy : IMapObject
@@ -73,14 +69,14 @@ public interface IDestroy : IMapObject
 
 public interface IWeapon : IMapObject
 {
-    public uint AttackPower { get; set; }
+    public float AttackPower { get; set; }
     public bool CheckAttackCollider();
     public void Attack();
 }
 
 public interface IHeal : IMapObject
 {
-    public uint HealPower { get; set; }
+    public float HealPower { get; set; }
     public bool CheckHealCollider();
     public void Heal();
 }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34c241087f2f565458b353610c3f60d3, type: 3}
+  m_Name: MO_LongSword
+  m_EditorClassIdentifier: 
+  hasRarity: 0
+  m_ObjectName: 
+  m_Info: "\u30AB\u30FC\u30C9\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u305F\u3068\u304D\u306B\u8868\u793A\u3059\u308B\u8AAC\u660E\u6587"
+  <Cost>k__BackingField: -150
+  <IsCollider>k__BackingField: 0
+  m_Prefab: {fileID: 1933853278335757198, guid: 1c925e76d6a373a4887092efebc03ce7, type: 3}
+  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
+  <TurnMax>k__BackingField: 0
+  <TurnSpawn>k__BackingField: 0
+  <AttackPower>k__BackingField: 0

@@ -1,0 +1,8 @@
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "MO_SO/Trap/#SCRIPTNAME#")]
+public class #SCRIPTNAME# : MapObject_SO_Template, IDestroy
+{
+    [field: SerializeField] public uint TurnMax { get; set; }
+    [field: SerializeField] public uint TurnSpawn { get; set; }
+}

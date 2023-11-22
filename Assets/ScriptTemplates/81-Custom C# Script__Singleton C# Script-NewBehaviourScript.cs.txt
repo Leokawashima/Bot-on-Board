@@ -1,0 +1,22 @@
+using UnityEngine;
+
+public class #SCRIPTNAME# : MonoBehaviour
+{
+    public static #SCRIPTNAME# Singleton { get; private set; }
+
+    private void Awake()
+    {
+        if (Singleton == null)
+        {
+            Singleton = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    private void OnDestroy()
+    {
+        Singleton = null;
+    }
+}

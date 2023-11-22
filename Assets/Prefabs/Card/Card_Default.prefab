@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8618209698020002616}
   - component: {fileID: 5591076926629762438}
   m_Layer: 5
-  m_Name: Card_Defaiult
+  m_Name: Card_Default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
