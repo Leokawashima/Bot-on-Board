@@ -32,7 +32,7 @@ public class CardManager : MonoBehaviour
             var _index = Random.Range(0, m_Deck.Count - 1);
             m_HandCardList.Add(m_Deck[_index]);
 
-            m_MO_SO_Table.m_Table[m_Deck[_index]].CardCreate(m_Deck[_index], transform, m_ToggleGroup, this);
+            m_MO_SO_Table.Data[m_Deck[_index]].CardCreate(m_Deck[_index], transform, m_ToggleGroup, this);
 
             m_Deck.RemoveAt(_index);
         }
@@ -50,7 +50,7 @@ public class CardManager : MonoBehaviour
             var _index = Random.Range(0, m_StockCaedList.Count - 1);
             m_HandCardList.Add(m_StockCaedList[_index]);
 
-            m_MO_SO_Table.m_Table[m_StockCaedList[_index]].CardCreate(m_StockCaedList[_index], transform, m_ToggleGroup, this);
+            m_MO_SO_Table.Data[m_StockCaedList[_index]].CardCreate(m_StockCaedList[_index], transform, m_ToggleGroup, this);
 
             m_StockCaedList.RemoveAt(_index);
         }
