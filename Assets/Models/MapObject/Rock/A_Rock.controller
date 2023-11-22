@@ -32,8 +32,8 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: 7406528054562963636}
-    m_Position: {x: 92, y: 248, z: 0}
+    m_State: {fileID: 7559223884928601769}
+    m_Position: {x: 169, y: 269, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -43,15 +43,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 7406528054562963636}
---- !u!1102 &7406528054562963636
+  m_DefaultState: {fileID: 7559223884928601769}
+--- !u!1102 &7559223884928601769
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rock|RockAction
+  m_Name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2Action"
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -64,7 +64,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -467663461231686841, guid: 16cd17a9d6007ee4ab34bcef8745c3af, type: 3}
+  m_Motion: {fileID: -6140374235425719669, guid: 16cd17a9d6007ee4ab34bcef8745c3af, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
