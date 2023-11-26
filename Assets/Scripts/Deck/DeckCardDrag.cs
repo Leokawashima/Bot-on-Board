@@ -11,10 +11,6 @@ public class DeckCardDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public event Action<Vector2, MapObjectCard> OnBeginDrag;
     public event Action<Vector2> OnDrag, OnEndDrag;
 
-    private void Start()
-    {
-        m_card = GetComponent<MapObjectCard>();
-    }
     public void Initialize(MapObjectCard card_)
     {
         m_card = card_;

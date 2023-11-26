@@ -12,7 +12,7 @@ public abstract class MapChip_SO_Template : ScriptableObject
 
     public virtual MapChip Spawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {
-        var _go = Instantiate(Prefab, tf_.position + pos_, Prefab.transform.rotation, tf_);
+        var _go = Instantiate(Prefab, pos_, Prefab.transform.rotation, tf_);
         _go.m_SO = this;
 
         _go.m_position = posdata_;

@@ -29,21 +29,21 @@ public class GUIManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameSystem.Event_Initialize += OnInitialize;
-        GameSystem.Event_Turn_Place += OnTurnPlace;
-        GameSystem.Event_Turn_TurnEnd += OnTurnEnd;
-        GameSystem.Event_Turn_AIAction += OnAIAction;
-        GameSystem.Event_Turn_Initialize += OnTurnInitialize;
-        GameSystem.Event_Turn_GameSet += OnTurnGameSet;
+        GameManager.Event_Initialize += OnInitialize;
+        GameManager.Event_Turn_Place += OnTurnPlace;
+        GameManager.Event_Turn_TurnEnd += OnTurnEnd;
+        GameManager.Event_Turn_AIAction += OnAIAction;
+        GameManager.Event_Turn_Initialize += OnTurnInitialize;
+        GameManager.Event_Turn_GameSet += OnTurnGameSet;
     }
     void OnDisable()
     {
-        GameSystem.Event_Initialize -= OnInitialize;
-        GameSystem.Event_Turn_Place -= OnTurnPlace;
-        GameSystem.Event_Turn_TurnEnd -= OnTurnEnd;
-        GameSystem.Event_Turn_AIAction -= OnAIAction;
-        GameSystem.Event_Turn_Initialize -= OnTurnInitialize;
-        GameSystem.Event_Turn_GameSet -= OnTurnGameSet;
+        GameManager.Event_Initialize -= OnInitialize;
+        GameManager.Event_Turn_Place -= OnTurnPlace;
+        GameManager.Event_Turn_TurnEnd -= OnTurnEnd;
+        GameManager.Event_Turn_AIAction -= OnAIAction;
+        GameManager.Event_Turn_Initialize -= OnTurnInitialize;
+        GameManager.Event_Turn_GameSet -= OnTurnGameSet;
     }
 
     void Awake()
@@ -57,7 +57,7 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);//下層は完成
+        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);//下層は完成
         m_AIHPUIManager.Initialize(2, 10);//2人　HP 10で初期化 下層は完成
 
         //ローカルの場合は人数分
@@ -81,20 +81,20 @@ public class GUIManager : MonoBehaviour
     }
     void OnTurnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameSystem.Singleton.ElapsedTurn);
+        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
         foreach(var ui_ in m_PlayerUIArray)
             ui_.TurnInitialize();
 
-        m_CutInManager.CutIn("Turn:" + GameSystem.Singleton.ElapsedTurn, () =>
+        m_CutInManager.CutIn("Turn:" + GameManager.Singleton.ElapsedTurn, () =>
         {
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameSystem.Singleton.PlayerIndex, () =>
+        m_CutInManager.CutIn("Place:" + GameManager.Singleton.PlayerIndex, () =>
         {
-            m_PlayerUIArray[GameSystem.Singleton.PlayerIndex].gameObject.SetActive(true);
+            m_PlayerUIArray[GameManager.Singleton.PlayerIndex].gameObject.SetActive(true);
         });
     }
     void OnTurnEnd()

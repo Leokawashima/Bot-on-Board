@@ -1,38 +1,42 @@
-﻿using Cysharp.Threading.Tasks.Triggers;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DeckCardList : MonoBehaviour
 {
-    [SerializeField] DeckCardDragManager _deckCardDragManager;
+    [SerializeField] private DeckCardDragManager _deckCardDragManager;
     
-    [SerializeField] MapObjectTable_SO m_table;
+    [SerializeField] private MapObjectTable_SO m_table;//どこからでもアクセスできるテーブルクラスを作るべき
 
-    [SerializeField] RectTransform m_content;
+    [SerializeField] private RectTransform m_content;
+
+    [SerializeField] private float m_size = 0.55f;
+    [SerializeField] private Vector2 m_position = new(-460, 810);
+    [SerializeField] private Vector2 m_offset = new(230, -350);
+    [SerializeField] private int m_sheat = 5;
 
     private void Start()
     {
-        for (int y = 0; y < 2; ++y)
+        for(int i = 0; i < m_table.Data.Length; ++i)
         {
-            for (int i = 0; i < m_table.Data.Length; ++i)
-            {
-                _deckCardDragManager.m_cardList.Add(CardCreate(m_table.Data[i], i, y));
-            }
+            _deckCardDragManager.m_cardList.Add(CardCreate(i));
         }
     }
 
-    private DeckCardDrag CardCreate(MapObject_SO_Template mapObject_SO_, int index_, int y_)
+    private DeckCardDrag CardCreate(int index_)
     {
-        var _moc = Instantiate(mapObject_SO_.m_Card, m_content);
-        _moc.m_SO = mapObject_SO_;
+        var _so = m_table.Data[index_];
+        var _moc = Instantiate(_so.m_Card, m_content);
+
+        _moc.m_SO = _so;
         _moc.m_Index = index_;
-        _moc.m_Text.text = mapObject_SO_.m_ObjectName;
+        _moc.m_Text.text = _so.m_ObjectName;
 
         var _rect = _moc.transform as RectTransform;
-        _rect.anchoredPosition = new Vector2(index_ * 240.0f - 500.0f, 800.0f - 350.0f * y_);
+        _rect.localScale = Vector3.one * m_size;
+        _rect.anchoredPosition = m_position + new Vector2(m_offset.x * (index_ % m_sheat), m_offset.y * (int)(index_ / m_sheat));
 
-        return _moc.AddComponent<DeckCardDrag>();
+        var _drag = _moc.gameObject.AddComponent<DeckCardDrag>();
+        _drag.Initialize(_moc);
+
+        return _drag;
     }
 }

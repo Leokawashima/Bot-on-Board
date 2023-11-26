@@ -17,11 +17,11 @@ public class AIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameSystem.Event_Turn_AIAction += AIAction;
+        GameManager.Event_Turn_AIAction += AIAction;
     }
     private void OnDisable()
     {
-        GameSystem.Event_Turn_AIAction -= AIAction;
+        GameManager.Event_Turn_AIAction -= AIAction;
     }
 
     void Awake()
@@ -40,6 +40,10 @@ public class AIManager : MonoBehaviour
             var _ai = Instantiate(m_AIPrefab, transform);
             _ai.Spawn(i, $"AI:{i}", new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
             m_AIList.Add(_ai);
+            if (i == 1)
+            {
+                _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
             _ai.Event_DamageHP += (int index_, float hp_) =>
             {
                 GUIManager.Singleton.OnSetHPText(index_, hp_);

@@ -18,7 +18,7 @@ MonoBehaviour:
   <Cost>k__BackingField: -150
   <IsCollider>k__BackingField: 0
   m_Prefab: {fileID: 4129468362197197433, guid: 9384fa41774d86142894d870bccd4878, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
+  m_Card: {fileID: 8618209698020002616, guid: 4fef23fd0d348fa41bb2d1af0ce6efb1, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10
   <AttackPower>k__BackingField: 1.5

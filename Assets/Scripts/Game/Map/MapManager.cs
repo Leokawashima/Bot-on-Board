@@ -37,13 +37,13 @@ public class MapManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameSystem.Event_Initialize += OnSystemInitialize;
-        GameSystem.Event_Turn_Finalize += OnGameFinalize;
+        GameManager.Event_Initialize += OnSystemInitialize;
+        GameManager.Event_Turn_Finalize += OnGameFinalize;
     }
     void OnDisable()
     {
-        GameSystem.Event_Initialize -= OnSystemInitialize;
-        GameSystem.Event_Turn_Finalize -= OnGameFinalize;
+        GameManager.Event_Initialize -= OnSystemInitialize;
+        GameManager.Event_Turn_Finalize -= OnGameFinalize;
     }
 
     void OnSystemInitialize()
@@ -63,7 +63,7 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
-        Singleton ??= this;
+        Singleton = this;
     }
     private void OnDestroy()
     {

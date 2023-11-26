@@ -17,8 +17,8 @@ MonoBehaviour:
   m_Info: "\u30AB\u30FC\u30C9\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u305F\u3068\u304D\u306B\u8868\u793A\u3059\u308B\u8AAC\u660E\u6587"
   <Cost>k__BackingField: -150
   <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 0}
-  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
+  m_Prefab: {fileID: 3618709999038679345, guid: 448fe33e2065bb24bbf314e959cc28f8, type: 3}
+  m_Card: {fileID: 8618209698020002616, guid: 4fef23fd0d348fa41bb2d1af0ce6efb1, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10
   <AttackPower>k__BackingField: 3
