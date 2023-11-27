@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Models/MapObject/PickAxe/X_PickAxe.fbx.meta
 guid: 633bd92ff359d9c42b0651852ba0e7b6
+========
+guid: 479dd7732417ab04682bc05bf5c458c7
+>>>>>>>> origin/22ci0219:Assets/Models/MapObject/LongSword/X_LongSword.fbx.meta
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []

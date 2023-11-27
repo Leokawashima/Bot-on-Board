@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Models/MapObject/LongSword/X_LongSword.fbx.meta
 guid: 5664281ccd57cad40a16bb8f46c28146
+========
+guid: cd0da39f91b4a5347869e2a5eb7151a0
+>>>>>>>> origin/22ci0219:Assets/Models/MapObject/LongSword/B_LongSword.blend.meta
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
