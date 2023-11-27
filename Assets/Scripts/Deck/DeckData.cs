@@ -32,5 +32,5 @@ public class DeckData
     /// <summary>
     /// デッキのフィールド
     /// </summary>
-    public List<int> CardIndexList = new();
+    public int[] CardIndexArray;
 }

@@ -6,6 +6,7 @@ public class DeckEditArea : MonoBehaviour
     private RectTransform m_baseRectTransform;
 
     private MapObjectCard[] m_editCardList;
+    public MapObjectCard[] EditCardList => m_editCardList;
 
     [SerializeField]
     private MapObjectCard m_targetCard;

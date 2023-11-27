@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.VolumeComponent;
+using UnityEngine.UI;
 
 public class DeckCardDragManager : MonoBehaviour
 {
@@ -12,6 +15,8 @@ public class DeckCardDragManager : MonoBehaviour
     private DeckEditArea m_deckEditArea;
 
     private RectTransform m_selectionRectTransform;
+
+    public static event Action<MapObjectCard> Event_EndDrag;
 
     private void Start()
     {
@@ -30,7 +35,11 @@ public class DeckCardDragManager : MonoBehaviour
     {
         m_selectionCard.gameObject.SetActive(true);
         m_selectionRectTransform.localPosition = mousePos_;
-        //m_selectionCard = card_;
+        // セレクトカードに反映
+        m_selectionCard.m_SO = card_.m_SO;
+        m_selectionCard.m_Index = card_.m_Index;
+        m_selectionCard.m_Text.text = card_.m_SO.m_ObjectName;
+
     }
 
     private void OnDrag(Vector2 mousePos_)
@@ -52,10 +61,18 @@ public class DeckCardDragManager : MonoBehaviour
     {
         if (m_deckEditArea.CheckHitCard(mousePos_, out var _card))
         {
+            Event_EndDrag?.Invoke(m_selectionCard);
             // カードに情報を渡す
+            _card.m_SO = m_selectionCard.m_SO;
+            _card.m_Index = m_selectionCard.m_Index;
+            _card.m_Text.text = m_selectionCard.m_SO.m_ObjectName;
         }
 
         m_selectionCard.gameObject.SetActive(false);
-        //m_selectionCard = null;
+
+        // 空にする
+        m_selectionCard.m_SO = null;
+        m_selectionCard.m_Index = -1;
+        m_selectionCard.m_Text.text = string.Empty;
     }
 }

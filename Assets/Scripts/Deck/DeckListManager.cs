@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using MyFileSystem;
 
@@ -25,6 +26,8 @@ public class DeckListManager : MonoBehaviour
     [SerializeField] private Button m_editButton;
     [SerializeField] private Button m_deleteButton;
 
+    public static event Action<InfoDeckData> Event_EditOpen;
+
     public void Enable()
     {
         gameObject.SetActive(true);
@@ -34,26 +37,37 @@ public class DeckListManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    private void Awake()
     {
+        DeckManager.Event_Initialize += Initialize;
         DeckManager.Event_Initialize += OpenDeckList;
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
+        DeckManager.Event_Initialize -= Initialize;
         DeckManager.Event_Initialize -= OpenDeckList;
     }
 
-    private void Start()
+    private void Initialize()
     {
+        Enable();
+
         m_editButton.onClick.AddListener(() =>
         {
-            Disable();
-            m_deckManager.DeckEdit.Enable();
+            if (SelectInfo != null)
+            {
+                Disable();
+                m_deckManager.DeckEdit.Enable();
+                Event_EditOpen?.Invoke(SelectInfo);
+            }
         });
 
         m_deleteButton.onClick.AddListener(() =>
         {
-            DeleteDeck(SelectInfo.Index);
+            if (SelectInfo != null)
+            {
+                DeleteDeck(SelectInfo.Index);
+            }
         });
     }
 
@@ -101,6 +115,11 @@ public class DeckListManager : MonoBehaviour
         _rect.anchoredPosition = new(_rect.anchoredPosition.x, m_position + index_ * m_offset);
 
         return LoadDeck(index_, out deck_);
+    }
+
+    public void Save(int index_, DeckData deck_)
+    {
+        SaveDeck(index_, deck_);
     }
 
     private void SaveDeck(int index_, DeckData deck_)

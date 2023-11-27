@@ -16,6 +16,15 @@ public class DeckManager : MonoBehaviour
 
     public static event Action Event_Initialize;
 
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        
+    }
+
     private void Start()
     {
         Event_Initialize?.Invoke();
