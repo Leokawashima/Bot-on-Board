@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
+    m_Style: 0
     m_Time: 2
     m_CustomCurve:
       serializedVersion: 2
@@ -4675,7 +4675,6 @@ MonoBehaviour:
   cameraSystem: {fileID: 1412758615}
   mapCam: {fileID: 626029442}
   AIManager: {fileID: 137300151}
-  blenderSettings: {fileID: 0}
 --- !u!114 &1412758615
 MonoBehaviour:
   m_ObjectHideFlags: 0

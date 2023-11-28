@@ -9,7 +9,6 @@ public class AICameraTest : MonoBehaviour
     [SerializeField] CinemachineVirtualCameraBase mapCam;
     private InputActionMapSettings m_inputMap;
     [SerializeField] AIManager AIManager;
-    [SerializeField] CinemachineBlenderSettings blenderSettings;
 
     private void OnEnable()
     {
