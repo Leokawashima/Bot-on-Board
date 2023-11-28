@@ -10,7 +10,6 @@ public class CameraTrailSystem : MonoBehaviour
     [SerializeField] float m_DragSpeed = 0.005f;
 
     CinemachineTrackedDolly m_Dolly;
-    Vector2 m_PrePos = new();
     int m_PathWayPoints = 0;
 
     private void Start()
@@ -19,15 +18,9 @@ public class CameraTrailSystem : MonoBehaviour
         m_PathWayPoints = m_SmoothMath.m_Waypoints.Length;
     }
 
-    void OnDragStart()
+    private void Update()
     {
-        m_PrePos = PlayerInputManager.m_Pos;
-    }
-    void OnDrag()
-    {
-        var _value = (PlayerInputManager.m_Pos.x - m_PrePos.x) * m_DragSpeed;
+        var _value = Time.deltaTime * m_DragSpeed;
         m_Dolly.m_PathPosition = (m_Dolly.m_PathPosition + _value) % m_PathWayPoints;
-
-        m_PrePos = PlayerInputManager.m_Pos;
     }
 }

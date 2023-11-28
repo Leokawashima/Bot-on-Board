@@ -13,6 +13,10 @@ public class AIManager : MonoBehaviour
 #endif
     List<AISystem> m_AIList = new();
 
+    [SerializeField] AICameraTest m_AICameraTest;
+
+    public List<AISystem> AIList => m_AIList;
+
     public static event Action Event_AiActioned;
 
     private void OnEnable()
@@ -53,6 +57,7 @@ public class AIManager : MonoBehaviour
                 GUIManager.Singleton.OnSetHPText(index_, hp_);
             };
         }
+        m_AICameraTest.Initialize();
     }
 
     public bool CheckAIIsDead()//誰か死んだ時点でtrueを返している

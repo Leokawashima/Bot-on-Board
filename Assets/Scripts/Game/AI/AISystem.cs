@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 /// <summary>
 /// AI一体当たりのシステム
@@ -39,6 +40,8 @@ public class AISystem : MonoBehaviour
     //ダメージイベントと回復イベントを別に分けたのは回復エフェクトやダメージエフェクトを別に登録したいから
     public event Action<int, float>  Event_DamageHP;
     public event Action<int, float> Event_HealHP;
+
+    public CinemachineVirtualCamera cameraA;
 
     public void Spawn(int index_, string name_, Vector2Int posData_)
     {
