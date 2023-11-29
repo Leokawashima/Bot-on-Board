@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -6,6 +7,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class EscGameManager : MonoBehaviour
 {
+    [SerializeField] EscMenuManager manager;
+
+    [SerializeField] Button m_button;
+
     private InputActionMapSettings m_inputMap;
 
     private void OnEnable()
@@ -21,8 +26,13 @@ public class EscGameManager : MonoBehaviour
         m_inputMap = null;
     }
 
+    private void Start()
+    {
+        m_button.onClick.AddListener(manager.Switch);
+    }
+
     private void GameQuit(InputAction.CallbackContext context_)
     {
-        Application.Quit();
+        manager.Switch();
     }
 }
