@@ -7,7 +7,7 @@ public class DeckInfoArea : MonoBehaviour
     [SerializeField] private TMP_Text m_categoryText;
     [SerializeField] private TMP_Text m_rankText;
     [SerializeField] private TMP_Text m_deckSizeText;
-    [SerializeField] private TMP_Text m_nameText;
+    [SerializeField] private TMP_InputField m_nameInputField;
 
     private void OnEnable()
     {
@@ -56,6 +56,6 @@ public class DeckInfoArea : MonoBehaviour
 
     private void SetNameText(InfoDeckData info_)
     {
-        m_nameText.text = info_.Data.Name;
+        m_nameInputField.text = info_.Data.Name;
     }
 }

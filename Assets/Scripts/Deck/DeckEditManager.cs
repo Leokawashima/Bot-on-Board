@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class DeckEditManager : MonoBehaviour
@@ -48,7 +47,7 @@ public class DeckEditManager : MonoBehaviour
                 m_deckManager.DeckList.SelectInfo.Data.CardIndexArray[i] = m_editArea.EditCardList[i].m_Index;
             }
             m_deckManager.DeckList.Save(m_deckManager.DeckList.SelectInfo.Index, m_deckManager.DeckList.SelectInfo.Data);
-            m_deckManager.DeckList.SelectInfo.NameText = "New Save";
+            m_deckManager.DeckList.SelectInfo.ReFresh();
 
             Disable();
             m_deckManager.DeckList.Enable();

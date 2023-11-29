@@ -135,8 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3bfb69e248dae418fd982835b52f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_text: {fileID: 3773158082739911430}
   m_button: {fileID: 6971282451043565939}
+  m_nameText: {fileID: 3773158082739911430}
 --- !u!1 &6008635931834191634
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,8 +205,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
