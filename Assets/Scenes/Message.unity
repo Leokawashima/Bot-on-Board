@@ -286,8 +286,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -575,6 +575,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1735374183}
   - component: {fileID: 1735374182}
+  - component: {fileID: 1735374184}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -602,6 +603,8 @@ MonoBehaviour:
     be careful flashing lights."
   - "\u307E\u305F\u3001\u3053\u306E\u30B2\u30FC\u30E0\u306F\u5B66\u751F\u4F5C\u54C1\u3067\u3059\u3002\r\nAlso,
     this game was created by students."
+  - "\u305D\u3057\u3066\u5236\u4F5C\u9014\u4E2D\u306E\u3082\u306E\u3067\u3082\u3042\u308A\u307E\u3059\u3002\nand
+    some are still in production."
   - "\u9177\u8A55\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044 ; )\r\nPlease don't
     criticize harshly ; )"
   - "\u3067\u306F  ;D\r\nenjoy  ;D "
@@ -621,3 +624,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1735374184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735374181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87e5490870e7b34c85da260d861e4cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  m_button: {fileID: 0}

@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: "Bot on Board\u5236\u4F5C\u59D4\u54E1\u4F1A"
-  productName: "2023\u5E74\u5EA6 \u5352\u696D\u5236\u4F5C \"Bot on Board\" \u300CAmazon\u300D"
+  productName: "2023\u5E74\u5EA6_\u5352\u696D\u5236\u4F5C_Bot on Board_\u300CAmazon\u300D"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -273,7 +273,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 29753790a9d9fdb42badb1134860d53d, type: 3}
+      m_Icon: {fileID: 2800000, guid: acc327c0dc18d9445b76f179af5c3a04, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

@@ -16,23 +16,30 @@ public class EscGameManager : MonoBehaviour
     private void OnEnable()
     {
         m_inputMap = new();
-        m_inputMap.UI.Esc.started += GameQuit;
+        m_inputMap.UI.Esc.started += OnClickButton;
         m_inputMap.Enable();
     }
     private void OnDisable()
     {
-        m_inputMap.UI.Esc.started -= GameQuit;
+        m_inputMap.UI.Esc.started -= OnClickButton;
         m_inputMap.Disable();
         m_inputMap = null;
     }
 
     private void Start()
     {
-        m_button.onClick.AddListener(manager.Switch);
+        if (m_button != null)
+        {
+            m_button.onClick.AddListener(manager.Switch);
+        }
     }
 
-    private void GameQuit(InputAction.CallbackContext context_)
+    private void OnClickButton(InputAction.CallbackContext context_)
     {
-        manager.Switch();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }
