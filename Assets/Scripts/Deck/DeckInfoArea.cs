@@ -26,35 +26,34 @@ public class DeckInfoArea : MonoBehaviour
         SetNameText(info_);
     }
 
-    private void SetCategoryText(InfoDeckData info_)
+    public void SetCategoryText(InfoDeckData info_)
     {
         var _text = string.Empty;
-        var _category = Enum.GetNames(typeof(DeckCardCategory.Category));
         var _colors = new Color[] { Color.red, Color.blue, Color.green, new Color(0.6f, 0.0f, 1.0f), new Color(0.3f, 0.3f, 0.0f) };
         for (int i = 0; i < info_.Data.CategoryCount.Length; ++i)
         {
-            _text += $"<color=#{ColorUtility.ToHtmlStringRGB(_colors[i])}>{_category[i]} {info_.Data.CategoryCount[i]}</color>\n";
+            _text += $"<color=#{ColorUtility.ToHtmlStringRGB(_colors[i])}>{info_.Data.CategoryCount[i]}</color>\n";
         }
         m_categoryText.text = _text;
     }
 
-    private void SetRankText(InfoDeckData info_)
+    public void SetRankText(InfoDeckData info_)
     {
         var _text = string.Empty;
         var _rank = Enum.GetNames(typeof (DeckCardCategory.Rank));
         for (int i = 0; i < info_.Data.RankCount.Length; ++i)
         {
-            _text += $"{_rank[i]} {info_.Data.RankCount[i]}\n";
+            _text += $"{info_.Data.RankCount[i]}\n";
         }
         m_rankText.text = _text;
     }
 
-    private void SetDeckSizeText(InfoDeckData info_)
+    public void SetDeckSizeText(InfoDeckData info_)
     {
         m_deckSizeText.text = info_.Data.Size.ToString();
     }
 
-    private void SetNameText(InfoDeckData info_)
+    public void SetNameText(InfoDeckData info_)
     {
         m_nameInputField.text = info_.Data.Name;
     }

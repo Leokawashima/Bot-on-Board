@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2241ec27307379148a3474ae44278d0e, type: 3}
   m_Name: MO_Rock
   m_EditorClassIdentifier: 
-  hasRarity: 0
+  HasRarity: 0
+  HasCategory: 4
   m_ObjectName: "\u5CA9"
   m_Info: "\u7F6E\u3044\u305F\u5834\u6240\u306F\u901A\u308C\u306A\u304F\u306A\u308B\u3002\u3064\u308B\u306F\u3057\u3067\u65E9\u304F\u58CA\u305B\u308B\u3002"
   <Cost>k__BackingField: 0
   <IsCollider>k__BackingField: 0
   m_Prefab: {fileID: 8258996168174084673, guid: 2c9d0cf6988f8c54ead676aa824ecca7, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: ac5f3bbd1ed768f46b3a909eea1db48a, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10

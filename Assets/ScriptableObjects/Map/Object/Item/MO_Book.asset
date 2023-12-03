@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
   m_Name: MO_Book
   m_EditorClassIdentifier: 
-  hasRarity: 0
+  HasRarity: 0
+  HasCategory: 2
   m_ObjectName: "\u672C"
   m_Info: "\u672C"
   <Cost>k__BackingField: -12
   <IsCollider>k__BackingField: 0
   m_Prefab: {fileID: 3211439898948200358, guid: a5d7ebf7ed7224140a41c04225d63fbf, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: df98dc636712a754d9f0cf92ac30a409, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10

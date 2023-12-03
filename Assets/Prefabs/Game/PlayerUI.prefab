@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Order
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 66fa158e47f2f754497796d1a60cb702, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -541,8 +541,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Card
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 66fa158e47f2f754497796d1a60cb702, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -718,6 +718,7 @@ GameObject:
   - component: {fileID: 372945359207628440}
   - component: {fileID: 8292889253322889875}
   - component: {fileID: 125393315238535631}
+  - component: {fileID: 9098669358171654254}
   m_Layer: 5
   m_Name: CardUIManager
   m_TagString: Untagged
@@ -757,8 +758,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccfbe23ae7ca60c49992e92ac0014723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_cardGenerator: {fileID: 9098669358171654254}
   m_Deck: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f00000010000000110000001200000013000000
-  m_MO_SO_Table: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_ToggleGroup: {fileID: 125393315238535631}
   m_TrashCardList: 
   m_HandCardList: 
@@ -802,6 +803,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 1
+--- !u!114 &9098669358171654254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277640559008600310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b646cfbbaae7654c909eb9fb5047811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
+  m_cardTable: {fileID: 11400000, guid: 34543ea3060d0f6428f8c6b5b76b46a4, type: 2}
 --- !u!1 &1285434159689109361
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,8 +885,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30BF\u30FC\u30F3\u7D42\u4E86"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 3725512006366861618, guid: 34075dd4672893e489f2753294f5655f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1627,8 +1642,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8A2D\u7F6E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 3725512006366861618, guid: 34075dd4672893e489f2753294f5655f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

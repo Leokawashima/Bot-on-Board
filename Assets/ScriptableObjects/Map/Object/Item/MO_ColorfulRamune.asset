@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
   m_Name: MO_ColorfulRamune
   m_EditorClassIdentifier: 
-  hasRarity: 0
+  HasRarity: 0
+  HasCategory: 2
   m_ObjectName: "\u30AB\u30E9\u30D5\u30EB\u306A\u30E9\u30E0\u30CD"
   m_Info: "<s>\u9EBB\u85AC</s>"
   <Cost>k__BackingField: -12
   <IsCollider>k__BackingField: 0
   m_Prefab: {fileID: 4844984779904326133, guid: a9da90414e2230f4c94bacda35832f5d, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: df98dc636712a754d9f0cf92ac30a409, type: 3}
   <TurnMax>k__BackingField: 10
   <TurnSpawn>k__BackingField: 10

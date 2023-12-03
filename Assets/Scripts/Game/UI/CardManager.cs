@@ -10,6 +10,8 @@ public class CardManager : MonoBehaviour
         m_HandSize = 4,
         m_DrawSize = 2;
 
+    [SerializeField] private CardGenerator m_cardGenerator;
+
     public MapObjectCard GetSelectCard { get
         { return m_ToggleGroup.ActiveToggles().FirstOrDefault()?.GetComponent<MapObjectCard>(); }
     }
@@ -18,7 +20,6 @@ public class CardManager : MonoBehaviour
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,//デッキを組めるようになったらデッキをJson保存しそれらを呼び出して初期化する
     };
 
-    [SerializeField] MapObjectTable_SO m_MO_SO_Table;
     [SerializeField] ToggleGroup m_ToggleGroup;
 
     private const float CardSelectOffset = 50.0f;
@@ -34,7 +35,7 @@ public class CardManager : MonoBehaviour
             var _index = Random.Range(0, m_Deck.Count - 1);
             m_HandCardList.Add(m_Deck[_index]);
 
-            CardCreate(i, m_MO_SO_Table.Data[m_Deck[i]]);
+            CardCreate(i);
 
             m_Deck.RemoveAt(_index);
         }
@@ -42,19 +43,23 @@ public class CardManager : MonoBehaviour
         m_Deck.Clear();
     }
 
-    private void CardCreate(int index_, MapObject_SO_Template so_)
+    private void CardCreate(int index_)
     {
-        var moc = Instantiate(so_.m_Card, transform);
-        moc.m_SO = so_;
-        moc.m_Index = index_;
-        moc.m_Text.text = so_.m_ObjectName;
-        moc.m_Toggle.group = m_ToggleGroup;
-        moc.m_CardManager = this;
+        var _moc = m_cardGenerator.Create(index_, transform);
 
-        var _rect = moc.transform as RectTransform;
+        var _toggle = _moc.gameObject.GetComponent<Toggle>();
+        _toggle.group = m_ToggleGroup;
+
+        _moc.Event_Trash += () =>
+        {
+            m_TrashCardList.Add(index_);
+            m_HandCardList.Remove(index_);
+        };
+
+        var _rect = _moc.transform as RectTransform;
         _rect.localScale = Vector2.one * 0.5f;
 
-        moc.m_Toggle.onValueChanged.AddListener((bool isOn_) =>
+        _toggle.onValueChanged.AddListener((bool isOn_) =>
         {
             _rect.anchoredPosition = new Vector2(
                 _rect.anchoredPosition.x,
@@ -74,7 +79,7 @@ public class CardManager : MonoBehaviour
             var _index = Random.Range(0, m_StockCaedList.Count - 1);
             m_HandCardList.Add(m_StockCaedList[_index]);
 
-            CardCreate(i, m_MO_SO_Table.Data[m_StockCaedList[_index]]);
+            CardCreate(i);
 
             m_StockCaedList.RemoveAt(_index);
         }

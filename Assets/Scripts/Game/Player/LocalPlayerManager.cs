@@ -41,6 +41,9 @@ public class LocalPlayerManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
 
         int mask = 1 << Name.Layer.Map | 1 << Name.Layer.UI;
+
+        if (false == UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+
         if(Physics.Raycast(ray, out var hit, Mathf.Infinity, mask))
         {
             var map = hit.collider.GetComponent<MapChip>();

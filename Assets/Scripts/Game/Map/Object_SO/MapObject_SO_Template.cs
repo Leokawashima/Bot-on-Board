@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public abstract class MapObject_SO_Template : ScriptableObject
 {
     public enum Rarity
     {
-        common = 0,
-        unCommon = 1,
-        Rare = 2,
-        Epic = 3,
+        Common,
+        UnCommon,
+        Rare,
+        Epic,
     }
-    public Rarity hasRarity = Rarity.common;
+    public Rarity HasRarity = Rarity.Common;
+
+    public enum Category
+    {
+        Weapon_Type1,
+        Wweapon_Type2,
+        Item,
+        Trap,
+        Wall,
+    }
+    public Category HasCategory;
 
     public string m_ObjectName = string.Empty;
     public string m_Info = "カードにカーソルを合わせたときに表示する説明文";
@@ -22,7 +31,6 @@ public abstract class MapObject_SO_Template : ScriptableObject
     public bool IsCollider { get; private set; } = false;
 
     public GameObject m_Prefab;
-    public MapObjectCard m_Card;
 
     public virtual MapObject Spawn(Vector2Int posdata_, Vector3 pos_, Transform tf_)
     {

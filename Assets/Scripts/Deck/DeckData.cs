@@ -27,7 +27,7 @@ public class DeckData
     /// <summary>
     /// デッキのサイズ
     /// </summary>
-    public int Size = 10;
+    public int Size => CardIndexArray.Length;
 
     /// <summary>
     /// デッキのフィールド

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeckCardList : MonoBehaviour
 {
-    [SerializeField] private MapObjectTable_SO m_table;//どこからでもアクセスできるテーブルクラスを作るべき
+    [SerializeField] private CardGenerator m_cardGenerator;
 
     [SerializeField] private RectTransform m_content;
 
@@ -18,7 +18,7 @@ public class DeckCardList : MonoBehaviour
     private void Start()
     {
         var _dragCards = new List<DeckCardDrag>();
-        for(int i = 0; i < m_table.Data.Length; ++i)
+        for(int i = 0; i < m_cardGenerator.m_mapObjectTable.Data.Length; ++i)
         {
             _dragCards.Add(CardCreate(i));
         }
@@ -27,12 +27,7 @@ public class DeckCardList : MonoBehaviour
 
     private DeckCardDrag CardCreate(int index_)
     {
-        var _so = m_table.Data[index_];
-        var _moc = Instantiate(_so.m_Card, m_content);
-
-        _moc.m_SO = _so;
-        _moc.m_Index = index_;
-        _moc.m_Text.text = _so.m_ObjectName;
+        var _moc = m_cardGenerator.Create(index_, m_content);
 
         var _rect = _moc.transform as RectTransform;
         _rect.localScale = Vector3.one * m_size;

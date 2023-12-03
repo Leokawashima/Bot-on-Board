@@ -18,6 +18,10 @@ public class InfoDeckData : MonoBehaviour
     /// デッキデータを保持するフィールド
     /// </summary>
     public DeckData Data { get; private set; }
+    public void SetData(DeckData data_)
+    {
+        Data = data_;
+    }
 
     /// <summary>
     /// 押されたことを検知するButton
@@ -52,7 +56,7 @@ public class InfoDeckData : MonoBehaviour
 
         ReFresh();
     }
-    
+
     /// <summary>
     /// 更新処理
     /// </summary>
