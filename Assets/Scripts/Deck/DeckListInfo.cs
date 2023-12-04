@@ -19,7 +19,7 @@ public class DeckListInfo : MonoBehaviour
             {
                 for(int i = 0; i < info_.Data.CardIndexArray.Length; ++i)
                 {
-                    _text += m_table.Data[info_.Data.CardIndexArray[i]].m_ObjectName + "\n";
+                    _text += m_table.Data[info_.Data.CardIndexArray[i]].ObjectName + "\n";
                 }
             }
         }

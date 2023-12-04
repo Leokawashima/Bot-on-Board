@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MapObject : MonoBehaviour
 {
-    public MapObject_SO_Template MapObjectSO { get; set; }
+    public MapObject_SO MapObjectSO { get; set; }
     public Vector2Int Position = Vector2Int.zero;
     public uint ElapsedTurn = 0;
 
@@ -19,15 +19,6 @@ public class MapObject : MonoBehaviour
     public bool ObjectUpdate(MapManager mapManager_)
     {
         ElapsedTurn++;
-
-        if (MapObjectSO is IDestroy _destroy)
-        {
-            if (_destroy.TurnMax - ElapsedTurn <= 0)
-            {
-                ObjectDestroy(mapManager_);
-                return false;
-            }
-        }
 
         return true;
     }

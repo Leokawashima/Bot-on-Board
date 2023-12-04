@@ -23,29 +23,48 @@ public class CardGenerator : MonoBehaviour
 
         var _appearance = _moc.GetComponent<CardAppearance>();
 
-        var _rarity = (int)_moc.SO.HasRarity;
+        var _rarity = _moc.SO.HasRarity;
         var _category = (int)_moc.SO.HasCategory;
 
         _appearance.m_categoryIcon.sprite = m_cardTable.Icon[_category];
-        _appearance.m_text.text = _moc.SO.m_ObjectName;
+        _appearance.m_text.text = _moc.SO.ObjectName;
 
-        if (_rarity != 3)
+        switch(_rarity)
         {
-            _appearance.m_backGround.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.2f, 1.0f);
-            _appearance.m_frame.sprite = m_cardTable.Frame_Base;
-            _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
-        }
-        else
-        {
-            _appearance.m_backGround.sprite = m_cardTable.BG_Epic[_category];
+            case MapObject_SO.Rarity.Common:
+                {
+                    _appearance.m_backGround.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.2f, 1.0f);
+                    _appearance.m_frame.sprite = m_cardTable.Frame_Base;
+                    _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
+                }
+                break;
+            case MapObject_SO.Rarity.UnCommon:
+                {
+                    _appearance.m_backGround.sprite = m_cardTable.BG_UnCommon;
+                    _appearance.m_frame.sprite = m_cardTable.Frame_Base;
+                    _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
+                }
+                break;
+            case MapObject_SO.Rarity.Rare:
+                {
+                    _appearance.m_backGround.sprite = m_cardTable.BG_Rare;
+                    _appearance.m_frame.sprite = m_cardTable.Frame_Base;
+                    _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
+                }
+                break;
+            case MapObject_SO.Rarity.Epic:
+                {
+                    _appearance.m_backGround.sprite = m_cardTable.BG_Epic[_category];
 
-            var _color = _appearance.m_categoryIcon.color;
-            _color.a = 0.2f;
-            _appearance.m_categoryIcon.color = _color;
+                    var _color = _appearance.m_categoryIcon.color;
+                    _color.a = 0.2f;
+                    _appearance.m_categoryIcon.color = _color;
 
-            _appearance.m_frame.sprite = m_cardTable.Frame_Epic;
+                    _appearance.m_frame.sprite = m_cardTable.Frame_Epic;
 
-            _appearance.m_text.color = Color.white;
+                    _appearance.m_text.color = Color.white;
+                }
+                break;
         }
 
         return _moc;

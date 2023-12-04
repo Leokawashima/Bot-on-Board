@@ -9,15 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_ColorfulRamune
   m_EditorClassIdentifier: 
   HasRarity: 0
   HasCategory: 2
-  m_ObjectName: "\u30AB\u30E9\u30D5\u30EB\u306A\u30E9\u30E0\u30CD"
-  m_Info: "<s>\u9EBB\u85AC</s>"
-  <Cost>k__BackingField: -12
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 4844984779904326133, guid: a9da90414e2230f4c94bacda35832f5d, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
+  ObjectName: "\u30AB\u30E9\u30D5\u30EB\u30E9\u30E0\u30CD"
+  Info: "\u4E57\u3063\u305F\u3089\u30AB\u30B7\u30B3\u30B5\u304C\u4E00\u3064\u4E0B\u304C\u308B\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 7053258685227343360, guid: a9da90414e2230f4c94bacda35832f5d, type: 3}
+  Components: []
+  references:
+    version: 2
+    RefIds: []

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
-  m_Name: MO_Unti
+  m_Name: MO_BottleOfPoison
   m_EditorClassIdentifier: 
   HasRarity: 0
   HasCategory: 3
-  ObjectName: "\u3046\u3093\u3061"
-  Info: "\u4E57\u308B\u3068\u30B9\u30BF\u30F3\u3002"
+  ObjectName: "\u30C9\u30AF\u306E\u30D3\u30F3"
+  Info: "\u8A2D\u7F6E\u30DE\u30B9\u3092\u4E2D\u5FC3\u306B9\xD79\u30DE\u30B9\u3092\u30C9\u30AF\u30A8\u30EA\u30A2\u306B\u3059\u308B\u3002"
   Cost: 0
   IsCollider: 0
-  Prefab: {fileID: 8482209174458148584, guid: 8de4547f04a11d54690c81c1a4bac8cc, type: 3}
+  Prefab: {fileID: 7196294325550652174, guid: 87a7726c60b9c7942814e52777825d50, type: 3}
   Components: []
   references:
     version: 2

@@ -51,7 +51,7 @@ public class MapStateManager
         MapChipCost[pos_.y, pos_.x] = 0;
     }
 
-    public void SetMapObject(Vector2Int pos_, MapObject_SO_Template mapObject_)
+    public void SetMapObject(Vector2Int pos_, MapObject_SO mapObject_)
     {
         MapObjectState[pos_.y, pos_.x] = 1;
         MapObjectCost[pos_.y, pos_.x] = mapObject_.Cost;

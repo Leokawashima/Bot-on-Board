@@ -4,7 +4,7 @@ using TMPro;
 
 public class MapObjectCard : MonoBehaviour
 {
-    public MapObject_SO_Template SO;
+    public MapObject_SO SO;
     public int Index = -1;
 
     public event Action Event_Trash;

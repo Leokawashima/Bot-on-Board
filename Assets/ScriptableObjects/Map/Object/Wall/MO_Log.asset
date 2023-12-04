@@ -9,15 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2241ec27307379148a3474ae44278d0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_Log
   m_EditorClassIdentifier: 
   HasRarity: 0
   HasCategory: 4
-  m_ObjectName: "\u4E38\u592A"
-  m_Info: "\u7F6E\u3044\u305F\u5834\u6240\u306F\u901A\u308C\u306A\u304F\u306A\u308B\u3002\u65A7\u3067\u65E9\u304F\u58CA\u305B\u308B\u3002"
-  <Cost>k__BackingField: 0
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 486553090382227240, guid: 2ba7ac26880514a4baeba85c2d2d5e74, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
+  ObjectName: "\u30DE\u30EB\u30BF"
+  Info: "\u30DE\u30EB\u30BF\u3002\n\u3069\u3053\u304B\u3089\u898B\u3066\u3082\u30DE\u30EB\u30BF\u3002"
+  Cost: 0
+  IsCollider: 1
+  Prefab: {fileID: 1936052159799774842, guid: 2ba7ac26880514a4baeba85c2d2d5e74, type: 3}
+  Components: []
+  references:
+    version: 2
+    RefIds: []
