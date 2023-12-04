@@ -20,6 +20,7 @@ namespace Map
 
             return true;
         }
+
         public void ObjectDestroy(MapManager mapManager_)
         {
             mapManager_.MapObjectList.Remove(this);
