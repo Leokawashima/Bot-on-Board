@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using TMPro;
+using Map;
 
 public class MapObjectCard : MonoBehaviour
 {

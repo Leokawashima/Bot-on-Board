@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
+using Map;
 
 /// <summary>
 /// ゲームの基本的な処理を担うクラス

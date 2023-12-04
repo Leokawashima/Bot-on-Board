@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Map;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス

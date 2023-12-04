@@ -21,6 +21,15 @@ namespace Map
         [Header(nameof(Destroy))]
         [SerializeField] private uint TurnMax = 10;
         [SerializeField] private uint TurnSpawn = 10;
+
+        public virtual void Initialize()
+        {
+            Debug.Log(TurnSpawn);
+        }
+        public virtual void AddTurn(int add_)
+        {
+            Debug.Log(TurnMax);
+        }
     }
 
     public class Attack : MOComponent, IColliderAction
@@ -34,6 +43,7 @@ namespace Map
         }
         public virtual void Action()
         {
+            Debug.Log(Power);
         }
     }
 
@@ -48,6 +58,7 @@ namespace Map
         }
         public virtual void Action()
         {
+            Debug.Log(Power);
         }
     }
 

@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MapObject : MonoBehaviour
+namespace Map
 {
-    public MapObject_SO MapObjectSO { get; set; }
-    public Vector2Int Position = Vector2Int.zero;
-    public uint ElapsedTurn = 0;
-
-    public void Initialize(MapManager mapManager_)
+    public class MapObject : MonoBehaviour
     {
-        mapManager_.MapObjectList.Add(this);
-        mapManager_.MapState.SetMapObject(Position, MapObjectSO);
-    }
+        public MapObject_SO MapObjectSO { get; set; }
+        public Vector2Int Position = Vector2Int.zero;
+        public uint ElapsedTurn = 0;
 
-    public bool ObjectUpdate(MapManager mapManager_)
-    {
-        ElapsedTurn++;
+        public void Initialize(MapManager mapManager_)
+        {
+            mapManager_.MapObjectList.Add(this);
+            mapManager_.MapState.SetMapObject(Position, MapObjectSO);
+        }
 
-        return true;
-    }
-    public void ObjectDestroy(MapManager mapManager_)
-    {
-        mapManager_.MapObjectList.Remove(this);
-        mapManager_.MapState.ReSetMapObject(Position);
-        Destroy(gameObject);
+        public bool ObjectUpdate(MapManager mapManager_)
+        {
+            ElapsedTurn++;
+
+            return true;
+        }
+        public void ObjectDestroy(MapManager mapManager_)
+        {
+            mapManager_.MapObjectList.Remove(this);
+            mapManager_.MapState.ReSetMapObject(Position);
+            Destroy(gameObject);
+        }
     }
 }
