@@ -14,14 +14,14 @@ namespace Map
             mapManager_.MapState.SetMapObject(Position, MapObjectSO);
         }
 
-        public bool ObjectUpdate(MapManager mapManager_)
+        public bool TurnUpdate(MapManager mapManager_)
         {
             ElapsedTurn++;
 
             return true;
         }
 
-        public void ObjectDestroy(MapManager mapManager_)
+        public void Destroy(MapManager mapManager_)
         {
             mapManager_.MapObjectList.Remove(this);
             mapManager_.MapState.ReSetMapObject(Position);

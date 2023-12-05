@@ -55,7 +55,7 @@ namespace Map
         {
             for (int i = 0; i < MapObjectList.Count; i++)
             {
-                if (false == MapObjectList[i].ObjectUpdate(this))
+                if (false == MapObjectList[i].TurnUpdate(this))
                 {
                     --i;
                 }
@@ -92,9 +92,9 @@ namespace Map
                                 if (m_MapDataSO.MapChip[_index] != -1)
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset;
-                                    var mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
+                                    var _mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
                                         .Spawn(new Vector2Int(x, z), _pos, transform);
-                                    //mc.Initialize(this);
+                                    _mc.Initialize(this);
                                 }
                                 if (m_MapDataSO.MapObject[_index] != -1)
                                 {
@@ -121,6 +121,7 @@ namespace Map
         }
         public void AIHitObject(Vector2Int pos_, AISystem _ai)
         {
+            // Nonじゃないなら
             if (MapState.MapObjectState[pos_.y, pos_.x] != -1)
             {
                 // foreachじゃないのはループ中に要素を削除することができないから
@@ -143,7 +144,7 @@ namespace Map
                         {
                             _ai.m_Stan = 1;
                         }
-                        MapObjectList[i].ObjectDestroy(this);
+                        MapObjectList[i].Destroy(this);
                         --i;
                         break;
                     }

@@ -38,7 +38,7 @@ public class PlayerUIManager : MonoBehaviour
         if(m_CardManager.GetSelectCard == null) return;
 
         //ローカルインスタンスに選択チップを取得しに行く　マルチでも生成されるのは一つのインスタンスなので破綻しない
-        var _chip = LocalPlayerManager.Singleton.m_SelectChip;
+        var _chip = LocalPlayerManager.Singleton.SelectChip;
         if(_chip != null)
         {
             if(MapManager.Singleton.MapState.MapObjectState[_chip.m_position.y, _chip.m_position.x] == -1)
