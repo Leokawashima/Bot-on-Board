@@ -1439,13 +1439,13 @@ MonoBehaviour:
         y: 0
         z: -15
       TangentIn:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.00000014901161
+        y: -0
+        z: -1.2909943
       TangentOut:
-        x: 0
+        x: -0.00000014901161
         y: 0
-        z: 0
+        z: 1.2909943
       Rotation:
         value:
           x: 0
@@ -1457,13 +1457,13 @@ MonoBehaviour:
         y: 0
         z: 15
       TangentIn:
-        x: 0
-        y: 0
-        z: 0
+        x: -0.00000014901161
+        y: -0
+        z: -1.2909943
       TangentOut:
-        x: 0
+        x: 0.00000014901161
         y: 0
-        z: 0
+        z: 1.2909943
       Rotation:
         value:
           x: 0
@@ -1475,13 +1475,13 @@ MonoBehaviour:
         y: 0
         z: 15
       TangentIn:
-        x: 0
-        y: 0
-        z: 0
+        x: -0.00000011920929
+        y: -0
+        z: -1.290994
       TangentOut:
-        x: 0
+        x: 0.00000011920929
         y: 0
-        z: 0
+        z: 1.290994
       Rotation:
         value:
           x: 0
@@ -1493,13 +1493,13 @@ MonoBehaviour:
         y: 0
         z: -15
       TangentIn:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.00000011920929
+        y: -0
+        z: -1.290994
       TangentOut:
-        x: 0
+        x: -0.00000011920929
         y: 0
-        z: 0
+        z: 1.290994
       Rotation:
         value:
           x: 0
@@ -1508,13 +1508,13 @@ MonoBehaviour:
           w: -0.38268346
     m_Length: -1
     m_MetaData:
-    - Mode: 1
+    - Mode: 0
       Tension: 0.33333334
-    - Mode: 1
+    - Mode: 0
       Tension: 0.33333334
-    - Mode: 1
+    - Mode: 0
       Tension: 0.33333334
-    - Mode: 1
+    - Mode: 0
       Tension: 0.33333334
     m_Closed: 1
   m_Knots:
@@ -5179,7 +5179,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033371890}
-  m_LocalRotation: {x: 0.19197412, y: 0.21600766, z: -0.043360543, w: 0.9563506}
+  m_LocalRotation: {x: 0.1919741, y: 0.21600763, z: -0.043360535, w: 0.9563506}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
