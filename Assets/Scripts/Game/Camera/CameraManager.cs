@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour
@@ -12,6 +11,11 @@ public class CameraManager : MonoBehaviour
     void Awake()
     {
         Singleton = this;
+    }
+
+    private void Update()
+    {
+        SetFreeLookCamIsMove(false == EventSystem.current.IsPointerOverGameObject());
     }
 
     public void SetFreeLookCamIsMove(bool flag_)
