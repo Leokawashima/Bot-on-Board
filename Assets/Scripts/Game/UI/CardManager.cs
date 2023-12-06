@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class CardManager : MonoBehaviour
 {
     const int
-        m_DeckSize = 10,
-        m_HandSize = 4,
-        m_DrawSize = 2;
+        DECK_SIZE = 10,
+        HAND_SIZE = 4,
+        DRAW_SIZE = 2;
 
     [SerializeField] private CardGenerator m_cardGenerator;
 
@@ -16,7 +16,7 @@ public class CardManager : MonoBehaviour
         { return m_ToggleGroup.ActiveToggles().FirstOrDefault()?.GetComponent<MapObjectCard>(); }
     }
 
-    [SerializeField] List<int> m_Deck = new(m_DeckSize);
+    [SerializeField] List<int> m_Deck = new(DECK_SIZE);
 
     [SerializeField] ToggleGroup m_ToggleGroup;
 
@@ -28,15 +28,13 @@ public class CardManager : MonoBehaviour
 
     public void Initialize()
     {
-        for (int i = 0; i < m_HandSize; ++i)
+        for (int i = 0; i < HAND_SIZE; ++i)
         {
             var _index = Random.Range(0, m_Deck.Count - 1);
-            _index = 10 + i;
-            Debug.Log(_index);
-            Debug.Log(m_Deck[_index]);
+
             HandCardList.Add(m_Deck[_index]);
 
-            CardCreate(_index);
+            CardCreate(m_Deck[_index]);
 
             m_Deck.RemoveAt(_index);
         }
@@ -72,15 +70,15 @@ public class CardManager : MonoBehaviour
 
     public void Draw()
     {
-        var _space = m_HandSize - HandCardList.Count;
-        var _draw = Mathf.Min(_space, m_DrawSize);
+        var _space = HAND_SIZE - HandCardList.Count;
+        var _draw = Mathf.Min(_space, DRAW_SIZE);
 
         for (int i = 0; i < _draw; ++i)
         {
             var _index = Random.Range(0, StockCardList.Count - 1);
             HandCardList.Add(StockCardList[_index]);
 
-            CardCreate(_index);
+            CardCreate(StockCardList[_index]);
 
             StockCardList.RemoveAt(_index);
         }
