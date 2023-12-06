@@ -3,11 +3,25 @@ using UnityEngine;
 
 namespace Map
 {
-    // GetType().Name
-    // Editor拡張を作成するときはこれで名前を取得して表示を変える
     [Serializable]
     public abstract class MOComponent
     {
+        public virtual void Initialize()
+        {
+        }
+
+        public virtual bool Update()
+        {
+            return true;
+        }
+
+        public virtual void Hit(AISystem ai_)
+        {
+        }
+
+        public virtual void Destroy()
+        {
+        }
     }
 
     public interface IColliderAction
@@ -16,19 +30,33 @@ namespace Map
         public void Action();
     }
 
-    public class Destroy : MOComponent
+    public class TurnDestroy : MOComponent
     {
-        [Header(nameof(Destroy))]
+        [Header(nameof(TurnDestroy))]
+        [SerializeField] private uint TurnDestruction = 0;
         [SerializeField] private uint TurnMax = 10;
         [SerializeField] private uint TurnSpawn = 10;
 
-        public virtual void Initialize()
+        public override void Initialize()
         {
-            Debug.Log(TurnSpawn);
+            TurnDestruction = TurnSpawn;
         }
-        public virtual void AddTurn(int add_)
+        public override bool Update()
         {
-            Debug.Log(TurnMax);
+            if (--TurnDestruction <= 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public virtual void AddTurn(uint add_)
+        {
+            TurnDestruction += add_;
+            if (TurnDestruction > TurnMax)
+            {
+                TurnDestruction = TurnMax;
+            }
         }
     }
 
@@ -47,18 +75,25 @@ namespace Map
         }
     }
 
-    public class Heal : MOComponent, IColliderAction
+    public class Damage : MOComponent
+    {
+        [Header(nameof(Damage))]
+        [SerializeField] private float Power = 1.0f;
+
+        public override void Hit(AISystem ai_)
+        {
+            ai_.DamageHP(Power);
+        }
+    }
+
+    public class Heal : MOComponent
     {
         [Header(nameof(Heal))]
-        [SerializeField] private float Power = 3.0f;
+        [SerializeField] private float Power = 1.0f;
 
-        public virtual bool CheckCollider()
+        public override void Hit(AISystem ai_)
         {
-            return true;
-        }
-        public virtual void Action()
-        {
-            Debug.Log(Power);
+            ai_.HealHP(Power);
         }
     }
 

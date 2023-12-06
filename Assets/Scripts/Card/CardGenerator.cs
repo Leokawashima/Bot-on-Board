@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Map;
 
 public class CardGenerator : MonoBehaviour
 {
@@ -31,28 +32,28 @@ public class CardGenerator : MonoBehaviour
 
         switch(_rarity)
         {
-            case MapObject_SO.Rarity.Common:
+            case Rarity.Common:
                 {
                     _appearance.m_backGround.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.2f, 1.0f);
                     _appearance.m_frame.sprite = m_cardTable.Frame_Base;
                     _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
                 }
                 break;
-            case MapObject_SO.Rarity.UnCommon:
+            case Rarity.UnCommon:
                 {
                     _appearance.m_backGround.sprite = m_cardTable.BG_UnCommon;
                     _appearance.m_frame.sprite = m_cardTable.Frame_Base;
                     _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
                 }
                 break;
-            case MapObject_SO.Rarity.Rare:
+            case Rarity.Rare:
                 {
                     _appearance.m_backGround.sprite = m_cardTable.BG_Rare;
                     _appearance.m_frame.sprite = m_cardTable.Frame_Base;
                     _appearance.m_frame.color = Color.HSVToRGB(m_CATEGORY_COLOR[_category], 0.5f, 1.0f);
                 }
                 break;
-            case MapObject_SO.Rarity.Epic:
+            case Rarity.Epic:
                 {
                     _appearance.m_backGround.sprite = m_cardTable.BG_Epic[_category];
 

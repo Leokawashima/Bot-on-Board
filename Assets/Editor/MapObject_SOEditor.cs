@@ -24,12 +24,9 @@ public class MapObject_SOEditor : Editor
         var buttonRect = GUILayoutUtility.GetRect(buttonLabel, buttonStyle);
         if (GUI.Button(buttonRect, buttonLabel, buttonStyle))
         {
+            var _moSO = target as MapObject_SO;
             // ドロップダウンを表示
-            var _dropdown = new MOComponentAdvancedDropdown(new AdvancedDropdownState());
-            _dropdown.Event_ItemSelected += (AdvancedDropdownItem item_) =>
-            {
-                (target as MapObject_SO).Components.Add(_dropdown.Components[item_.id]);
-            };
+            var _dropdown = new MOComponentAdvancedDropdown(new AdvancedDropdownState(), _moSO);
             _dropdown.Show(buttonRect);
         }
     }
@@ -41,15 +38,13 @@ public class MapObject_SOEditor : Editor
     /// 参考　https://qiita.com/shogo281/items/fb24cf7d28f06822527e
     public class MOComponentAdvancedDropdown : AdvancedDropdown
     {
-        public Dictionary<int, MOComponent> Components = new();
-        public event Action<AdvancedDropdownItem> Event_ItemSelected;
+        private MapObject_SO m_reference;
+        private Dictionary<int, MOComponent> m_components = new();
 
-        public MOComponentAdvancedDropdown(AdvancedDropdownState state) : base(state)
+        public MOComponentAdvancedDropdown(AdvancedDropdownState state, MapObject_SO moSO_) : base(state)
         {
-            var _minSize = minimumSize;
-            _minSize.x = 200;
-            _minSize.y = 200;
-            minimumSize = _minSize;
+            m_reference = moSO_;
+            minimumSize = new(200.0f, 200.0f);
         }
 
         protected override AdvancedDropdownItem BuildRoot()
@@ -64,7 +59,7 @@ public class MapObject_SOEditor : Editor
             foreach (var component in _components)
             {
                 var _item = new AdvancedDropdownItem(component.GetType().Name);
-                Components.Add(_item.id, component);
+                m_components.Add(_item.id, component);
                 _root.AddChild(_item);
             }
 
@@ -73,7 +68,7 @@ public class MapObject_SOEditor : Editor
 
         protected override void ItemSelected(AdvancedDropdownItem item_)
         {
-            Event_ItemSelected?.Invoke(item_);
+            m_reference.Components.Add(m_components[item_.id]);
         }
     }
 }

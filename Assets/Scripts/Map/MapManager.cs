@@ -26,7 +26,7 @@ namespace Map
         [SerializeField] MapObjectTable_SO m_MapObjectTable;
 
         [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
-        public List<AISystem> m_AIManagerList { get; private set; } = new();
+        public List<AISystem> AIManagerList { get; private set; } = new();
 
         public MapStateManager MapState { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Map
 
         public static event Action Event_MapCreated;
 
-        public Vector3 Offset => new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f);
+        public Vector3 Offset => new(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f);
 
         void OnEnable()
         {
@@ -57,6 +57,7 @@ namespace Map
             {
                 if (false == MapObjectList[i].TurnUpdate(this))
                 {
+                    // falseでUpdate内部から破壊しリストから削除しているためデクリメントしている
                     --i;
                 }
             }
@@ -106,8 +107,8 @@ namespace Map
                             }
                         }
                     }
-                    _cnt++;// ++_cntで下とまとめても良いが個人的に読み返すときに見落とされがちなので使用しない
-                           // 頂点位置計算等の数学フィジカルごり押しプログラムなら良いと思う
+
+                    ++_cnt;
 
                     if (_cnt == m_MapDataSO.Size.x + m_MapDataSO.Size.y) break;
 
@@ -119,33 +120,18 @@ namespace Map
 
             StartCoroutine(CoMapCreate());
         }
-        public void AIHitObject(Vector2Int pos_, AISystem _ai)
+        public void AIHitObject(Vector2Int pos_, AISystem ai_)
         {
-            // Nonじゃないなら
-            if (MapState.MapObjectState[pos_.y, pos_.x] != -1)
+            if (MapState.MapObjects[pos_.y][pos_.x] != null)
             {
-                // foreachじゃないのはループ中に要素を削除することができないから
+                // ループ中に要素を削除する可能性があるためforeach
                 for (int i = 0; i < MapObjectList.Count; ++i)
                 {
                     if (MapObjectList[i].Position == pos_)
                     {
-                        // 本来こんな書き方でアイテムの効果を出すわけがないが、
-                        // オブジェクト志向の組み方をしている暇がないので一旦回復アイテムはこれ
-                        if (MapState.MapObjectState[pos_.y, pos_.x] == -50)
-                        {
-                            _ai.HealHP(3);
-                        }
-                        else if (MapState.MapObjectState[pos_.y, pos_.x] == -100)
-                        {
-                            _ai.m_PowWeapon = 3;
-                            _ai.m_UseWeapon = 2;
-                        }
-                        else if (MapState.MapObjectState[pos_.y, pos_.x] == 50)
-                        {
-                            _ai.m_Stan = 1;
-                        }
-                        MapObjectList[i].Destroy(this);
-                        --i;
+                        MapObjectList[i--].Hit(ai_);
+                        MapObjectList[i--].Destroy(this);
+                        // i--;を別の行に記述すると不必要な代入と文句を言われるので上に統合
                         break;
                     }
                 }
@@ -174,9 +160,9 @@ namespace Map
                     {
                         for (int x = 0; x < m_MapDataSO.Size.x; ++x)
                         {
-                            if (MapState.MapObjectState[y, x] != -1)
+                            if (MapState.MapObjects[y][x] != null)
                             {
-                                Gizmos.color = Color.HSVToRGB(MapState.MapObjectState[y, x] / 36.0f % 1, 1, 1);
+                                Gizmos.color = Color.HSVToRGB(MapState.MapObjects[y][x].Data.Cost / 36.0f % 1, 1, 1);
                                 Gizmos.DrawWireCube(transform.position + _offset + new Vector3(x, 0, y), Vector3.one);
                             }
                         }

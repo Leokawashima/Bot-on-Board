@@ -52,10 +52,7 @@ public class AStarAlgorithm
         {
             list_.Add(positon);
 
-            if(orizin != null)
-            {
-                orizin.GetPath(list_);
-            }
+            orizin?.GetPath(list_);
         }
     }
 
@@ -73,32 +70,47 @@ public class AStarAlgorithm
         _nodeMap[orizin_.y, orizin_.x] = new Node();
         _nodeMap[orizin_.y, orizin_.x].OpenStartNode(orizin_, target_, _cost, _openList);
 
-        while(true)
+        while (true)
         {
             _cost += m_MoveCost;
 
-            if(_openList.Count == 0) return null;
+            if (_openList.Count == 0) return null;
 
             // 開く原点を決める
             Node _baseNode = _openList[0];
-            for(int i = 1; i < _openList.Count; ++i)
+            for (int i = 1; i < _openList.Count; ++i)
             {
                 // スコアが一番低いもの
-                if(_openList[i].score < _baseNode.score)
+                if (_openList[i].score < _baseNode.score)
                     _baseNode = _openList[i];
-                else if(_openList[i].actualCost < _baseNode.actualCost)
+                else if (_openList[i].actualCost < _baseNode.actualCost)
                     _baseNode = _openList[i];
             }
 
             // 上　右　下　左　の順で探索する　キャラの向きからこの向きで探索すると面白いかも
-            for(int i = 0; i < SearchPosition.Length; ++i)
+            for (int i = 0; i < SearchPosition.Length; ++i)
             {
-                var _serachPos = _baseNode.positon + SearchPosition[i];
-                if(0 <= _serachPos.y && 0 <= _serachPos.x && m_mapState.MapSize.y > _serachPos.y && m_mapState.MapSize.x > _serachPos.x)
+                var _searchPos = _baseNode.positon + SearchPosition[i];
+                if (0 <= _searchPos.y && 0 <= _searchPos.x)
                 {
-                    _nodeMap[_serachPos.y, _serachPos.x] ??= new Node();
-                    if(_nodeMap[_serachPos.y, _serachPos.x].OpenNode(_serachPos, orizin_, target_, _cost + m_mapState.MapObjectCost[_serachPos.y, _serachPos.x], _baseNode, _openList))
-                        return _nodeMap[_serachPos.y, _serachPos.x];
+                    if (m_mapState.MapSize.y > _searchPos.y && m_mapState.MapSize.x > _searchPos.x)
+                    {
+                        _nodeMap[_searchPos.y, _searchPos.x] ??= new Node();
+                        if (m_mapState.MapObjects[_searchPos.y][_searchPos.x] != null)
+                        {
+                            if (_nodeMap[_searchPos.y, _searchPos.x].OpenNode(_searchPos, orizin_, target_,
+                                                        _cost + m_mapState.MapObjects[_searchPos.y][_searchPos.x].Data.Cost,
+                                                        _baseNode, _openList))
+                                return _nodeMap[_searchPos.y, _searchPos.x];
+                        }
+                        else
+                        {
+                            if (_nodeMap[_searchPos.y, _searchPos.x].OpenNode(_searchPos, orizin_, target_,
+                            _cost,
+                            _baseNode, _openList))
+                                return _nodeMap[_searchPos.y, _searchPos.x];
+                        }
+                    }
                 }
             }
 

@@ -35,26 +35,26 @@ public class PlayerUIManager : MonoBehaviour
     void OnButton_Place()
     {
         //カードが選択されていないなら返す
-        if(m_CardManager.GetSelectCard == null) return;
-
+        if (m_CardManager.GetSelectCard == null) return;
         //ローカルインスタンスに選択チップを取得しに行く　マルチでも生成されるのは一つのインスタンスなので破綻しない
         var _chip = LocalPlayerManager.Singleton.SelectChip;
         if(_chip != null)
         {
-            if(MapManager.Singleton.MapState.MapObjectState[_chip.m_position.y, _chip.m_position.x] == -1)
+            if(MapManager.Singleton.MapState.MapChips[_chip.m_position.y][_chip.m_position.x] == null)
             {
-                for (int i = 0; i < MapManager.Singleton.m_AIManagerList.Count; ++i)
+                for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
                 {
-                    if (MapManager.Singleton.m_AIManagerList[i].Position == _chip.m_position)
+                    if (MapManager.Singleton.AIManagerList[i].Position == _chip.m_position)
                         return;
                 }
+
                 var _mo = m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
                 _mo.Initialize(MapManager.Singleton);
                 m_CardManager.GetSelectCard.Trash();
 
                 Event_ButtonPlace?.Invoke();
 
-                if(--m_NumOfPlace == 0 || m_CardManager.m_HandCardList.Count == 0)
+                if (--m_NumOfPlace == 0 || m_CardManager.m_HandCardList.Count == 0)
                     OnButton_TurnEnd();
             }
         }
