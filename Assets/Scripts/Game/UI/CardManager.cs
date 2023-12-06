@@ -16,30 +16,31 @@ public class CardManager : MonoBehaviour
         { return m_ToggleGroup.ActiveToggles().FirstOrDefault()?.GetComponent<MapObjectCard>(); }
     }
 
-    [SerializeField] List<int> m_Deck = new(m_DeckSize) {
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,//デッキを組めるようになったらデッキをJson保存しそれらを呼び出して初期化する
-    };
+    [SerializeField] List<int> m_Deck = new(m_DeckSize);
 
     [SerializeField] ToggleGroup m_ToggleGroup;
 
     private const float CardSelectOffset = 50.0f;
 
-    public List<int> m_TrashCardList = new();
-    public List<int> m_HandCardList = new();
-    public List<int> m_StockCaedList = new();
+    public List<int> TrashCardList = new();
+    public List<int> HandCardList = new();
+    public List<int> StockCardList = new();
 
     public void Initialize()
     {
         for (int i = 0; i < m_HandSize; ++i)
         {
             var _index = Random.Range(0, m_Deck.Count - 1);
-            m_HandCardList.Add(m_Deck[_index]);
+            _index = 10 + i;
+            Debug.Log(_index);
+            Debug.Log(m_Deck[_index]);
+            HandCardList.Add(m_Deck[_index]);
 
-            CardCreate(i);
+            CardCreate(_index);
 
             m_Deck.RemoveAt(_index);
         }
-        m_StockCaedList = new(m_Deck);
+        StockCardList = new(m_Deck);
         m_Deck.Clear();
     }
 
@@ -52,8 +53,8 @@ public class CardManager : MonoBehaviour
 
         _moc.Event_Trash += () =>
         {
-            m_TrashCardList.Add(index_);
-            m_HandCardList.Remove(index_);
+            TrashCardList.Add(index_);
+            HandCardList.Remove(index_);
         };
 
         var _rect = _moc.transform as RectTransform;
@@ -71,22 +72,22 @@ public class CardManager : MonoBehaviour
 
     public void Draw()
     {
-        var _space = m_HandSize - m_HandCardList.Count;
+        var _space = m_HandSize - HandCardList.Count;
         var _draw = Mathf.Min(_space, m_DrawSize);
 
         for (int i = 0; i < _draw; ++i)
         {
-            var _index = Random.Range(0, m_StockCaedList.Count - 1);
-            m_HandCardList.Add(m_StockCaedList[_index]);
+            var _index = Random.Range(0, StockCardList.Count - 1);
+            HandCardList.Add(StockCardList[_index]);
 
-            CardCreate(i);
+            CardCreate(_index);
 
-            m_StockCaedList.RemoveAt(_index);
+            StockCardList.RemoveAt(_index);
         }
 
         //ドローが終わったら破棄カードたちを山札に戻す
-        foreach(var _index in m_TrashCardList)
-            m_StockCaedList.Add(_index);
-        m_TrashCardList.Clear();
+        foreach (var index in TrashCardList)
+            StockCardList.Add(index);
+        TrashCardList.Clear();
     }
 }

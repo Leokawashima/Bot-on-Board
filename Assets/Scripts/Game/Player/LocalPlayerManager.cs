@@ -9,7 +9,9 @@ public class LocalPlayerManager : MonoBehaviour
     public MapChip SelectChip { get; private set; }
     Vector2 m_mousePosition;
 
-    (Color baseColor, Color outLineColor) m_selectColor;
+    private bool m_isPointerOver;
+
+    (Color main, Color outLine) m_selectColor;
     Coroutine m_activeCorutine;
 
     void OnEnable()
@@ -36,6 +38,11 @@ public class LocalPlayerManager : MonoBehaviour
         Singleton = null;
     }
 
+    private void Update()
+    {
+        m_isPointerOver = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
+
     void OnMouse_MainClick()
     {
         Stop();
@@ -44,16 +51,17 @@ public class LocalPlayerManager : MonoBehaviour
 
         int _mask = 1 << Name.Layer.Map;
 
-        // UI上なら返す　Updateで呼び出さないと不正確だぞ！とwarningが出るがいったん無視
-        if (false == UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-
-        if(Physics.Raycast(_ray, out var hit, Mathf.Infinity, _mask))
+        // UI上かどうか
+        if (false == m_isPointerOver)
         {
-            var _chip = hit.collider.GetComponent<MapChip>();
-            if(SelectChip != _chip)
+            if (Physics.Raycast(_ray, out var hit, Mathf.Infinity, _mask))
             {
-                SelectChip = _chip;
-                HighLight(SelectChip);
+                var _chip = hit.collider.GetComponent<MapChip>();
+                if (SelectChip != _chip)
+                {
+                    SelectChip = _chip;
+                    HighLight(SelectChip);
+                }
             }
         }
     }
@@ -72,7 +80,7 @@ public class LocalPlayerManager : MonoBehaviour
 
     void OnMouse_MovePerform()
     {
-        if((m_mousePosition - PlayerInputManager.m_Pos).magnitude >= 20.0f)
+        if ((m_mousePosition - PlayerInputManager.m_Pos).magnitude >= 20.0f)
         {
             CameraManager.Singleton.SetFreeLookCamIsMove(true);
             PlayerInputManager.OnMouseMovePerformEvent -= OnMouse_MovePerform;
@@ -94,14 +102,14 @@ public class LocalPlayerManager : MonoBehaviour
         {
             StopCoroutine(m_activeCorutine);
             m_activeCorutine = null;
-            SelectChip.Material.color = m_selectColor.baseColor;
-            SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLineColor);
+            SelectChip.Material.color = m_selectColor.main;
+            SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLine);
         }
     }
     IEnumerator CoHighLight(MapChip chip_)
     {
-        m_selectColor.baseColor = chip_.Material.color;
-        m_selectColor.outLineColor = chip_.Material.GetColor("_OutlineColor");
+        m_selectColor.main = chip_.Material.color;
+        m_selectColor.outLine = chip_.Material.GetColor("_OutlineColor");
 
         float _h, _v;
         Color.RGBToHSV(chip_.Material.color, out _h, out _, out _v);

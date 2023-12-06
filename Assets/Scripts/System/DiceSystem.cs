@@ -32,7 +32,6 @@ public class DiceSystem : MonoBehaviour
     {
         m_RB.isKinematic = false;
 
-        Random.InitState(System.DateTime.Now.Millisecond);
         m_RB.AddForce(new Vector3(0, Random.Range(m_RandomPowY.x, m_RandomPowY.y), 0), ForceMode.Impulse);
         m_RB.AddTorque(Vector3.right * Random.Range(m_RandomRotX.x, m_RandomRotX.y) + Vector3.up * Random.Range(m_RandomRotY.x, m_RandomRotY.y));
 

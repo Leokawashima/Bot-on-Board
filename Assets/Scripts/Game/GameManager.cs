@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     void SystemInitalize()
     {
         m_BattleState = BattleState.Non;
-        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond + DateTime.Now.Second);
         CameraManager.Singleton.SetFreeLookCamIsMove(false);
 
         GlobalSystem.SetMatchState(GlobalSystem.MatchState.Local);

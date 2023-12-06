@@ -38,9 +38,9 @@ public class PlayerUIManager : MonoBehaviour
         if (m_CardManager.GetSelectCard == null) return;
         //ローカルインスタンスに選択チップを取得しに行く　マルチでも生成されるのは一つのインスタンスなので破綻しない
         var _chip = LocalPlayerManager.Singleton.SelectChip;
-        if(_chip != null)
+        if (_chip != null)
         {
-            if(MapManager.Singleton.MapState.MapChips[_chip.m_position.y][_chip.m_position.x] == null)
+            if (MapManager.Singleton.MapState.MapChips[_chip.m_position.y][_chip.m_position.x] == null)
             {
                 for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
                 {
@@ -54,7 +54,7 @@ public class PlayerUIManager : MonoBehaviour
 
                 Event_ButtonPlace?.Invoke();
 
-                if (--m_NumOfPlace == 0 || m_CardManager.m_HandCardList.Count == 0)
+                if (--m_NumOfPlace == 0 || m_CardManager.HandCardList.Count == 0)
                     OnButton_TurnEnd();
             }
         }
