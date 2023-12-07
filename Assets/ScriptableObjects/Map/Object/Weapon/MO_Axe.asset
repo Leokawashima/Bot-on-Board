@@ -28,7 +28,7 @@ MonoBehaviour:
     - rid: 4745484629399306281
       type: {class: TurnDestroy, ns: Map, asm: Assembly-CSharp}
       data:
-        TurnDestruction: 9
+        TurnDestruction: 0
         TurnMax: 10
         TurnSpawn: 10
     - rid: 4745484629399306283

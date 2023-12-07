@@ -69,6 +69,7 @@ public class MapObject_SOEditor : Editor
         protected override void ItemSelected(AdvancedDropdownItem item_)
         {
             m_reference.Components.Add(m_components[item_.id]);
+            EditorUtility.SetDirty(m_reference);
         }
     }
 }

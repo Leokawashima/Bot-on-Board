@@ -12,8 +12,12 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private CardGenerator m_cardGenerator;
 
-    public MapObjectCard GetSelectCard { get
-        { return m_ToggleGroup.ActiveToggles().FirstOrDefault()?.GetComponent<MapObjectCard>(); }
+    public MapObjectCard GetSelectCard
+    {
+        get
+        {
+            return m_ToggleGroup.ActiveToggles().FirstOrDefault()?.GetComponent<MapObjectCard>();
+        }
     }
 
     [SerializeField] List<int> m_Deck = new(DECK_SIZE);
@@ -67,7 +71,7 @@ public class CardManager : MonoBehaviour
                 );
         });
     }
-
+    
     public void Draw()
     {
         var _space = HAND_SIZE - HandCardList.Count;
