@@ -35,7 +35,7 @@ public class AStarAlgorithm
         }
         public bool OpenNode(Vector2Int coordinate_, Vector2Int start_, Vector2Int target_, int actualCost_, Node orizin_, List<Node> list_)
         {
-            if(state != State.Non) return false;
+            if (state != State.Non) return false;
 
             state = State.Open;
             positon = coordinate_;
@@ -96,20 +96,24 @@ public class AStarAlgorithm
                     if (m_mapState.MapSize.y > _searchPos.y && m_mapState.MapSize.x > _searchPos.x)
                     {
                         _nodeMap[_searchPos.y, _searchPos.x] ??= new Node();
+                        var _searchCost = _cost;
+
+                        if (m_mapState.MapChips[_searchPos.y][_searchPos.x] != null)
+                        {
+                            _searchCost += m_mapState.MapChips[_searchPos.y][_searchPos.x].Data.Cost;
+                        }
+                        
                         if (m_mapState.MapObjects[_searchPos.y][_searchPos.x] != null)
                         {
-                            if (_nodeMap[_searchPos.y, _searchPos.x].OpenNode(_searchPos, orizin_, target_,
-                                                        _cost + m_mapState.MapObjects[_searchPos.y][_searchPos.x].Data.Cost,
-                                                        _baseNode, _openList))
-                                return _nodeMap[_searchPos.y, _searchPos.x];
+                            _searchCost += m_mapState.MapObjects[_searchPos.y][_searchPos.x].Data.Cost;
                         }
-                        else
-                        {
-                            if (_nodeMap[_searchPos.y, _searchPos.x].OpenNode(_searchPos, orizin_, target_,
-                            _cost,
-                            _baseNode, _openList))
-                                return _nodeMap[_searchPos.y, _searchPos.x];
-                        }
+
+                        if (_nodeMap[_searchPos.y, _searchPos.x].OpenNode(
+                            _searchPos,// 座標
+                            orizin_, target_,// 開始地点、目標地点
+                            _searchCost,// 検索にかかるコスト
+                            _baseNode, _openList))// 検索元のノード、現在空いているノードのリスト
+                            return _nodeMap[_searchPos.y, _searchPos.x];
                     }
                 }
             }

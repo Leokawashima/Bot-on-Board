@@ -16,7 +16,12 @@ MonoBehaviour:
   Info: "\u8AAC\u660E\u6587"
   Cost: 20
   Prefab: {fileID: 3946896690379435978, guid: 92a3b685f8a8dd14c8f7abf2f523a3e9, type: 3}
-  Components: []
+  Components:
+  - rid: 8759145202757664768
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 8759145202757664768
+      type: {class: Damage, ns: Map.Chip, asm: Assembly-CSharp}
+      data:
+        Power: 1

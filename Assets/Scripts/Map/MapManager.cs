@@ -126,7 +126,7 @@ namespace Map
         {
             if (MapState.MapObjects[pos_.y][pos_.x] != null)
             {
-                // ループ中に要素を削除する可能性があるためforeach
+                // ループ中に要素を削除する可能性があるためfor
                 for (int i = 0; i < MapObjectList.Count; ++i)
                 {
                     if (MapObjectList[i].Position == pos_)
@@ -137,6 +137,14 @@ namespace Map
                         break;
                     }
                 }
+            }
+        }
+
+        public void AIRideChip(Vector2Int pos_, AISystem ai_)
+        {
+            if(MapState.MapChips[pos_.y][pos_.x] != null)
+            {
+                MapState.MapChips[pos_.y][pos_.x].Ride(ai_);
             }
         }
 

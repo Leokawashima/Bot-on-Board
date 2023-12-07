@@ -104,6 +104,7 @@ public class AIManager : MonoBehaviour
 
         foreach(var _ai in m_AIList)
         {
+            MapManager.Singleton.AIRideChip(_ai.Position, _ai);
             MapManager.Singleton.AIHitObject(_ai.Position, _ai);
         }
 

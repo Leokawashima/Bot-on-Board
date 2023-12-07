@@ -5,16 +5,16 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
-namespace Map.Object
+namespace Map.Chip
 {
     /// <summary>
     /// MapObject_SOのInspetor拡張
     /// </summary>
     /// VolumePrifileのAddOverridesのようにコンポーネントを足したくて調べたらあった
     /// 参考　https://light11.hatenadiary.com/entry/2022/08/31/193932
-    [CustomEditor(typeof(MapObject_SO))]
+    [CustomEditor(typeof(MapChip_SO))]
     [CanEditMultipleObjects]
-    public class MapObject_SOEditor : Editor
+    public class MapChip_SOEditor : Editor
     {
         public override void OnInspectorGUI()
         {
@@ -25,26 +25,26 @@ namespace Map.Object
             var _rect = GUILayoutUtility.GetRect(_label, _style);
             if(GUI.Button(_rect, _label, _style))
             {
-                var _moSO = target as MapObject_SO;
+                var _mcSO = target as MapChip_SO;
                 // ドロップダウンを表示
-                var _dropdown = new MOComponentAdvancedDropdown(new AdvancedDropdownState(), _moSO);
+                var _dropdown = new MCComponentAdvancedDropdown(new AdvancedDropdownState(), _mcSO);
                 _dropdown.Show(_rect);
             }
         }
 
         /// <summary>
-        /// MapObjectComponent専用のドロップダウンメニュー
+        /// MapChipComponent専用のドロップダウンメニュー
         /// </summary>
         /// AdvancedDropDownItemのIdからどうやってコンポーネントを抽出しようかと思っていたらDictonaryで捌くサイトを見つけてマネした
         /// 参考　https://qiita.com/shogo281/items/fb24cf7d28f06822527e
-        public class MOComponentAdvancedDropdown : AdvancedDropdown
+        public class MCComponentAdvancedDropdown : AdvancedDropdown
         {
-            private MapObject_SO m_reference;
-            private Dictionary<int, MapObjectComponent> m_components = new();
+            private MapChip_SO m_reference;
+            private Dictionary<int, MapChipComponent> m_components = new();
 
-            public MOComponentAdvancedDropdown(AdvancedDropdownState state, MapObject_SO moSO_) : base(state)
+            public MCComponentAdvancedDropdown(AdvancedDropdownState state, MapChip_SO mcSO_) : base(state)
             {
-                m_reference = moSO_;
+                m_reference = mcSO_;
                 minimumSize = new(200.0f, 200.0f);
             }
 
@@ -52,11 +52,11 @@ namespace Map.Object
             {
                 var _root = new AdvancedDropdownItem("Components");
 
-                var _types = System.Reflection.Assembly.GetAssembly(typeof(MapObjectComponent))
+                var _types = System.Reflection.Assembly.GetAssembly(typeof(MapChipComponent))
                     .GetTypes()
-                    .Where(x => x.IsSubclassOf(typeof(MapObjectComponent)) && !x.IsAbstract)
+                    .Where(x => x.IsSubclassOf(typeof(MapChipComponent)) && !x.IsAbstract)
                     .ToArray();
-                var _components = _types.Select(type => (MapObjectComponent)Activator.CreateInstance(type)).ToArray();
+                var _components = _types.Select(type => (MapChipComponent)Activator.CreateInstance(type)).ToArray();
                 foreach(var component in _components)
                 {
                     var _item = new AdvancedDropdownItem(component.GetType().Name);
