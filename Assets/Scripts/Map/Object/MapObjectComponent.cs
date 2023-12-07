@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Map
+namespace Map.Object
 {
     [Serializable]
-    public abstract class MOComponent
+    public abstract class MapObjectComponent
     {
         public virtual void Initialize()
         {
@@ -30,7 +30,7 @@ namespace Map
         public void Action();
     }
 
-    public class TurnDestroy : MOComponent
+    public class TurnDestroy : MapObjectComponent
     {
         [Header(nameof(TurnDestroy))]
         [SerializeField] private uint TurnDestruction = 0;
@@ -43,7 +43,7 @@ namespace Map
         }
         public override bool Update()
         {
-            if (--TurnDestruction <= 0)
+            if(--TurnDestruction <= 0)
             {
                 return false;
             }
@@ -53,14 +53,14 @@ namespace Map
         public virtual void AddTurn(uint add_)
         {
             TurnDestruction += add_;
-            if (TurnDestruction > TurnMax)
+            if(TurnDestruction > TurnMax)
             {
                 TurnDestruction = TurnMax;
             }
         }
     }
 
-    public class Attack : MOComponent, IColliderAction
+    public class Attack : MapObjectComponent, IColliderAction
     {
         [Header(nameof(Attack))]
         [SerializeField] private float Power = 3.0f;
@@ -75,7 +75,7 @@ namespace Map
         }
     }
 
-    public class Damage : MOComponent
+    public class Damage : MapObjectComponent
     {
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
@@ -86,7 +86,18 @@ namespace Map
         }
     }
 
-    public class Heal : MOComponent
+    public class Stan : MapObjectComponent
+    {
+        [Header(nameof(Stan))]
+        [SerializeField] private uint StanTurn = 1;
+
+        public override void Hit(AISystem ai_)
+        {
+            ai_.StanTurn = StanTurn;
+        }
+    }
+
+    public class Heal : MapObjectComponent
     {
         [Header(nameof(Heal))]
         [SerializeField] private float Power = 1.0f;
@@ -97,7 +108,7 @@ namespace Map
         }
     }
 
-    public class Direction : MOComponent
+    public class Direction : MapObjectComponent
     {
         [Header(nameof(Direction))]
         [SerializeField] private Vertical VerticalDirection;
@@ -115,7 +126,7 @@ namespace Map
             Right = 1,
             Left = -1,
         }
-        
+
         public Vector2Int Vector2D => new((int)HorizontalDirection, (int)VerticalDirection);
         public Vector3Int Vector3D => new((int)HorizontalDirection, 0, (int)VerticalDirection);
     }

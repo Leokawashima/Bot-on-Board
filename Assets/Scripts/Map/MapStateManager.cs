@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Map;
+using Map.Chip;
+using Map.Object;
 
 /// <summary>
 /// マップのステートを管理するクラス

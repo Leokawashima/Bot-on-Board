@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Map
+namespace Map.Object
 {
     public class MapObject : MonoBehaviour
     {
@@ -9,26 +9,26 @@ namespace Map
         public Vector2Int Position = Vector2Int.zero;
 
         [field: SerializeReference]
-        public List<MOComponent> Components { get; private set; } = new();
+        public List<MapObjectComponent> Components { get; private set; } = new();
 
-        public void Initialize(MapManager mapManager_)
+        public void Initialize(MapManager manager_)
         {
             foreach (var component in Components)
             {
                 component.Initialize();
             }
 
-            mapManager_.MapObjectList.Add(this);
-            mapManager_.MapState.SetMapObject(Position, this);
+            manager_.MapObjectList.Add(this);
+            manager_.MapState.SetMapObject(Position, this);
         }
 
-        public bool TurnUpdate(MapManager mapManager_)
+        public bool TurnUpdate(MapManager manager_)
         {
             foreach (var component in Components)
             {
                 if (false == component.Update())
                 {
-                    Destroy(mapManager_);
+                    this.Destroy(manager_);
                     return false;
                 }
             }
@@ -44,16 +44,16 @@ namespace Map
             }
         }
 
-        public void Destroy(MapManager mapManager_)
+        public void Destroy(MapManager manager_)
         {
             foreach (var component in Components)
             {
                 component.Destroy();
             }
 
-            mapManager_.MapObjectList.Remove(this);
-            mapManager_.MapState.ReSetMapObject(Position);
-            Destroy(gameObject);
+            manager_.MapObjectList.Remove(this);
+            manager_.MapState.ReSetMapObject(Position);
+            UnityEngine.Object.Destroy(gameObject);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using Map.Object;
 
 public class DeckListInfo : MonoBehaviour
 {

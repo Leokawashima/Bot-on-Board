@@ -20,12 +20,12 @@ MonoBehaviour:
   IsCollider: 0
   Prefab: {fileID: 711941203453368293, guid: a5d7ebf7ed7224140a41c04225d63fbf, type: 3}
   Components:
-  - rid: 4745484629399306286
+  - rid: 8759145200713990152
   references:
     version: 2
     RefIds:
-    - rid: 4745484629399306286
-      type: {class: TurnDestroy, ns: Map, asm: Assembly-CSharp}
+    - rid: 8759145200713990152
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10

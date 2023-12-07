@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip;
+using Map.Object;
 
 namespace Map
 {
@@ -129,7 +131,7 @@ namespace Map
                 {
                     if (MapObjectList[i].Position == pos_)
                     {
-                        MapObjectList[i--].Hit(ai_);
+                        MapObjectList[i].Hit(ai_);
                         MapObjectList[i--].Destroy(this);
                         // i--;を別の行に記述すると不必要な代入と文句を言われるので上に統合
                         break;

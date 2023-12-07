@@ -16,16 +16,16 @@ MonoBehaviour:
   HasCategory: 2
   ObjectName: "\u30A2\u30ED\u30FC"
   Info: "\u30AF\u30ED\u30B9\u30DC\u30A6\u3092\u30EA\u30ED\u30FC\u30C9\u3059\u308B\u305F\u3081\u306E\u77E2\u3002\n\u4E09\u767A\u3042\u308B\u3002"
-  Cost: 0
+  Cost: -50
   IsCollider: 0
   Prefab: {fileID: 8961295681281133565, guid: d3f6f90bb753a41418be93d202f8030f, type: 3}
   Components:
-  - rid: 4745484629399306284
+  - rid: 8759145200713990150
   references:
     version: 2
     RefIds:
-    - rid: 4745484629399306284
-      type: {class: TurnDestroy, ns: Map, asm: Assembly-CSharp}
+    - rid: 8759145200713990150
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10

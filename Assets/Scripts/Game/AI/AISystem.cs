@@ -34,12 +34,11 @@ public class AISystem : MonoBehaviour
 
     [field: SerializeField] public int m_PowWeapon { get; set; }
     [field: SerializeField] public int m_UseWeapon { get; set; }
-    [field: SerializeField] public int m_Stan { get; set; }
+    [field: SerializeField] public uint StanTurn { get; set; }
 
     Vector2Int m_MapSize = Vector2Int.zero;
 
-    //ダメージイベントと回復イベントを別に分けたのは回復エフェクトやダメージエフェクトを別に登録したいから
-    public event Action<int, float>  Event_DamageHP;
+    public event Action<int, float> Event_DamageHP;
     public event Action<int, float> Event_HealHP;
 
     public CinemachineVirtualCamera cameraA;
@@ -69,9 +68,9 @@ public class AISystem : MonoBehaviour
 
         var _aStar = new AStarAlgorithm(MapManager.Singleton.MapState);
         m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
-        if (m_Stan > 0)
+        if (StanTurn > 0)
         {
-            --m_Stan;
+            --StanTurn;
             AIThinkState = ThinkState.CantMove;
         }
         else if (m_Path.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Map;
+using Map.Chip;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
@@ -40,11 +41,11 @@ public class PlayerUIManager : MonoBehaviour
         var _chip = LocalPlayerManager.Singleton.SelectChip;
         if (_chip != null)
         {
-            if (MapManager.Singleton.MapState.MapChips[_chip.m_position.y][_chip.m_position.x] == null)
+            if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] == null)
             {
                 for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
                 {
-                    if (MapManager.Singleton.AIManagerList[i].Position == _chip.m_position)
+                    if (MapManager.Singleton.AIManagerList[i].Position == _chip.Position)
                         return;
                 }
 

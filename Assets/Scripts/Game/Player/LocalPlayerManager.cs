@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip;
 
 public class LocalPlayerManager : MonoBehaviour
 {
@@ -45,8 +46,6 @@ public class LocalPlayerManager : MonoBehaviour
 
     void OnMouse_MainClick()
     {
-        Stop();
-
         Ray _ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
 
         int _mask = 1 << Name.Layer.Map;
@@ -59,6 +58,7 @@ public class LocalPlayerManager : MonoBehaviour
                 var _chip = hit.collider.GetComponent<MapChip>();
                 if (SelectChip != _chip)
                 {
+                    Stop();
                     SelectChip = _chip;
                     HighLight(SelectChip);
                 }

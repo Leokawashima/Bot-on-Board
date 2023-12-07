@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Map;
+using Map.Object;
 
 public class CardGenerator : MonoBehaviour
 {

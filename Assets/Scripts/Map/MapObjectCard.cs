@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using Map;
+using Map.Chip;
+using Map.Object;
 
 public class MapObjectCard : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class MapObjectCard : MonoBehaviour
 
     public MapObject ObjectSpawn(MapChip chip_, MapManager map_)
     {
-        return SO.Spawn(chip_.m_position, chip_.transform.position + Vector3.up, map_.transform);
+        return SO.Spawn(chip_.Position, chip_.transform.position + Vector3.up, map_.transform);
     }
 
     public void Trash()

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MCTable_SO
   m_EditorClassIdentifier: 
   Table:
-  - {fileID: 11400000, guid: 5263463c1653efd43a4b59e3164331f2, type: 2}
-  - {fileID: 11400000, guid: 29872bf7fa7b3044484069acc33b84db, type: 2}
+  - {fileID: 11400000, guid: 1451a87488d73a246a7c18fe1c63bd81, type: 2}
+  - {fileID: 11400000, guid: baeafa06304f1614bb1ecf336cdaec2f, type: 2}
