@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MC_Ground
   m_EditorClassIdentifier: 
   Name: Ground
-  Info: "\u8AAC\u660E\u6587"
+  Info: "\u666E\u901A\u306E\u5E8A"
   Cost: 0
   Prefab: {fileID: -7855295089463768574, guid: ad3af117c204b4043928e0ec97d4e7cc, type: 3}
   Components: []

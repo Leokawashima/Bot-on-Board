@@ -6277,11 +6277,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 519693154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc18fa799d4a0d443ae05010aca8f5b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baa17391ea153946a070a0edde55823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 519693161}
-  m_defaultStateName: On
+  m_defaultStateName: New State
 --- !u!1 &575659613
 GameObject:
   m_ObjectHideFlags: 0

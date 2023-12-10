@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Map/CardImageTable_SO")]
+[CreateAssetMenu(fileName = "CardImageTable", menuName = "BoB/Card/CardImageTable")]
 public class CardImageTable_SO : ScriptableObject
 {
     public MapObjectCard Prefab;

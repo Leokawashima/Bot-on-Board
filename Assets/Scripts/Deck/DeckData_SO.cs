@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Deck/DeckData_SO")]
+[CreateAssetMenu(fileName = "DeckData", menuName = "BoB/Deck/DeckData")]
 public class DeckData_SO : ScriptableObject
 {
     public DeckData Deck;

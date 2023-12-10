@@ -3,8 +3,8 @@ using RoomUDPSystem;
 
 public static class GlobalSystem
 {
-    public static bool m_IsPause { get; private set; }
-    public static void SetPause(bool pause_) { m_IsPause = pause_; }
+    public static bool IsPause { get; private set; }
+    public static void SetPause(bool pause_) { IsPause = pause_; }
 
     public enum MatchState { Non, Tutorial, Local, Multi }
     public static MatchState m_MatchState { get; private set; }

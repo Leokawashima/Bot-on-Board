@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Map.Object
 {
-    [CreateAssetMenu(fileName = "MO_", menuName = "Map/MapObject")]
+    [CreateAssetMenu(fileName = "MO_", menuName = "BoB/Map/MapObject")]
     public class MapObject_SO : ScriptableObject
     {
         public Rarity HasRarity = Rarity.Common;

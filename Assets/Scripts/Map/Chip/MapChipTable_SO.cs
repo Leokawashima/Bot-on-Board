@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Map.Chip
 {
-    [CreateAssetMenu(menuName = "Map/Table/MC_Table_SO")]
+    [CreateAssetMenu(fileName = "MapChipTable", menuName = "BoB/Map/Table/MapChipTable")]
     public class MapChipTable_SO : ScriptableObject
     {
         public MapChip_SO[] Table;

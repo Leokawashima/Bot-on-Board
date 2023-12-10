@@ -5,7 +5,7 @@ using TMPro;
 //完成
 public class CutInManager : MonoBehaviour
 {
-    [SerializeField] AnimatorManager m_AnimatorManager;
+    [SerializeField] AnimatorSystem m_AnimatorManager;
     [SerializeField] TextMeshProUGUI m_Text;
 
     public void CutIn(string text_, Action callback_)

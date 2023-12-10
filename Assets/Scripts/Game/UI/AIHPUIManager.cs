@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-//完成
 public class AIHPUIManager : MonoBehaviour
 {
     [SerializeField] AIHPUI m_AIHPUI;
@@ -9,7 +9,7 @@ public class AIHPUIManager : MonoBehaviour
 #endif
     AIHPUI[] m_AIHPUIArray;
 
-    public void Initialize(int players_, float hp_)
+    public void Initialize(int players_, List<AISystem> ai_)
     {
         m_AIHPUIArray = new AIHPUI[players_];
         for (int i = 0; i < players_; ++i)
@@ -17,7 +17,7 @@ public class AIHPUIManager : MonoBehaviour
             m_AIHPUIArray[i] = Instantiate(m_AIHPUI, transform);
             m_AIHPUIArray[i].name = $"AIHPUI_Player_{i + 1}";
             m_AIHPUIArray[i].Initialize($"P{i + 1}");
-            m_AIHPUIArray[i].SetHP(hp_);
+            m_AIHPUIArray[i].SetHP(ai_[i].m_HP);
         }
     }
 

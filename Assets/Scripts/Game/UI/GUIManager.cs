@@ -57,8 +57,8 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);//下層は完成
-        m_AIHPUIManager.Initialize(2, 10);//2人　HP 10で初期化 下層は完成
+        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_AIHPUIManager.Initialize(2, AIManager.Singleton.AIList);
 
         //ローカルの場合は人数分
         m_PlayerUIArray = new PlayerUIManager[2];

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Map.Chip
 {
-    [CreateAssetMenu(fileName = "MC_", menuName = "Map/MapChip")]
+    [CreateAssetMenu(fileName = "MC_", menuName = "BoB/Map/MapChip")]
     public class MapChip_SO : ScriptableObject
     {
         public string Name = string.Empty;
