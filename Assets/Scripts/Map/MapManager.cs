@@ -15,9 +15,9 @@ namespace Map
     {
 #if UNITY_EDITOR
         [Header("Gizmos")]
-        [SerializeField] bool m_drawGizmos = true;
-        [SerializeField] bool m_drawChipGizmos = true;
-        [SerializeField] bool m_drawObjectGizmos = true;
+        [SerializeField] private bool m_drawGizmos = true;
+        [SerializeField] private bool m_drawChipGizmos = true;
+        [SerializeField] private bool m_drawObjectGizmos = true;
 #endif
         public static MapManager Singleton { get; private set; }
 
@@ -78,7 +78,7 @@ namespace Map
         {
             MapState = new(m_MapDataSO.Size);
 
-            IEnumerator CoMapCreate()
+            IEnumerator Co_MapCreate()
             {
                 var _mapOffset = Offset;
                 var _cnt = 0;
@@ -103,7 +103,7 @@ namespace Map
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
                                     var _mo = m_MapObjectTable.Data[m_MapDataSO.MapObject[_index]]
-                                        .Spawn(new Vector2Int(z, x), _pos, transform);
+                                        .Spawn(new Vector2Int(x, z), _pos, transform);
                                     _mo.Initialize(this);
                                 }
                             }
@@ -120,7 +120,7 @@ namespace Map
                 Event_MapCreated?.Invoke();
             }
 
-            StartCoroutine(CoMapCreate());
+            StartCoroutine(Co_MapCreate());
         }
         public void AIHitObject(Vector2Int pos_, AISystem ai_)
         {

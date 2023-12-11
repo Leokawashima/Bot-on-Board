@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using ZXing.OneD;
 
@@ -11,10 +12,10 @@ public class GUIManager : MonoBehaviour
 {
     public static GUIManager Singleton { get; private set; }
 
-    [SerializeField] TurnCountManager m_TurnCountManager;//完成
-    [SerializeField] AIHPUIManager m_AIHPUIManager;//完成
+    [SerializeField] TurnCountManager m_TurnCountManager;
+    [SerializeField] AIHPUIManager m_AIHPUIManager;
     [SerializeField] PlayerUIManager m_PlayerUIManager;
-    [SerializeField] CutInManager m_CutInManager;//完成
+    [SerializeField] CutInManager m_CutInManager;
     [SerializeField] AudioSource m_audio;
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
@@ -58,7 +59,6 @@ public class GUIManager : MonoBehaviour
     void OnInitialize()
     {
         m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
-        m_AIHPUIManager.Initialize(2, AIManager.Singleton.AIList);
 
         //ローカルの場合は人数分
         m_PlayerUIArray = new PlayerUIManager[2];
@@ -120,5 +120,10 @@ public class GUIManager : MonoBehaviour
     public void OnSetHPText(int index_, float hp_)
     {
         m_AIHPUIManager.Refresh(index_, hp_);
+    }
+
+    public void InitializeAIHPUI()
+    {
+        m_AIHPUIManager.Initialize(AIManager.Singleton.AIList);
     }
 }

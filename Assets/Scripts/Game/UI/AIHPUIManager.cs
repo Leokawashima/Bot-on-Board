@@ -7,12 +7,12 @@ public class AIHPUIManager : MonoBehaviour
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
 #endif
-    AIHPUI[] m_AIHPUIArray;
+    private AIHPUI[] m_AIHPUIArray;
 
-    public void Initialize(int players_, List<AISystem> ai_)
+    public void Initialize(List<AISystem> ai_)
     {
-        m_AIHPUIArray = new AIHPUI[players_];
-        for (int i = 0; i < players_; ++i)
+        m_AIHPUIArray = new AIHPUI[ai_.Count];
+        for (int i = 0; i < ai_.Count; ++i)
         {
             m_AIHPUIArray[i] = Instantiate(m_AIHPUI, transform);
             m_AIHPUIArray[i].name = $"AIHPUI_Player_{i + 1}";
