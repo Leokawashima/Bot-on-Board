@@ -11,11 +11,23 @@ namespace Map.Object
         [field: SerializeReference]
         public List<MapObjectComponent> Components { get; private set; } = new();
 
+        public T GetMOComponent<T>() where T : MapObjectComponent
+        {
+            foreach(var component in Components)
+            {
+                if (component.GetType() == typeof(T))
+                {
+                    return component as T;
+                }
+            }
+            return null;
+        }
+
         public void Initialize(MapManager manager_)
         {
             foreach (var component in Components)
             {
-                component.Initialize();
+                component.Initialize(this);
             }
 
             manager_.MapObjectList.Add(this);
@@ -26,7 +38,7 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                if (false == component.Update())
+                if (false == component.Update(this))
                 {
                     this.Destroy(manager_);
                     return false;
@@ -40,7 +52,7 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                component.Hit(ai_);
+                component.Hit(this, ai_);
             }
         }
 
@@ -48,7 +60,7 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                component.Destroy();
+                component.Destroy(this);
             }
 
             manager_.MapObjectList.Remove(this);

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Map;
+using Map.Object;
+using Unity.Collections.LowLevel.Unsafe;
 
 /// <summary>
 /// AI一体当たりのシステム
@@ -32,8 +34,7 @@ public class AISystem : MonoBehaviour
 
     [SerializeField] List<Vector2Int> m_Path;
 
-    [field: SerializeField] public int m_PowWeapon { get; set; }
-    [field: SerializeField] public int m_UseWeapon { get; set; }
+    [field: SerializeField] public Weapon HasWeapon { get; set; } = null;
     [field: SerializeField] public uint StanTurn { get; set; }
 
     Vector2Int m_MapSize = Vector2Int.zero;
@@ -148,7 +149,7 @@ public class AISystem : MonoBehaviour
         Event_HealHP?.Invoke(Index, m_HP);
     }
 
-    void Move()
+    public void Move()
     {
         // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
         if (MapManager.Singleton.MapState.MapObjects[m_Path[1].y][m_Path[1].x] != null)
@@ -164,6 +165,23 @@ public class AISystem : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
     }
 
+    public void Move(Vector2Int pos_)
+    {
+        // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
+        if (MapManager.Singleton.MapState.MapObjects[pos_.y][pos_.x] != null)
+        {
+            if (MapManager.Singleton.MapState.MapObjects[pos_.y][pos_.x].Data.IsCollider)
+                return;
+        }
+        // 経路は[0]が現在地点なので[1]が次のチップ
+        transform.localPosition = new Vector3(pos_.x, 0, pos_.y) + MapManager.Singleton.Offset + Vector3.up;
+        Position = pos_;
+        var _dir = Position - PrePosition;
+        transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
+    }
+
+    #region Attack
+
     void Attack()
     {
         //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
@@ -178,16 +196,48 @@ public class AISystem : MonoBehaviour
 
         if (flag)
         {
-            float _attackPow = m_Attack;
-            if (m_UseWeapon > 0)
+            if (HasWeapon != null)
             {
-                _attackPow = m_PowWeapon;
-                if (--m_UseWeapon == 0) m_PowWeapon = 0;
-
+                if (HasWeapon.CheckCollider())
+                {
+                    if (false == HasWeapon.Action(this))
+                    {
+                        HasWeapon = null;
+                    }
+                }
+                else
+                {
+                    enemy[0].DamageHP(m_Attack);
+                }
             }
-            enemy[0].DamageHP(_attackPow);
+            else
+            {
+                enemy[0].DamageHP(m_Attack);
+            }
         }
     }
+
+    [ContextMenu("DebugAttack")]
+    void DebugAttack()
+    {
+        //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
+        var enemy = new List<AISystem>(MapManager.Singleton.AIManagerList);
+        enemy.Remove(this);
+
+        if (HasWeapon != null)
+        {
+            if (false == HasWeapon.Action(this))
+            {
+                HasWeapon = null;
+            }
+        }
+        else
+        {
+            enemy[0].DamageHP(m_Attack);
+        }
+    }
+
+    #endregion Attack
 
     int GetRandomWeightedProbability(params int[] weight_)
     {

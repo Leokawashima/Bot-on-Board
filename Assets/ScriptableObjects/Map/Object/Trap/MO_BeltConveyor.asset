@@ -21,9 +21,20 @@ MonoBehaviour:
   Prefab: {fileID: -7133317745497258694, guid: c89f38bf5334a394d85c801e74c1a321, type: 3}
   Components:
   - rid: 8759145200713990154
+  - rid: 4745484744830746630
+  - rid: 4745484744830746629
   references:
     version: 2
     RefIds:
+    - rid: 4745484744830746629
+      type: {class: DirectionMove, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        Power: 0
+    - rid: 4745484744830746630
+      type: {class: Direction, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        VerticalDirection: 1
+        HorizontalDirection: 0
     - rid: 8759145200713990154
       type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
       data:

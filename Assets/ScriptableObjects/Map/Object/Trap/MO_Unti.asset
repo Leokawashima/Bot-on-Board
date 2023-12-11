@@ -18,7 +18,7 @@ MonoBehaviour:
   Info: "\u4E57\u308B\u3068\u30B9\u30BF\u30F3\u3002"
   Cost: 0
   IsCollider: 0
-  Prefab: {fileID: 8482209174458148584, guid: 8de4547f04a11d54690c81c1a4bac8cc, type: 3}
+  Prefab: {fileID: 4251866832636960141, guid: ffebf8c24d4ff32458f6c43ba8c0c7a8, type: 3}
   Components:
   - rid: 8759145200713990156
   references:

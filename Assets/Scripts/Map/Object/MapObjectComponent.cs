@@ -6,28 +6,22 @@ namespace Map.Object
     [Serializable]
     public abstract class MapObjectComponent
     {
-        public virtual void Initialize()
+        public virtual void Initialize(MapObject obj_)
         {
         }
 
-        public virtual bool Update()
+        public virtual bool Update(MapObject obj_)
         {
             return true;
         }
 
-        public virtual void Hit(AISystem ai_)
+        public virtual void Hit(MapObject obj_, AISystem ai_)
         {
         }
 
-        public virtual void Destroy()
+        public virtual void Destroy(MapObject obj_)
         {
         }
-    }
-
-    public interface IColliderAction
-    {
-        public bool CheckCollider();
-        public void Action();
     }
 
     public class TurnDestroy : MapObjectComponent
@@ -37,11 +31,11 @@ namespace Map.Object
         [SerializeField] private uint TurnMax = 10;
         [SerializeField] private uint TurnSpawn = 10;
 
-        public override void Initialize()
+        public override void Initialize(MapObject obj_)
         {
             TurnDestruction = TurnSpawn;
         }
-        public override bool Update()
+        public override bool Update(MapObject obj_)
         {
             if(--TurnDestruction <= 0)
             {
@@ -60,18 +54,25 @@ namespace Map.Object
         }
     }
 
-    public class Attack : MapObjectComponent, IColliderAction
+    public class Weapon : MapObjectComponent
     {
-        [Header(nameof(Attack))]
+        [Header(nameof(Weapon))]
         [SerializeField] private float Power = 3.0f;
+        [SerializeField] private uint Remain = 1;
+
+        public override void Hit(MapObject obj_, AISystem ai_)
+        {
+            ai_.HasWeapon = this.DeepCopyInstance();
+        }
 
         public virtual bool CheckCollider()
         {
             return true;
         }
-        public virtual void Action()
+        public virtual bool Action(AISystem ai_)
         {
-            Debug.Log(Power);
+            ai_.DamageHP(Power);
+            return --Remain <= 0;
         }
     }
 
@@ -80,7 +81,7 @@ namespace Map.Object
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(AISystem ai_)
+        public override void Hit(MapObject obj_, AISystem ai_)
         {
             ai_.DamageHP(Power);
         }
@@ -91,7 +92,7 @@ namespace Map.Object
         [Header(nameof(Stan))]
         [SerializeField] private uint StanTurn = 1;
 
-        public override void Hit(AISystem ai_)
+        public override void Hit(MapObject obj_, AISystem ai_)
         {
             ai_.StanTurn = StanTurn;
         }
@@ -102,7 +103,7 @@ namespace Map.Object
         [Header(nameof(Heal))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(AISystem ai_)
+        public override void Hit(MapObject obj_, AISystem ai_)
         {
             ai_.HealHP(Power);
         }
@@ -129,5 +130,16 @@ namespace Map.Object
 
         public Vector2Int Vector2D => new((int)HorizontalDirection, (int)VerticalDirection);
         public Vector3Int Vector3D => new((int)HorizontalDirection, 0, (int)VerticalDirection);
+    }
+
+    public class DirectionMove : MapObjectComponent
+    {
+        [Header(nameof(DirectionMove))]
+        [SerializeField] private uint Power;
+
+        public override void Hit(MapObject obj_, AISystem ai_)
+        {
+            ai_.Move(obj_.GetMOComponent<Direction>().Vector2D + obj_.Position);
+        }
     }
 }

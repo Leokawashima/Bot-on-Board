@@ -21,9 +21,15 @@ MonoBehaviour:
   Prefab: {fileID: 1066075577020487917, guid: 9384fa41774d86142894d870bccd4878, type: 3}
   Components:
   - rid: 8759145200713990148
+  - rid: 4745484744830746626
   references:
     version: 2
     RefIds:
+    - rid: 4745484744830746626
+      type: {class: Weapon, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        Power: 3
+        Remain: 1
     - rid: 8759145200713990148
       type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
       data:
