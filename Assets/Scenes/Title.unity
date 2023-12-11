@@ -293,7 +293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 341, y: -418}
+  m_AnchoredPosition: {x: 341, y: -195}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &35996982
@@ -5242,7 +5242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 346, y: 171}
+  m_AnchoredPosition: {x: 637, y: 391}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164031738
@@ -7115,10 +7115,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<i><align=\"center\">\u30B2\u30FC\u30E0\u8AAC\u660E</i>\n<align=\"left\">2\u3064\u306E\u30ED\u30DC\u30C3\u30C8\u304C\u96FB\u8133\u7A7A\u9593\u306B\u5B58\u5728\u3057\u307E\u3059\u3002\n\u5F7C\u3089\u306F\u304A\u4E92\u3044\u3092\u6575\u3068\u307F\u306A\u3057\u3001\u7D20\u624B/\u6B66\u5668\u3092\u7528\u3044\u3066\u7834\u58CA\u3057\u3088\u3046\u3068\u3057\u307E\u3059\u3002\n\u4EBA\u9593\u306E\u3042\u306A\u305F\u9054\u306F\u305D\u308C\u305E\u308C\u306E<color=#00FF00>\u30ED\u30DC\u30C3\u30C8\u306B\u80A9\u5165\u308C<color=#FFFFFF>\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n\u6575\u306E\u5468\u308A\u306B<color=#FF5500>\u7F60\u3092\u4ED5\u639B\u3051\u305F\u308A<color=#FFFFFF>\u3001\u5473\u65B9\u306E\u8FD1\u304F\u306B<color=#FF5500>\u6B66\u5668\u3092\u7F6E\u3044\u305F\u308A<color=#FFFFFF>....\n\n\u653B\u6483\u3092\u901A\u3057\u3066\u3001<color=#00FF00>\u6575\u306EHP\u3092\u5168\u3066\u524A\u308B\u3053\u3068\u3067\u52DD\u5229<color=#FFFFFF>\u3068\u306A\u308A\u307E\u3059\u3002\n\u597D\u304D\u306A\u65B9\u306E\u30ED\u30DC\u30C3\u30C8\u3092\u652F\u63F4\u3057\u3001\u52DD\u5229\u3078\u3068\u5C0E\u304D\u307E\u3057\u3087\u3046\u3002\n\n<i><align=\"center\">\u30A2\u30A4\u30C6\u30E0\u8AAC\u660E</i>\n\n<align=\"center\">\u5CA9/\u4E38\u592A\r\n<align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306F\u3053\u308C\u3092\u969C\u5BB3\u7269\u3068\u8A8D\u8B58\u3057\u3001\u901A\u308A\u629C\u3051\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3002\r\n\r\n<align=\"center\">\u9244\u30D1\u30A4\u30D7\r\n<align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306E\u8DB3\u5143\u306B\u3042\u308B\u3068\u3001\u624B\u6301\u3061\u7121\u6C99\u6C70\u306E\u6642\u306B\u9650\u308A\u62FE\u3044\u307E\u3059\u3002\r\n\u9244\u30D1\u30A4\u30D7\u3092\u62FE\u3063\u3066\u3044\u308B\u3068\u3001\u6575\u306B\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C\u4E0A\u6607\u3057\u307E\u3059\u3002\r\n\u305F\u3060\u3057\u3001\u4F55\u56DE\u304B\u6575\u3092\u653B\u6483\u3059\u308B\u3068\u7834\u640D\u3057\u3001\u4F7F\u3044\u7269\u306B\u306A\u3089\u306A\u304F\u306A\u308A\u307E\u3059\u3002\r\n\r\n<align=\"center\">\u30D0\u30C3\u30C6\u30EA\u30FC\r\n<align=\"left\">\u30ED\u30DC\u30C3\u30C8\u304C\u653B\u6483\u3092\u53D7\u3051\u3066\u50B7\u3092\u8CA0\u3063\u3066\u3044\u308B\u5834\u5408\u3001HP\u3092\u5C11\u3057\u56DE\u5FA9\u3057\u307E\u3059\u3002\r\n\r\n<align=\"center\">\u3046\u3093\u3061\n<align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306F\u3053\u306E\u4E0A\u3092\u901A\u904E\u3059\u308B\u3053\u3068\u304C\u5ACC\u3044\u3067\u3059\u3002\r\n\u305D\u306E\u305F\u3081\u3001\u4ED6\u306E\u9053\u304C\u585E\u304C\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u306F\u3053\u308C\u3092\u907F\u3051\u308B\u3088\u3046\u306A\u30EB\u30FC\u30C8\u3092\u7A4D\u6975\u7684\u306B\u9078\u629E\u3057\u307E\u3059\u3002"
+  m_text: "<i><align=\"center\">\u30B2\u30FC\u30E0\u8AAC\u660E</i>\n<align=\"left\">2\u3064\u306E\u30ED\u30DC\u30C3\u30C8\u304C\u96FB\u8133\u7A7A\u9593\u306B\u5B58\u5728\u3057\u307E\u3059\u3002\n\u5F7C\u3089\u306F\u304A\u4E92\u3044\u3092\u6575\u3068\u307F\u306A\u3057\u3001\u7D20\u624B/\u6B66\u5668\u3092\u7528\u3044\u3066\u7834\u58CA\u3057\u3088\u3046\u3068\u3057\u307E\u3059\u3002\n\u4EBA\u9593\u306E\u3042\u306A\u305F\u9054\u306F\u305D\u308C\u305E\u308C\u306E<color=#00FF00>\u30ED\u30DC\u30C3\u30C8\u306B\u80A9\u5165\u308C<color=#FFFFFF>\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n\u6575\u306E\u5468\u308A\u306B<color=#FF5500>\u30EF\u30CA\u3092\u4ED5\u639B\u3051\u305F\u308A<color=#FFFFFF>\u3001\u5473\u65B9\u306E\u8FD1\u304F\u306B<color=#FF5500>\u6B66\u5668\u3092\u7F6E\u3044\u305F\u308A<color=#FFFFFF>....\n\n\u653B\u6483\u3092\u901A\u3057\u3066\u3001<color=#00FF00>\u6575\u306EHP\u3092\u5168\u3066\u524A\u308B\u3053\u3068\u3067\u52DD\u5229<color=#FFFFFF>\u3068\u306A\u308A\u307E\u3059\u3002\n\u597D\u304D\u306A\u65B9\u306E\u30ED\u30DC\u30C3\u30C8\u3092\u652F\u63F4\u3057\u3001\u52DD\u5229\u3078\u3068\u5C0E\u304D\u307E\u3057\u3087\u3046\u3002\n\n<i><align=\"center\">\u30A2\u30A4\u30C6\u30E0\u8AAC\u660E</i>\n\n<align=\"center\"><color=#FF8800>\u5CA9/\u4E38\u592A\r\n<color=#FFFFFF><align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306F\u3053\u308C\u3092\u969C\u5BB3\u7269\u3068\u8A8D\u8B58\u3057\u3001\n\u901A\u308A\u629C\u3051\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3002\r\n\n<align=\"center\"><color=#FF0000>\u9244\u30D1\u30A4\u30D7\r\n<color=#FFFFFF><align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306E\u8DB3\u5143\u306B\u3042\u308B\u3068\u3001\n\u624B\u6301\u3061\u7121\u6C99\u6C70\u306E\u6642\u306B\u9650\u308A\u62FE\u3044\u307E\u3059\u3002\r\n\u9244\u30D1\u30A4\u30D7\u3092\u62FE\u3063\u3066\u3044\u308B\u3068\u3001\n\u6575\u306B\u4E0E\u3048\u308B\u30C0\u30E1\u30FC\u30B8\u304C\u4E0A\u6607\u3057\u307E\u3059\u3002\r\n\u305F\u3060\u3057\u3001\u4F55\u56DE\u304B\u6575\u3092\u653B\u6483\u3059\u308B\u3068\u7834\u640D\u3057\u3001\u4F7F\u3044\u7269\u306B\u306A\u3089\u306A\u304F\u306A\u308A\u307E\u3059\u3002\r\n\r\n<align=\"center\"><color=#00FF00>\u30D0\u30C3\u30C6\u30EA\u30FC\r\n<color=#FFFFFF><align=\"left\">\u30ED\u30DC\u30C3\u30C8\u304C\u653B\u6483\u3092\u53D7\u3051\u3066\u50B7\u3092\u8CA0\u3063\u3066\u3044\u308B\u5834\u5408\u3001\nHP\u3092\u5C11\u3057\u56DE\u5FA9\u3057\u307E\u3059\u3002\r\n\r\n<align=\"center\"><color=#FF00FF>\u3046\u3093\u3061\n<color=#FFFFFF><align=\"left\">\u30ED\u30DC\u30C3\u30C8\u306F\u3053\u306E\u4E0A\u3092\u901A\u904E\u3059\u308B\u3053\u3068\u304C\u5ACC\u3044\u3067\u3059\u3002\r\n\u305D\u306E\u305F\u3081\u3001\u4ED6\u306E\u9053\u304C\u585E\u304C\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u306F\n\u3053\u308C\u3092\u8E0F\u3080\u30EB\u30FC\u30C8\u3092\u907F\u3051\u307E\u3059\u3002"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bc746e3867e80ab4ea7e908c34b00d2e, type: 2}
-  m_sharedMaterial: {fileID: 4486754721019210335, guid: bc746e3867e80ab4ea7e908c34b00d2e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7252,8 +7252,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back To Title
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 3725512006366861618, guid: 34075dd4672893e489f2753294f5655f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -19241,8 +19241,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30B2\u30FC\u30E0\u8AAC\u660E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 34075dd4672893e489f2753294f5655f, type: 2}
-  m_sharedMaterial: {fileID: 3725512006366861618, guid: 34075dd4672893e489f2753294f5655f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
+  m_sharedMaterial: {fileID: -4186813613350098577, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20006,7 +20006,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 341, y: -718}
+  m_AnchoredPosition: {x: 341, y: -391}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1509675978
@@ -20807,7 +20807,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 178, y: 171}
+  m_AnchoredPosition: {x: 426, y: 392}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1779631197
@@ -21040,7 +21040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 346, y: -39}
+  m_AnchoredPosition: {x: 429, y: 148}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907370515
