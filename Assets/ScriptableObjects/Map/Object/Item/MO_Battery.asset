@@ -9,16 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a661b347b0750bd45b0ea007b778daea, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_Battery
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: "\u30D0\u30C3\u30C6\u30EA\u30FC"
-  m_Info: "\u56DE\u5FA9\u30A2\u30A4\u30C6\u30E0\u3002HP\u30923\u56DE\u5FA9\u3059\u308B\u3002"
-  <Cost>k__BackingField: -50
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 5824294107130418009, guid: 25212d0b95ea95b43b2b01dd59ce295a, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: df98dc636712a754d9f0cf92ac30a409, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
-  <HealPower>k__BackingField: 3
+  HasRarity: 0
+  HasCategory: 2
+  ObjectName: "\u30D0\u30C3\u30C6\u30EA\u30FC"
+  Info: "\u4E57\u3063\u305F\u3089HP\u30923\u56DE\u5FA9\u3059\u308B\u3002"
+  Cost: -50
+  IsCollider: 0
+  Prefab: {fileID: 8468683320965597539, guid: 25212d0b95ea95b43b2b01dd59ce295a, type: 3}
+  Components:
+  - rid: 8759145200713990151
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990151
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

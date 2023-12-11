@@ -24,7 +24,6 @@ public class DeckCardCategory : MonoBehaviour
 
     public enum Rank
     {
-        None = -1,
         Common = 0,
         UnCommon = 1,
         Rare = 2,

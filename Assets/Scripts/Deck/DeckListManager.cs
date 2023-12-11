@@ -81,7 +81,14 @@ public class DeckListManager : MonoBehaviour
             }
             else
             {
-                _info.Initialize(0, m_deckData.Deck, OnClickInfo);
+                _info.Initialize(0, new()
+                {
+                    Name = m_deckData.Deck.Name,
+                    State = m_deckData.Deck.State,
+                    CategoryCount = m_deckData.Deck.CategoryCount,
+                    RankCount = m_deckData.Deck.RankCount,
+                    CardIndexArray = m_deckData.Deck.CardIndexArray,
+                }, OnClickInfo);
             }
         }
 

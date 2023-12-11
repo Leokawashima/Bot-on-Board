@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class DeckEditArea : MonoBehaviour
 {
@@ -13,8 +14,10 @@ public class DeckEditArea : MonoBehaviour
 
     [SerializeField] private Vector2 m_position = new Vector2(620, 108);
     [SerializeField] private Vector2 m_offset = new Vector2(200, -134);
-    [SerializeField] private int m_sheat = 2;
+    
     [SerializeField] private int m_deckSize = 10;
+    
+    private const int WIDTH_SHEAT = 2;
 
     private void Start()
     {
@@ -30,7 +33,7 @@ public class DeckEditArea : MonoBehaviour
         var _moc = Instantiate(m_targetCard, transform);
         m_editCardList[index_] = _moc;
         var _rect = _moc.transform as RectTransform;
-        _rect.anchoredPosition = m_position + new Vector2(m_offset.x * (index_ % m_sheat), m_offset.y * (int)(index_ / m_sheat));
+        _rect.anchoredPosition = m_position + new Vector2(m_offset.x * (index_ % WIDTH_SHEAT), m_offset.y * (int)(index_ / WIDTH_SHEAT));
     }
 
     public bool CheckHitCard(Vector2 mousePos_, out MapObjectCard card_)
@@ -51,6 +54,7 @@ public class DeckEditArea : MonoBehaviour
         return false;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool CheckHit(RectTransform rect_, Vector2 mousePos_)
     {
         return CheckHit(rect_.anchoredPosition, rect_.sizeDelta, mousePos_);

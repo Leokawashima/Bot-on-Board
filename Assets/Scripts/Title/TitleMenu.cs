@@ -18,7 +18,7 @@ public class TitleMenu : MonoBehaviour
     [Header("Sound")]
     [SerializeField] AudioSource m_audio;
     [Header("QuitAnim")]
-    [SerializeField] AnimatorManager m_animator;
+    [SerializeField] AnimatorSystem m_animator;
     [Header("Profile")]
     [SerializeField] Volume m_volume;
     [Header("EscMenu")]

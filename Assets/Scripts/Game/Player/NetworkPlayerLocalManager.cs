@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip;
 
 public class NetworkPlayerLocalManager : MonoBehaviour
 {
@@ -30,8 +31,6 @@ public class NetworkPlayerLocalManager : MonoBehaviour
             var map = hit.collider.GetComponent<MapChip>();
             if(m_SelectChip != map)
             {
-                m_SelectChip?.Stop();
-                map.HighLight();
                 m_SelectChip = map;
             }
         }

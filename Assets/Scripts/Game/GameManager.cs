@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
+using Map;
 
 /// <summary>
 /// ゲームの基本的な処理を担うクラス
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     void SystemInitalize()
     {
         m_BattleState = BattleState.Non;
-        UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+        UnityEngine.Random.InitState(DateTime.Now.Millisecond + DateTime.Now.Second);
         CameraManager.Singleton.SetFreeLookCamIsMove(false);
 
         GlobalSystem.SetMatchState(GlobalSystem.MatchState.Local);

@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: "Bot on Board\u5236\u4F5C\u59D4\u54E1\u4F1A"
+  companyName: Amazon
   productName: "2023\u5E74\u5EA6_\u5352\u696D\u5236\u4F5C_Bot on Board_\u300CAmazon\u300D"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -133,7 +133,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 2
+  bundleVersion: 3
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -273,7 +273,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: acc327c0dc18d9445b76f179af5c3a04, type: 3}
+      m_Icon: {fileID: 2800000, guid: 24363dde72ec26548bca2e3260d79cd6, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

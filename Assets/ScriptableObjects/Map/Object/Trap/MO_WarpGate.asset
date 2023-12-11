@@ -9,15 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_WarpGate
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: "\u30EF\u30FC\u30D7\u30B2\u30FC\u30C8"
-  m_Info: "\u30EF\u30FC\u30D7\u30B2\u30FC\u30C8"
-  <Cost>k__BackingField: 200
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 6567639146333096487, guid: 60e50565962aeca469021b2c3b331ee4, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: 6a1278a2c459d8948abc1e7ed8d40f41, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
+  HasRarity: 0
+  HasCategory: 3
+  ObjectName: "\u30EF\u30FC\u30D7\u30B2\u30FC\u30C8"
+  Info: "\u4E57\u308B\u3068\u3069\u3053\u304B\u3078\u30EF\u30FC\u30D7\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: -2494388723460330479, guid: 60e50565962aeca469021b2c3b331ee4, type: 3}
+  Components:
+  - rid: 8759145200713990157
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990157
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

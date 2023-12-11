@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Mat_Black
+    second: {fileID: 2100000, guid: 324d5673af704f449a48ec73d6da7c7a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Mat_Gray
     second: {fileID: 2100000, guid: ab544b3323f8a444fbed5cc71f8f980a, type: 2}
   - first:
@@ -19,6 +24,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Mat_Metalic
     second: {fileID: 2100000, guid: 48949ce7a826a314ba81f38361aa2ce8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat_Wave
+    second: {fileID: -876546973899608171, guid: 22e95407f5c8da34785878acc8e0bdf5, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

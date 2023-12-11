@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Map;
 
 /// <summary>
 /// AI一体当たりのシステム
@@ -33,12 +34,11 @@ public class AISystem : MonoBehaviour
 
     [field: SerializeField] public int m_PowWeapon { get; set; }
     [field: SerializeField] public int m_UseWeapon { get; set; }
-    [field: SerializeField] public int m_Stan { get; set; }
+    [field: SerializeField] public uint StanTurn { get; set; }
 
     Vector2Int m_MapSize = Vector2Int.zero;
 
-    //ダメージイベントと回復イベントを別に分けたのは回復エフェクトやダメージエフェクトを別に登録したいから
-    public event Action<int, float>  Event_DamageHP;
+    public event Action<int, float> Event_DamageHP;
     public event Action<int, float> Event_HealHP;
 
     public CinemachineVirtualCamera cameraA;
@@ -55,7 +55,7 @@ public class AISystem : MonoBehaviour
 
         m_MapSize = MapManager.Singleton.MapDataSize;
 
-        MapManager.Singleton.m_AIManagerList.Add(this);
+        MapManager.Singleton.AIManagerList.Add(this);
     }
 
     public void Think()
@@ -63,14 +63,14 @@ public class AISystem : MonoBehaviour
         PrePosition = Position;
         
         //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
-        var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
+        var enemy = new List<AISystem>(MapManager.Singleton.AIManagerList);
         enemy.Remove(this);
 
         var _aStar = new AStarAlgorithm(MapManager.Singleton.MapState);
         m_Path = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
-        if (m_Stan > 0)
+        if (StanTurn > 0)
         {
-            --m_Stan;
+            --StanTurn;
             AIThinkState = ThinkState.CantMove;
         }
         else if (m_Path.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
@@ -93,7 +93,7 @@ public class AISystem : MonoBehaviour
         {
             case ThinkState.Attack:
                 // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
-                if(GetRandomWeightedProbability(9, 1) == 0)// 10%で移動するかも(アホ)
+                if (GetRandomWeightedProbability(9, 1) == 0)// 10%で移動するかも(アホ)
                 {
                     // 仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
                     // で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
@@ -105,7 +105,7 @@ public class AISystem : MonoBehaviour
                 }
                 break;
             case ThinkState.Move:
-                if(GetRandomWeightedProbability(9, 1) == 0)// 10%で攻撃する(アホ)
+                if (GetRandomWeightedProbability(9, 1) == 0)// 10%で攻撃する(アホ)
                 {
                     Move();
                 }
@@ -118,7 +118,7 @@ public class AISystem : MonoBehaviour
                 break;
             case ThinkState.CollisionPredict:
                 // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
-                if(GetRandomWeightedProbability(5, 5) == 0)
+                if (GetRandomWeightedProbability(5, 5) == 0)
                 {
                     Move();
                 }
@@ -150,8 +150,12 @@ public class AISystem : MonoBehaviour
 
     void Move()
     {
-        // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムの方がいい
-        if(MapManager.Singleton.MapState.MapCollisionState[m_Path[1].y, m_Path[1].x]) return;
+        // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
+        if (MapManager.Singleton.MapState.MapObjects[m_Path[1].y][m_Path[1].x] != null)
+        {
+            if (MapManager.Singleton.MapState.MapObjects[m_Path[1].y][m_Path[1].x].Data.IsCollider)
+                return;
+        }
 
         // 経路は[0]が現在地点なので[1]が次のチップ
         transform.localPosition = new Vector3(m_Path[1].x, 0, m_Path[1].y) + MapManager.Singleton.Offset + Vector3.up;
@@ -163,7 +167,7 @@ public class AISystem : MonoBehaviour
     void Attack()
     {
         //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
-        var enemy = new List<AISystem>(MapManager.Singleton.m_AIManagerList);
+        var enemy = new List<AISystem>(MapManager.Singleton.AIManagerList);
         enemy.Remove(this);
 
         //2人前提で[0]に攻撃判定
@@ -172,13 +176,13 @@ public class AISystem : MonoBehaviour
         if (pos.x == 0 && Mathf.Abs(pos.y) == 1) flag = true;//前後一マスずれにいるか否か
         else if (Mathf.Abs(pos.x) == 1 && pos.y == 0) flag = true;//左右一マスズレにいるか否か
 
-        if(flag)
+        if (flag)
         {
             float _attackPow = m_Attack;
             if (m_UseWeapon > 0)
             {
                 _attackPow = m_PowWeapon;
-                if(--m_UseWeapon == 0) m_PowWeapon = 0;
+                if (--m_UseWeapon == 0) m_PowWeapon = 0;
 
             }
             enemy[0].DamageHP(_attackPow);
@@ -188,15 +192,15 @@ public class AISystem : MonoBehaviour
     int GetRandomWeightedProbability(params int[] weight_)
     {
         int _total = 0;
-        foreach(var _value in weight_)
+        foreach (var _value in weight_)
             _total += _value;
 
         float _random = _total * UnityEngine.Random.value;
 
-        for(int i = 0; i < weight_.Length; ++i)
+        for (int i = 0; i < weight_.Length; ++i)
         {
             // ランダムポイントが重みより小さいなら
-            if(_random < weight_[i])
+            if (_random < weight_[i])
             {
                 return i;
             }

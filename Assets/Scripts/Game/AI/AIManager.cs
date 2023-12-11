@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 public class AIManager : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class AIManager : MonoBehaviour
                 GUIManager.Singleton.OnSetHPText(index_, hp_);
             };
         }
+        GUIManager.Singleton.InitializeAIHPUI();
         m_AICameraTest.Initialize();
     }
 
@@ -78,7 +80,7 @@ public class AIManager : MonoBehaviour
         foreach(var _ai in m_AIList)//全員現在の状態から意思決定
             _ai.Think();
 
-        foreach(var _ai in m_AIList)//前意思決定後に行動
+        foreach(var _ai in m_AIList)//意思決定後に行動
             _ai.Action();
 
         //以下AI2体前提処理　時間が足りないのでこのまま
@@ -103,6 +105,7 @@ public class AIManager : MonoBehaviour
 
         foreach(var _ai in m_AIList)
         {
+            MapManager.Singleton.AIRideChip(_ai.Position, _ai);
             MapManager.Singleton.AIHitObject(_ai.Position, _ai);
         }
 

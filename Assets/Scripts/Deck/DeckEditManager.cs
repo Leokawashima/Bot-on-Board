@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class DeckEditManager : MonoBehaviour
@@ -41,14 +40,21 @@ public class DeckEditManager : MonoBehaviour
         });
         m_saveButton.onClick.AddListener(() =>
         {
-            m_deckManager.DeckList.SelectInfo.Data.Name = "New Save";
-            m_deckManager.DeckList.SelectInfo.Data.CardIndexArray = new int[10];
+            var _deckData = new DeckData()
+            {
+                Name = "New Save",
+                CardIndexArray = new int[m_editArea.EditCardList.Length],
+
+
+            };
             for (int i = 0; i < m_editArea.EditCardList.Length; ++i)
             {
-                m_deckManager.DeckList.SelectInfo.Data.CardIndexArray[i] = m_editArea.EditCardList[i].m_Index;
+                _deckData.CardIndexArray[i] = m_editArea.EditCardList[i].Index;
             }
-            m_deckManager.DeckList.Save(m_deckManager.DeckList.SelectInfo.Index, m_deckManager.DeckList.SelectInfo.Data);
-            m_deckManager.DeckList.SelectInfo.NameText = "New Save";
+            m_deckManager.DeckList.Save(m_deckManager.DeckList.SelectInfo.Index, _deckData);
+            m_deckManager.DeckList.SelectInfo.SetData(_deckData);
+            m_deckManager.DeckList.SelectInfo.ReFresh();
+            m_listInfo.SetInfo(m_deckManager.DeckList.SelectInfo);
 
             Disable();
             m_deckManager.DeckList.Enable();

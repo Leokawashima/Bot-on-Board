@@ -9,15 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3443ca8743150e4dab9239189406cdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_Caltrop
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: "\u307E\u304D\u3073\u3057"
-  m_Info: "\u307E\u304D\u3073\u3057"
-  <Cost>k__BackingField: 200
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 6735578237244452338, guid: 8de4547f04a11d54690c81c1a4bac8cc, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: 6a1278a2c459d8948abc1e7ed8d40f41, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
+  HasRarity: 0
+  HasCategory: 3
+  ObjectName: "\u307E\u304D\u3073\u3057"
+  Info: "\u4E57\u308B\u3068\u30C0\u30E1\u30FC\u30B8\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 8482209174458148584, guid: 8de4547f04a11d54690c81c1a4bac8cc, type: 3}
+  Components:
+  - rid: 8759145200713990155
+  - rid: 8759145200713990160
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990155
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10
+    - rid: 8759145200713990160
+      type: {class: Damage, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        Power: 1
