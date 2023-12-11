@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] NetConnectManager m_NetConnectManager;
     [SerializeField] NetworkManager m_NetworkManager;
     [SerializeField] AIManager m_AIManager;
+    [SerializeField] CutInManager m_CutInManager;
 
     public static GameManager Singleton { get; private set; }
 

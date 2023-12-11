@@ -22,11 +22,11 @@ public class AIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Event_Turn_AIAction += AIAction;
+        GUIManager.Event_AICutInFinish += AIAction;
     }
     private void OnDisable()
     {
-        GameManager.Event_Turn_AIAction -= AIAction;
+        GUIManager.Event_AICutInFinish -= AIAction;
     }
 
     void Awake()
@@ -49,13 +49,14 @@ public class AIManager : MonoBehaviour
             {
                 _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
-            _ai.Event_DamageHP += (int index_, float hp_) =>
+            _ai.Event_DamageHP += (AISystem ai_, float damage_) =>
             {
-                GUIManager.Singleton.OnSetHPText(index_, hp_);
+                GUIManager.Singleton.DamageEffect(ai_, damage_);
+                GUIManager.Singleton.OnSetHPText(ai_.Index, ai_.m_HP);
             };
-            _ai.Event_HealHP += (int index_, float hp_) =>
+            _ai.Event_HealHP += (AISystem ai_, float heal) =>
             {
-                GUIManager.Singleton.OnSetHPText(index_, hp_);
+                GUIManager.Singleton.OnSetHPText(ai_.Index, ai_.m_HP);
             };
         }
         GUIManager.Singleton.InitializeAIHPUI();

@@ -16,6 +16,7 @@ public class GUIManager : MonoBehaviour
     [SerializeField] AIHPUIManager m_AIHPUIManager;
     [SerializeField] PlayerUIManager m_PlayerUIManager;
     [SerializeField] CutInManager m_CutInManager;
+    [SerializeField] DamageUIManager m_DamageUIManager;
     [SerializeField] AudioSource m_audio;
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
@@ -59,6 +60,7 @@ public class GUIManager : MonoBehaviour
     void OnInitialize()
     {
         m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_DamageUIManager.Initialize();
 
         //ローカルの場合は人数分
         m_PlayerUIArray = new PlayerUIManager[2];
@@ -125,5 +127,9 @@ public class GUIManager : MonoBehaviour
     public void InitializeAIHPUI()
     {
         m_AIHPUIManager.Initialize(AIManager.Singleton.AIList);
+    }
+    public void DamageEffect(AISystem ai_, float power_)
+    {
+        m_DamageUIManager.AddUI(ai_, power_);
     }
 }

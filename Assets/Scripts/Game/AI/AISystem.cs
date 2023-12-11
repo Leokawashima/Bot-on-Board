@@ -39,8 +39,8 @@ public class AISystem : MonoBehaviour
 
     Vector2Int m_MapSize = Vector2Int.zero;
 
-    public event Action<int, float> Event_DamageHP;
-    public event Action<int, float> Event_HealHP;
+    public event Action<AISystem, float> Event_DamageHP;
+    public event Action<AISystem, float> Event_HealHP;
 
     public CinemachineVirtualCamera cameraA;
 
@@ -141,12 +141,12 @@ public class AISystem : MonoBehaviour
         m_HP = Mathf.Max(m_HP - damage_, 0.0f);//HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に変える...？のか？
         if(m_HP == 0.0f)
             AIAliveState = AliveState.Dead;
-        Event_DamageHP?.Invoke(Index, m_HP);
+        Event_DamageHP?.Invoke(this, damage_);
     }
     public void HealHP(float heal_)
     {
         m_HP = Mathf.Min(m_HP + heal_, m_HPMax);
-        Event_HealHP?.Invoke(Index, m_HP);
+        Event_HealHP?.Invoke(this, heal_);
     }
 
     public void Move()
