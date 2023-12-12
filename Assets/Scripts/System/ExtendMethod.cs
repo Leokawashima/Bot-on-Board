@@ -64,6 +64,7 @@ public static class ExtendMethod
     /// </summary>
     /// 参考　https://albatrus.com/entry/2021/07/04/190000
     /// 使いやすくGenerics化した
+    /// どうやらenum型はpublicでないとコンパイラが暗黙的に変換するためかprivateではコンパイルできない
     /// <typeparam name="T">コピーを行う型</typeparam>
     /// <param name="from_">コピー元</param>
     /// <returns>コピーしたインスタンス</returns>
@@ -72,7 +73,7 @@ public static class ExtendMethod
         var _copy = System.Activator.CreateInstance(from_.GetType()) as T;
         var _fields = from_.GetType().GetFields();
 
-        foreach(var field in _fields)
+        foreach (var field in _fields)
         {
             field.SetValue(_copy, field.GetValue(from_));
         }

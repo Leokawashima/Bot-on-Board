@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Map.Object
@@ -112,25 +113,27 @@ namespace Map.Object
     public class Direction : MapObjectComponent
     {
         [Header(nameof(Direction))]
-        [SerializeField] private Vertical VerticalDirection;
-        [SerializeField] private Horizontal HorizontalDirection;
-        public Vertical TestVVV;
+        public State DirectionState;
 
-        public enum Vertical
+        public enum State
         {
-            Non = 0,
-            Forward = 1,
-            Backward = -1,
-        }
-        public enum Horizontal
-        {
-            Non = 0,
-            Right = 1,
-            Left = -1,
+            Forward,
+            Right,
+            Backward,
+            Left,
         }
 
-        public Vector2Int Vector2D => new((int)HorizontalDirection, (int)VerticalDirection);
-        public Vector3Int Vector3D => new((int)HorizontalDirection, 0, (int)VerticalDirection);
+        public Vector2Int Vector2D
+        {
+            get
+            {
+                var _vec = new Vector2Int[]
+                {
+                    Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left
+                };
+                return _vec[(int)DirectionState];
+            }
+        }
     }
 
     public class DirectionMove : MapObjectComponent

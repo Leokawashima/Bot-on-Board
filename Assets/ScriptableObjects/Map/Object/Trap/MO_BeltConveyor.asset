@@ -33,8 +33,7 @@ MonoBehaviour:
     - rid: 4745484744830746630
       type: {class: Direction, ns: Map.Object, asm: Assembly-CSharp}
       data:
-        VerticalDirection: 1
-        HorizontalDirection: 0
+        DirectionState: 1
     - rid: 8759145200713990154
       type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
       data:
