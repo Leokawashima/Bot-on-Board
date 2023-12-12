@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+[Serializable]
 public class DeckData
 {
     /// <summary>
@@ -10,15 +12,25 @@ public class DeckData
     /// <summary>
     /// デッキの状態
     /// </summary>
-    public DeckEditingManager.DeckState State = 0;
+    public DeckManager.DeckState State = DeckManager.DeckState.Non;
 
     /// <summary>
-    /// デッキのフィールド
+    /// デッキのカテゴリ毎のカウント
     /// </summary>
-    public List<int> CardIndexList = new();
+    public int[] CategoryCount = new int[Enum.GetValues(typeof(DeckCardCategory.Category)).Length];
+
+    /// <summary>
+    /// デッキのランク毎のカウント
+    /// </summary>
+    public int[] RankCount = new int[Enum.GetValues(typeof(DeckCardCategory.Rank)).Length];
 
     /// <summary>
     /// デッキのサイズ
     /// </summary>
-    public int MaxSize = 10;
+    public int Size => CardIndexArray.Length;
+
+    /// <summary>
+    /// デッキのフィールド
+    /// </summary>
+    public int[] CardIndexArray;
 }

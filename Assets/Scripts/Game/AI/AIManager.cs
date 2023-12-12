@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 public class AIManager : MonoBehaviour
 {
@@ -13,15 +14,19 @@ public class AIManager : MonoBehaviour
 #endif
     List<AISystem> m_AIList = new();
 
+    [SerializeField] AICameraTest m_AICameraTest;
+
+    public List<AISystem> AIList => m_AIList;
+
     public static event Action Event_AiActioned;
 
     private void OnEnable()
     {
-        GameSystem.Event_Turn_AIAction += AIAction;
+        GameManager.Event_Turn_AIAction += AIAction;
     }
     private void OnDisable()
     {
-        GameSystem.Event_Turn_AIAction -= AIAction;
+        GameManager.Event_Turn_AIAction -= AIAction;
     }
 
     void Awake()
@@ -40,6 +45,10 @@ public class AIManager : MonoBehaviour
             var _ai = Instantiate(m_AIPrefab, transform);
             _ai.Spawn(i, $"AI:{i}", new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
             m_AIList.Add(_ai);
+            if (i == 1)
+            {
+                _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
             _ai.Event_DamageHP += (int index_, float hp_) =>
             {
                 GUIManager.Singleton.OnSetHPText(index_, hp_);
@@ -49,6 +58,8 @@ public class AIManager : MonoBehaviour
                 GUIManager.Singleton.OnSetHPText(index_, hp_);
             };
         }
+        GUIManager.Singleton.InitializeAIHPUI();
+        m_AICameraTest.Initialize();
     }
 
     public bool CheckAIIsDead()//誰か死んだ時点でtrueを返している
@@ -69,7 +80,7 @@ public class AIManager : MonoBehaviour
         foreach(var _ai in m_AIList)//全員現在の状態から意思決定
             _ai.Think();
 
-        foreach(var _ai in m_AIList)//前意思決定後に行動
+        foreach(var _ai in m_AIList)//意思決定後に行動
             _ai.Action();
 
         //以下AI2体前提処理　時間が足りないのでこのまま
@@ -94,6 +105,7 @@ public class AIManager : MonoBehaviour
 
         foreach(var _ai in m_AIList)
         {
+            MapManager.Singleton.AIRideChip(_ai.Position, _ai);
             MapManager.Singleton.AIHitObject(_ai.Position, _ai);
         }
 

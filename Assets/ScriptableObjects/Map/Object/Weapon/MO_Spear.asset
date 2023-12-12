@@ -9,16 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7159f007c50afda46bce2b8838a1f253, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_Spear
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: 
-  m_Info: "\u30AB\u30FC\u30C9\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u305F\u3068\u304D\u306B\u8868\u793A\u3059\u308B\u8AAC\u660E\u6587"
-  <Cost>k__BackingField: -150
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 0}
-  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
-  <TurnMax>k__BackingField: 0
-  <TurnSpawn>k__BackingField: 0
-  <AttackPower>k__BackingField: 0
+  HasRarity: 0
+  HasCategory: 0
+  ObjectName: "\u30E4\u30EA"
+  Info: "\u30E4\u30EA\u3002\n\u30E4\u30EA\u30E4\u30EA\u30E4\u30EA\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 1642479611443022614, guid: 448fe33e2065bb24bbf314e959cc28f8, type: 3}
+  Components:
+  - rid: 8759145200713990149
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990149
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

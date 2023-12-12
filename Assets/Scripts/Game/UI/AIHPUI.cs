@@ -6,8 +6,8 @@ using TMPro;
 /// </summary>
 public class AIHPUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI m_nameText;
-    [SerializeField] TextMeshProUGUI m_hpText;
+    [SerializeField] TMP_Text m_nameText;
+    [SerializeField] TMP_Text m_hpText;
 
     public void Initialize(string name_)
     {

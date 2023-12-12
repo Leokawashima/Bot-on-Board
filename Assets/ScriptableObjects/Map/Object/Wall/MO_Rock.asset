@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
+  m_Name: MO_Rock
+  m_EditorClassIdentifier: 
+  HasRarity: 0
+  HasCategory: 4
+  ObjectName: "\u30ED\u30C3\u30AF"
+  Info: "\u30ED\u30C3\u30AF\u3002\n\u3069\u3053\u304B\u3089\u898B\u3066\u3082\u30ED\u30C3\u30AF\u3002"
+  Cost: 10000
+  IsCollider: 1
+  Prefab: {fileID: 4374121206139303338, guid: 2c9d0cf6988f8c54ead676aa824ecca7, type: 3}
+  Components:
+  - rid: 8759145200713990159
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990159
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

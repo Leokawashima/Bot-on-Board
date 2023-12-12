@@ -9,16 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34c241087f2f565458b353610c3f60d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_LongSword
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: 
-  m_Info: "\u30AB\u30FC\u30C9\u306B\u30AB\u30FC\u30BD\u30EB\u3092\u5408\u308F\u305B\u305F\u3068\u304D\u306B\u8868\u793A\u3059\u308B\u8AAC\u660E\u6587"
-  <Cost>k__BackingField: -150
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 1933853278335757198, guid: 1c925e76d6a373a4887092efebc03ce7, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
-  <TurnMax>k__BackingField: 0
-  <TurnSpawn>k__BackingField: 0
-  <AttackPower>k__BackingField: 0
+  HasRarity: 1
+  HasCategory: 0
+  ObjectName: "\u30ED\u30F3\u30B0\u30BD\u30FC\u30C9"
+  Info: "\u534D\u3076\u3063\u305F\u5207\u308B\u534D"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 4762864159647980754, guid: 1c925e76d6a373a4887092efebc03ce7, type: 3}
+  Components:
+  - rid: 8759145200713990147
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990147
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

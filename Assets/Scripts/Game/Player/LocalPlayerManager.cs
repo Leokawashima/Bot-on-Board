@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip;
 
 public class LocalPlayerManager : MonoBehaviour
 {
     public static LocalPlayerManager Singleton { get; private set; }
 
-    public MapChip m_SelectChip { get; private set; }
-    Vector2 m_Position;
+    public MapChip SelectChip { get; private set; }
+    Vector2 m_mousePosition;
+
+    private bool m_isPointerOver;
+
+    (Color main, Color outLine) m_selectColor;
+    Coroutine m_activeCorutine;
 
     void OnEnable()
     {
@@ -33,29 +39,36 @@ public class LocalPlayerManager : MonoBehaviour
         Singleton = null;
     }
 
+    private void Update()
+    {
+        m_isPointerOver = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
+
     void OnMouse_MainClick()
     {
-        //メインカメラから例を飛ばしているのでUIが別カメラでoverray映ししているため判定が取れていない
-        //サブカメラのインスタンスを取ってそこからUIオンリーのレイを飛ばして、
-        //判定していたらマップ選択は呼び出さないような処理をすればUI透過現象は回避できるはず
-        Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
+        Ray _ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
 
-        int mask = 1 << Name.Layer.Map | 1 << Name.Layer.UI;
-        if(Physics.Raycast(ray, out var hit, Mathf.Infinity, mask))
+        int _mask = 1 << Name.Layer.Map;
+
+        // UI上かどうか
+        if (false == m_isPointerOver)
         {
-            var map = hit.collider.GetComponent<MapChip>();
-            if(m_SelectChip != map)
+            if (Physics.Raycast(_ray, out var hit, Mathf.Infinity, _mask))
             {
-                m_SelectChip?.Stop();
-                map.HighLight();
-                m_SelectChip = map;
+                var _chip = hit.collider.GetComponent<MapChip>();
+                if (SelectChip != _chip)
+                {
+                    Stop();
+                    SelectChip = _chip;
+                    HighLight(SelectChip);
+                }
             }
         }
     }
 
     void OnMouse_DragStart()
     {
-        m_Position = PlayerInputManager.m_Pos;
+        m_mousePosition = PlayerInputManager.m_Pos;
         PlayerInputManager.OnMouseMovePerformEvent += OnMouse_MovePerform;
     }
 
@@ -67,7 +80,7 @@ public class LocalPlayerManager : MonoBehaviour
 
     void OnMouse_MovePerform()
     {
-        if((m_Position - PlayerInputManager.m_Pos).magnitude >= 20.0f)
+        if ((m_mousePosition - PlayerInputManager.m_Pos).magnitude >= 20.0f)
         {
             CameraManager.Singleton.SetFreeLookCamIsMove(true);
             PlayerInputManager.OnMouseMovePerformEvent -= OnMouse_MovePerform;
@@ -76,6 +89,37 @@ public class LocalPlayerManager : MonoBehaviour
 
     void OnButton_Place()
     {
-        m_SelectChip?.Stop();
+        Stop();
+    }
+
+    private void HighLight(MapChip chip_)
+    {
+        m_activeCorutine = StartCoroutine(CoHighLight(chip_));
+    }
+    private void Stop()
+    {
+        if (m_activeCorutine != null)
+        {
+            StopCoroutine(m_activeCorutine);
+            m_activeCorutine = null;
+            SelectChip.Material.color = m_selectColor.main;
+            SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLine);
+        }
+    }
+    IEnumerator CoHighLight(MapChip chip_)
+    {
+        m_selectColor.main = chip_.Material.color;
+        m_selectColor.outLine = chip_.Material.GetColor("_OutlineColor");
+
+        float _h, _v;
+        Color.RGBToHSV(chip_.Material.color, out _h, out _, out _v);
+
+        chip_.Material.SetColor("_OutlineColor", Color.blue);
+
+        while (true)
+        {
+            chip_.Material.color = Color.HSVToRGB(_h, Time.time % 1, _v);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

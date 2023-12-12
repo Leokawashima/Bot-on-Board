@@ -13,13 +13,21 @@ public class DeckCardCategory : MonoBehaviour
     private Category m_categoryState = 0;
 
     [Flags]
-    private enum Category
+    public enum Category
     {
         MeleeWeapon = 1 << 0,
         LongRangeWeapon = 1 << 1,
         Item = 1 << 2,
         Trap = 1 << 3,
         Wall = 1 << 4,
+    }
+
+    public enum Rank
+    {
+        Common = 0,
+        UnCommon = 1,
+        Rare = 2,
+        Epic = 3,
     }
 
     private readonly Color m_CHANGE_COLOR = new Color(0.5f, 0.5f, 0.5f, 0.0f);

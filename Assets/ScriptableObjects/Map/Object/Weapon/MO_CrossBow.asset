@@ -9,16 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee30e2332c938e247bb19d75ae49d323, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_CrossBow
-  m_EditorClassIdentifier: Assembly-CSharp::MO_SO_CrossBow
-  hasRarity: 0
-  m_ObjectName: "\u30AF\u30ED\u30B9\u30DC\u30A6"
-  m_Info: "\u653B\u6483\u306B\u77E2\u3092\u6D88\u8CBB\u3059\u308B\u5A01\u529B3\u306E\u6B66\u5668\u3002\u77E2\u304C\u4E8C\u3064\u4ED8\u3044\u3066\u304F\u308B\u3002"
-  <Cost>k__BackingField: -150
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 3792239601901439544, guid: 2c62a9b65759bc6478415d6be8eac3ef, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: b4d20f7aba64686419ad873b64406653, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
-  <AttackPower>k__BackingField: 0
+  m_EditorClassIdentifier: 
+  HasRarity: 0
+  HasCategory: 1
+  ObjectName: "\u30AF\u30ED\u30B9\u30DC\u30A6"
+  Info: "\u77E2\u3092\u6D88\u8CBB\u3057\u3066\u9060\u8DDD\u96E2\u653B\u6483\u3067\u304D\u308B\u3002\n\u5A01\u529B2\u3002\n\u6700\u521D\u304B\u3089\u77E2\u304C\u4E8C\u3064\u4ED8\u3044\u3066\u3044\u308B\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 6239989903741537931, guid: 2c62a9b65759bc6478415d6be8eac3ef, type: 3}
+  Components:
+  - rid: 8759145200713990145
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990145
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

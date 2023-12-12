@@ -62,6 +62,15 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Debug"",
+                    ""type"": ""Button"",
+                    ""id"": ""96344e5f-8fc0-4371-b17e-90d11e434724"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -205,6 +214,17 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0549e6da-608b-457f-a799-b5f335d0741e"",
+                    ""path"": ""<Keyboard>/numpad0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -790,6 +810,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         m_Player_HoldAction = m_Player.FindAction("HoldAction", throwIfNotFound: true);
         m_Player_Position = m_Player.FindAction("Position", throwIfNotFound: true);
         m_Player_DragPosition = m_Player.FindAction("DragPosition", throwIfNotFound: true);
+        m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -867,6 +888,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
     private readonly InputAction m_Player_HoldAction;
     private readonly InputAction m_Player_Position;
     private readonly InputAction m_Player_DragPosition;
+    private readonly InputAction m_Player_Debug;
     public struct PlayerActions
     {
         private @InputActionMapSettings m_Wrapper;
@@ -875,6 +897,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         public InputAction @HoldAction => m_Wrapper.m_Player_HoldAction;
         public InputAction @Position => m_Wrapper.m_Player_Position;
         public InputAction @DragPosition => m_Wrapper.m_Player_DragPosition;
+        public InputAction @Debug => m_Wrapper.m_Player_Debug;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -896,6 +919,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @DragPosition.started += instance.OnDragPosition;
             @DragPosition.performed += instance.OnDragPosition;
             @DragPosition.canceled += instance.OnDragPosition;
+            @Debug.started += instance.OnDebug;
+            @Debug.performed += instance.OnDebug;
+            @Debug.canceled += instance.OnDebug;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -912,6 +938,9 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
             @DragPosition.started -= instance.OnDragPosition;
             @DragPosition.performed -= instance.OnDragPosition;
             @DragPosition.canceled -= instance.OnDragPosition;
+            @Debug.started -= instance.OnDebug;
+            @Debug.performed -= instance.OnDebug;
+            @Debug.canceled -= instance.OnDebug;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1053,6 +1082,7 @@ public partial class @InputActionMapSettings: IInputActionCollection2, IDisposab
         void OnHoldAction(InputAction.CallbackContext context);
         void OnPosition(InputAction.CallbackContext context);
         void OnDragPosition(InputAction.CallbackContext context);
+        void OnDebug(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

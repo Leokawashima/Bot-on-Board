@@ -1,6 +1,7 @@
 *.csproj
 *.sln
 *.suo
+.vs/
 .vsconfig
 .vscode/
 Library/
@@ -8,6 +9,7 @@ Logs/
 obj/
 UserSettings/
 Temp/
-.vs/
-Assets/Systems/TMPFonts/
+
 Assets/Downloads/ProPixelizer/
+Assets/Save/
+Assets/Save.meta

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
+  m_Name: MO_Caltrop
+  m_EditorClassIdentifier: 
+  HasRarity: 0
+  HasCategory: 3
+  ObjectName: "\u307E\u304D\u3073\u3057"
+  Info: "\u4E57\u308B\u3068\u30C0\u30E1\u30FC\u30B8\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 8482209174458148584, guid: 8de4547f04a11d54690c81c1a4bac8cc, type: 3}
+  Components:
+  - rid: 8759145200713990155
+  - rid: 8759145200713990160
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990155
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10
+    - rid: 8759145200713990160
+      type: {class: Damage, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        Power: 1

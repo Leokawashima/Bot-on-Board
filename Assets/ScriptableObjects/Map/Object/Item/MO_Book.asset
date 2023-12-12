@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
+  m_Name: MO_Book
+  m_EditorClassIdentifier: 
+  HasRarity: 0
+  HasCategory: 2
+  ObjectName: "\u30DB\u30F3"
+  Info: "\u4E57\u3063\u305F\u3089\u30AB\u30B7\u30B3\u30B5\u304C\u4E00\u3064\u4E0A\u304C\u308B\u3002"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: 711941203453368293, guid: a5d7ebf7ed7224140a41c04225d63fbf, type: 3}
+  Components:
+  - rid: 8759145200713990152
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990152
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10

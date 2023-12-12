@@ -9,16 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fd18c3f124fd24487275e2101b3305, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_IronPipe
   m_EditorClassIdentifier: 
-  hasRarity: 0
-  m_ObjectName: "\u9244\u30D1\u30A4\u30D7"
-  m_Info: "\u6B63\u9762\u4E09\u30DE\u30B9\u306E\u3069\u3053\u304B\u306B\u653B\u6483\u3067\u304D\u308B\u3002\u4E8C\u56DE\u547D\u4E2D\u3067\u58CA\u308C\u308B\u3002"
-  <Cost>k__BackingField: -100
-  <IsCollider>k__BackingField: 0
-  m_Prefab: {fileID: 1933853278335757198, guid: 03edbfdfe859f974dab9e3ba5c628c4d, type: 3}
-  m_Card: {fileID: 8618209698020002616, guid: e7fd339bd65baf745892f21618947d6a, type: 3}
-  <TurnMax>k__BackingField: 10
-  <TurnSpawn>k__BackingField: 10
-  <AttackPower>k__BackingField: 3
+  HasRarity: 0
+  HasCategory: 0
+  ObjectName: "\u30C6\u30C4\u30D1\u30A4\u30D7"
+  Info: "\u534D\u3076\u3093\u6BB4\u308B\u534D"
+  Cost: 0
+  IsCollider: 0
+  Prefab: {fileID: -2103091421625863518, guid: 03edbfdfe859f974dab9e3ba5c628c4d, type: 3}
+  Components:
+  - rid: 8759145200713990146
+  references:
+    version: 2
+    RefIds:
+    - rid: 8759145200713990146
+      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+      data:
+        TurnDestruction: 0
+        TurnMax: 10
+        TurnSpawn: 10
