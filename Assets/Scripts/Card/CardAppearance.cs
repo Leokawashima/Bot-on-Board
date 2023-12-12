@@ -6,6 +6,7 @@ public class CardAppearance : MonoBehaviour
 {
     public Image m_backGround;
     public Image m_frame;
+    public Image m_title;
     public Image m_categoryIcon;
     public TMP_Text m_text;
 
@@ -16,6 +17,10 @@ public class CardAppearance : MonoBehaviour
         m_backGround.color = from_.m_backGround.color;
         m_backGround.sprite = from_.m_backGround.sprite;
         m_backGround.material = from_.m_backGround.material;
+
+        m_title.color = from_.m_title.color;
+        m_title.sprite = from_.m_title.sprite;
+        m_backGround.material = from_.m_title.material;
 
         m_frame.color = from_.m_frame.color;
         m_frame.sprite = from_.m_frame.sprite;

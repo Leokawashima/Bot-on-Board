@@ -30,6 +30,7 @@ public class CardGenerator : MonoBehaviour
 
         _appearance.m_categoryIcon.sprite = m_cardTable.Icon[_category];
         _appearance.m_text.text = _moc.SO.ObjectName;
+        _appearance.m_title.sprite = _moc.SO.TitleImage;
 
         switch(_rarity)
         {

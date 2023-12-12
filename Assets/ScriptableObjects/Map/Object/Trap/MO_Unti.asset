@@ -16,6 +16,7 @@ MonoBehaviour:
   HasCategory: 3
   ObjectName: "\u3046\u3093\u3061"
   Info: "\u4E57\u308B\u3068\u30B9\u30BF\u30F3\u3002"
+  TitleImage: {fileID: 21300000, guid: c6d62a44e14b6464a86e2fbc209d82d8, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 4251866832636960141, guid: ffebf8c24d4ff32458f6c43ba8c0c7a8, type: 3}

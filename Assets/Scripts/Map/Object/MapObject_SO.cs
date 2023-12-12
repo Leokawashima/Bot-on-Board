@@ -16,6 +16,8 @@ namespace Map.Object
         [TextArea(3, 5)]
         public string Info = "説明文";
 
+        public Sprite TitleImage;
+
         public int Cost = 0;
 
         public bool IsCollider = false;
