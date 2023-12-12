@@ -312,10 +312,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a870d99e23d36ab40ac9a072366ba18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CardManager: {fileID: 372945359207628440}
-  m_OrderManager: {fileID: 1081298210583334739}
-  m_PlaceButton: {fileID: 7448982292234326195}
-  m_TurnEndButton: {fileID: 6033718012355844286}
+  m_cardManager: {fileID: 372945359207628440}
+  m_orderManager: {fileID: 1081298210583334739}
+  m_placeButton: {fileID: 7448982292234326195}
+  m_turnEndButton: {fileID: 6033718012355844286}
   m_MaxOfPlace: 3
   m_NumOfPlace: 0
   m_AddOfPlace: 3

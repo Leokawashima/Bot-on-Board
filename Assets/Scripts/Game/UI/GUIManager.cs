@@ -1,30 +1,21 @@
 ﻿using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using ZXing.OneD;
 
 /// <summary>
-/// GUIを管理するクラス
+/// GUI全般の管理クラス
 /// </summary>
 public class GUIManager : MonoBehaviour
 {
     public static GUIManager Singleton { get; private set; }
 
     [SerializeField] TurnCountManager m_TurnCountManager;
-    [SerializeField] AIHPUIManager m_AIHPUIManager;
+    [SerializeField] InfoPlayerDataManager m_infoPlayerDataManager;
     [SerializeField] PlayerUIManager m_PlayerUIManager;
     [SerializeField] CutInManager m_CutInManager;
     [SerializeField] DamageUIManager m_DamageUIManager;
     [SerializeField] AudioSource m_audio;
-#if UNITY_EDITOR
-    [Header("Debug"), SerializeField]
-#endif
-    PlayerUIManager[] m_PlayerUIArray;
 
     public static event Action Event_TurnInitializeCutIn;
-    public static event Action Event_ButtonPlace;
-    public static event Action Event_ButtonTurnEnd;
     public static event Action Event_AICutInFinish;
     public static event Action Event_AnimGameSet;
 
@@ -61,30 +52,12 @@ public class GUIManager : MonoBehaviour
         m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
         m_DamageUIManager.Initialize();
 
-        //ローカルの場合は人数分
-        m_PlayerUIArray = new PlayerUIManager[2];
-        for(int i = 0; i < 2; ++i)
-        {
-            m_PlayerUIArray[i] = Instantiate(m_PlayerUIManager, transform);
-            m_PlayerUIArray[i].Initialize();
-            m_PlayerUIArray[i].Event_ButtonPlace += () =>
-            {
-                Event_ButtonPlace?.Invoke();
-            };
-            m_PlayerUIArray[i].Event_ButtonTurnEnd += () =>
-            {
-                Event_ButtonTurnEnd?.Invoke();
-            };
-            m_PlayerUIArray[i].gameObject.SetActive(false);
-        }
-
-        //マルチなら一つ分生成
+        m_PlayerUIManager.Initialize();
     }
     void OnTurnInitialize()
     {
         m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
-        foreach(var ui_ in m_PlayerUIArray)
-            ui_.TurnInitialize();
+        m_PlayerUIManager.TurnInitialize();
 
         m_CutInManager.CutIn("Turn:" + GameManager.Singleton.ElapsedTurn, () =>
         {
@@ -95,7 +68,7 @@ public class GUIManager : MonoBehaviour
     {
         m_CutInManager.CutIn("Place:" + GameManager.Singleton.PlayerIndex, () =>
         {
-            m_PlayerUIArray[GameManager.Singleton.PlayerIndex].gameObject.SetActive(true);
+            m_PlayerUIManager.TurnPlace();
         });
     }
     void OnTurnEnd()
@@ -120,12 +93,12 @@ public class GUIManager : MonoBehaviour
 
     public void OnSetHPText(int index_, float hp_)
     {
-        m_AIHPUIManager.Refresh(index_, hp_);
+        m_infoPlayerDataManager.Refresh(index_, hp_);
     }
 
     public void InitializeAIHPUI()
     {
-        m_AIHPUIManager.Initialize(AIManager.Singleton.AIList);
+        m_infoPlayerDataManager.Initialize(AIManager.Singleton.AIList);
     }
     public void DamageEffect(AISystem ai_, float power_)
     {

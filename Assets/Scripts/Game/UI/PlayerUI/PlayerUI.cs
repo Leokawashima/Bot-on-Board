@@ -2,18 +2,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Map;
-using Map.Chip;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
 /// </summary>
-/// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
-public class PlayerUIManager : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] CardManager m_CardManager;
-    [SerializeField] OrderManager m_OrderManager;
-    [SerializeField] Button m_PlaceButton;
-    [SerializeField] Button m_TurnEndButton;
+    [SerializeField] CardManager m_cardManager;
+    [SerializeField] OrderManager m_orderManager;
+    [SerializeField] Button m_placeButton;
+    [SerializeField] Button m_turnEndButton;
 
     [SerializeField] int m_MaxOfPlace = 3;
     [SerializeField] int m_NumOfPlace = 0;
@@ -26,17 +24,17 @@ public class PlayerUIManager : MonoBehaviour
     {
         m_NumOfPlace = m_MaxOfPlace;
 
-        m_TurnEndButton.onClick.AddListener(OnButton_TurnEnd);
-        m_PlaceButton.onClick.AddListener(OnButton_Place);
+        m_turnEndButton.onClick.AddListener(OnButton_TurnEnd);
+        m_placeButton.onClick.AddListener(OnButton_Place);
 
-        m_CardManager.Initialize();
-        m_OrderManager.Initialize();
+        m_cardManager.Initialize();
+        m_orderManager.Initialize();
     }
 
     void OnButton_Place()
     {
         // カードが選択されていないなら返す
-        if (m_CardManager.GetSelectCard == null)
+        if (m_cardManager.GetSelectCard == null)
             return;
 
         // 選択チップ取得
@@ -56,16 +54,16 @@ public class PlayerUIManager : MonoBehaviour
         if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] != null)
             return;
 
-        var _mo = MapManager.Singleton.ObjectSpawn(m_CardManager.GetSelectCard.SO, _chip);
+        var _mo = MapManager.Singleton.ObjectSpawn(m_cardManager.GetSelectCard.SO, _chip);
         _mo.Initialize(MapManager.Singleton);
-        m_CardManager.GetSelectCard.Trash();
+        m_cardManager.GetSelectCard.Trash();
 
         Event_ButtonPlace?.Invoke();
 
         // 置ける枚数を1減らす　カードによって減る量を変える場合これを変えて残り置ける枚数と必要量を比較しなければいけない
         m_NumOfPlace--;
 
-        if (m_NumOfPlace <= 0 || m_CardManager.HandCard.Count == 0)
+        if (m_NumOfPlace <= 0 || m_cardManager.HandCard.Count == 0)
         {
             OnButton_TurnEnd();
         }
@@ -81,6 +79,6 @@ public class PlayerUIManager : MonoBehaviour
     public void TurnInitialize()
     {
         m_NumOfPlace = Mathf.Min(m_NumOfPlace + m_AddOfPlace, m_MaxOfPlace);
-        m_CardManager.Draw();
+        m_cardManager.Draw();
     }
 }

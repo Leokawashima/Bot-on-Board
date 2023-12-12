@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         //演出系の処理を作ったらそっちのコールバックイベント等につなぎを任せる
         MapManager.Event_MapCreated += OnMapCreated;
         GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
-        GUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
+        PlayerUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet += SystemFinalize;
         AIManager.Event_AiActioned += TurnFinalize;
     }
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     {
         MapManager.Event_MapCreated -= OnMapCreated;
         GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
-        GUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
+        PlayerUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
         GUIManager.Event_AnimGameSet -= SystemFinalize;
         AIManager.Event_AiActioned -= TurnFinalize;
     }

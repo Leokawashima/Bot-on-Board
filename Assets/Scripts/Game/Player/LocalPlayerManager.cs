@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Map.Chip;
 
@@ -20,14 +19,14 @@ public class LocalPlayerManager : MonoBehaviour
         PlayerInputManager.OnMouseMainClickEvent += OnMouse_MainClick;
         PlayerInputManager.OnDragStartEvent += OnMouse_DragStart;
         PlayerInputManager.OnDragCancelEvent += OnMouse_DragCancel;
-        GUIManager.Event_ButtonPlace += OnButton_Place;
+        PlayerUIManager.Event_ButtonPlace += OnButton_Place;
     }
     void OnDisable()
     {
         PlayerInputManager.OnMouseMainClickEvent -= OnMouse_MainClick;
         PlayerInputManager.OnDragStartEvent -= OnMouse_DragStart;
         PlayerInputManager.OnDragCancelEvent -= OnMouse_DragCancel;
-        GUIManager.Event_ButtonPlace -= OnButton_Place;
+        PlayerUIManager.Event_ButtonPlace -= OnButton_Place;
     }
 
     void Awake()

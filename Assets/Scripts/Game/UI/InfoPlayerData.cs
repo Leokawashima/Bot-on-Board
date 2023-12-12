@@ -2,9 +2,9 @@
 using TMPro;
 
 /// <summary>
-/// AIのHPをUI表示するクラス
+/// Playerの情報及び付随する情報を表示するクラス
 /// </summary>
-public class AIHPUI : MonoBehaviour
+public class InfoPlayerData : MonoBehaviour
 {
     [SerializeField] TMP_Text m_nameText;
     [SerializeField] TMP_Text m_hpText;

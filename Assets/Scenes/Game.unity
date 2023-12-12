@@ -2334,7 +2334,7 @@ GameObject:
   - component: {fileID: 627858606}
   - component: {fileID: 627858605}
   m_Layer: 5
-  m_Name: AIHPUIManager
+  m_Name: InfoPlayerDataManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2369,10 +2369,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 627858603}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db1e398394bee684ba7d5c2fe4b3dce8, type: 3}
+  m_Script: {fileID: 11500000, guid: eff211b3adbef0c49b00587b1dd6f76a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AIHPUI: {fileID: 7126723779813728080, guid: 39a456d002b04034ba7dbe9311723293, type: 3}
+  m_prefab: {fileID: 7126723779813728080, guid: 39a456d002b04034ba7dbe9311723293, type: 3}
   m_AIHPUIArray: []
 --- !u!114 &627858606
 MonoBehaviour:
@@ -3124,7 +3124,7 @@ MonoBehaviour:
   m_NetConnectManager: {fileID: 1004095211}
   m_NetworkManager: {fileID: 720780913}
   m_AIManager: {fileID: 137300151}
-  m_CutInManager: {fileID: 0}
+  m_CutInManager: {fileID: 1943065066}
   m_GameState: 0
   m_BattleState: 0
   <ElapsedTurn>k__BackingField: 1
@@ -5814,6 +5814,57 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aff265a8993ee1f43a43ebd3ec6894d2, type: 3}
+--- !u!1 &2053929997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2053929999}
+  - component: {fileID: 2053929998}
+  m_Layer: 5
+  m_Name: PlayerUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2053929998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053929997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aefa130a2cccc54e93feb6941791421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefab: {fileID: 3704817949519636658, guid: 685a0fdf93cc90540ac8b5c4f0902bcc, type: 3}
+  m_PlayerUIArray: []
+--- !u!224 &2053929999
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053929997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4968583387266716953}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1344747860104167313
 Canvas:
   m_ObjectHideFlags: 0
@@ -5912,10 +5963,11 @@ RectTransform:
   - {fileID: 371895507}
   - {fileID: 1800438163}
   - {fileID: 627858604}
+  - {fileID: 2053929999}
   - {fileID: 1943065063}
+  - {fileID: 192524505}
   - {fileID: 1306682277}
   - {fileID: 1515161164}
-  - {fileID: 192524505}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5937,12 +5989,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TurnCountManager: {fileID: 1800438164}
-  m_AIHPUIManager: {fileID: 627858605}
-  m_PlayerUIManager: {fileID: 3704817949519636658, guid: 685a0fdf93cc90540ac8b5c4f0902bcc, type: 3}
+  m_infoPlayerDataManager: {fileID: 627858605}
+  m_PlayerUIManager: {fileID: 2053929998}
   m_CutInManager: {fileID: 1943065066}
   m_DamageUIManager: {fileID: 192524504}
   m_audio: {fileID: 4968583387266716955}
-  m_PlayerUIArray: []
 --- !u!82 &4968583387266716955
 AudioSource:
   m_ObjectHideFlags: 0
