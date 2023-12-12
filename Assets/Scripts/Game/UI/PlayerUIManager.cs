@@ -35,29 +35,39 @@ public class PlayerUIManager : MonoBehaviour
 
     void OnButton_Place()
     {
-        //カードが選択されていないなら返す
-        if (m_CardManager.GetSelectCard == null) return;
-        //ローカルインスタンスに選択チップを取得しに行く　マルチでも生成されるのは一つのインスタンスなので破綻しない
+        // カードが選択されていないなら返す
+        if (m_CardManager.GetSelectCard == null)
+            return;
+
+        // 選択チップ取得
         var _chip = LocalPlayerManager.Singleton.SelectChip;
-        if (_chip != null)
+        // ヌルなら返す　空中に置けるようにしたい場合選択方法から作らねばいけない
+        if (_chip == null)
+            return;
+
+        // AIと被っていたら置けないとして返す　ものによってはAIに直接置けたらおもしろそう
+        for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
         {
-            if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] == null)
-            {
-                for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
-                {
-                    if (MapManager.Singleton.AIManagerList[i].Position == _chip.Position)
-                        return;
-                }
+            if (MapManager.Singleton.AIManagerList[i].Position == _chip.Position)
+                return;
+        }
 
-                var _mo = m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
-                _mo.Initialize(MapManager.Singleton);
-                m_CardManager.GetSelectCard.Trash();
+        // オブジェクトがあるなら返す　ハカイ爆弾などのためにこれは別途方法を考えないといけない
+        if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] != null)
+            return;
 
-                Event_ButtonPlace?.Invoke();
+        var _mo = m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
+        _mo.Initialize(MapManager.Singleton);
+        m_CardManager.GetSelectCard.Trash();
 
-                if (--m_NumOfPlace == 0 || m_CardManager.HandCardList.Count == 0)
-                    OnButton_TurnEnd();
-            }
+        Event_ButtonPlace?.Invoke();
+
+        // 置ける枚数を1減らす　カードによって減る量を変える場合これを変えて残り置ける枚数と必要量を比較しなければいけない
+        m_NumOfPlace--;
+
+        if (m_NumOfPlace <= 0 || m_CardManager.HandCard.Count == 0)
+        {
+            OnButton_TurnEnd();
         }
     }
 

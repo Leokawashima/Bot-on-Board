@@ -132,7 +132,7 @@ namespace Map
                     if (MapObjectList[i].Position == pos_)
                     {
                         MapObjectList[i].Hit(ai_);
-                        MapObjectList[i--].Destroy(this);
+                        MapObjectList[i--].Finalize(this);
                         // i--;を別の行に記述すると不必要な代入と文句を言われるので上に統合
                         break;
                     }

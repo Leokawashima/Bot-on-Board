@@ -31,7 +31,7 @@ namespace Map.Chip
             {
                 if (false == component.Update())
                 {
-                    this.Destroy(manager_);
+                    Finalize(manager_);
                     return false;
                 }
             }
@@ -47,7 +47,7 @@ namespace Map.Chip
             }
         }
 
-        public void Destroy(MapManager manager_)
+        public void Finalize(MapManager manager_)
         {
             foreach (var component in Components)
             {
@@ -55,7 +55,7 @@ namespace Map.Chip
             }
 
             manager_.MapState.ResetMapChip(Position);
-            UnityEngine.Object.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

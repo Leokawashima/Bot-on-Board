@@ -114,6 +114,7 @@ namespace Map.Object
         [Header(nameof(Direction))]
         [SerializeField] private Vertical VerticalDirection;
         [SerializeField] private Horizontal HorizontalDirection;
+        public Vertical TestVVV;
 
         public enum Vertical
         {

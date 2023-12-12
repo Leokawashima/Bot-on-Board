@@ -40,7 +40,7 @@ namespace Map.Object
             {
                 if (false == component.Update(this))
                 {
-                    this.Destroy(manager_);
+                    Finalize(manager_);
                     return false;
                 }
             }
@@ -56,7 +56,7 @@ namespace Map.Object
             }
         }
 
-        public void Destroy(MapManager manager_)
+        public void Finalize(MapManager manager_)
         {
             foreach (var component in Components)
             {
@@ -65,7 +65,7 @@ namespace Map.Object
 
             manager_.MapObjectList.Remove(this);
             manager_.MapState.ReSetMapObject(Position);
-            UnityEngine.Object.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }
