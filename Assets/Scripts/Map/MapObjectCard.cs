@@ -11,11 +11,6 @@ public class MapObjectCard : MonoBehaviour
 
     public event Action Event_Trash;
 
-    public MapObject ObjectSpawn(MapChip chip_, MapManager map_)
-    {
-        return SO.Spawn(chip_.Position, chip_.transform.position + Vector3.up, map_.transform);
-    }
-
     public void Trash()
     {
         Event_Trash?.Invoke();

@@ -56,7 +56,7 @@ public class PlayerUIManager : MonoBehaviour
         if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] != null)
             return;
 
-        var _mo = m_CardManager.GetSelectCard.ObjectSpawn(_chip, MapManager.Singleton);
+        var _mo = MapManager.Singleton.ObjectSpawn(m_CardManager.GetSelectCard.SO, _chip);
         _mo.Initialize(MapManager.Singleton);
         m_CardManager.GetSelectCard.Trash();
 

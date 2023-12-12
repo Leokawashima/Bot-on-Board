@@ -10,7 +10,6 @@ namespace Map
     /// <summary>
     /// マップを管理するクラス
     /// </summary>
-    /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
     public class MapManager : MonoBehaviour
     {
 #if UNITY_EDITOR
@@ -20,6 +19,10 @@ namespace Map
         [SerializeField] private bool m_drawObjectGizmos = true;
 #endif
         public static MapManager Singleton { get; private set; }
+
+        [SerializeField] private Transform
+            m_mapChipParent,
+            m_mapObjectParent;
 
         [SerializeField] MapData_SO m_MapDataSO;
         public Vector2Int MapDataSize => m_MapDataSO.Size;
@@ -96,14 +99,14 @@ namespace Map
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset;
                                     var _mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
-                                        .Spawn(new Vector2Int(x, z), _pos, transform);
+                                        .Spawn(new Vector2Int(x, z), _pos, m_mapChipParent);
                                     _mc.Initialize(this);
                                 }
                                 if (m_MapDataSO.MapObject[_index] != -1)
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
                                     var _mo = m_MapObjectTable.Data[m_MapDataSO.MapObject[_index]]
-                                        .Spawn(new Vector2Int(x, z), _pos, transform);
+                                        .Spawn(new Vector2Int(x, z), _pos, m_mapObjectParent);
                                     _mo.Initialize(this);
                                 }
                             }
@@ -122,6 +125,12 @@ namespace Map
 
             StartCoroutine(Co_MapCreate());
         }
+
+        public MapObject ObjectSpawn(MapObject_SO so_, MapChip chip_)
+        {
+            return so_.Spawn(chip_.Position, chip_.transform.position + Vector3.up, m_mapObjectParent);
+        }
+
         public void AIHitObject(Vector2Int pos_, AISystem ai_)
         {
             if (MapState.MapObjects[pos_.y][pos_.x] != null)
