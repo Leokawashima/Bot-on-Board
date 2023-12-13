@@ -8,10 +8,10 @@ public class GUIManager : MonoBehaviour
 {
     public static GUIManager Singleton { get; private set; }
 
-    [SerializeField] TurnCountManager m_TurnCountManager;
+    [SerializeField] TurnCountManager m_turnCountManager;
     [SerializeField] InfoPlayerDataManager m_infoPlayerDataManager;
-    [SerializeField] PlayerUIManager m_PlayerUIManager;
-    [SerializeField] CutInManager m_CutInManager;
+    [SerializeField] PlayerUIManager m_playerUIManager;
+    [SerializeField] CutInSystem m_cutInSystem;
     [SerializeField] DamageUIManager m_DamageUIManager;
     [SerializeField] AudioSource m_audio;
 
@@ -49,26 +49,26 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_turnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
         m_DamageUIManager.Initialize();
 
-        m_PlayerUIManager.Initialize();
+        m_playerUIManager.Initialize();
     }
     void OnTurnInitialize()
     {
-        m_TurnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
-        m_PlayerUIManager.TurnInitialize();
+        m_turnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_playerUIManager.TurnInitialize();
 
-        m_CutInManager.CutIn("Turn:" + GameManager.Singleton.ElapsedTurn, () =>
+        m_cutInSystem.CutIn("Turn:" + GameManager.Singleton.ElapsedTurn, () =>
         {
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_CutInManager.CutIn("Place:" + GameManager.Singleton.PlayerIndex, () =>
+        m_cutInSystem.CutIn("Place:" + GameManager.Singleton.PlayerIndex, () =>
         {
-            m_PlayerUIManager.TurnPlace();
+            m_playerUIManager.TurnPlace();
         });
     }
     void OnTurnEnd()
@@ -77,7 +77,7 @@ public class GUIManager : MonoBehaviour
     }
     void OnAIAction()
     {
-        m_CutInManager.CutIn("AIAction", () =>
+        m_cutInSystem.CutIn("AIAction", () =>
         {
             Event_AICutInFinish?.Invoke();
         });
@@ -85,7 +85,7 @@ public class GUIManager : MonoBehaviour
     void OnTurnGameSet()
     {
         m_audio.Play();
-        m_CutInManager.CutIn("GameSet", () =>
+        m_cutInSystem.CutIn("GameSet", () =>
         {
             Event_AnimGameSet?.Invoke();
         });

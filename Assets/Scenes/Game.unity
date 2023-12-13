@@ -274,7 +274,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128953481}
-  m_LocalRotation: {x: 0.19197412, y: 0.21600766, z: -0.043360543, w: 0.9563506}
+  m_LocalRotation: {x: 0.1919741, y: 0.21600763, z: -0.043360535, w: 0.9563506}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -421,10 +421,10 @@ RectTransform:
   m_Father: {fileID: 4968583387266716953}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &217481310
 PrefabInstance:
@@ -1120,7 +1120,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328738301}
-  m_LocalRotation: {x: 0.20816255, y: 0.21524134, z: -0.047016963, w: 0.952958}
+  m_LocalRotation: {x: 0.20816258, y: 0.21524137, z: -0.04701697, w: 0.952958}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1920,7 +1920,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546397390}
-  m_LocalRotation: {x: 0.20175195, y: 0.21555255, z: -0.045569018, w: 0.95433575}
+  m_LocalRotation: {x: 0.20175198, y: 0.21555258, z: -0.045569025, w: 0.95433575}
   m_LocalPosition: {x: -5.314372, y: 5.1724577, z: -11.164235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3124,7 +3124,7 @@ MonoBehaviour:
   m_NetConnectManager: {fileID: 1004095211}
   m_NetworkManager: {fileID: 720780913}
   m_AIManager: {fileID: 137300151}
-  m_CutInManager: {fileID: 1943065066}
+  m_cutInSystem: {fileID: 1943065066}
   m_GameState: 0
   m_BattleState: 0
   <ElapsedTurn>k__BackingField: 1
@@ -4658,7 +4658,7 @@ GameObject:
   - component: {fileID: 1800438163}
   - component: {fileID: 1800438164}
   m_Layer: 5
-  m_Name: TurnCountUI
+  m_Name: TurnCountManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5074,10 +5074,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1943065062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f11258d8218824e8fb30e8f5e76034, type: 3}
+  m_Script: {fileID: 11500000, guid: 3068a2e6b7ab5784590e87970accbfa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AnimatorManager: {fileID: 1943065065}
+  m_AnimatorSystem: {fileID: 1943065065}
   m_Text: {fileID: 1928251346}
 --- !u!1 &1988920696
 GameObject:
@@ -5926,10 +5926,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ea24fe7d85ea6840867e866cda441fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TurnCountManager: {fileID: 1800438164}
+  m_turnCountManager: {fileID: 1800438164}
   m_infoPlayerDataManager: {fileID: 627858605}
-  m_PlayerUIManager: {fileID: 2053929998}
-  m_CutInManager: {fileID: 1943065066}
+  m_playerUIManager: {fileID: 2053929998}
+  m_cutInSystem: {fileID: 1943065066}
   m_DamageUIManager: {fileID: 192524504}
   m_audio: {fileID: 4968583387266716955}
 --- !u!82 &4968583387266716955

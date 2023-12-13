@@ -1,81 +1,169 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-//こちらのサイトを参考にインポートした
-//https://umistudioblog.com/%E3%80%90unity%E3%80%91hierarchy-%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E8%89%B2%E5%88%86%E3%81%91%E3%81%97%E3%81%A6%E8%A6%8B%E3%82%84%E3%81%99%E3%81%8F%E3%81%97%E3%81%9F%E3%81%84%E3%80%90%E7%84%A1/
-//Key文字を消去する仕組みや必ずToUpperで大文字にする仕組みなど若干取り回しが悪いので個人的に改変している
-//具体的には45行目と50行目と71行目
+// こちらのサイトを参考にインポートした
+// https://umistudioblog.com/%E3%80%90unity%E3%80%91hierarchy-%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E8%89%B2%E5%88%86%E3%81%91%E3%81%97%E3%81%A6%E8%A6%8B%E3%82%84%E3%81%99%E3%81%8F%E3%81%97%E3%81%9F%E3%81%84%E3%80%90%E7%84%A1/
+// ごりごりに改造しているしコメントも個人的な意訳をしているので元のサイトをあてにしたほうがいい
 namespace MStudio
 {
     [InitializeOnLoad]
     public class StyleHierarchy
     {
-        static string[] dataArray;//Find ColorPalette GUID
-        static string path;//Get ColorPalette(ScriptableObject) path
-        static ColorPalette colorPalette;
+        private static string[] m_dataArray; // カラーパレットテーブルのGUID
+        private static string m_path; // カラーパレットテーブルのパス
+        private static ColorPalette m_ColorPalette;
 
         static StyleHierarchy()
         {
-            dataArray = AssetDatabase.FindAssets("t:ColorPalette");
+            m_dataArray = AssetDatabase.FindAssets("t:ColorPalette");
 
-            if (dataArray.Length >= 1)
-            {    //We have only one color palette, so we use dataArray[0] to get the path of the file
-                path = AssetDatabase.GUIDToAssetPath(dataArray[0]);
+            if (m_dataArray.Length >= 1)
+            {
+                // 複数のカラーパレットがある場合GUID[0]のものしか使用しない
+                m_path = AssetDatabase.GUIDToAssetPath(m_dataArray[0]);
 
-                colorPalette = AssetDatabase.LoadAssetAtPath<ColorPalette>(path);
+                m_ColorPalette = AssetDatabase.LoadAssetAtPath<ColorPalette>(m_path);
 
                 EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindow;
             }
         }
 
-        private static void OnHierarchyWindow(int instanceID, Rect selectionRect)
+        private static void OnHierarchyWindow(int instanceID_, Rect selectionRect_)
         {
+            // このツールを最初にインポートしたときにエラーがでないように　翻訳あってる？
             //To make sure there is no error on the first time the tool imported in project
-            if (dataArray.Length == 0) return;
+            if (m_dataArray.Length == 0) return;
 
-            UnityEngine.Object instance = EditorUtility.InstanceIDToObject(instanceID);
+            Object _instance = EditorUtility.InstanceIDToObject(instanceID_);
 
-            if (instance != null)
+            if (_instance != null)
             {
-                for (int i = 0; i < colorPalette.colorDesigns.Count; i++)
+                for (int i = 0, count = m_ColorPalette.ColorDesigns.Count; i < count; i++)
                 {
-                    var design = colorPalette.colorDesigns[i];
-
-                    //Check if the name of each gameObject is begin with keyChar in colorDesigns list.
-                    #region 改変箇所
-                    //instance.name.StartsWith(design.keyChar)から名前が一致するものに変更
-                    if(instance.name == design.keyChar)
-                    #endregion
+                    if (State(_instance, selectionRect_, m_ColorPalette.ColorDesigns[i]))
                     {
-                        #region 改変箇所
-                        //Remove the symbol(keyChar) from the name.
-                        string newName = instance.name;
-                        //newName = newName.Substring(design.keyChar.Length);
-                        //newName = newName.ToUpper();
-                        #endregion
-
-                        //Draw a rectangle as a background, and set the color.
-                        EditorGUI.DrawRect(selectionRect, design.backgroundColor);
-
-                        //Create a new GUIStyle to match the desing in colorDesigns list.
-                        GUIStyle newStyle = new GUIStyle
-                        {
-                            alignment = design.textAlignment,
-                            fontStyle = design.fontStyle,
-                            normal = new GUIStyleState()
-                            {
-                                textColor = design.textColor,
-                            }
-                        };
-
-                        #region 改変箇所
-                        //Draw a label to show the name in upper letters and newStyle.
-                        //If you don't like all capital latter, you can remove ".ToUpper()".
-                        EditorGUI.LabelField(selectionRect, newName, newStyle);
-                        #endregion
+                        break;
                     }
                 }
             }
+        }
+
+        private static bool State(Object instance_, Rect selectionRect_, ColorDesign design_)
+        {
+            switch (design_.State)
+            {
+                case ColorDesign.KeyState.Equal:
+                    {
+                        // 名前が全て一致するか
+                        if (instance_.name == design_.KeyName)
+                        {
+                            var _newName = instance_.name;
+                            switch (design_.Case)
+                            {
+                                case ColorDesign.CaseState.Default: break;
+                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
+                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
+                            }
+
+                            // バックグラウンドに描画して色を設定する
+                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
+
+                            // カラーパレットの指定通りのスタイルを新しく作る
+                            var _newStyle = new GUIStyle()
+                            {
+                                alignment = design_.TextAlignment,
+                                fontStyle = design_.FontStyle,
+                                normal = new GUIStyleState()
+                                {
+                                    textColor = design_.TextColor,
+                                },
+                            };
+
+                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
+                            // 改造しているのでそんな必要はない
+                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+
+                            return true;
+                        }
+                    }
+                    break;
+                case ColorDesign.KeyState.Begin:
+                    {
+                        // 最初に見つけた文字列が一致しているか
+                        if (instance_.name.StartsWith(design_.KeyName))
+                        {
+                            var _newName = instance_.name;
+
+                            switch (design_.Case)
+                            {
+                                case ColorDesign.CaseState.Default: break;
+                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
+                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
+                            }
+
+                            // バックグラウンドに描画して色を設定する
+                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
+
+                            // カラーパレットの指定通りのスタイルを新しく作る
+                            var _newStyle = new GUIStyle()
+                            {
+                                alignment = design_.TextAlignment,
+                                fontStyle = design_.FontStyle,
+                                normal = new GUIStyleState()
+                                {
+                                    textColor = design_.TextColor,
+                                },
+                            };
+
+                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
+                            // 改造しているのでそんな必要はない
+                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+
+                            return true;
+                        }
+                    }
+                    break;
+                case ColorDesign.KeyState.BeginDelete:
+                    {
+                        // 最初に見つけた文字列が一致しているか
+                        if (instance_.name.StartsWith(design_.KeyName))
+                        {
+                            var _newName = instance_.name;
+                            _newName = _newName.Substring(design_.KeyName.Length);
+                            _newName = _newName.ToUpper();
+
+                            switch (design_.Case)
+                            {
+                                case ColorDesign.CaseState.Default: break;
+                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
+                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
+                            }
+
+                            // バックグラウンドに描画して色を設定する
+                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
+
+                            // カラーパレットの指定通りのスタイルを新しく作る
+                            var _newStyle = new GUIStyle()
+                            {
+                                alignment = design_.TextAlignment,
+                                fontStyle = design_.FontStyle,
+                                normal = new GUIStyleState()
+                                {
+                                    textColor = design_.TextColor,
+                                },
+                            };
+
+                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
+                            // 改造しているのでそんな必要はない
+                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+
+                            return true;
+                        }
+                    }
+                    break;
+            }
+
+            return false;
         }
     }
 }

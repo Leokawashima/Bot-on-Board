@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -25,6 +26,7 @@ public class DeckCardDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         m_card = card_;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private Vector2 GetMousePosition(PointerEventData eventData_)
     {
         return eventData_.position - m_DISPLAY_SIZE;

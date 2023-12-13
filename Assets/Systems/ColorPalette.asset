@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7edb8eb7125ea44f68bbe616b44fa9bc, type: 3}
+  m_Name: ColorPalette
+  m_EditorClassIdentifier: 
+  ColorDesigns:
+  - State: 0
+    KeyName: Manager
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.3614275, g: 0.5849056, b: 0.5849056, a: 1}
+    TextAlignment: 4
+    FontStyle: 3
+    Case: 0
+  - State: 0
+    KeyName: Main Camera
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.07008721, g: 0.4245283, b: 0.32983947, a: 1}
+    TextAlignment: 3
+    FontStyle: 2
+    Case: 0
+  - State: 0
+    KeyName: Canvas Camera
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.468349, g: 0.077830195, b: 0.5, a: 1}
+    TextAlignment: 3
+    FontStyle: 2
+    Case: 0
+  - State: 0
+    KeyName: Cameras List
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.33962262, g: 0.05286579, b: 0.11336436, a: 1}
+    TextAlignment: 4
+    FontStyle: 2
+    Case: 0
+  - State: 0
+    KeyName: Directional Light
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.4636571, g: 0.4811321, b: 0.19744574, a: 1}
+    TextAlignment: 3
+    FontStyle: 2
+    Case: 0
+  - State: 0
+    KeyName: EventSystem
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.12055002, g: 0.18928565, b: 0.5943396, a: 1}
+    TextAlignment: 3
+    FontStyle: 2
+    Case: 0
+  - State: 0
+    KeyName: Level
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.10524209, g: 0.4056604, b: 0.15506966, a: 1}
+    TextAlignment: 4
+    FontStyle: 3
+    Case: 0
+  - State: 0
+    KeyName: Canvas
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.335296, g: 0.0485938, b: 0.49056602, a: 1}
+    TextAlignment: 4
+    FontStyle: 3
+    Case: 0
+  - State: 1
+    KeyName: SubCanvas
+    TextColor: {r: 1, g: 1, b: 1, a: 1}
+    BackGroundColor: {r: 0.7529412, g: 0.0485938, b: 0.49056602, a: 1}
+    TextAlignment: 3
+    FontStyle: 2
+    Case: 0
