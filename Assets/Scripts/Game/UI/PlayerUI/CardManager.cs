@@ -18,7 +18,7 @@ public class CardManager : MonoBehaviour
     {
         get
         {
-            return m_toggleGroup.ActiveToggles().FirstOrDefault().
+            return m_toggleGroup.ActiveToggles().FirstOrDefault()?.
                 GetComponent<MapObjectCard>();
         }
     }
