@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Position: {x: 0, y: 0}
-  ElapsedTurn: 0
+  <Components>k__BackingField: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &9018356999264320952
 PrefabInstance:
   m_ObjectHideFlags: 0
