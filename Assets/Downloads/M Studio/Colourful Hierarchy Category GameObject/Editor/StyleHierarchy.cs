@@ -9,8 +9,11 @@ namespace MStudio
     [InitializeOnLoad]
     public class StyleHierarchy
     {
-        private static string[] m_dataArray; // カラーパレットテーブルのGUID
-        private static string m_path; // カラーパレットテーブルのパス
+        // カラーパレットテーブルのGUID
+        private static string[] m_dataArray;
+        // カラーパレットテーブルのパス
+        private static string m_path;
+        // キャッシュフィールド
         private static ColorPalette m_ColorPalette;
 
         static StyleHierarchy()
@@ -58,30 +61,8 @@ namespace MStudio
                         if (instance_.name == design_.KeyName)
                         {
                             var _newName = instance_.name;
-                            switch (design_.Case)
-                            {
-                                case ColorDesign.CaseState.Default: break;
-                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
-                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
-                            }
 
-                            // バックグラウンドに描画して色を設定する
-                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
-
-                            // カラーパレットの指定通りのスタイルを新しく作る
-                            var _newStyle = new GUIStyle()
-                            {
-                                alignment = design_.TextAlignment,
-                                fontStyle = design_.FontStyle,
-                                normal = new GUIStyleState()
-                                {
-                                    textColor = design_.TextColor,
-                                },
-                            };
-
-                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
-                            // 改造しているのでそんな必要はない
-                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+                            Draw(_newName, selectionRect_, design_);
 
                             return true;
                         }
@@ -94,30 +75,7 @@ namespace MStudio
                         {
                             var _newName = instance_.name;
 
-                            switch (design_.Case)
-                            {
-                                case ColorDesign.CaseState.Default: break;
-                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
-                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
-                            }
-
-                            // バックグラウンドに描画して色を設定する
-                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
-
-                            // カラーパレットの指定通りのスタイルを新しく作る
-                            var _newStyle = new GUIStyle()
-                            {
-                                alignment = design_.TextAlignment,
-                                fontStyle = design_.FontStyle,
-                                normal = new GUIStyleState()
-                                {
-                                    textColor = design_.TextColor,
-                                },
-                            };
-
-                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
-                            // 改造しているのでそんな必要はない
-                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+                            Draw(_newName, selectionRect_, design_);
 
                             return true;
                         }
@@ -131,30 +89,7 @@ namespace MStudio
                             var _newName = instance_.name;
                             _newName = _newName.Substring(design_.KeyName.Length);
 
-                            switch (design_.Case)
-                            {
-                                case ColorDesign.CaseState.Default: break;
-                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
-                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
-                            }
-
-                            // バックグラウンドに描画して色を設定する
-                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
-
-                            // カラーパレットの指定通りのスタイルを新しく作る
-                            var _newStyle = new GUIStyle()
-                            {
-                                alignment = design_.TextAlignment,
-                                fontStyle = design_.FontStyle,
-                                normal = new GUIStyleState()
-                                {
-                                    textColor = design_.TextColor,
-                                },
-                            };
-
-                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
-                            // 改造しているのでそんな必要はない
-                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+                            Draw(_newName, selectionRect_, design_);
 
                             return true;
                         }
@@ -167,30 +102,7 @@ namespace MStudio
                         {
                             var _newName = instance_.name;
 
-                            switch (design_.Case)
-                            {
-                                case ColorDesign.CaseState.Default: break;
-                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
-                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
-                            }
-
-                            // バックグラウンドに描画して色を設定する
-                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
-
-                            // カラーパレットの指定通りのスタイルを新しく作る
-                            var _newStyle = new GUIStyle()
-                            {
-                                alignment = design_.TextAlignment,
-                                fontStyle = design_.FontStyle,
-                                normal = new GUIStyleState()
-                                {
-                                    textColor = design_.TextColor,
-                                },
-                            };
-
-                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
-                            // 改造しているのでそんな必要はない
-                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+                            Draw(_newName, selectionRect_, design_);
 
                             return true;
                         }
@@ -204,30 +116,7 @@ namespace MStudio
                             var _newName = instance_.name;
                             _newName = _newName.Substring(0, instance_.name.Length - design_.KeyName.Length);
 
-                            switch (design_.Case)
-                            {
-                                case ColorDesign.CaseState.Default: break;
-                                case ColorDesign.CaseState.ToUpper: _newName = _newName.ToUpper(); break;
-                                case ColorDesign.CaseState.ToLower: _newName = _newName.ToLower(); break;
-                            }
-
-                            // バックグラウンドに描画して色を設定する
-                            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
-
-                            // カラーパレットの指定通りのスタイルを新しく作る
-                            var _newStyle = new GUIStyle()
-                            {
-                                alignment = design_.TextAlignment,
-                                fontStyle = design_.FontStyle,
-                                normal = new GUIStyleState()
-                                {
-                                    textColor = design_.TextColor,
-                                },
-                            };
-
-                            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
-                            // 改造しているのでそんな必要はない
-                            EditorGUI.LabelField(selectionRect_, _newName, _newStyle);
+                            Draw(_newName, selectionRect_, design_);
 
                             return true;
                         }
@@ -236,6 +125,34 @@ namespace MStudio
             }
 
             return false;
+        }
+
+        private static void Draw(string name_, Rect selectionRect_, ColorDesign design_)
+        {
+            switch (design_.Case)
+            {
+                case ColorDesign.CaseState.Default: break;
+                case ColorDesign.CaseState.ToUpper: name_ = name_.ToUpper(); break;
+                case ColorDesign.CaseState.ToLower: name_ = name_.ToLower(); break;
+            }
+
+            // バックグラウンドに描画して色を設定する
+            EditorGUI.DrawRect(selectionRect_, design_.BackGroundColor);
+
+            // カラーパレットの指定通りのスタイルを新しく作る
+            var _newStyle = new GUIStyle()
+            {
+                alignment = design_.TextAlignment,
+                fontStyle = design_.FontStyle,
+                normal = new GUIStyleState()
+                {
+                    textColor = design_.TextColor,
+                },
+            };
+
+            // デフォルトの処理で描画すっけど気に入らねえなら自分でToUpper消してな？(意訳)
+            // 改造しているのでそんな必要はない
+            EditorGUI.LabelField(selectionRect_, name_, _newStyle);
         }
     }
 }
