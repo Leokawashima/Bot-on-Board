@@ -62,7 +62,7 @@ MonoBehaviour:
     TextAlignment: 4
     FontStyle: 3
     Case: 0
-  - State: 0
+  - State: 1
     KeyName: Canvas
     TextColor: {r: 1, g: 1, b: 1, a: 1}
     BackGroundColor: {r: 0.335296, g: 0.0485938, b: 0.49056602, a: 1}
@@ -76,3 +76,10 @@ MonoBehaviour:
     TextAlignment: 3
     FontStyle: 2
     Case: 0
+  - State: 1
+    KeyName: TEST
+    TextColor: {r: 0, g: 0, b: 0, a: 1}
+    BackGroundColor: {r: 1, g: 1, b: 0.047058824, a: 1}
+    TextAlignment: 4
+    FontStyle: 3
+    Case: 1

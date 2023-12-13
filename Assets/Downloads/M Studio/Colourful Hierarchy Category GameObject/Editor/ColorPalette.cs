@@ -33,6 +33,8 @@ namespace MStudio
             Equal,
             Begin,
             BeginDelete,
+            End,
+            EndDelete,
         }
 
         public enum CaseState
