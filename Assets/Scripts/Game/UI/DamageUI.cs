@@ -19,7 +19,7 @@ public class DamageUI : MonoBehaviour
         IsUsed = true;
         m_text.gameObject.SetActive(true);
         var _rect = m_text.transform as RectTransform;
-        _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, ai_.transform.position) - new Vector2(1920 / 2.0f, 1080 / 2.0f);
+        _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, ai_.transform.position);
 
         m_text.text = power_.ToString();
         yield return new WaitForSeconds(2.0f);
