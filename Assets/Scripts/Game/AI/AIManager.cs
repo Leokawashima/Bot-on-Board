@@ -40,7 +40,7 @@ public class AIManager : MonoBehaviour
 
     public void Initialize()
     {
-        for(int i = 0; i < 2; ++i)//人数分処理する　現在は2固定
+        for (int i = 0; i < 2; ++i)//人数分処理する　現在は2固定
         {
             var _ai = Instantiate(m_AIPrefab, transform);
             _ai.Spawn(i, $"AI:{i}", new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
@@ -65,9 +65,9 @@ public class AIManager : MonoBehaviour
 
     public bool CheckAIIsDead()//誰か死んだ時点でtrueを返している
     {
-        foreach(var _ai in m_AIList)
+        foreach (var _ai in m_AIList)
         {
-            if(_ai.AIAliveState == AISystem.AliveState.Dead)
+            if (_ai.AIAliveState == AISystem.AliveState.Dead)
             {
                 return true;
             }
@@ -78,24 +78,24 @@ public class AIManager : MonoBehaviour
 
     public void AIAction()
     {
-        foreach(var _ai in m_AIList)//全員現在の状態から意思決定
+        foreach (var _ai in m_AIList)//全員現在の状態から意思決定
             _ai.Think();
 
-        foreach(var _ai in m_AIList)//意思決定後に行動
+        foreach (var _ai in m_AIList)//意思決定後に行動
             _ai.Action();
 
         //以下AI2体前提処理　時間が足りないのでこのまま
         var _isHit = false;
-        if(m_AIList[0].Position == m_AIList[1].Position) _isHit = true;//完全に同一のマスにいる
-        if(m_AIList[0].Position == m_AIList[1].PrePosition)//[0]が[1]の移動前にいた場所にいる
+        if (m_AIList[0].Position == m_AIList[1].Position) _isHit = true;//完全に同一のマスにいる
+        if (m_AIList[0].Position == m_AIList[1].PrePosition)//[0]が[1]の移動前にいた場所にいる
         {
-            if(m_AIList[0].PrePosition == m_AIList[1].Position)//[1]が[0]の移動前にいた場所にいる
+            if (m_AIList[0].PrePosition == m_AIList[1].Position)//[1]が[0]の移動前にいた場所にいる
                 _isHit = true;//つまりすれ違っているのでHit判定
         }
 
-        if(_isHit)
+        if (_isHit)
         {
-            for(int i = 0; i < 2; ++i)
+            for (int i = 0; i < 2; ++i)
             {
                 m_AIList[i].BackPosition();
                 m_AIList[i].DamageHP(0.5f);
@@ -104,7 +104,7 @@ public class AIManager : MonoBehaviour
         }
         //ここまでAI2体前提処理
 
-        foreach(var _ai in m_AIList)
+        foreach (var _ai in m_AIList)
         {
             MapManager.Singleton.AIRideChip(_ai.Position, _ai);
             MapManager.Singleton.AIHitObject(_ai.Position, _ai);
@@ -114,9 +114,9 @@ public class AIManager : MonoBehaviour
         
         IEnumerator Co_DelayMove()
         {
-            for(int i = 1; i <= 10; ++i)
+            for (int i = 1; i <= 10; ++i)
             {
-                foreach(var _ai in m_AIList)
+                foreach (var _ai in m_AIList)
                 {
                     Vector2 prepos = _ai.PrePosition;
                     Vector2 pos = _ai.Position;

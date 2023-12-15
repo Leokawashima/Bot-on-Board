@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eefbb0ec5be47c46ac0cba1f9972bec, type: 3}
-  m_Name: MCTable_SO
+  m_Script: {fileID: 11500000, guid: ebf49b53830b307498bfdcf01b5ec1b3, type: 3}
+  m_Name: MSTable
   m_EditorClassIdentifier: 
-  Table:
-  - {fileID: 11400000, guid: 1451a87488d73a246a7c18fe1c63bd81, type: 2}
-  - {fileID: 11400000, guid: baeafa06304f1614bb1ecf336cdaec2f, type: 2}
+  Table: []

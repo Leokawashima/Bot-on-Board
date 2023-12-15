@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 /// <summary>
 /// Astar探索ロジッククラス

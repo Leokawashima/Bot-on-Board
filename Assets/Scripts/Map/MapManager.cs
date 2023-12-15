@@ -80,7 +80,7 @@ namespace Map
 
         void MapCreate()
         {
-            MapState = new(m_MapStageSO.Size);
+            MapState = new(m_MapStageSO);
 
             IEnumerator Co_MapCreate()
             {

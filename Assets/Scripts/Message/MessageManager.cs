@@ -43,7 +43,7 @@ public class MessageManager : MonoBehaviour
     /// <summary>
     /// コルーチンのアクティブなものを保持するフィールド
     /// </summary>
-    private Coroutine m_activeCoroutine;
+    private Coroutine m_activeCorutine;
 
     /// <summary>
     /// 初期化処理
@@ -67,7 +67,7 @@ public class MessageManager : MonoBehaviour
         // 最初の文字を反映
         m_text.text = m_messageList[m_index];
 
-        m_activeCoroutine = StartCoroutine(CoAwake());
+        m_activeCorutine = StartCoroutine(CoAwake());
     }
 
     /// <summary>
@@ -86,20 +86,23 @@ public class MessageManager : MonoBehaviour
         // 現在のインデックスが最後の文字かどうか
         if (m_index + 1 != m_messageList.Count)
         {
-            if (m_activeCoroutine != null)
+            if (m_activeCorutine != null)
             {
-                StopCoroutine(m_activeCoroutine);
+                StopCoroutine(m_activeCorutine);
                 m_text.text = m_messageList[m_index];
             }
             m_index++;
-            m_activeCoroutine = StartCoroutine(CoFade());
+            m_activeCorutine = StartCoroutine(CoFade());
         }
         else
         {
             m_inputMap.UI.Any.started -= OnAnyInput;
             m_inputMap.Disable();
 
-            StopCoroutine(m_activeCoroutine);
+            if (m_activeCorutine != null)
+            {
+                StopCoroutine(m_activeCorutine);
+            }
             StartCoroutine(CoSceneLoad());
         }
     }
@@ -118,7 +121,7 @@ public class MessageManager : MonoBehaviour
         }
 
         m_text.SetAlpha(1);
-        m_activeCoroutine = null;
+        m_activeCorutine = null;
     }
 
     /// <summary>
@@ -142,7 +145,7 @@ public class MessageManager : MonoBehaviour
             yield return null;
         }
         m_text.SetAlpha(1);
-        m_activeCoroutine = null;
+        m_activeCorutine = null;
     }
 
     /// <summary>

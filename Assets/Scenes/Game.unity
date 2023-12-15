@@ -2515,7 +2515,7 @@ MonoBehaviour:
   m_drawObjectGizmos: 1
   m_mapChipParent: {fileID: 218901412}
   m_mapObjectParent: {fileID: 1625194054}
-  m_MapDataSO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
+  m_MapStageSO: {fileID: 11400000, guid: 76b62e31b1d2cf643b830735180a671b, type: 2}
   m_MapChipTable: {fileID: 11400000, guid: 09abf90a4512e7942988897314854d46, type: 2}
   m_MapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_WaitOnePlaceSecond: 0.05
