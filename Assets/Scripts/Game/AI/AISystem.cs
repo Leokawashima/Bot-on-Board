@@ -54,7 +54,7 @@ public class AISystem : MonoBehaviour
         PrePosition = posData_;
         transform.localPosition = new Vector3(posData_.x, 1, posData_.y) + MapManager.Singleton.Offset;
 
-        m_MapSize = MapManager.Singleton.MapDataSize;
+        m_MapSize = MapManager.Singleton.MapStageSize;
 
         MapManager.Singleton.AIManagerList.Add(this);
     }

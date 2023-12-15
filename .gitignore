@@ -10,6 +10,8 @@ obj/
 UserSettings/
 Temp/
 
-Assets/Downloads/ProPixelizer/
 Assets/Save/
 Assets/Save.meta
+
+Assets/Downloads/ProPixelizer/
+Packages/com.singularitygroup.hotreload/

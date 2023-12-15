@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Map.Chip;
 using Map.Object;
+using Map.Stage;
 
 namespace Map
 {
@@ -24,8 +25,8 @@ namespace Map
             m_mapChipParent,
             m_mapObjectParent;
 
-        [SerializeField] MapData_SO m_MapDataSO;
-        public Vector2Int MapDataSize => m_MapDataSO.Size;
+        [SerializeField] MapStage_SO m_MapStageSO;
+        public Vector2Int MapStageSize => m_MapStageSO.Size;
 
         [SerializeField] MapChipTable_SO m_MapChipTable;
         [SerializeField] MapObjectTable_SO m_MapObjectTable;
@@ -39,7 +40,7 @@ namespace Map
 
         public static event Action Event_MapCreated;
 
-        public Vector3 Offset => new(-m_MapDataSO.Size.x / 2.0f + 0.5f, 0, -m_MapDataSO.Size.y / 2.0f + 0.5f);
+        public Vector3 Offset => new(-m_MapStageSO.Size.x / 2.0f + 0.5f, 0, -m_MapStageSO.Size.y / 2.0f + 0.5f);
 
         void OnEnable()
         {
@@ -79,7 +80,7 @@ namespace Map
 
         void MapCreate()
         {
-            MapState = new(m_MapDataSO.Size);
+            MapState = new(m_MapStageSO.Size);
 
             IEnumerator Co_MapCreate()
             {
@@ -88,24 +89,24 @@ namespace Map
 
                 while (true)
                 {
-                    for (int z = 0; z < m_MapDataSO.Size.y; ++z)
+                    for (int z = 0; z < m_MapStageSO.Size.y; ++z)
                     {
-                        for (int x = 0; x < m_MapDataSO.Size.x; ++x)
+                        for (int x = 0; x < m_MapStageSO.Size.x; ++x)
                         {
                             if (_cnt == x + z)// 斜めに順生成するための判定
                             {
-                                int _index = z * m_MapDataSO.Size.x + x;
-                                if (m_MapDataSO.MapChip[_index] != -1)
+                                int _index = z * m_MapStageSO.Size.x + x;
+                                if (m_MapStageSO.MapChip[_index] != -1)
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset;
-                                    var _mc = m_MapChipTable.Table[m_MapDataSO.MapChip[_index]]
+                                    var _mc = m_MapChipTable.Table[m_MapStageSO.MapChip[_index]]
                                         .Spawn(new Vector2Int(x, z), _pos, m_mapChipParent);
                                     _mc.Initialize(this);
                                 }
-                                if (m_MapDataSO.MapObject[_index] != -1)
+                                if (m_MapStageSO.MapObject[_index] != -1)
                                 {
                                     var _pos = new Vector3(x, 0, z) + _mapOffset + Vector3.up;
-                                    var _mo = m_MapObjectTable.Data[m_MapDataSO.MapObject[_index]]
+                                    var _mo = m_MapObjectTable.Data[m_MapStageSO.MapObject[_index]]
                                         .Spawn(new Vector2Int(x, z), _pos, m_mapObjectParent);
                                     _mo.Initialize(this);
                                 }
@@ -115,7 +116,7 @@ namespace Map
 
                     ++_cnt;
 
-                    if (_cnt == m_MapDataSO.Size.x + m_MapDataSO.Size.y) break;
+                    if (_cnt == m_MapStageSO.Size.x + m_MapStageSO.Size.y) break;
 
                     yield return new WaitForSeconds(m_WaitOnePlaceSecond);
                 }
@@ -165,7 +166,7 @@ namespace Map
 
             if (m_drawChipGizmos)
             {
-                var _size = new Vector3(m_MapDataSO.Size.x, 1, m_MapDataSO.Size.y);
+                var _size = new Vector3(m_MapStageSO.Size.x, 1, m_MapStageSO.Size.y);
                 Gizmos.DrawWireCube(transform.position, _size);
             }
 
@@ -173,11 +174,11 @@ namespace Map
             {
                 if (MapState != null)
                 {
-                    var _offset = new Vector3(-m_MapDataSO.Size.x / 2.0f + 0.5f, 1, -m_MapDataSO.Size.y / 2.0f + 0.5f);
+                    var _offset = new Vector3(-m_MapStageSO.Size.x / 2.0f + 0.5f, 1, -m_MapStageSO.Size.y / 2.0f + 0.5f);
                     //二重ループなのでちょっと重い
-                    for (int y = 0; y < m_MapDataSO.Size.y; ++y)
+                    for (int y = 0; y < m_MapStageSO.Size.y; ++y)
                     {
-                        for (int x = 0; x < m_MapDataSO.Size.x; ++x)
+                        for (int x = 0; x < m_MapStageSO.Size.x; ++x)
                         {
                             if (MapState.MapObjects[y][x] != null)
                             {
@@ -189,7 +190,7 @@ namespace Map
                 }
                 else
                 {
-                    var _size = new Vector3(m_MapDataSO.Size.x, 1, m_MapDataSO.Size.y);
+                    var _size = new Vector3(m_MapStageSO.Size.x, 1, m_MapStageSO.Size.y);
                     Gizmos.color = Color.red;
                     Gizmos.DrawWireCube(transform.position + Vector3.up, _size);
                 }

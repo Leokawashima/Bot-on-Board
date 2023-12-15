@@ -19,10 +19,17 @@ public class DamageUI : MonoBehaviour
         IsUsed = true;
         m_text.gameObject.SetActive(true);
         var _rect = m_text.transform as RectTransform;
-        _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, ai_.transform.position);
 
         m_text.text = power_.ToString();
-        yield return new WaitForSeconds(2.0f);
+
+        var _elapsedTime = 0.0f;
+
+        while(_elapsedTime <= 2.0f)
+        {
+            _elapsedTime += Time.deltaTime;
+            _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, ai_.transform.position);
+            yield return null;
+        }
 
         m_text.gameObject.SetActive(false);
         IsUsed = false;

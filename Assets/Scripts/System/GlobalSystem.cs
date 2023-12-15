@@ -11,6 +11,12 @@ public static class GlobalSystem
     public static void SetMatchState(MatchState state_) { m_MatchState = state_; }
 
     public static RoomUDP.RoomState m_RoomState { get { return RoomUDP.State; } }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void AAA()
+    {
+        Debug.Log("AA");
+    }
 }
 
 namespace Name
