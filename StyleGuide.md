@@ -49,7 +49,7 @@
 | private protected フィールド | camelCase | private protected int m_playerIndex; | プレフィックス `m_` |
 | const フィールド | CONSTANT_CASE | const int PLAYER_INDEX; |
 | readonly フィールド | CONSTANT_CASE | readonly int m_PLAYER_INDEX; | プレフィックス `m_` |
-| private / protected static フィールド | PascalCase | private static int m_PlayerIndex; | プレフィックス `m_` |
+| private / protected static フィールド | camelCase | private static int s_playerIndex; | プレフィックス `s_` |
 | public / internal static フィールド | PascalCase | public static int PlayerIndex; |
 | ローカル変数 | camelCase | int _playerIndex; | プレフィックス `_` |
 | 引数 / パラメーター | camelCase | (int playerIndex_) | サフィックス `_` |
@@ -58,7 +58,7 @@
 #### 変数名省略について
 このプロジェクトではフィールドの変数名を省略したものにすることを禁じます。  
 具体的にはカウントの変数を`Cnt`と省略すること禁じます。  
-ローカル変数はその限りではありません。  
+ローカル変数や引数はその限りではありません。  
 具体的にはゲームオブジェクトを`go`と省略することを許容します。  
 しかし、使用されているスコープ内で似通った意味合いを持つ変数等がある場合に省略を多用することは好ましくありません。  
 使用範囲が限定されている場合のみ許容されているということを念頭に命名をしてください。 
@@ -67,7 +67,7 @@
 具体的には  
 `m_maxValue`と`m_minValue`  
 と命名することはせず、  
-`m_valueMax`と`m_minValue`  
+`m_valueMax`と`m_ValueMin`  
 と命名します。  
 条件としては特定の変数、仮に`value`の最大値、最小値、現在値等を変数として宣言する場合です。  
 これは形容詞が対義語であるなどの場合問題ないですが、2つ以上の変数がある、  
@@ -97,7 +97,7 @@ public class PlayerData : MonoBehaviour
     /// <summary>
     /// プレイヤーのインデックスを初期化する処理
     /// </summary>
-    void InitializeIndex()
+    private void InitializeIndex()
     {
         // 記述...
     }
@@ -114,7 +114,7 @@ public class PlayerData : MonoBehaviour
 // K&R
 namespace PlayerData {
 	public class PlayerData	{
-      // 記述...
+      		// 記述...
 	}
 }
 
@@ -129,24 +129,27 @@ namespace PlayerData
 ```
 
 #### コードルールについて
-* privateを明示的に宣言しないものとします。  
-  これはUnityEventのStart()等も同様で、privateは必ず削除します。  
+* privateを明示的に宣言するものとします。 
+  これはStart等のマジックメソッドにデフォルトで実装されるものを消去する手間と、
+  いろいろな人に書いといたほうが良いよと言われた為です(一敗)  
 ``` CSharp
-  int m_hoge;
-  void Start()
+  private int m_hoge;
+  private void Start()
 　{
 　　// 記述...
 　}
 ```
 * bool値のif文は`!`での反転を行った判定を禁じます。  
   これは簡潔に記述できるもののコードリーディングを行う際に見落とす可能性を考慮したものです。  
-  `==`を`=`にしてしまう記述ミスでのバグが生まれる可能性もありますが、気にしないものとします。  
+  `==`を`=`にしてしまう記述ミスでのバグが生まれる可能性もありますが、気にしないものとします。
+  具体的には反転したい場合'false =='から始まる記述を遵守してください。
+  'false'が後部にある場合反転するのかが後部を確認するまでわからない為です。
 ``` CSharp
   if (m_isOpen)
   {
       // 記述...
 　}
-  if (m_isPlaying == false)
+  if (false == m_isPlaying)
   {
       // 記述...
   }
@@ -156,19 +159,21 @@ namespace PlayerData
   Awakeでは他のコンポーネントを参照、取得以外の初期化を行い、  
   StartではAwakeでできなかった初期化処理を記述します。  
 ``` CSharp
-  [SerializeField] int m_MapSizeX = 10;
-  [SerializeField] int m_MapSizeY = 5;
-  readonly Vector2Int m_MAP_SIZE;
+  [SerializeField]
+  private int m_MapSizeX = 10;
+  [SerializeField]
+  private int m_MapSizeY = 5;
+  private readonly Vector2Int m_MAP_SIZE;
   // MapManager 型
-  readonly MapManager m_MAP_MANAGER;
+  private readonly MapManager m_MAP_MANAGER;
 
-  void Awake()
+  private void Awake()
   {
     // 参照、取得なしでできる初期化を行う(Vector2Intを[SerializeField]しろは言わないでね)
-    m_MAP_SIZE = new Vector2Int(m_MapSizeX, m_MapSizeY);
+    m_MAP_SIZE = new(m_MapSizeX, m_MapSizeY);
   }
 
-   void Start()
+  private void Start()
   {
 　　// 相手のシングルトンインスタンスを取得する
     // MapManager.Singleton はAwakeで初期化されている
@@ -192,7 +197,7 @@ namespace PlayerData
 ``` CSharp
   // Indexという扱いをする変数なため配列のキーとして使用すること。
   // int型へのキャストが必要になり数値が失われる可能性などが存在する為int型で宣言
-  readonly int m_playerIndex;
+  private readonly int m_playerIndex;
   public int PlayerIndex => m_playerIndex;
 
   // コンストラクタ内
@@ -202,22 +207,64 @@ namespace PlayerData
   }
   m_playerIndex = index_
 ```
+   次に動的にクラス内部で変更されるが外部公開したい変数、外部から変更の恐れのある変数の記述です。  
+   単に公開する場合はプロパティ化しセッターはprivate属性にする事で解決できます。  
+   外部から変更の恐れのある変数は単純な代入チェックを行う場合はセッターを改変し、  
+   複雑な代入チェックなどが必要になる場合はクラスとして独立させる事や関数かすることで設計を改善することが必要になります。
+1. public int HP;
+2. public int Attack;
+``` CSharp
+  // 外部公開する変数
+  // もしInspectorに表示したいは、[field: SerializeField]を付与する
+  // ダメージないし回復は別にメソッドを定義する事。　変数から参照は追えるが、加算減算をそれぞれ追うことは難しいため
+  public int HP { get; private set; }
+
+  // 外部から変更の恐れのある変数
+  // 最低限の記述で済ませる場合
+  public int Attack
+  {
+	get;
+	set
+	{
+	  if (value < 0)
+	  	Debug.Log("0以下の値が代入されています");
+	  else
+	  	Attack = value;
+	}
+  }
+```
 * varやnew()のような型推論、初期化を省略する書き方について。  
   原則この記述を積極的に活用してコーディングします。  
   これはコードの修正が必要な場面等でクラス型などを使用している場合は修正箇所を減らすことができ、  
   宣言時も型名が著しく長くなってしまい変数名を追いづらくなる事態を避けることができる為です。  
   しかし、int, float, double等の数値の取り扱いをvarで記述すると初期化する値次第でヒューマンエラーが発生します。  
   もちろんvarで宣言したほうが簡潔であったり複数の変数を宣言したい場合名前の開始位置を統一できる等活用すべき時もあります。  
-  そのため、この記述に関してはコードライターに委ねます。  
+  そのため、この記述に関しては記述者に委ねます。  
   読み手にとって理解しやすいか、読みやすいかを意識して記述することを念頭に置いてください。  
   また、変数宣言を行うときは念入りにバグが発生することのないように読み返すこと。  
 ``` CSharp
   // この場合はクラス名にも問題はあるがvarを積極採用
   var _classObject = new TooLongClassNameHogeHuga();
   // この場合はvar宣言を推奨するがAStarArgorithm型で宣言しても良い。
-  var _classObject = new AStarAlgorithm();
+  // その場合は new();で初期化することを推奨する。
+  var _classObject1 = new AStarAlgorithm();
+  AStarAlgorithm _classObject2 = new();
 
   // この場合は_playerHPは本当に0で初期化していいのか？0.0fじゃなくていいのか？
   var _playerIndex = 0;
   var _playerHP = 0;
  ```
+
+* タプル式について。  
+  使用可能ですが、過度な使用は推奨しません。  
+  これは匿名の型である以上、大きさと内容が乱雑に違うものが宣言されていては可読性を著しく損なう恐れがある為です。  
+  適度でわかりやすく、また積極的に名前が付けられているものであれば尚よいです。  
+  
+* 文字列結合について。
+  一般的にStringBuilderでの結合がメモリアロケーションの観点から見て速度、効率ともに良いという結果があるのですが、
+  2023/12/15日時点での10万回の'+='と'.Append()'の比較を試したところ'.Append'のほうがわずかに遅いという結果が得られました。
+  これは年月の経過によりVisualStudioがより効率的なコンパイルをするようになった為なのか、  
+  それとも速度的には少し劣るが内部的にメモリ効率はいいままなのか、詳しい結果は細かく確認していない為わかりません。  
+  しかし、'+='での実装は依然追いにくいため、結合についてはStringBuilderでの実装を推奨します。  
+  それ以外の文字列操作については記述者に委ねます。  
+  ZStringBuilderというライブラリを開発している方がいらっしゃったので、興味がある人は。  
