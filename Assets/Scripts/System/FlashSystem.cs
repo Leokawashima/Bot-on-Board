@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// オブジェクトをアクティブ非アクティブに切り替えるクラス
 /// </summary>
-public class FlashSystem : MonoBehaviour
+public class FlashSystem : CorutineMonoBehaivour
 {
     /// <summary>
     /// 対象のオブジェクト
@@ -26,46 +25,9 @@ public class FlashSystem : MonoBehaviour
     private float m_time = 1;
 
     /// <summary>
-    /// フラッシュ終了時に呼ばれるコールバック
-    /// </summary>
-    public event Action OnFinished;
-
-    /// <summary>
-    /// コルーチンのアクティブなものを保持するフィールド
-    /// </summary>
-    private Coroutine m_activeCorutine;
-
-    /// <summary>
-    /// フラッシュさせる
-    /// </summary>
-    public void Flash()
-    {
-        if (m_activeCorutine == null)
-        {
-            m_activeCorutine = StartCoroutine(CoFlash());
-        }
-#if UNITY_EDITOR
-        else
-        {
-            Debug.Log("既にフラッシュを行っているため呼び出しを破棄します");
-        }
-#endif
-    }
-
-    /// <summary>
-    /// フラッシュを停止する
-    /// </summary>
-    public void Stop()
-    {
-        // ヌルなら例外がスローされるため独自に例外処理を組み込む必要はない
-        StopCoroutine(m_activeCorutine);
-        m_activeCorutine = null;
-    }
-
-    /// <summary>
     /// フラッシュを行うコルーチン
     /// </summary>
-    private IEnumerator CoFlash()
+    protected override IEnumerator CoProcess()
     {
         float _perFlashTime = m_time / m_count / 2.0f;
         for (int i = 0; i < m_count; ++i)
@@ -75,8 +37,5 @@ public class FlashSystem : MonoBehaviour
             m_target.SetActive(true);
             yield return new WaitForSeconds(_perFlashTime);
         }
-
-        OnFinished?.Invoke();
-        m_activeCorutine = null;
     }
 }

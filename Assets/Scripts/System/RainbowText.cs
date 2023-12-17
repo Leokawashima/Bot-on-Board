@@ -5,7 +5,7 @@ using TMPro;
 /// <summary>
 /// TMP_Textをレインボーに変化させるクラス
 /// </summary>
-public class RainbowTextSystem : MonoBehaviour
+public class RainbowText : CorutineMonoBehaivour
 {
     /// <summary>
     /// 色を変化させるテキスト
@@ -25,33 +25,7 @@ public class RainbowTextSystem : MonoBehaviour
     [SerializeField]
     private float m_speed = 1.0f;
 
-    /// <summary>
-    /// コルーチンのアクティブなものを保持するフィールド
-    /// </summary>
-    private Coroutine m_activeCorutine;
-
-    /// <summary>
-    /// レインボーさせる
-    /// </summary>
-    public void Rainbow()
-    {
-        m_activeCorutine = StartCoroutine(CoRainbow());
-    }
-
-    /// <summary>
-    /// レインボーを停止する
-    /// </summary>
-    public void Stop()
-    {
-        // ヌルなら例外がスローされるため独自に例外処理を組み込む必要はない
-        StopCoroutine(m_activeCorutine);
-        m_activeCorutine = null;
-    }
-
-    /// <summary>
-    /// レインボーを行うコルーチン
-    /// </summary>
-    private IEnumerator CoRainbow()
+    protected override IEnumerator CoProcess()
     {
         // 最初の色をHSV形式に変換して彩度のみ抽出
         Color.RGBToHSV(m_startColor, out float _h, out _, out _);

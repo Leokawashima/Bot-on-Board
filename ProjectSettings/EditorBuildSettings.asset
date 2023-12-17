@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/System.unity
+    guid: f6b6a3566663b824a97247ee6fc3a9c0
+  - enabled: 1
     path: Assets/Scenes/Message.unity
     guid: 21cd08c704f4cee49a7dfeb681cdc1b1
   - enabled: 1
@@ -14,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Deck.unity
     guid: 6d73498cb38caf84aa4c91eab39649ff
+  - enabled: 1
+    path: Assets/Scenes/GameMode.unity
+    guid: 5d70a81fc3ef4aa40b13c95a3bcbe8e4
+  - enabled: 1
+    path: Assets/Scenes/Room.unity
+    guid: 86c3aa347a7cde8499439afc4fa5d768
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 5b24dabba53bdcc4f9cbe3950c5e4e05

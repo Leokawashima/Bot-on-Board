@@ -91,18 +91,18 @@ public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
             StopCoroutine(m_activeCorutine);
             m_activeCorutine = null;
             SelectChip.Material.color = m_selectColor.main;
-            SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLine);
+            // SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLine);
         }
     }
     IEnumerator CoHighLight(MapChip chip_)
     {
         m_selectColor.main = chip_.Material.color;
-        m_selectColor.outLine = chip_.Material.GetColor("_OutlineColor");
+        // m_selectColor.outLine = chip_.Material.GetColor("_OutlineColor");
 
         float _h, _v;
         Color.RGBToHSV(chip_.Material.color, out _h, out _, out _v);
 
-        chip_.Material.SetColor("_OutlineColor", Color.blue);
+        // chip_.Material.SetColor("_OutlineColor", Color.blue);
 
         while (true)
         {

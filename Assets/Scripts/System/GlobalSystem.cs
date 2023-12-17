@@ -1,21 +1,25 @@
-﻿using UnityEngine;
-using RoomUDPSystem;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using Game;
 
 public static class GlobalSystem
 {
     public static bool IsPause { get; private set; }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetPause(bool pause_) { IsPause = pause_; }
 
-    public enum MatchState { Non, Tutorial, Local, Multi }
-    public static MatchState m_MatchState { get; private set; }
-    public static void SetMatchState(MatchState state_) { m_MatchState = state_; }
-
-    public static RoomUDP.RoomState m_RoomState { get { return RoomUDP.State; } }
+    public static GameModeState GameMode { get; private set; }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SetGameMode(GameModeState state_) { GameMode = state_; }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void AAA()
+    private static void OnRuntimeInitialize()
     {
-        Debug.Log("AA");
+        SetPause(false);
+        SetGameMode(GameModeState.Non);
+        
+        SceneManager.LoadScene(Name.Scene.System, LoadSceneMode.Additive);
     }
 }
 
@@ -23,10 +27,13 @@ namespace Name
 {
     public static class Scene
     {
+        public const string System = "System";
         public const string Message = "Message";
         public const string Title = "Title";
+        public const string Deck = "Deck";
+        public const string GameMode = "GameMode";
+        public const string Room = "Room";
         public const string Game = "Game";
-        //public const string GameMode = "GameMode";//チュートリアルローカルマルチを選択するシーン
         public const string Result = "Result";
     }
 
@@ -42,22 +49,13 @@ namespace Name
         public const int Default = 0;
         public const int TransparentFX = 1;
         public const int IgnoreRaycast = 2;
+
         public const int Water = 4;
         public const int UI = 5;
+
         public const int PostProcess = 9;
         public const int OutLine = 10;
         public const int Map = 11;
-    }
-
-    public static class AudioMixer
-    {
-        public static class Volume
-        {
-            public const string Master = "Volume_Master";
-            public const string BGM = "Volume_BGM";
-            public const string SE = "Volume_SE";
-            public const string UI = "Volume_UI";
-        }
     }
 
     public static class FilePath

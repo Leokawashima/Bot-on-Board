@@ -815,7 +815,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b646cfbbaae7654c909eb9fb5047811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_mapObjectTable: {fileID: 11400000, guid: 22171d2801967694a95b81d8ad73a9be, type: 2}
   m_cardTable: {fileID: 11400000, guid: 34543ea3060d0f6428f8c6b5b76b46a4, type: 2}
 --- !u!1 &1285434159689109361
 GameObject:
@@ -1571,8 +1570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98e5ff35a499014489d162112e8b255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ToggleGroup: {fileID: 9183808950083482611}
-  m_AIOrder: {fileID: 8245634083912547314, guid: f6c25273f6f21ca489b99ab4bfa2a604, type: 3}
+  m_toggleGroup: {fileID: 9183808950083482611}
+  m_prefab: {fileID: 8245634083912547314, guid: f6c25273f6f21ca489b99ab4bfa2a604, type: 3}
   m_AIOrderArray: []
 --- !u!1 &7631444385680786357
 GameObject:

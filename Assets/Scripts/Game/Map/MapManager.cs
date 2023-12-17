@@ -5,7 +5,7 @@ using UnityEngine;
 using Map.Chip;
 using Map.Object;
 using Map.Stage;
-using AI;
+using Game;
 
 namespace Map
 {

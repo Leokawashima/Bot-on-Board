@@ -29,13 +29,13 @@ public class TitleMenu : MonoBehaviour
 
     void OnEnable()
     {
-        EscMenuManager.Event_EscMenuOpen += Disable;
-        EscMenuManager.Event_EscMenuClose += Enable;
+        EscMenuManager.Event_Open += Disable;
+        EscMenuManager.Event_Close += Enable;
     }
     void OnDisable()
     {
-        EscMenuManager.Event_EscMenuOpen -= Disable;
-        EscMenuManager.Event_EscMenuClose -= Enable;
+        EscMenuManager.Event_Open -= Disable;
+        EscMenuManager.Event_Close -= Enable;
     }
 
     public void Initialize()

@@ -12,13 +12,13 @@ public class EscMenuManager : MonoBehaviour
     [SerializeField] private Button m_closeButton;
     [SerializeField] private SoundVolumeManager m_soundVolumeManager;
 
-    public static Action Event_EscMenuOpen;
-    public static Action Event_EscMenuClose;
-
-    bool m_isOpen = false;
+    public static Action
+        Event_Open,
+        Event_Close;
 
     void Start()
     {
+        m_canvas.enabled = false;
         m_closeButton.onClick.AddListener(Close);
 
         // サウンド初期化とファイル読み込み
@@ -29,28 +29,35 @@ public class EscMenuManager : MonoBehaviour
     public void Switch()
     {
         // わかりやすさ重視
-        if(false == m_isOpen)
+        if(false == GlobalSystem.IsPause)
+        {
             Open();
+        }
         else
+        {
             Close();
+        }
     }
 
     void Open()
     {
+        GlobalSystem.SetPause(true);
         m_audio.Play();
-        m_isOpen = true;
-        m_canvas.gameObject.SetActive(true);
+        m_canvas.enabled = true;
 
-        Event_EscMenuOpen?.Invoke();
+        Event_Open?.Invoke();
     }
 
     void Close()
     {
         m_audio.Play();
-        m_isOpen = false;
-        if (m_soundVolumeManager.IsDirty) m_soundVolumeManager.Save();
-        m_canvas.gameObject.SetActive(false);
+        if (m_soundVolumeManager.IsDirty)
+        {
+            m_soundVolumeManager.Save();
+        }
+        m_canvas.enabled = false;
 
-        Event_EscMenuClose?.Invoke();
+        Event_Close?.Invoke();
+        GlobalSystem.SetPause(false);
     }
 }

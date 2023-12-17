@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using AI;
+using Game;
 
 /// <summary>
 /// GUI全般の管理クラス
@@ -50,24 +51,24 @@ public class GUIManager : MonoBehaviour
 
     void OnInitialize()
     {
-        m_turnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_turnCountManager.SetTurn(GameManager.Singleton.TurnElapsed);
         m_DamageUIManager.Initialize();
 
         m_playerUIManager.Initialize();
     }
     void OnTurnInitialize()
     {
-        m_turnCountManager.SetTurn(GameManager.Singleton.ElapsedTurn);
+        m_turnCountManager.SetTurn(GameManager.Singleton.TurnElapsed);
         m_playerUIManager.TurnInitialize();
 
-        m_cutInSystem.CutIn("Turn:" + GameManager.Singleton.ElapsedTurn, () =>
+        m_cutInSystem.CutIn("Turn:" + GameManager.Singleton.TurnElapsed, () =>
         {
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_cutInSystem.CutIn("Place:" + GameManager.Singleton.PlayerIndex, () =>
+        m_cutInSystem.CutIn("Place:" + GameManager.Singleton.ProcessingPlayerIndex, () =>
         {
             m_playerUIManager.TurnPlace();
         });

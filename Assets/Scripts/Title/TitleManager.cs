@@ -53,7 +53,7 @@ public class TitleManager : MonoBehaviour
         m_credit.Initialize();
         m_tutorial.Initialize();
 
-        m_pressAnyKey.FlashSystem.OnFinished += () =>
+        m_pressAnyKey.FlashSystem.Event_Finished += () =>
         {
             m_menu.Enable();
             m_pressAnyKey.Disable();

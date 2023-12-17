@@ -9,7 +9,7 @@ using Map;
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] CardManager m_cardManager;
-    [SerializeField] OrderManager m_orderManager;
+    [SerializeField] InfoAIOrderManager m_orderManager;
     [SerializeField] Button m_placeButton;
     [SerializeField] Button m_turnEndButton;
 

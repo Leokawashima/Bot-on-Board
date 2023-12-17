@@ -45,6 +45,11 @@ public class SoundVolumeManager : MonoBehaviour
             UIVolume;
     }
 
+    public const string Master = "Volume_Master";
+    public const string BGM = "Volume_BGM";
+    public const string SE = "Volume_SE";
+    public const string UI = "Volume_UI";
+
     #endregion Fields
 
     #region Functions
@@ -81,10 +86,10 @@ public class SoundVolumeManager : MonoBehaviour
             inputField_.onEndEdit.AddListener((string str_) => { InputFieldf(str_, name_, slider_); });
         }
 
-        _Initialize(Name.AudioMixer.Volume.Master, m_masterSlider, m_mastertInputField);
-        _Initialize(Name.AudioMixer.Volume.BGM, m_bgmSlider, m_bgmInputField);
-        _Initialize(Name.AudioMixer.Volume.SE, m_seSlider, m_seInputField);
-        _Initialize(Name.AudioMixer.Volume.UI, m_uiSlider, m_uiInputField);
+        _Initialize(Master, m_masterSlider, m_mastertInputField);
+        _Initialize(BGM, m_bgmSlider, m_bgmInputField);
+        _Initialize(SE, m_seSlider, m_seInputField);
+        _Initialize(UI, m_uiSlider, m_uiInputField);
     }
 
     [ContextMenu("Save")]

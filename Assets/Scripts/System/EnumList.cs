@@ -48,3 +48,35 @@ namespace Player
 {
 
 }
+
+namespace Game
+{
+    public enum GameModeState
+    {
+        Non,
+        Tutorial,
+        Local,
+        Multi
+    }
+
+    public enum GameState
+    {
+        Non,
+        Initialize,
+        DecidedTheOrder,
+        Battle,
+        GameSet,
+        Finalize,
+    }
+
+    public enum BattleState
+    {
+        Non,
+        Initialize,
+        Place,
+        TurnEnd,
+        AIAction,
+        Finalize,
+        GameSet,
+    }
+}

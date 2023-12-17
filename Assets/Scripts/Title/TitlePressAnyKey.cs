@@ -4,13 +4,13 @@ public class TitlePressAnyKey : MonoBehaviour
 {
     [SerializeField] FlashSystem m_flashSystem;
     public FlashSystem FlashSystem => m_flashSystem;
-    [SerializeField] RainbowTextSystem m_rainbowText;
+    [SerializeField] RainbowText m_rainbowText;
     [SerializeField] AudioSource m_audio;
     [SerializeField] ParticleSystem m_particle;
 
     public void Initialize()
     {
-        m_rainbowText.Rainbow();
+        m_rainbowText.Active();
     }
 
     public void Enable()
@@ -27,7 +27,7 @@ public class TitlePressAnyKey : MonoBehaviour
 
     public void Enter()
     {
-        m_flashSystem.Flash();
+        m_flashSystem.Active();
         m_audio.Play();
         m_particle.Play();
     }
