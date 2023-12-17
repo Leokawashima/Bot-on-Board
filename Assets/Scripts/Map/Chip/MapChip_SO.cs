@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip.Component;
 
 namespace Map.Chip
 {
@@ -22,10 +22,10 @@ namespace Map.Chip
             // データ生成時にデフォルトで追加されてほしいコンポーネントを記述する
         };
 
-        public virtual MapChip Spawn(Vector2Int mapPos_, Vector3 pos_, Transform parent_)
+        public virtual MapChip Spawn(Vector2Int mapPos_, MapManager manager_)
         {
-            var _mc = Instantiate(Prefab, parent_);
-            _mc.transform.localPosition = pos_;
+            var _mc = Instantiate(Prefab, manager_.ChipParent);
+            _mc.transform.localPosition = new Vector3(mapPos_.x, 0.0f, mapPos_.y) + manager_.Offset;
             _mc.transform.localRotation = Prefab.transform.rotation;
 
             _mc.Data = this;
@@ -35,6 +35,8 @@ namespace Map.Chip
                 var _copy = component.DeepCopyInstance();
                 _mc.Components.Add(_copy);
             }
+
+            _mc.Initialize(manager_);
 
             return _mc;
         }

@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using Map;
-using Map.Object;
 
 public class CardGenerator : MonoBehaviour
 {
-    public MapObjectTable_SO m_mapObjectTable;
-
     [SerializeField] CardImageTable_SO m_cardTable;
 
     private readonly float[] m_CATEGORY_COLOR = new float[]
@@ -20,8 +17,7 @@ public class CardGenerator : MonoBehaviour
     public MapObjectCard Create(int index_, Transform parent_)
     {
         var _moc = Instantiate(m_cardTable.Prefab, parent_);
-        _moc.SO = m_mapObjectTable.Data[index_];
-        _moc.Index = index_;
+        _moc.Initialize(index_);
 
         var _appearance = _moc.GetComponent<CardAppearance>();
 
@@ -29,7 +25,7 @@ public class CardGenerator : MonoBehaviour
         var _category = (int)_moc.SO.HasCategory;
 
         _appearance.m_categoryIcon.sprite = m_cardTable.Icon[_category];
-        _appearance.m_text.text = _moc.SO.ObjectName;
+        _appearance.m_text.text = _moc.SO.Name;
         _appearance.m_title.sprite = _moc.SO.TitleImage;
 
         switch(_rarity)

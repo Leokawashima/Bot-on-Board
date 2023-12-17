@@ -14,26 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasRarity: 1
   HasCategory: 0
-  ObjectName: "\u30ED\u30F3\u30B0\u30BD\u30FC\u30C9"
+  Name: "\u30ED\u30F3\u30B0\u30BD\u30FC\u30C9"
   Info: "\u534D\u3076\u3063\u305F\u5207\u308B\u534D"
   TitleImage: {fileID: 21300000, guid: 35888767b5103f44c9ae8ac5c907951f, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 4762864159647980754, guid: 1c925e76d6a373a4887092efebc03ce7, type: 3}
   Components:
-  - rid: 8759145200713990147
-  - rid: 4745484744830746628
+  - rid: 8759145406249304081
+  - rid: 8759145406249304087
   references:
     version: 2
     RefIds:
-    - rid: 4745484744830746628
-      type: {class: Weapon, ns: Map.Object, asm: Assembly-CSharp}
-      data:
-        Power: 3
-        Remain: 1
-    - rid: 8759145200713990147
-      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+    - rid: 8759145406249304081
+      type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10
         TurnSpawn: 10
+    - rid: 8759145406249304087
+      type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
+      data:
+        Power: 3
+        Remain: 1

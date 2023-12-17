@@ -39,7 +39,7 @@ public class DeckCardCategory : MonoBehaviour
 
     private void Initialize()
     {
-        var _categoryBit = (Category[])Enum.GetValues(typeof(Category));
+        var _categoryBit = (Category[])System.Enum.GetValues(typeof(Category));
 
         for(int i = 0; i < m_categoryToggles.Length; ++i)
         {

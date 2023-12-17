@@ -85,8 +85,7 @@ public class DeckCardDragManager : MonoBehaviour
 
     private void CopyCard(MapObjectCard from_, MapObjectCard to_)
     {
-        to_.SO = from_.SO;
-        to_.Index = from_.Index;
+        to_.Initialize(from_.Index);
 
         var _fromAppearance = from_.GetComponent<CardAppearance>();
         var _toAppearance = to_.GetComponent<CardAppearance>();

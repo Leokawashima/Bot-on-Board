@@ -51,11 +51,10 @@ public class PlayerUI : MonoBehaviour
         }
 
         // オブジェクトがあるなら返す　ハカイ爆弾などのためにこれは別途方法を考えないといけない
-        if (MapManager.Singleton.MapState.MapObjects[_chip.Position.y][_chip.Position.x] != null)
+        if (MapManager.Singleton.Stage.Object[_chip.Position.y][_chip.Position.x] != null)
             return;
 
         var _mo = MapManager.Singleton.ObjectSpawn(m_cardManager.GetSelectCard.SO, _chip);
-        _mo.Initialize(MapManager.Singleton);
         m_cardManager.GetSelectCard.Trash();
 
         Event_ButtonPlace?.Invoke();

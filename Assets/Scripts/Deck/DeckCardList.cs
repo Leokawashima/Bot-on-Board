@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 public class DeckCardList : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class DeckCardList : MonoBehaviour
     private void Start()
     {
         var _dragCards = new List<DeckCardDrag>();
-        for(int i = 0; i < m_cardGenerator.m_mapObjectTable.Data.Length; ++i)
+        for(int i = 0, len = MapTable.Object.Table.Length; i < len; ++i)
         {
             _dragCards.Add(CardCreate(i));
         }

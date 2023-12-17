@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using AI;
 
-namespace Map.Object
+namespace Map.Object.Component
 {
     [Serializable]
     public abstract class MapObjectComponent
@@ -16,7 +16,7 @@ namespace Map.Object
             return true;
         }
 
-        public virtual void Hit(MapObject obj_, AISystem ai_)
+        public virtual void Hit(MapObject obj_, AI.AIAgent ai_)
         {
         }
 
@@ -61,7 +61,7 @@ namespace Map.Object
         [SerializeField] private float Power = 3.0f;
         [SerializeField] private uint Remain = 1;
 
-        public override void Hit(MapObject obj_, AISystem ai_)
+        public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
             ai_.HasWeapon = this.DeepCopyInstance();
         }
@@ -70,7 +70,7 @@ namespace Map.Object
         {
             return true;
         }
-        public virtual bool Action(AISystem ai_)
+        public virtual bool Action(AI.AIAgent ai_)
         {
             ai_.DamageHP(Power);
             return --Remain <= 0;
@@ -82,7 +82,7 @@ namespace Map.Object
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(MapObject obj_, AISystem ai_)
+        public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
             ai_.DamageHP(Power);
         }
@@ -93,7 +93,7 @@ namespace Map.Object
         [Header(nameof(Stan))]
         [SerializeField] private uint StanTurn = 1;
 
-        public override void Hit(MapObject obj_, AISystem ai_)
+        public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
             ai_.StanTurn = StanTurn;
         }
@@ -104,7 +104,7 @@ namespace Map.Object
         [Header(nameof(Heal))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(MapObject obj_, AISystem ai_)
+        public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
             ai_.HealHP(Power);
         }
@@ -113,15 +113,7 @@ namespace Map.Object
     public class Direction : MapObjectComponent
     {
         [Header(nameof(Direction))]
-        public State DirectionState;
-
-        public enum State
-        {
-            Forward,
-            Right,
-            Backward,
-            Left,
-        }
+        public Map.Direction State;
 
         public Vector2Int Vector2D
         {
@@ -131,7 +123,7 @@ namespace Map.Object
                 {
                     Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left
                 };
-                return _vec[(int)DirectionState];
+                return _vec[(int)State];
             }
         }
     }
@@ -141,7 +133,7 @@ namespace Map.Object
         [Header(nameof(DirectionMove))]
         [SerializeField] private uint Power;
 
-        public override void Hit(MapObject obj_, AISystem ai_)
+        public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
             ai_.Move(obj_.GetMOComponent<Direction>().Vector2D + obj_.Position);
         }

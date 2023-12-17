@@ -17,12 +17,12 @@ public class DeckData
     /// <summary>
     /// デッキのカテゴリ毎のカウント
     /// </summary>
-    public int[] CategoryCount = new int[Enum.GetValues(typeof(DeckCardCategory.Category)).Length];
+    public int[] CategoryCount = new int[System.Enum.GetValues(typeof(DeckCardCategory.Category)).Length];
 
     /// <summary>
     /// デッキのランク毎のカウント
     /// </summary>
-    public int[] RankCount = new int[Enum.GetValues(typeof(DeckCardCategory.Rank)).Length];
+    public int[] RankCount = new int[System.Enum.GetValues(typeof(DeckCardCategory.Rank)).Length];
 
     /// <summary>
     /// デッキのサイズ

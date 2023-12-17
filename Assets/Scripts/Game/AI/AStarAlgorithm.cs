@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Map;
+using Map.Stage;
 
 /// <summary>
 /// Astar探索ロジッククラス
 /// </summary>
 public class AStarAlgorithm
 {
-    private readonly MapStateManager m_MAP_STATE;
+    private readonly MapStage m_MAP_STAGE;
     private const int MOVE_COST = 1;
 
     // ノードを開ける順番
@@ -60,16 +60,16 @@ public class AStarAlgorithm
         }
     }
 
-    public AStarAlgorithm(MapStateManager mapState_)
+    public AStarAlgorithm(MapStage mapState_)
     {
-        m_MAP_STATE = mapState_;
+        m_MAP_STAGE = mapState_;
     }
 
     private Node SearchNode(Vector2Int orizin_, Vector2Int target_)
     {
-        var _nodeMap = new Node[m_MAP_STATE.MapSize.y][];
-        for (int i = 0; i < m_MAP_STATE.MapSize.y; i++)
-            _nodeMap[i] = new Node[m_MAP_STATE.MapSize.x];
+        var _nodeMap = new Node[m_MAP_STAGE.Size.y][];
+        for (int i = 0, len = _nodeMap.Length; i < len; i++)
+            _nodeMap[i] = new Node[m_MAP_STAGE.Size.x];
 
         var _openList = new List<Node>();
         int _cost = 0;
@@ -107,19 +107,19 @@ public class AStarAlgorithm
                 var _searchPos = _baseNode.Position + SearchPosition[i];
                 if (0 <= _searchPos.y && 0 <= _searchPos.x)
                 {
-                    if (m_MAP_STATE.MapSize.y > _searchPos.y && m_MAP_STATE.MapSize.x > _searchPos.x)
+                    if (m_MAP_STAGE.Size.y > _searchPos.y && m_MAP_STAGE.Size.x > _searchPos.x)
                     {
                         _nodeMap[_searchPos.y][_searchPos.x] ??= new Node();
                         var _searchCost = _cost;
 
-                        if (m_MAP_STATE.MapChips[_searchPos.y][_searchPos.x] != null)
+                        if (m_MAP_STAGE.Chip[_searchPos.y][_searchPos.x] != null)
                         {
-                            _searchCost += m_MAP_STATE.MapChips[_searchPos.y][_searchPos.x].Data.Cost;
+                            _searchCost += m_MAP_STAGE.Chip[_searchPos.y][_searchPos.x].Data.Cost;
                         }
                         
-                        if (m_MAP_STATE.MapObjects[_searchPos.y][_searchPos.x] != null)
+                        if (m_MAP_STAGE.Object[_searchPos.y][_searchPos.x] != null)
                         {
-                            _searchCost += m_MAP_STATE.MapObjects[_searchPos.y][_searchPos.x].Data.Cost;
+                            _searchCost += m_MAP_STAGE.Object[_searchPos.y][_searchPos.x].Data.Cost;
                         }
 
                         if (_nodeMap[_searchPos.y][_searchPos.x].OpenNode(

@@ -40,7 +40,7 @@ public class DeckInfoArea : MonoBehaviour
     public void SetRankText(InfoDeckData info_)
     {
         var _text = string.Empty;
-        var _rank = Enum.GetNames(typeof (DeckCardCategory.Rank));
+        var _rank = System.Enum.GetNames(typeof (DeckCardCategory.Rank));
         for (int i = 0; i < info_.Data.RankCount.Length; ++i)
         {
             _text += $"{info_.Data.RankCount[i]}\n";

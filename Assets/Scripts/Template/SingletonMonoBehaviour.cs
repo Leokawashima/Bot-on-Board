@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 
+[DisallowMultipleComponent]
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>, new()
 {
     public static T Singleton { get; private set; }
 
     protected virtual void Awake()
     {
-        if(Singleton == null)
+        if (Singleton == null)
         {
-            Singleton = (T)this;
+            Singleton = this as T;
         }
         else
         {
@@ -17,7 +18,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
     }
     protected virtual void OnDestroy()
     {
-        if(Singleton == this)
+        if (Singleton == this)
         {
             Singleton = null;
         }

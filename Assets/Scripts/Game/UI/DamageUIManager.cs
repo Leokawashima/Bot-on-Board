@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using AI;
 
 public class DamageUIManager : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class DamageUIManager : MonoBehaviour
         }
     }
 
-    public void AddUI(AISystem ai_, float power_)
+    public void AddUI(AI.AIAgent ai_, float power_)
     {
 
         for(int i = 0; i < POOL_SIZE; ++i)

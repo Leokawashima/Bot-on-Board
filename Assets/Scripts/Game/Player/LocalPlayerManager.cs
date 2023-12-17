@@ -2,10 +2,8 @@
 using UnityEngine;
 using Map.Chip;
 
-public class LocalPlayerManager : MonoBehaviour
+public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
 {
-    public static LocalPlayerManager Singleton { get; private set; }
-
     public MapChip SelectChip { get; private set; }
     Vector2 m_mousePosition;
 
@@ -27,15 +25,6 @@ public class LocalPlayerManager : MonoBehaviour
         PlayerInputManager.OnDragStartEvent -= OnMouse_DragStart;
         PlayerInputManager.OnDragCancelEvent -= OnMouse_DragCancel;
         PlayerUIManager.Event_ButtonPlace -= OnButton_Place;
-    }
-
-    void Awake()
-    {
-        Singleton ??= this;
-    }
-    void OnDestroy()
-    {
-        Singleton = null;
     }
 
     private void Update()

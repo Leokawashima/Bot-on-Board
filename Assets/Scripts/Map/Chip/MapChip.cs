@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Map.Chip.Component;
+using AI;
 
 namespace Map.Chip
 {
@@ -22,7 +24,7 @@ namespace Map.Chip
                 component.Initialize();
             }
 
-            manager_.MapState.SetMapChip(Position, this);
+            manager_.Stage.SetMapChip(Position, this);
         }
 
         public bool TurnUpdate(MapManager manager_)
@@ -39,7 +41,7 @@ namespace Map.Chip
             return true;
         }
 
-        public void Ride(AISystem ai_)
+        public void Ride(AI.AIAgent ai_)
         {
             foreach (var component in Components)
             {
@@ -54,7 +56,7 @@ namespace Map.Chip
                 component.Destroy();
             }
 
-            manager_.MapState.ResetMapChip(Position);
+            manager_.Stage.ResetMapChip(Position);
             Destroy(gameObject);
         }
     }

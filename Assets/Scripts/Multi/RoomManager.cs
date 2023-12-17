@@ -283,7 +283,7 @@ public class RoomManager : MonoBehaviour
 
         try
         {
-            return (MessageState)Enum.Parse(typeof(MessageState), state);
+            return (MessageState)System.Enum.Parse(typeof(MessageState), state);
         }
         catch(ArgumentException)
         {

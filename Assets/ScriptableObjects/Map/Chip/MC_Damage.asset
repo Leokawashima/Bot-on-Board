@@ -17,11 +17,11 @@ MonoBehaviour:
   Cost: 20
   Prefab: {fileID: 3946896690379435978, guid: 92a3b685f8a8dd14c8f7abf2f523a3e9, type: 3}
   Components:
-  - rid: 8759145202757664768
+  - rid: 8759145406249304090
   references:
     version: 2
     RefIds:
-    - rid: 8759145202757664768
-      type: {class: Damage, ns: Map.Chip, asm: Assembly-CSharp}
+    - rid: 8759145406249304090
+      type: {class: Damage, ns: Map.Chip.Component, asm: Assembly-CSharp}
       data:
         Power: 1

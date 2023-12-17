@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using AI;
 
 /// <summary>
 /// GUI全般の管理クラス
@@ -98,9 +99,9 @@ public class GUIManager : MonoBehaviour
 
     public void InitializeAIHPUI()
     {
-        m_infoPlayerDataManager.Initialize(AIManager.Singleton.AIList);
+        m_infoPlayerDataManager.Initialize();
     }
-    public void DamageEffect(AISystem ai_, float power_)
+    public void DamageEffect(AIAgent ai_, float power_)
     {
         m_DamageUIManager.AddUI(ai_, power_);
     }

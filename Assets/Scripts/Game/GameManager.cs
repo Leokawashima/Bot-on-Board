@@ -3,19 +3,16 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Map;
+using AI;
+using Player;
 
 /// <summary>
 /// ゲームの基本的な処理を担うクラス
 /// </summary>
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField] DiceSystem m_DiceSystem;
-    [SerializeField] NetConnectManager m_NetConnectManager;
-    [SerializeField] NetworkManager m_NetworkManager;
-    [SerializeField] AIManager m_AIManager;
     [SerializeField] CutInSystem m_cutInSystem;
-
-    public static GameManager Singleton { get; private set; }
 
     public enum GameState { Non, Initialize, DecidedTheOrder, Battle, GameSet, Finalize }
     public GameState m_GameState = GameState.Non;
@@ -55,17 +52,6 @@ public class GameManager : MonoBehaviour
         AIManager.Event_AiActioned -= TurnFinalize;
     }
 #endregion EventSubscribe
-
-#region Singleton
-    void Awake()
-    {
-        Singleton ??= this;
-    }
-    void OnDestroy()
-    {
-        Singleton = null;
-    }
-#endregion Singleton
 
     void Start()
     {
@@ -127,8 +113,10 @@ public class GameManager : MonoBehaviour
         m_BattleState = BattleState.Finalize;
         Event_Turn_Finalize?.Invoke();
         
-        if (m_AIManager.CheckAIIsDead())
+        if (AIManager.Singleton.CheckAIIsDead())
+        {
             TurnGameSet();
+        }
 
         else if(ElapsedTurn < ForceFinishTurn)
         {
@@ -153,10 +141,11 @@ public class GameManager : MonoBehaviour
     }
     void LocalModeInitialize()
     {
-        Destroy(m_NetworkManager.gameObject);
+        Destroy(NetworkManager.Singleton.gameObject);
     }
     void MultiModeInitialize()
     {
+        #region MultiItit
         /*
         //接続するまで待機をする間初期化をしておく
         //一定時間で戻りますか？のUIを出す
@@ -254,17 +243,19 @@ public class GameManager : MonoBehaviour
                 m_DiceSystem.gameObject.SetActive(true);
             }
         });
-*/
+        */
+        #endregion
     }
 
     void OnMapCreated()
     {
         //本来ローカル専用初期化処理だが用意の時間が足りなかったので直書き
-        var player = new GameObject("PlayerManager");
-        player.AddComponent<PlayerInputManager>();
-        player.AddComponent<LocalPlayerManager>();
+        var _playerManager = PlayerManager.Singleton.gameObject;
+        _playerManager.AddComponent<PlayerInputManager>();
+        _playerManager.AddComponent<LocalPlayerManager>();
 
-        m_AIManager.Initialize();
+        PlayerManager.Singleton.Initialize();
+        AIManager.Singleton.Initialize();
         //ここまでローカル専用処理
 
         TurnInitialize();

@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasRarity: 0
   HasCategory: 2
-  ObjectName: "\u30D0\u30C3\u30C6\u30EA\u30FC"
+  Name: "\u30D0\u30C3\u30C6\u30EA\u30FC"
   Info: "\u4E57\u3063\u305F\u3089HP\u30923\u56DE\u5FA9\u3059\u308B\u3002"
   TitleImage: {fileID: 21300000, guid: ae4ac3f935ed61b4f92b8e75e4a8b202, type: 3}
   Cost: -50
   IsCollider: 0
   Prefab: {fileID: 8468683320965597539, guid: 25212d0b95ea95b43b2b01dd59ce295a, type: 3}
   Components:
-  - rid: 8759145200713990151
+  - rid: 8759145406249304065
   references:
     version: 2
     RefIds:
-    - rid: 8759145200713990151
-      type: {class: TurnDestroy, ns: Map.Object, asm: Assembly-CSharp}
+    - rid: 8759145406249304065
+      type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10

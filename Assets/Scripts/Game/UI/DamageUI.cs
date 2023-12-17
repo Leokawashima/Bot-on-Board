@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using AI;
 
 public class DamageUI : MonoBehaviour
 {
@@ -9,12 +10,12 @@ public class DamageUI : MonoBehaviour
 
     private Coroutine m_activeCorutine;
 
-    public void Effect(AISystem ai_, float power_)
+    public void Effect(AI.AIAgent ai_, float power_)
     {
         m_activeCorutine = StartCoroutine(CoEffect(ai_, power_));
     }
 
-    private IEnumerator CoEffect(AISystem ai_, float power_)
+    private IEnumerator CoEffect(AI.AIAgent ai_, float power_)
     {
         IsUsed = true;
         m_text.gameObject.SetActive(true);

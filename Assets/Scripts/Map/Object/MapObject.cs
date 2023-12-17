@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Map.Object.Component;
+using AI;
 
 namespace Map.Object
 {
@@ -31,7 +33,7 @@ namespace Map.Object
             }
 
             manager_.MapObjectList.Add(this);
-            manager_.MapState.SetMapObject(Position, this);
+            manager_.Stage.SetMapObject(Position, this);
         }
 
         public bool TurnUpdate(MapManager manager_)
@@ -48,7 +50,7 @@ namespace Map.Object
             return true;
         }
 
-        public void Hit(AISystem ai_)
+        public void Hit(AI.AIAgent ai_)
         {
             foreach (var component in Components)
             {
@@ -64,7 +66,7 @@ namespace Map.Object
             }
 
             manager_.MapObjectList.Remove(this);
-            manager_.MapState.ReSetMapObject(Position);
+            manager_.Stage.ReSetMapObject(Position);
             Destroy(gameObject);
         }
     }

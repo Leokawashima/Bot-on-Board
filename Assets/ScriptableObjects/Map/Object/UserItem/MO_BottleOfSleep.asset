@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasRarity: 0
   HasCategory: 3
-  ObjectName: "\u30CD\u30E0\u30EA\u306E\u30D3\u30F3"
+  Name: "\u30CD\u30E0\u30EA\u30CE\u30D3\u30F3"
   Info: "\u8A2D\u7F6E\u30DE\u30B9\u3092\u4E2D\u5FC3\u306B9\xD79\u30DE\u30B9\u3092\u30CD\u30E0\u30EA\u30A8\u30EA\u30A2\u306B\u3059\u308B\u3002"
   TitleImage: {fileID: 21300000, guid: 4048083be8612df4abe1da7c08013485, type: 3}
   Cost: 0

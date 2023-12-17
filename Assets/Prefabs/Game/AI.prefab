@@ -111,6 +111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4869696264618002843}
   - component: {fileID: 6666446635267003982}
+  - component: {fileID: 9117685005750319661}
   m_Layer: 0
   m_Name: AI
   m_TagString: Untagged
@@ -148,19 +149,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e852cd40d173b7e40a94e44cf46d4d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Index>k__BackingField: 0
-  <AIDirectionVertical>k__BackingField: 0
-  <AIDirectionHorizontal>k__BackingField: 0
-  <AIAliveState>k__BackingField: 0
-  <AIThinkState>k__BackingField: 0
   <Position>k__BackingField: {x: 0, y: 0}
   <PrePosition>k__BackingField: {x: 0, y: 0}
-  m_HPMax: 10
-  m_HP: 0
-  m_Attack: 1
-  m_Path: []
+  <HP>k__BackingField: 0
+  <HPMax>k__BackingField: 0
+  <AttackPower>k__BackingField: 0
+  <Direction>k__BackingField: 0
+  <AIAliveState>k__BackingField: 0
+  <AIThinkState>k__BackingField: 0
+  <SearchPath>k__BackingField: []
+  <MovePath>k__BackingField: []
   <StanTurn>k__BackingField: 0
-  cameraA: {fileID: 829364418005553134}
+  <Camera>k__BackingField: {fileID: 9117685005750319661}
+--- !u!114 &9117685005750319661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039676552996752965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e791aa6440d79124cb03a240f4b03570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Default>k__BackingField: {fileID: 829364418005553134}
 --- !u!1 &4639887804427791479
 GameObject:
   m_ObjectHideFlags: 0

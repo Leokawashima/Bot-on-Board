@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Map.Object.Component;
 
 namespace Map.Object
 {
@@ -11,7 +11,7 @@ namespace Map.Object
 
         public Category HasCategory = Category.Weapon_Type1;
 
-        public string ObjectName = string.Empty;
+        public string Name = string.Empty;
 
         [TextArea(3, 5)]
         public string Info = "説明文";
@@ -31,10 +31,10 @@ namespace Map.Object
             new TurnDestroy(),
         };
 
-        public virtual MapObject Spawn(Vector2Int mapPos_, Vector3 pos_, Transform parent_)
+        public virtual MapObject Spawn(Vector2Int mapPos_, MapManager manager_)
         {
-            var _mo = Instantiate(Prefab, parent_);
-            _mo.transform.localPosition = pos_;
+            var _mo = Instantiate(Prefab, manager_.ObjectParent);
+            _mo.transform.localPosition = new Vector3(mapPos_.x, 1.0f, mapPos_.y) + manager_.Offset;
             _mo.transform.localRotation = Prefab.transform.rotation;
 
             _mo.Data = this;
@@ -44,6 +44,8 @@ namespace Map.Object
                 var _copy = component.DeepCopyInstance();
                 _mo.Components.Add(_copy);
             }
+
+            _mo.Initialize(manager_);
 
             return _mo;
         }
