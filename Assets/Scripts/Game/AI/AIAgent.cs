@@ -29,7 +29,7 @@ namespace AI
         [field: SerializeField] public ThinkState AIThinkState { get; private set; }
 
         [field: SerializeField] public List<Vector2Int> SearchPath { get; private set; }
-        [field: SerializeField] public List<Vector2Int> MovePath { get; private set; }
+        [field: SerializeField] public AIPath Move { get; private set; }
 
         [field: SerializeField] public Weapon HasWeapon { get; set; }
         [field: SerializeField] public uint StanTurn { get; set; }
@@ -60,7 +60,7 @@ namespace AI
 
         public void Think()
         {
-            PrePosition = Position;
+            Move.Initialize();
 
             //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
             var enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
@@ -101,13 +101,13 @@ namespace AI
                     }
                     else
                     {
-                        Move();
+                        MoveStep(SearchPath[1], MoveState.Step);
                     }
                     break;
                 case ThinkState.Move:
                     if (GetRandomWeightedProbability(9, 1) == 0)// 10%で攻撃する(アホ)
                     {
-                        Move();
+                        MoveStep(SearchPath[1], MoveState.Step);
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace AI
                     // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
                     if (GetRandomWeightedProbability(5, 5) == 0)
                     {
-                        Move();
+                        MoveStep(SearchPath[1], MoveState.Step);
                     }
                     else
                     {
@@ -130,64 +130,80 @@ namespace AI
             }
         }
 
-        public void BackPosition()
+        public void Damage(float damage_)
         {
-            Position = PrePosition;
-            transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
-        }
-        public void DamageHP(float damage_)
-        {
-            HP = Mathf.Max(HP - damage_, 0.0f);//HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に変える...？のか？
+            //HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に蘇生される可能性も考慮
+            HP = Mathf.Max(HP - damage_, 0.0f);
             if (HP == 0.0f)
+            {
                 AIAliveState = AliveState.Dead;
+            }
             Event_DamageHP?.Invoke(this, damage_);
         }
-        public void HealHP(float heal_)
+        public void Heal(float heal_)
         {
             HP = Mathf.Min(HP + heal_, HPMax);
             Event_HealHP?.Invoke(this, heal_);
         }
 
-        public void Move()
+        public void BackPosition()
         {
-            // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
-            if (MapManager.Singleton.Stage.Object[SearchPath[1].y][SearchPath[1].x] != null)
-            {
-                if (MapManager.Singleton.Stage.Object[SearchPath[1].y][SearchPath[1].x].Data.IsCollider)
-                    return;
-            }
-
-            // 経路は[0]が現在地点なので[1]が次のチップ
-            transform.localPosition = new Vector3(SearchPath[1].x, 0, SearchPath[1].y) + MapManager.Singleton.Offset + Vector3.up;
-            Position = SearchPath[1];
-            var _dir = Position - PrePosition;
-            transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
+            Position = PrePosition;
+            transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
         }
 
-        public void Move(Vector2Int pos_)
+        public void MoveStep(Vector2Int pos_, MoveState state_)
         {
-            // 壁系の当たり判定オブジェクトならムリ　これも仮実装　コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
-            if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x] != null)
+            // コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
+
+            var _mapManager = MapManager.Singleton;
+            // 地面がなければムリ
+            if (_mapManager.Stage.Chip[pos_.y][pos_.x] == null) return;
+            if (_mapManager.Stage.Object[pos_.y][pos_.x] != null)
             {
-                if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider)
-                    return;
+                // 壁系の当たり判定オブジェクトならムリ
+                if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
             }
-            transform.localPosition = new Vector3(pos_.x, 0, pos_.y) + MapManager.Singleton.Offset + Vector3.up;
-            Position = pos_;
-            var _dir = Position - PrePosition;
-            transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
+
+            Move.Add(pos_, state_);
         }
 
         public IEnumerator DelayMove()
         {
-            for (int i = 1; i <= 10; ++i)
+            for (int i = 0; i < Move.Count; ++i)
             {
-                Vector2 prepos = PrePosition;
-                Vector2 pos = Position;
-                Vector2 _offset = (pos - prepos) * i / 10.0f;
-                transform.localPosition = new Vector3(PrePosition.x, 1, PrePosition.y) + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
-                yield return new WaitForSeconds(0.1f);
+                Debug.Log(Move.Count);
+                if (i != 0)
+                {
+                    PrePosition = Move.Path[i - 1].Position;
+                }
+                Position = Move.Path[i].Position;
+                switch (Move.Path[i].State)
+                {
+                    case MoveState.Step:
+                        for (int j = 1; j <= 10; ++j)
+                        {
+                            Vector2 prepos = PrePosition;
+                            Vector2 pos = Position;
+                            Vector2 _offset = (pos - prepos) * j / 10.0f;
+                            transform.localPosition = new Vector3(prepos.x, 1, prepos.y)
+                                + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
+                            var _dir = Position - PrePosition;
+                            transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                        break;
+                    case MoveState.Warp:
+                        {
+                            transform.localPosition = new Vector3(Position.x, 1, Position.y) + MapManager.Singleton.Offset;
+                            yield return new WaitForSeconds(1.0f);
+                        }
+                        break;
+                }
+                
             }
+            PrePosition = Position;
+            Move.Clear();
         }
 
         #region Attack
@@ -217,12 +233,12 @@ namespace AI
                     }
                     else
                     {
-                        enemy[0].DamageHP(AttackPower);
+                        enemy[0].Damage(AttackPower);
                     }
                 }
                 else
                 {
-                    enemy[0].DamageHP(AttackPower);
+                    enemy[0].Damage(AttackPower);
                 }
             }
         }
@@ -243,7 +259,7 @@ namespace AI
             }
             else
             {
-                enemy[0].DamageHP(AttackPower);
+                enemy[0].Damage(AttackPower);
             }
         }
 

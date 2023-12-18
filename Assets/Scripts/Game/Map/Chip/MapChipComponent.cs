@@ -32,7 +32,7 @@ namespace Map.Chip.Component
 
         public override void Ride(AI.AIAgent ai_)
         {
-            ai_.DamageHP(Power);
+            ai_.Damage(Power);
         }
     }
 }

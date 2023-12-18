@@ -42,6 +42,12 @@ namespace AI
         CantMove,
         CollisionPredict
     }
+
+    public enum MoveState
+    {
+        Step,
+        Warp,
+    }
 }
 
 namespace Player

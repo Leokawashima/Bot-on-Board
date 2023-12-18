@@ -6,6 +6,9 @@ using Map.Chip;
 using Map.Object;
 using Map.Stage;
 using Game;
+using AI;
+using System.IO;
+using Unity.VisualScripting;
 
 namespace Map
 {
@@ -113,28 +116,18 @@ namespace Map
             return so_.Spawn(chip_.Position, this);
         }
 
-        public void AIHitObject(Vector2Int pos_, AI.AIAgent ai_)
+        public void AIHitCheck(Vector2Int pos_, AIAgent ai_)
         {
             if (Stage.Object[pos_.y][pos_.x] != null)
-            {
-                // ループ中に要素を削除する可能性があるためfor
-                for (int i = 0, cnt = MapObjectList.Count; i < cnt; ++i)
-                {
-                    if (MapObjectList[i].Position == pos_)
-                    {
-                        MapObjectList[i].Hit(ai_);
-                        MapObjectList[i--].Finalize(this);
-                        // i--;をこの行に記述すると不必要な代入と文句を言われるので
-                        // 上に統合(一敗)
-                        break;
-                    }
-                }
+            {                   
+                Stage.Object[pos_.y][pos_.x].Hit(ai_);
+                Stage.Object[pos_.y][pos_.x].Finalize(this);
             }
         }
 
-        public void AIRideChip(Vector2Int pos_, AI.AIAgent ai_)
+        public void AIRideCheck(Vector2Int pos_, AIAgent ai_)
         {
-            if(Stage.Chip[pos_.y][pos_.x] != null)
+            if (Stage.Chip[pos_.y][pos_.x] != null)
             {
                 Stage.Chip[pos_.y][pos_.x].Ride(ai_);
             }

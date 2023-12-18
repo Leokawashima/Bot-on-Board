@@ -93,7 +93,7 @@ namespace AI
                 for (int i = 0; i < AI_SIZE; ++i)
                 {
                     AIList[i].BackPosition();
-                    AIList[i].DamageHP(0.5f);
+                    AIList[i].Damage(0.5f);
                     //接触ダメージ直入れ　アモアスのように設定できるようにしたい
                 }
             }
@@ -101,8 +101,11 @@ namespace AI
 
             foreach (var ai in AIList)
             {
-                MapManager.Singleton.AIRideChip(ai.Position, ai);
-                MapManager.Singleton.AIHitObject(ai.Position, ai);
+                for (int i = 0; i < ai.Move.Path.Count; ++i)
+                {
+                    MapManager.Singleton.AIRideCheck(ai.Move.Path[i].Position, ai);
+                    MapManager.Singleton.AIHitCheck(ai.Move.Path[i].Position, ai);
+                }
             }
 
             foreach (var ai in AIList)
