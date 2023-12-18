@@ -135,7 +135,7 @@ namespace Map.Object.Component
 
         public override void Hit(MapObject obj_, AIAgent ai_)
         {
-            ai_.MoveStep(obj_.GetMOComponent<Direction>().Vector2D + obj_.Position, MoveState.Step);
+            ai_.Move.Step(obj_.GetMOComponent<Direction>().Vector2D + obj_.Position);
         }
     }
 
@@ -149,7 +149,7 @@ namespace Map.Object.Component
             var _size = MapManager.Singleton.Stage.Size;
             int _randX = UnityEngine.Random.Range(0, _size.x),
                 _randY = UnityEngine.Random.Range(0, _size.y);
-            ai_.MoveStep(new Vector2Int(_randX, _randY), MoveState.Warp);
+            ai_.Move.Warp(new Vector2Int(_randX, _randY));
         }
     }
 }

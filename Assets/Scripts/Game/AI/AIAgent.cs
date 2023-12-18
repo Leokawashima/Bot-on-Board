@@ -6,6 +6,7 @@ using Map.Object.Component;
 using Player;
 using System.Collections;
 using Unity.VisualScripting;
+using static UnityEditor.PlayerSettings;
 
 /// <summary>
 /// AI単体を処理するクラス
@@ -93,7 +94,7 @@ namespace AI
             {
                 case ThinkState.Attack:
                     // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
-                    if (GetRandomWeightedProbability(9, 1) == 0)// 10%で移動するかも(アホ)
+                    if (GetRandomWeightedProbability(19, 1) == 0)// 10%で移動するかも(アホ)
                     {
                         // 仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
                         // で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
@@ -101,13 +102,13 @@ namespace AI
                     }
                     else
                     {
-                        MoveStep(SearchPath[1], MoveState.Step);
+                        Move.Step(SearchPath[1]);
                     }
                     break;
                 case ThinkState.Move:
-                    if (GetRandomWeightedProbability(9, 1) == 0)// 10%で攻撃する(アホ)
+                    if (GetRandomWeightedProbability(19, 1) == 0)// 10%で攻撃する(アホ)
                     {
-                        MoveStep(SearchPath[1], MoveState.Step);
+                        Move.Step(SearchPath[1]);
                     }
                     else
                     {
@@ -120,7 +121,7 @@ namespace AI
                     // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
                     if (GetRandomWeightedProbability(5, 5) == 0)
                     {
-                        MoveStep(SearchPath[1], MoveState.Step);
+                        Move.Step(SearchPath[1]);
                     }
                     else
                     {
@@ -152,27 +153,10 @@ namespace AI
             transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
         }
 
-        public void MoveStep(Vector2Int pos_, MoveState state_)
-        {
-            // コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
-
-            var _mapManager = MapManager.Singleton;
-            // 地面がなければムリ
-            if (_mapManager.Stage.Chip[pos_.y][pos_.x] == null) return;
-            if (_mapManager.Stage.Object[pos_.y][pos_.x] != null)
-            {
-                // 壁系の当たり判定オブジェクトならムリ
-                if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
-            }
-
-            Move.Add(pos_, state_);
-        }
-
         public IEnumerator DelayMove()
         {
             for (int i = 0, cnt = Move.Count; i < cnt; ++i)
             {
-                Debug.Log(Move.Count);
                 if (i != 0)
                 {
                     PrePosition = Move.Path[i - 1].Position;
@@ -206,25 +190,19 @@ namespace AI
             Move.Clear();
         }
 
-        #region Attack
-
         void Attack()
         {
-            //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
-            var enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
-            enemy.Remove(this);
+            //自身を抜いた敵のリスト
+            var _enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
+            _enemy.Remove(this);
 
-            //2人前提で[0]に攻撃判定
-            var pos = Position - enemy[0].Position;
-            var flag = false;
-            if (pos.x == 0 && Mathf.Abs(pos.y) == 1) flag = true;//前後一マスずれにいるか否か
-            else if (Mathf.Abs(pos.x) == 1 && pos.y == 0) flag = true;//左右一マスズレにいるか否か
-
-            if (flag)
+            for (int i = 0; i < _enemy.Count; ++i)
             {
-                if (HasWeapon != null)
+                var _pos = Position - _enemy[i].Position;
+                // マンハッタン距離法　前後左右一マスかチェック
+                if (1 == (Mathf.Abs(_pos.x) + Mathf.Abs(_pos.y)))
                 {
-                    if (HasWeapon.CheckCollider())
+                    if (HasWeapon != null && HasWeapon.CheckCollider())
                     {
                         if (false == HasWeapon.Action(this))
                         {
@@ -233,37 +211,12 @@ namespace AI
                     }
                     else
                     {
-                        enemy[0].Damage(AttackPower);
+                        _enemy[0].Damage(AttackPower);
                     }
-                }
-                else
-                {
-                    enemy[0].Damage(AttackPower);
+                    break;
                 }
             }
         }
-
-        [ContextMenu("DebugAttack")]
-        void DebugAttack()
-        {
-            //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
-            var enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
-            enemy.Remove(this);
-
-            if (HasWeapon != null)
-            {
-                if (false == HasWeapon.Action(this))
-                {
-                    HasWeapon = null;
-                }
-            }
-            else
-            {
-                enemy[0].Damage(AttackPower);
-            }
-        }
-
-        #endregion Attack
 
         int GetRandomWeightedProbability(params int[] weight_)
         {

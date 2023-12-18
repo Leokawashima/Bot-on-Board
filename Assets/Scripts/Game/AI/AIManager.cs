@@ -58,7 +58,8 @@ namespace AI
             m_cameraManager.Initialize();
         }
 
-        public bool CheckAIIsDead()//誰か死んだ時点でtrueを返している
+        //誰か死んだ時点でtrueを返している
+        public bool CheckAIIsDead()
         {
             foreach (var _ai in AIList)
             {
@@ -70,36 +71,46 @@ namespace AI
 
             return false;
         }
+        private bool CheckHitAI(AIAgent a_, AIAgent b_)
+        {
+            if (a_.Position == b_.Position) return true;
+
+            if (a_.Position == b_.PrePosition && a_.PrePosition == b_.Position) return true;
+
+            return false;
+        }
 
         public void AIAction()
         {
-            foreach (var _ai in AIList)//全員現在の状態から意思決定
-                _ai.Think();
-
-            foreach (var _ai in AIList)//意思決定後に行動
-                _ai.Action();
-
-            //以下AI2体前提処理　時間が足りないのでこのまま
-            var _isHit = false;
-            if (AIList[0].Position == AIList[1].Position) _isHit = true;//完全に同一のマスにいる
-            if (AIList[0].Position == AIList[1].PrePosition)//[0]が[1]の移動前にいた場所にいる
+            var _list = AIList;
+            foreach (var ai in _list)
             {
-                if (AIList[0].PrePosition == AIList[1].Position)//[1]が[0]の移動前にいた場所にいる
-                    _isHit = true;//つまりすれ違っているのでHit判定
+                // 全員現在の状態から意思決定
+                ai.Think();
             }
 
-            if (_isHit)
+            foreach (var ai in _list)
             {
-                for (int i = 0; i < AI_SIZE; ++i)
+                //意思決定後に行動
+                ai.Action();
+            }
+
+            // AIが二体以上いないとインデックス漏れエラー
+            for (int i = 0; i < _list.Count - 1; ++i)
+            {
+                for (int j = i + 1; j < _list.Count; ++j)
                 {
-                    AIList[i].BackPosition();
-                    AIList[i].Damage(0.5f);
-                    //接触ダメージ直入れ　アモアスのように設定できるようにしたい
+                    if (CheckHitAI(_list[i], _list[i + j]))
+                    {
+                        _list[i].BackPosition();
+                        _list[i].Damage(0.5f);
+                        _list[i + j].BackPosition();
+                        _list[i + j].Damage(0.5f);
+                    }
                 }
             }
-            //ここまでAI2体前提処理
 
-            foreach (var ai in AIList)
+            foreach (var ai in _list)
             {
                 for (int i = 0; i < ai.Move.Path.Count; ++i)
                 {
@@ -109,7 +120,7 @@ namespace AI
             }
 
             var _maxMoveCnt = 0;
-            foreach (var ai in AIList)
+            foreach (var ai in _list)
             {
                 if (_maxMoveCnt < ai.Move.Count)
                     _maxMoveCnt = ai.Move.Count;

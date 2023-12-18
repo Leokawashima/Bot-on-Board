@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Map;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,9 +21,33 @@ namespace AI
             Path.Clear();
         }
 
-        public void Add(Vector2Int pos_, MoveState state_)
+        public void Step(Vector2Int pos_)
         {
-            Path.Add(new MovePath(pos_, state_));
+            // コストを持たせて状況に応じて殴らせて移動していくシステムに変更する
+
+            var _mapManager = MapManager.Singleton;
+            // 地面がなければムリ
+            if (_mapManager.Stage.Chip[pos_.y][pos_.x] == null) return;
+            if (_mapManager.Stage.Object[pos_.y][pos_.x] != null)
+            {
+                // 壁系の当たり判定オブジェクトならムリ
+                if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
+            }
+
+            Path.Add(new(pos_, MoveState.Step));
+        }
+        public void Warp(Vector2Int pos_)
+        {
+            var _mapManager = MapManager.Singleton;
+            // 地面がなければムリ
+            if (_mapManager.Stage.Chip[pos_.y][pos_.x] == null) return;
+            if (_mapManager.Stage.Object[pos_.y][pos_.x] != null)
+            {
+                // 壁系の当たり判定オブジェクトならムリ
+                if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
+            }
+
+            Path.Add(new(pos_, MoveState.Warp));
         }
 
         [Serializable]
