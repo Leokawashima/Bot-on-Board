@@ -4,6 +4,8 @@ using UnityEngine;
 using Map;
 using Map.Object.Component;
 using Player;
+using System.Collections;
+using Unity.VisualScripting;
 
 /// <summary>
 /// AI単体を処理するクラス
@@ -170,11 +172,22 @@ namespace AI
                 if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider)
                     return;
             }
-            // 経路は[0]が現在地点なので[1]が次のチップ
             transform.localPosition = new Vector3(pos_.x, 0, pos_.y) + MapManager.Singleton.Offset + Vector3.up;
             Position = pos_;
             var _dir = Position - PrePosition;
             transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
+        }
+
+        public IEnumerator DelayMove()
+        {
+            for (int i = 1; i <= 10; ++i)
+            {
+                Vector2 prepos = PrePosition;
+                Vector2 pos = Position;
+                Vector2 _offset = (pos - prepos) * i / 10.0f;
+                transform.localPosition = new Vector3(PrePosition.x, 1, PrePosition.y) + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         #region Attack

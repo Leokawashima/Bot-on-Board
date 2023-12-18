@@ -133,9 +133,23 @@ namespace Map.Object.Component
         [Header(nameof(DirectionMove))]
         [SerializeField] private uint Power;
 
-        public override void Hit(MapObject obj_, AI.AIAgent ai_)
+        public override void Hit(MapObject obj_, AIAgent ai_)
         {
             ai_.Move(obj_.GetMOComponent<Direction>().Vector2D + obj_.Position);
+        }
+    }
+
+    public class RandomMove : MapObjectComponent
+    {
+        [Header(nameof(RandomMove))]
+        [SerializeField] private uint Power;
+
+        public override void Hit(MapObject obj_, AIAgent ai_)
+        {
+            var _size = MapManager.Singleton.Stage.Size;
+            int _randX = UnityEngine.Random.Range(0, _size.x),
+                _randY = UnityEngine.Random.Range(0, _size.y);
+            ai_.Move(new Vector2Int(_randX, _randY));
         }
     }
 }

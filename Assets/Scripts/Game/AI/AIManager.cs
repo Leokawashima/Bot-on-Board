@@ -99,29 +99,22 @@ namespace AI
             }
             //ここまでAI2体前提処理
 
-            foreach (var _ai in AIList)
+            foreach (var ai in AIList)
             {
-                MapManager.Singleton.AIRideChip(_ai.Position, _ai);
-                MapManager.Singleton.AIHitObject(_ai.Position, _ai);
+                MapManager.Singleton.AIRideChip(ai.Position, ai);
+                MapManager.Singleton.AIHitObject(ai.Position, ai);
+            }
+
+            foreach (var ai in AIList)
+            {
+                StartCoroutine(ai.DelayMove());
             }
 
             StartCoroutine(Co_DelayMove());
 
             IEnumerator Co_DelayMove()
             {
-                for (int i = 1; i <= 10; ++i)
-                {
-                    foreach (var ai in AIList)
-                    {
-                        Vector2 prepos = ai.PrePosition;
-                        Vector2 pos = ai.Position;
-                        Vector2 _offset = (pos - prepos) * i / 10.0f;
-                        ai.transform.localPosition = new Vector3(ai.PrePosition.x, 1, ai.PrePosition.y) + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
-                    }
-                    yield return new WaitForSeconds(0.1f);
-                }
-
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1.5f);
                 Event_AiActioned?.Invoke();
             }
         }

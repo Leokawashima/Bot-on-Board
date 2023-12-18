@@ -15,11 +15,12 @@ public class DamageUI : MonoBehaviour
         m_activeCorutine = StartCoroutine(CoEffect(ai_, power_));
     }
 
-    private IEnumerator CoEffect(AI.AIAgent ai_, float power_)
+    private IEnumerator CoEffect(AIAgent ai_, float power_)
     {
         IsUsed = true;
         m_text.gameObject.SetActive(true);
         var _rect = m_text.transform as RectTransform;
+        var _pos = ai_.transform.position;
 
         m_text.text = power_.ToString();
 
@@ -28,7 +29,7 @@ public class DamageUI : MonoBehaviour
         while(_elapsedTime <= 2.0f)
         {
             _elapsedTime += Time.deltaTime;
-            _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, ai_.transform.position);
+            _rect.localPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, _pos);
             yield return null;
         }
 
