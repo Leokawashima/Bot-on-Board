@@ -108,8 +108,11 @@ namespace AI
                 }
             }
 
+            var _maxMoveCnt = 0;
             foreach (var ai in AIList)
             {
+                if (_maxMoveCnt < ai.Move.Count)
+                    _maxMoveCnt = ai.Move.Count;
                 StartCoroutine(ai.DelayMove());
             }
 
@@ -117,7 +120,7 @@ namespace AI
 
             IEnumerator Co_DelayMove()
             {
-                yield return new WaitForSeconds(1.5f);
+                yield return new WaitForSeconds(_maxMoveCnt + 0.5f);
                 Event_AiActioned?.Invoke();
             }
         }

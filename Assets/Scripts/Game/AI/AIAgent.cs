@@ -170,7 +170,7 @@ namespace AI
 
         public IEnumerator DelayMove()
         {
-            for (int i = 0; i < Move.Count; ++i)
+            for (int i = 0, cnt = Move.Count; i < cnt; ++i)
             {
                 Debug.Log(Move.Count);
                 if (i != 0)
