@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Map;
 using AI;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
@@ -38,19 +39,25 @@ public class PlayerUI : MonoBehaviour
     {
         // カードが選択されていないなら返す
         if (m_cardManager.GetSelectCard == null)
+        {
             return;
+        }
 
         // 選択チップ取得
         var _chip = LocalPlayerManager.Singleton.SelectChip;
         // ヌルなら返す　空中に置けるようにしたい場合選択方法から作らねばいけない
         if (_chip == null)
+        {
             return;
+        }
 
         // AIと被っていたら置けないとして返す　ものによってはAIに直接置けたらおもしろそう
         foreach (var ai in AIManager.Singleton.AIList)
         {
-            if (ai.Position == _chip.Position)
+            if (ai.Travel.Position == _chip.Position)
+            {
                 return;
+            }
         }
 
         // オブジェクトがあるなら返す　ハカイ爆弾などのためにこれは別途方法を考えないといけない

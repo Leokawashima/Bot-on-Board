@@ -32,9 +32,10 @@ namespace AI
 
         public void Initialize()
         {
-            for (int i = 0; i < AI_SIZE; ++i)//人数分処理する　現在は2固定
+            var _playerList = PlayerManager.Singleton.PlayerList;
+            for (int i = 0, cnt = AI_SIZE; i < cnt; ++i)//人数分処理する　現在は2固定
             {
-                var _oerator = PlayerManager.Singleton.PlayerList[i];
+                var _oerator = _playerList[i];
                 var _ai = Instantiate(m_prefab, transform);
                 _ai.Spawn(_oerator, new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
                 AIList.Add(_ai);
@@ -73,9 +74,9 @@ namespace AI
         }
         private bool CheckHitAI(AIAgent a_, AIAgent b_)
         {
-            if (a_.Position == b_.Position) return true;
+            if (a_.Travel.Position == b_.Travel.Position) return true;
 
-            if (a_.Position == b_.PrePosition && a_.PrePosition == b_.Position) return true;
+            if (a_.Travel.Position == b_.Travel.PrePosition && a_.Travel.PrePosition == b_.Travel.Position) return true;
 
             return false;
         }
@@ -102,9 +103,9 @@ namespace AI
                 {
                     if (CheckHitAI(_list[i], _list[i + j]))
                     {
-                        _list[i].BackPosition();
+                        _list[i].Travel.BackPosition();
                         _list[i].State.Damage(0.5f);
-                        _list[i + j].BackPosition();
+                        _list[i + j].Travel.BackPosition();
                         _list[i + j].State.Damage(0.5f);
                     }
                 }
@@ -112,19 +113,19 @@ namespace AI
 
             foreach (var ai in _list)
             {
-                for (int i = 0; i < ai.Move.Route.Count; ++i)
+                for (int i = 0; i < ai.Travel.Route.Count; ++i)
                 {
-                    MapManager.Singleton.AIRideCheck(ai.Move.Route[i].Position, ai);
-                    MapManager.Singleton.AIHitCheck(ai.Move.Route[i].Position, ai);
+                    MapManager.Singleton.AIRideCheck(ai.Travel.Route[i].Position, ai);
+                    MapManager.Singleton.AIHitCheck(ai.Travel.Route[i].Position, ai);
                 }
             }
 
             var _maxMoveCnt = 0;
             foreach (var ai in _list)
             {
-                if (_maxMoveCnt < ai.Move.Count)
-                    _maxMoveCnt = ai.Move.Count;
-                StartCoroutine(ai.DelayMove());
+                if (_maxMoveCnt < ai.Travel.Route.Count)
+                    _maxMoveCnt = ai.Travel.Route.Count;
+                StartCoroutine(ai.Travel.DelayMove());
             }
 
             StartCoroutine(Co_DelayMove());

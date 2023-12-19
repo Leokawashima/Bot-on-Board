@@ -1,7 +1,7 @@
-﻿using Map;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 namespace AI
 {
@@ -15,6 +15,7 @@ namespace AI
 
         public void Initialize(AIAgent ai_)
         {
+            m_operator = ai_;
         }
 
         public void Think(AIAgent ai_)
@@ -25,7 +26,7 @@ namespace AI
 
             var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
             // 相手は一人しかいない前提で[0]の座標をターゲットにする
-            SearchRoute = _aStar.Search(ai_.Position, _enemy[0].Position);
+            SearchRoute = _aStar.Search(ai_.Travel.Position, _enemy[0].Travel.Position);
             if (ai_.State.StanTurn > 0)
             {
                 --ai_.State.StanTurn;

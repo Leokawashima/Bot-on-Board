@@ -18,37 +18,31 @@ namespace AI
         /// </summary>
         public PlayerAgent Operator { get; private set; }
 
-        [field: SerializeField] public Vector2Int Position { get; private set; }
-        [field: SerializeField] public Vector2Int PrePosition { get; private set; }
-
         [field: SerializeField] public AIBrain Brain { get; private set; }
-        [field: SerializeField] public AIMove Move { get; private set; }
+        [field: SerializeField] public AITravel Travel { get; private set; }
         [field: SerializeField] public AIState State { get; private set; }
 
         [field: SerializeField] public Weapon HasWeapon { get; set; }
 
         [field: SerializeField] public AICamera Camera { get; private set; }
 
-        public AIAgent Spawn(PlayerAgent operator_, Vector2Int posData_)
+        public AIAgent Spawn(PlayerAgent operator_, Vector2Int pos_)
         {
+            name = $"AI：{operator_.Index}";
             Operator = operator_;
 
-            Position = posData_;
-            PrePosition = posData_;
-
             Brain.Initialize(this);
-            Move.Initialize(this);
+            Travel.Initialize(this, pos_);
             State.Initialize(this);
 
-            transform.localPosition = new Vector3(posData_.x, 1, posData_.y) + MapManager.Singleton.Offset;
+            transform.localPosition = new Vector3(pos_.x, 1, pos_.y) + MapManager.Singleton.Offset;
 
             return this;
         }
 
         public void Think()
         {
-            Move.Initialize(this);
-
+            Travel.Clear();
             Brain.Think(this);
         }
 
@@ -66,13 +60,13 @@ namespace AI
                     }
                     else
                     {
-                        Move.Step(Brain.SearchRoute[1]);
+                        Travel.Step(Brain.SearchRoute[1]);
                     }
                     break;
                 case ThinkState.Move:
                     if (GetRandomWeightedProbability(19, 1) == 0)// 10%で攻撃する(アホ)
                     {
-                        Move.Step(Brain.SearchRoute[1]);
+                        Travel.Step(Brain.SearchRoute[1]);
                     }
                     else
                     {
@@ -85,7 +79,7 @@ namespace AI
                     // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
                     if (GetRandomWeightedProbability(5, 5) == 0)
                     {
-                        Move.Step(Brain.SearchRoute[1]);
+                        Travel.Step(Brain.SearchRoute[1]);
                     }
                     else
                     {
@@ -93,50 +87,6 @@ namespace AI
                     }
                     break;
             }
-        }
-
-        
-        public void BackPosition()
-        {
-            Position = PrePosition;
-            transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
-        }
-
-        public IEnumerator DelayMove()
-        {
-            for (int i = 0, cnt = Move.Count; i < cnt; ++i)
-            {
-                if (i != 0)
-                {
-                    PrePosition = Move.Route[i - 1].Position;
-                }
-                Position = Move.Route[i].Position;
-                switch (Move.Route[i].State)
-                {
-                    case MoveState.Step:
-                        for (int j = 1; j <= 10; ++j)
-                        {
-                            Vector2 prepos = PrePosition;
-                            Vector2 pos = Position;
-                            Vector2 _offset = (pos - prepos) * j / 10.0f;
-                            transform.localPosition = new Vector3(prepos.x, 1, prepos.y)
-                                + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
-                            var _dir = Position - PrePosition;
-                            transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
-                            yield return new WaitForSeconds(0.1f);
-                        }
-                        break;
-                    case MoveState.Warp:
-                        {
-                            transform.localPosition = new Vector3(Position.x, 1, Position.y) + MapManager.Singleton.Offset;
-                            yield return new WaitForSeconds(1.0f);
-                        }
-                        break;
-                }
-                
-            }
-            PrePosition = Position;
-            Move.Clear();
         }
 
         void Attack()
@@ -147,7 +97,7 @@ namespace AI
 
             for (int i = 0; i < _enemy.Count; ++i)
             {
-                var _pos = Position - _enemy[i].Position;
+                var _pos = Travel.Position - _enemy[i].Travel.Position;
                 // マンハッタン距離法　前後左右一マスかチェック
                 if (1 == (Mathf.Abs(_pos.x) + Mathf.Abs(_pos.y)))
                 {
