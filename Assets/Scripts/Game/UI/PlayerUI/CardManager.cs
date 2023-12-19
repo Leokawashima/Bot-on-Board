@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class CardManager : MonoBehaviour
 {
     private const int
-        DECK_SIZE = 10,
         HAND_SIZE = 4,
         DRAW_SIZE = 2;
 
@@ -23,40 +22,40 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    [SerializeField] List<int> m_deck = new(DECK_SIZE);
+    [SerializeField] DeckData_SO m_deckData;
 
     [SerializeField] private ToggleGroup m_toggleGroup;
 
 #if UNITY_EDITOR
-    [SerializeField]
+    [field: SerializeField]
 #endif
-    private List<int> m_trashCardList = new();
+    public List<int> TrashCardList { get; private set; } = new();
 
 #if UNITY_EDITOR
-    [SerializeField]
+    [field: SerializeField]
 #endif
-    private List<int> m_handCardList = new();
-    public List<int> HandCard => m_handCardList;
+    public List<int> HandCardList { get; private set; }
 
 #if UNITY_EDITOR
-    [SerializeField]
+    [field: SerializeField]
 #endif
-    private List<int> m_stockCardList = new();
+    public List<int> StockCardList { get; private set; } = new();
 
     public void Initialize()
     {
+        // 元データのリストコピーのため元データを改変しない
+        var _deck = m_deckData.Deck.CardIndexArray.ToList();
         for (int i = 0; i < HAND_SIZE; ++i)
         {
-            var _index = Random.Range(0, m_deck.Count - 1);
+            var _index = Random.Range(0, _deck.Count - 1);
 
-            m_handCardList.Add(m_deck[_index]);
+            HandCardList.Add(_deck[_index]);
 
-            CardCreate(m_deck[_index]);
+            CardCreate(_deck[_index]);
 
-            m_deck.RemoveAt(_index);
+            _deck.RemoveAt(_index);
         }
-        m_stockCardList = new(m_deck);
-        m_deck.Clear();
+        StockCardList = new(_deck);
     }
 
     private void CardCreate(int index_)
@@ -68,8 +67,8 @@ public class CardManager : MonoBehaviour
 
         _moc.Event_Trash += () =>
         {
-            m_trashCardList.Add(index_);
-            m_handCardList.Remove(index_);
+            TrashCardList.Add(index_);
+            HandCardList.Remove(index_);
         };
 
         var _rect = _moc.transform as RectTransform;
@@ -87,22 +86,24 @@ public class CardManager : MonoBehaviour
     
     public void Draw()
     {
-        var _space = HAND_SIZE - m_handCardList.Count;
+        var _space = HAND_SIZE - HandCardList.Count;
         var _draw = Mathf.Min(_space, DRAW_SIZE);
 
         for (int i = 0; i < _draw; ++i)
         {
-            var _index = Random.Range(0, m_stockCardList.Count - 1);
-            m_handCardList.Add(m_stockCardList[_index]);
+            var _index = Random.Range(0, StockCardList.Count - 1);
+            HandCardList.Add(StockCardList[_index]);
 
-            CardCreate(m_stockCardList[_index]);
+            CardCreate(StockCardList[_index]);
 
-            m_stockCardList.RemoveAt(_index);
+            StockCardList.RemoveAt(_index);
         }
 
-        //ドローが終わったら破棄カードたちを山札に戻す
-        foreach (var index in m_trashCardList)
-            m_stockCardList.Add(index);
-        m_trashCardList.Clear();
+        // ドローが終わったら破棄カードたちを山札に戻す
+        foreach (var index in TrashCardList)
+        {
+            StockCardList.Add(index);
+        }
+        TrashCardList.Clear();
     }
 }

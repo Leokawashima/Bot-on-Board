@@ -759,11 +759,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cardGenerator: {fileID: 9098669358171654254}
-  m_deck: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f00000010000000110000001200000013000000
+  m_deckData: {fileID: 11400000, guid: dfea2884257af954e9735c85bf8fcccb, type: 2}
   m_toggleGroup: {fileID: 125393315238535631}
-  m_trashCardList: 
-  m_handCardList: 
-  m_stockCardList: 
+  <TrashCardList>k__BackingField: 
+  <HandCardList>k__BackingField: 
+  <StockCardList>k__BackingField: 
 --- !u!114 &8292889253322889875
 MonoBehaviour:
   m_ObjectHideFlags: 0

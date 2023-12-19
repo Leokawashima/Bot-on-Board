@@ -62,7 +62,7 @@ public class PlayerUI : MonoBehaviour
         // 置ける枚数を1減らす　カードによって減る量を変える場合これを変えて残り置ける枚数と必要量を比較しなければいけない
         m_NumOfPlace--;
 
-        if (m_NumOfPlace <= 0 || m_cardManager.HandCard.Count == 0)
+        if (m_NumOfPlace <= 0 || m_cardManager.HandCardList.Count == 0)
         {
             OnButton_TurnEnd();
         }

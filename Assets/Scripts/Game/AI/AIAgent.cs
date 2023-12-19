@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Map;
 using Map.Object.Component;
 using Player;
-using System.Collections;
-using Unity.VisualScripting;
-using static UnityEditor.PlayerSettings;
 
 /// <summary>
 /// AI単体を処理するクラス
@@ -15,7 +13,9 @@ namespace AI
 {
     public class AIAgent : MonoBehaviour
     {
-        // このAIを保持しているPlayer
+        /// <summary>
+        /// このAIを保持しているPlayer
+        /// </summary>
         public PlayerAgent Operator { get; private set; }
 
         [field: SerializeField] public Vector2Int Position { get; private set; }
