@@ -21,23 +21,11 @@ namespace AI
         [field: SerializeField] public Vector2Int Position { get; private set; }
         [field: SerializeField] public Vector2Int PrePosition { get; private set; }
 
-        [field: SerializeField] public float HP { get; private set; }
-        [field: SerializeField] public float HPMax { get; private set; }
-        [field: SerializeField] public float AttackPower { get; private set; }
-
-        [field: SerializeField] public Map.Direction Direction { get; private set; }
-        [field: SerializeField] public AliveState AIAliveState { get; private set; }
-        [field: SerializeField] public ThinkState AIThinkState { get; private set; }
-
-        [field: SerializeField] public List<Vector2Int> SearchPath { get; private set; }
-        [field: SerializeField] public AIPath Move { get; private set; }
+        [field: SerializeField] public AIBrain Brain { get; private set; }
+        [field: SerializeField] public AIMove Move { get; private set; }
+        [field: SerializeField] public AIState State { get; private set; }
 
         [field: SerializeField] public Weapon HasWeapon { get; set; }
-        [field: SerializeField] public uint StanTurn { get; set; }
-
-        public event Action<AIAgent, float>
-            Event_DamageHP,
-            Event_HealHP;
 
         [field: SerializeField] public AICamera Camera { get; private set; }
 
@@ -45,14 +33,12 @@ namespace AI
         {
             Operator = operator_;
 
-            HPMax = 10.0f; // 仮初期設定
-            HP = HPMax;
-            AttackPower = 1.0f; // 仮初期設定
-
-            AIAliveState = AliveState.Alive;
-
             Position = posData_;
             PrePosition = posData_;
+
+            Brain.Initialize(this);
+            Move.Initialize(this);
+            State.Initialize(this);
 
             transform.localPosition = new Vector3(posData_.x, 1, posData_.y) + MapManager.Singleton.Offset;
 
@@ -61,36 +47,14 @@ namespace AI
 
         public void Think()
         {
-            Move.Initialize();
+            Move.Initialize(this);
 
-            // 自身を抜いた敵のリスト 仲間のAIがいることを考慮できていない
-            var enemy = new List<AIAgent>(AIManager.Singleton.AIList);
-            enemy.Remove(this);
-
-            var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
-            SearchPath = _aStar.Search(Position, enemy[0].Position);// 相手は一人しかいないので必然的に[0]の座標をターゲットにする
-            if (StanTurn > 0)
-            {
-                --StanTurn;
-                AIThinkState = ThinkState.CantMove;
-            }
-            else if (SearchPath.Count == 2)// 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
-            {
-                AIThinkState = ThinkState.Attack;
-            }
-            else if (SearchPath.Count == 3)
-            {
-                AIThinkState = ThinkState.CollisionPredict;
-            }
-            else
-            {
-                AIThinkState = ThinkState.Move;
-            }
+            Brain.Think(this);
         }
 
         public void Action()
         {
-            switch (AIThinkState)
+            switch (Brain.State)
             {
                 case ThinkState.Attack:
                     // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
@@ -102,13 +66,13 @@ namespace AI
                     }
                     else
                     {
-                        Move.Step(SearchPath[1]);
+                        Move.Step(Brain.SearchRoute[1]);
                     }
                     break;
                 case ThinkState.Move:
                     if (GetRandomWeightedProbability(19, 1) == 0)// 10%で攻撃する(アホ)
                     {
-                        Move.Step(SearchPath[1]);
+                        Move.Step(Brain.SearchRoute[1]);
                     }
                     else
                     {
@@ -121,7 +85,7 @@ namespace AI
                     // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
                     if (GetRandomWeightedProbability(5, 5) == 0)
                     {
-                        Move.Step(SearchPath[1]);
+                        Move.Step(Brain.SearchRoute[1]);
                     }
                     else
                     {
@@ -131,37 +95,7 @@ namespace AI
             }
         }
 
-        public void Damage(float power_)
-        {
-            // HP最低値は0,0固定の方がいいやろ...という前提の処理
-            // 将来的にマイナスまでいくことや蘇生される可能性も考慮すべき
-            HP = Mathf.Max(HP - power_, 0.0f);
-            if (HP == 0.0f)
-            {
-                AIAliveState = AliveState.Dead;
-            }
-            Event_DamageHP?.Invoke(this, power_);
-        }
-        public void Heal(float power_)
-        {
-            if (HP == HPMax)
-            {
-                return;
-            }
-
-            if (HP + power_ > HPMax)
-            {
-                var _realPower = HP + power_ - HPMax;
-                HP += _realPower;
-                Event_HealHP?.Invoke(this, _realPower);
-            }
-            else
-            {
-                HP += power_;
-                Event_HealHP?.Invoke(this, power_);
-            }
-        }
-
+        
         public void BackPosition()
         {
             Position = PrePosition;
@@ -174,10 +108,10 @@ namespace AI
             {
                 if (i != 0)
                 {
-                    PrePosition = Move.Path[i - 1].Position;
+                    PrePosition = Move.Route[i - 1].Position;
                 }
-                Position = Move.Path[i].Position;
-                switch (Move.Path[i].State)
+                Position = Move.Route[i].Position;
+                switch (Move.Route[i].State)
                 {
                     case MoveState.Step:
                         for (int j = 1; j <= 10; ++j)
@@ -226,7 +160,7 @@ namespace AI
                     }
                     else
                     {
-                        _enemy[0].Damage(AttackPower);
+                        _enemy[0].State.Damage(State.AttackPower);
                     }
                     break;
                 }

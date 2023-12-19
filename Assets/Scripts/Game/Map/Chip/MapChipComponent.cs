@@ -16,7 +16,7 @@ namespace Map.Chip.Component
             return true;
         }
 
-        public virtual void Ride(AI.AIAgent ai_)
+        public virtual void Ride(AIAgent ai_)
         {
         }
 
@@ -30,9 +30,9 @@ namespace Map.Chip.Component
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Ride(AI.AIAgent ai_)
+        public override void Ride(AIAgent ai_)
         {
-            ai_.Damage(Power);
+            ai_.State.Damage(Power);
         }
     }
 }

@@ -6,19 +6,19 @@ using UnityEngine;
 namespace AI
 {
     [Serializable]
-    public class AIPath
+    public class AIMove
     {
-        public List<MovePath> Path = new();
+        public List<Path> Route = new();
 
-        public int Count => Path.Count;
+        public int Count => Route.Count;
 
-        public void Initialize()
+        public void Initialize(AIAgent ai_)
         {
-            Path = new();
+            Route = new();
         }
         public void Clear()
         {
-            Path.Clear();
+            Route.Clear();
         }
 
         public void Step(Vector2Int pos_)
@@ -34,7 +34,7 @@ namespace AI
                 if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
             }
 
-            Path.Add(new(pos_, MoveState.Step));
+            Route.Add(new(pos_, MoveState.Step));
         }
         public void Warp(Vector2Int pos_)
         {
@@ -47,16 +47,16 @@ namespace AI
                 if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
             }
 
-            Path.Add(new(pos_, MoveState.Warp));
+            Route.Add(new(pos_, MoveState.Warp));
         }
 
         [Serializable]
-        public class MovePath
+        public class Path
         {
-            public Vector2Int Position { get; private set; }
-            public MoveState State { get; private set; }
+            [field: SerializeField] public Vector2Int Position { get; private set; }
+            [field: SerializeField] public MoveState State { get; private set; }
 
-            public MovePath(Vector2Int position_, MoveState state_)
+            public Path(Vector2Int position_, MoveState state_)
             {
                 Position = position_;
                 State = state_;

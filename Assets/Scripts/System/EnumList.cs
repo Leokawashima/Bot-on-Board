@@ -28,7 +28,7 @@
 
 namespace AI
 {
-    public enum AliveState
+    public enum HealthState
     {
         Non,
         Alive,

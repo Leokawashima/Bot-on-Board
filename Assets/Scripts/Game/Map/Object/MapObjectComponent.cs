@@ -72,7 +72,7 @@ namespace Map.Object.Component
         }
         public virtual bool Action(AI.AIAgent ai_)
         {
-            ai_.Damage(Power);
+            ai_.State.Damage(Power);
             return --Remain <= 0;
         }
     }
@@ -84,7 +84,7 @@ namespace Map.Object.Component
 
         public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
-            ai_.Damage(Power);
+            ai_.State.Damage(Power);
         }
     }
 
@@ -95,7 +95,7 @@ namespace Map.Object.Component
 
         public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
-            ai_.StanTurn = StanTurn;
+            ai_.State.StanTurn = StanTurn;
         }
     }
 
@@ -106,7 +106,7 @@ namespace Map.Object.Component
 
         public override void Hit(MapObject obj_, AI.AIAgent ai_)
         {
-            ai_.Heal(Power);
+            ai_.State.Heal(Power);
         }
     }
 

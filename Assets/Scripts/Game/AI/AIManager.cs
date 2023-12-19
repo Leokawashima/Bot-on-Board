@@ -43,15 +43,15 @@ namespace AI
                 {
                     _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
                 }
-                _ai.Event_DamageHP += (AIAgent ai_, float damage_) =>
+                _ai.State.Event_Damage += (AIAgent ai_, float damage_) =>
                 {
                     GUIManager.Singleton.DamageEffect(ai_, damage_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.HP);
+                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.State.HP);
                 };
-                _ai.Event_HealHP += (AIAgent ai_, float heal_) =>
+                _ai.State.Event_Heal += (AIAgent ai_, float heal_) =>
                 {
                     GUIManager.Singleton.HealEffect(ai_, heal_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.HP);
+                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.State.HP);
                 };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
@@ -63,7 +63,7 @@ namespace AI
         {
             foreach (var _ai in AIList)
             {
-                if (_ai.AIAliveState == AliveState.Dead)
+                if (_ai.State.Health == HealthState.Dead)
                 {
                     return true;
                 }
@@ -103,19 +103,19 @@ namespace AI
                     if (CheckHitAI(_list[i], _list[i + j]))
                     {
                         _list[i].BackPosition();
-                        _list[i].Damage(0.5f);
+                        _list[i].State.Damage(0.5f);
                         _list[i + j].BackPosition();
-                        _list[i + j].Damage(0.5f);
+                        _list[i + j].State.Damage(0.5f);
                     }
                 }
             }
 
             foreach (var ai in _list)
             {
-                for (int i = 0; i < ai.Move.Path.Count; ++i)
+                for (int i = 0; i < ai.Move.Route.Count; ++i)
                 {
-                    MapManager.Singleton.AIRideCheck(ai.Move.Path[i].Position, ai);
-                    MapManager.Singleton.AIHitCheck(ai.Move.Path[i].Position, ai);
+                    MapManager.Singleton.AIRideCheck(ai.Move.Route[i].Position, ai);
+                    MapManager.Singleton.AIHitCheck(ai.Move.Route[i].Position, ai);
                 }
             }
 
