@@ -38,7 +38,6 @@ namespace AI
                 var _ai = Instantiate(m_prefab, transform);
                 _ai.Spawn(_oerator, new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
                 AIList.Add(_ai);
-                MapManager.Singleton.AIManagerList.Add(_ai);
 
                 if (i == 1)
                 {
@@ -49,16 +48,17 @@ namespace AI
                     GUIManager.Singleton.DamageEffect(ai_, damage_);
                     GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.HP);
                 };
-                _ai.Event_HealHP += (AIAgent ai_, float heal) =>
+                _ai.Event_HealHP += (AIAgent ai_, float heal_) =>
                 {
+                    GUIManager.Singleton.HealEffect(ai_, heal_);
                     GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.HP);
                 };
             }
-            GUIManager.Singleton.InitializeAIHPUI();
+            GUIManager.Singleton.InitializeInfoPlayerData();
             m_cameraManager.Initialize();
         }
 
-        //誰か死んだ時点でtrueを返している
+        // 誰か死んだ時点でtrueを返している
         public bool CheckAIIsDead()
         {
             foreach (var _ai in AIList)
@@ -91,7 +91,7 @@ namespace AI
 
             foreach (var ai in _list)
             {
-                //意思決定後に行動
+                // 意思決定後に行動
                 ai.Action();
             }
 

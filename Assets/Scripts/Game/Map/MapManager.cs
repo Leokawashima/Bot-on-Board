@@ -7,8 +7,6 @@ using Map.Object;
 using Map.Stage;
 using Game;
 using AI;
-using System.IO;
-using Unity.VisualScripting;
 
 namespace Map
 {
@@ -30,7 +28,6 @@ namespace Map
         public Transform ObjectParent { get; private set; }
 
         [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
-        public List<AI.AIAgent> AIManagerList { get; private set; } = new();
 
         public MapStage Stage { get; private set; }
 

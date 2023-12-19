@@ -6,20 +6,19 @@ using Game;
 /// <summary>
 /// GUI全般の管理クラス
 /// </summary>
-public class GUIManager : MonoBehaviour
+public class GUIManager : SingletonMonoBehaviour<GUIManager>
 {
-    public static GUIManager Singleton { get; private set; }
-
     [SerializeField] TurnCountManager m_turnCountManager;
     [SerializeField] InfoPlayerDataManager m_infoPlayerDataManager;
     [SerializeField] PlayerUIManager m_playerUIManager;
+    [SerializeField] FloatingUIManager m_floatingUIManager;
     [SerializeField] CutInSystem m_cutInSystem;
-    [SerializeField] DamageUIManager m_DamageUIManager;
     [SerializeField] AudioSource m_audio;
 
-    public static event Action Event_TurnInitializeCutIn;
-    public static event Action Event_AICutInFinish;
-    public static event Action Event_AnimGameSet;
+    public static event Action
+        Event_TurnInitializeCutIn,
+        Event_AICutInFinish,
+        Event_AnimGameSet;
 
     void OnEnable()
     {
@@ -40,19 +39,10 @@ public class GUIManager : MonoBehaviour
         GameManager.Event_Turn_GameSet -= OnTurnGameSet;
     }
 
-    void Awake()
-    {
-        Singleton ??= this;
-    }
-    void OnDestroy()
-    {
-        Singleton = null;
-    }
-
     void OnInitialize()
     {
         m_turnCountManager.SetTurn(GameManager.Singleton.TurnElapsed);
-        m_DamageUIManager.Initialize();
+        m_floatingUIManager.Initialize();
 
         m_playerUIManager.Initialize();
     }
@@ -98,12 +88,20 @@ public class GUIManager : MonoBehaviour
         m_infoPlayerDataManager.Refresh(index_, hp_);
     }
 
-    public void InitializeAIHPUI()
+    public void InitializeInfoPlayerData()
     {
         m_infoPlayerDataManager.Initialize();
     }
     public void DamageEffect(AIAgent ai_, float power_)
     {
-        m_DamageUIManager.AddUI(ai_, power_);
+        m_floatingUIManager.AddUI(ai_, power_, Color.red);
+    }
+    public void HealEffect(AIAgent ai_, float power_)
+    {
+        m_floatingUIManager.AddUI(ai_, power_, Color.green);
+    }
+    public void InteliEffect(AIAgent ai_, int difference_)
+    {
+        m_floatingUIManager.AddUI(ai_, difference_, Color.blue);
     }
 }

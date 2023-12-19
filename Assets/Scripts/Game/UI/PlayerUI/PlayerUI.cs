@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Map;
+using AI;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
@@ -20,6 +21,8 @@ public class PlayerUI : MonoBehaviour
     public event Action Event_ButtonPlace;
     public event Action Event_ButtonTurnEnd;
 
+    [SerializeField] DeckData_SO m_deck;
+
     public void Initialize()
     {
         m_NumOfPlace = m_MaxOfPlace;
@@ -27,7 +30,7 @@ public class PlayerUI : MonoBehaviour
         m_turnEndButton.onClick.AddListener(OnButton_TurnEnd);
         m_placeButton.onClick.AddListener(OnButton_Place);
 
-        m_cardManager.Initialize();
+        m_cardManager.Initialize(m_deck.Deck);
         m_orderManager.Initialize();
     }
 
@@ -44,9 +47,9 @@ public class PlayerUI : MonoBehaviour
             return;
 
         // AIと被っていたら置けないとして返す　ものによってはAIに直接置けたらおもしろそう
-        for (int i = 0; i < MapManager.Singleton.AIManagerList.Count; ++i)
+        foreach (var ai in AIManager.Singleton.AIList)
         {
-            if (MapManager.Singleton.AIManagerList[i].Position == _chip.Position)
+            if (ai.Position == _chip.Position)
                 return;
         }
 

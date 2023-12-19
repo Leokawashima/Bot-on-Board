@@ -17,10 +17,10 @@ public abstract class CorutineMonoBehaivour : MonoBehaviour
     {
         if (m_activeCorutine == null)
         {
-            m_activeCorutine = StartCoroutine(CoProcess());
+            m_activeCorutine = StartCoroutine(CoEvent());
         }
     }
-    private IEnumerator AAA()
+    private IEnumerator CoEvent()
     {
         yield return CoProcess();
         m_activeCorutine = null;

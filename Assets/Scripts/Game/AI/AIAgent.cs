@@ -63,18 +63,18 @@ namespace AI
         {
             Move.Initialize();
 
-            //自身を抜いた敵のリスト　人数が増えてもこれは基本変わらない
-            var enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
+            // 自身を抜いた敵のリスト 仲間のAIがいることを考慮できていない
+            var enemy = new List<AIAgent>(AIManager.Singleton.AIList);
             enemy.Remove(this);
 
             var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
-            SearchPath = _aStar.Search(Position, enemy[0].Position);//相手は一人しかいないので必然的に[0]の座標をターゲットにする
+            SearchPath = _aStar.Search(Position, enemy[0].Position);// 相手は一人しかいないので必然的に[0]の座標をターゲットにする
             if (StanTurn > 0)
             {
                 --StanTurn;
                 AIThinkState = ThinkState.CantMove;
             }
-            else if (SearchPath.Count == 2)//自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
+            else if (SearchPath.Count == 2)// 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
             {
                 AIThinkState = ThinkState.Attack;
             }
@@ -131,20 +131,35 @@ namespace AI
             }
         }
 
-        public void Damage(float damage_)
+        public void Damage(float power_)
         {
-            //HP最低値は0,0固定の方がいいやろ...という前提の処理　将来的に蘇生される可能性も考慮
-            HP = Mathf.Max(HP - damage_, 0.0f);
+            // HP最低値は0,0固定の方がいいやろ...という前提の処理
+            // 将来的にマイナスまでいくことや蘇生される可能性も考慮すべき
+            HP = Mathf.Max(HP - power_, 0.0f);
             if (HP == 0.0f)
             {
                 AIAliveState = AliveState.Dead;
             }
-            Event_DamageHP?.Invoke(this, damage_);
+            Event_DamageHP?.Invoke(this, power_);
         }
-        public void Heal(float heal_)
+        public void Heal(float power_)
         {
-            HP = Mathf.Min(HP + heal_, HPMax);
-            Event_HealHP?.Invoke(this, heal_);
+            if (HP == HPMax)
+            {
+                return;
+            }
+
+            if (HP + power_ > HPMax)
+            {
+                var _realPower = HP + power_ - HPMax;
+                HP += _realPower;
+                Event_HealHP?.Invoke(this, _realPower);
+            }
+            else
+            {
+                HP += power_;
+                Event_HealHP?.Invoke(this, power_);
+            }
         }
 
         public void BackPosition()
@@ -192,8 +207,8 @@ namespace AI
 
         void Attack()
         {
-            //自身を抜いた敵のリスト
-            var _enemy = new List<AIAgent>(MapManager.Singleton.AIManagerList);
+            // 自身を抜いた敵のリスト
+            var _enemy = new List<AIAgent>(AIManager.Singleton.AIList);
             _enemy.Remove(this);
 
             for (int i = 0; i < _enemy.Count; ++i)

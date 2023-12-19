@@ -22,9 +22,14 @@ MonoBehaviour:
   Prefab: {fileID: 8468683320965597539, guid: 25212d0b95ea95b43b2b01dd59ce295a, type: 3}
   Components:
   - rid: 8759145406249304065
+  - rid: 4745484920964251648
   references:
     version: 2
     RefIds:
+    - rid: 4745484920964251648
+      type: {class: Heal, ns: Map.Object.Component, asm: Assembly-CSharp}
+      data:
+        Power: 3
     - rid: 8759145406249304065
       type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:

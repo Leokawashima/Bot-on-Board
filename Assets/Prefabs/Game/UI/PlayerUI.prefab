@@ -319,6 +319,7 @@ MonoBehaviour:
   m_MaxOfPlace: 3
   m_NumOfPlace: 0
   m_AddOfPlace: 3
+  m_deck: {fileID: 11400000, guid: dfea2884257af954e9735c85bf8fcccb, type: 2}
 --- !u!1 &685739899136264388
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +760,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cardGenerator: {fileID: 9098669358171654254}
-  m_deckData: {fileID: 11400000, guid: dfea2884257af954e9735c85bf8fcccb, type: 2}
   m_toggleGroup: {fileID: 125393315238535631}
   <TrashCardList>k__BackingField: 
   <HandCardList>k__BackingField: 

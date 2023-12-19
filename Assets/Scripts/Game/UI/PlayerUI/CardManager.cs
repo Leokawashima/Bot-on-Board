@@ -22,8 +22,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    [SerializeField] DeckData_SO m_deckData;
-
     [SerializeField] private ToggleGroup m_toggleGroup;
 
 #if UNITY_EDITOR
@@ -41,10 +39,10 @@ public class CardManager : MonoBehaviour
 #endif
     public List<int> StockCardList { get; private set; } = new();
 
-    public void Initialize()
+    public void Initialize(DeckData deck_)
     {
         // 元データのリストコピーのため元データを改変しない
-        var _deck = m_deckData.Deck.CardIndexArray.ToList();
+        var _deck = deck_.CardIndexArray.ToList();
         for (int i = 0; i < HAND_SIZE; ++i)
         {
             var _index = Random.Range(0, _deck.Count - 1);
