@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Map;
-using AI;
+using Bot;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
@@ -52,7 +52,7 @@ public class PlayerUI : MonoBehaviour
         }
 
         // AIと被っていたら置けないとして返す　ものによってはAIに直接置けたらおもしろそう
-        foreach (var ai in AIManager.Singleton.AIList)
+        foreach (var ai in BotManager.Singleton.Bots)
         {
             if (ai.Travel.Position == _chip.Position)
             {

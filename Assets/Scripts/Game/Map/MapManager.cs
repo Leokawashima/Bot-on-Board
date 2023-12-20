@@ -6,7 +6,7 @@ using Map.Chip;
 using Map.Object;
 using Map.Stage;
 using Game;
-using AI;
+using Bot;
 
 namespace Map
 {
@@ -31,7 +31,7 @@ namespace Map
 
         public MapStage Stage { get; private set; }
 
-        [field: SerializeField] public List<MapObject> MapObjectList { get; private set; } = new();
+        [field: SerializeField] public List<MapObject> MapObjects { get; private set; } = new();
 
         public static event Action Event_MapCreated;
 
@@ -54,9 +54,9 @@ namespace Map
         }
         private void OnGameFinalize()
         {
-            for (int i = 0; i < MapObjectList.Count; i++)
+            for (int i = 0; i < MapObjects.Count; i++)
             {
-                if (false == MapObjectList[i].TurnUpdate(this))
+                if (false == MapObjects[i].TurnUpdate(this))
                 {
                     // falseでUpdate内部から破壊しリストから削除しているためデクリメントしている
                     --i;
@@ -113,20 +113,20 @@ namespace Map
             return so_.Spawn(chip_.Position, this);
         }
 
-        public void AIHitCheck(Vector2Int pos_, AIAgent ai_)
+        public void AIHitCheck(Vector2Int pos_, BotAgent bot_)
         {
             if (Stage.Object[pos_.y][pos_.x] != null)
             {                   
-                Stage.Object[pos_.y][pos_.x].Hit(ai_);
+                Stage.Object[pos_.y][pos_.x].Hit(bot_);
                 Stage.Object[pos_.y][pos_.x].Finalize(this);
             }
         }
 
-        public void AIRideCheck(Vector2Int pos_, AIAgent ai_)
+        public void AIRideCheck(Vector2Int pos_, BotAgent bot_)
         {
             if (Stage.Chip[pos_.y][pos_.x] != null)
             {
-                Stage.Chip[pos_.y][pos_.x].Ride(ai_);
+                Stage.Chip[pos_.y][pos_.x].Ride(bot_);
             }
         }
 

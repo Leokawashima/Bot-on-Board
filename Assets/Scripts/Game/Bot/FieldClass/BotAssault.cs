@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Map.Object.Component;
 
-namespace AI
+namespace Bot
 {
     [Serializable]
-    public class AIAssault
+    public class BotAssault : BotField_Template
     {
-        private AIAgent m_operator;
-
         [field: SerializeField] public float AttackPower { get; private set; }
         [field: SerializeField] public Weapon Weapon { get; private set; }
 
-        public event Action<AIAgent, Weapon>
+        public event Action<BotAgent, Weapon>
             Event_HoldWeapon;
-        public event Action<AIAgent>
+        public event Action<BotAgent>
             Event_ReleaceWeapon;
 
-        public void Initialize(AIAgent ai_)
+        public BotAssault(BotAgent bot_) : base(bot_)
         {
-            m_operator = ai_;
-
             AttackPower = 1.0f; // 仮初期設定
         }
 
@@ -37,11 +33,11 @@ namespace AI
             Event_ReleaceWeapon?.Invoke(m_operator);
         }
 
-        private void Punch(AIAgent target_)
+        private void Punch(BotAgent target_)
         {
             target_.Health.Damage(AttackPower);
         }
-        private void WeaponAttack(AIAgent target_)
+        private void WeaponAttack(BotAgent target_)
         {
             if (false == Weapon.Attack(target_))
             {
@@ -52,7 +48,7 @@ namespace AI
         public void Attack()
         {
             // 自身を抜いた敵のリスト 仲間のAIがいる可能性を考慮できていない
-            var _enemy = new List<AIAgent>(AIManager.Singleton.AIList);
+            var _enemy = new List<BotAgent>(BotManager.Singleton.Bots);
             _enemy.Remove(m_operator);
 
             var _pos = m_operator.Travel.Position;

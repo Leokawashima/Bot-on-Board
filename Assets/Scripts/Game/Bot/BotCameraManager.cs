@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using Cinemachine;
 
-namespace AI
+namespace Bot
 {
-    public class AICameraManager : MonoBehaviour
+    public class BotCameraManager : MonoBehaviour
     {
         [SerializeField] CameraChangeSystem cameraSystem;
 
@@ -25,10 +24,9 @@ namespace AI
 
         public void Initialize()
         {
-            cameraSystem.m_Cameras = new(AIManager.Singleton.AIList.Count + 1);
-            for (int i = 0, cnt = AIManager.Singleton.AIList.Count; i < cnt; ++i)
+            for (int i = 0, cnt = BotManager.Singleton.Bots.Count; i < cnt; ++i)
             {
-                cameraSystem.m_Cameras.Add(AIManager.Singleton.AIList[i].Camera.Default);
+                cameraSystem.m_Cameras.Add(BotManager.Singleton.Bots[i].Camera.Default);
             }
             cameraSystem.Refresh();
         }

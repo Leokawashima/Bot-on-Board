@@ -17,7 +17,7 @@
         Wall,
     }
 
-    public enum Direction
+    public enum DirectionState
     {
         Forward,
         Right,
@@ -26,7 +26,7 @@
     }
 }
 
-namespace AI
+namespace Bot
 {
     public enum HealthState
     {

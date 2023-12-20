@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 6666446635267003982}
   - component: {fileID: 9117685005750319661}
   m_Layer: 0
-  m_Name: AI
+  m_Name: Bot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,20 +146,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 4039676552996752965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e852cd40d173b7e40a94e44cf46d4d17, type: 3}
+  m_Script: {fileID: 11500000, guid: 691da5f040886334eaec4f4472546ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Position>k__BackingField: {x: 0, y: 0}
-  <PrePosition>k__BackingField: {x: 0, y: 0}
-  <HP>k__BackingField: 0
-  <HPMax>k__BackingField: 0
-  <AttackPower>k__BackingField: 0
-  <Direction>k__BackingField: 0
-  <AIAliveState>k__BackingField: 0
-  <AIThinkState>k__BackingField: 0
-  <SearchPath>k__BackingField: []
-  <MovePath>k__BackingField: []
-  <StanTurn>k__BackingField: 0
+  <Health>k__BackingField:
+    <State>k__BackingField: 0
+    <HP>k__BackingField: 0
+    <HPMax>k__BackingField: 0
+    <StanTurn>k__BackingField: 0
+  <Assault>k__BackingField:
+    <AttackPower>k__BackingField: 0
+  <Brain>k__BackingField:
+    <State>k__BackingField: 0
+    <SearchRoute>k__BackingField: []
+    <Intelligent>k__BackingField: 0
+  <Travel>k__BackingField:
+    <Position>k__BackingField: {x: 0, y: 0}
+    <PrePosition>k__BackingField: {x: 0, y: 0}
+    <Routes>k__BackingField: []
+  <Perform>k__BackingField:
+    <Processes>k__BackingField: []
   <Camera>k__BackingField: {fileID: 9117685005750319661}
 --- !u!114 &9117685005750319661
 MonoBehaviour:
@@ -170,7 +176,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4039676552996752965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e791aa6440d79124cb03a240f4b03570, type: 3}
+  m_Script: {fileID: 11500000, guid: 71f7fddd572fcf04c999783a45161daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Default>k__BackingField: {fileID: 829364418005553134}

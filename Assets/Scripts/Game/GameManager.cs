@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using Map;
-using AI;
+using Bot;
 using Player;
 
 namespace Game
@@ -47,7 +47,7 @@ namespace Game
             GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
             PlayerUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
             GUIManager.Event_AnimGameSet += SystemFinalize;
-            AIManager.Event_AiActioned += TurnFinalize;
+            BotManager.Event_BotsActioned += TurnFinalize;
         }
         void OnDisable()
         {
@@ -55,7 +55,7 @@ namespace Game
             GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
             PlayerUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
             GUIManager.Event_AnimGameSet -= SystemFinalize;
-            AIManager.Event_AiActioned -= TurnFinalize;
+            BotManager.Event_BotsActioned -= TurnFinalize;
         }
         #endregion EventSubscribe
 
@@ -110,7 +110,7 @@ namespace Game
         {
             Event_Turn_Finalize?.Invoke();
 
-            if (AIManager.Singleton.CheckAIIsDead())
+            if (BotManager.Singleton.CheckBotDead())
             {
                 TurnGameSet();
             }
@@ -252,7 +252,7 @@ namespace Game
             _playerManager.AddComponent<LocalPlayerManager>();
 
             PlayerManager.Singleton.Initialize();
-            AIManager.Singleton.Initialize();
+            BotManager.Singleton.Initialize();
             //ここまでローカル専用処理
 
             TurnInitialize();

@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 8379733009492313367}
   - component: {fileID: 8245634083912547314}
   m_Layer: 0
-  m_Name: InfoAIOrder
+  m_Name: InfoBotOrder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

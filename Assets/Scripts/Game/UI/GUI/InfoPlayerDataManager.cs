@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using AI;
+using Bot;
 
 /// <summary>
 /// Player等の情報を表示するクラスの管理クラス
@@ -14,7 +14,7 @@ public class InfoPlayerDataManager : MonoBehaviour
 
     public void Initialize()
     {
-        var _aiList = AIManager.Singleton.AIList;
+        var _aiList = BotManager.Singleton.Bots;
         m_infoArray = new InfoPlayerData[_aiList.Count];
         for (int i = 0, len = m_infoArray.Length; i < len; ++i)
         {
@@ -25,7 +25,7 @@ public class InfoPlayerDataManager : MonoBehaviour
         }
     }
 
-    public void Refresh(int index_, AIAgent ai_)
+    public void Refresh(int index_, BotAgent ai_)
     {
         m_infoArray[index_].Refresh(ai_);
     }

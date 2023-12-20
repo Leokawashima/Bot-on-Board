@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using AI;
+using Bot;
 
 public class FloatingUIManager : MonoBehaviour
 {
@@ -33,7 +33,7 @@ public class FloatingUIManager : MonoBehaviour
         ui_.gameObject.SetActive(false);
     }
 
-    public void AddUI(AIAgent ai_, float power_, Color color_)
+    public void AddUI(BotAgent ai_, float power_, Color color_)
     {
         if (m_poolRest.Count != 0)
         {

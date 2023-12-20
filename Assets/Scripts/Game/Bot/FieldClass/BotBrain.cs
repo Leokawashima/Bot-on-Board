@@ -3,27 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Map;
 
-namespace AI
+namespace Bot
 {
     [Serializable]
-    public class AIBrain
+    public class BotBrain : BotField_Template
     {
-        private AIAgent m_operator;
-
         [field: SerializeField] public ThinkState State { get; private set; }
         [field: SerializeField] public List<Vector2Int> SearchRoute { get; private set; }
 
         [field: SerializeField] public int Intelligent { get; private set; }
-        [SerializeField] public readonly int IntelligentMin = -2;
-        [SerializeField] public readonly int IntelligentMax = 2;
+        [SerializeField] private readonly int IntelligentMin = -2;
+        [SerializeField] private readonly int IntelligentMax = 2;
 
-        public event Action<AIAgent, int>
+        public event Action<BotAgent, int>
             Event_IncreaseIntelligent,
             Event_DecreaseIntelligent;
 
-        public void Initialize(AIAgent ai_)
+        public BotBrain(BotAgent bot_) : base(bot_)
         {
-            m_operator = ai_;
             Intelligent = 0;
         }
 
@@ -68,10 +65,10 @@ namespace AI
             }
         }
 
-        public void Think(AIAgent ai_)
+        public void Think(BotAgent ai_)
         {
             // 自身を抜いた敵のリスト 仲間のAIがいる可能性を考慮できていない
-            var _enemy = new List<AIAgent>(AIManager.Singleton.AIList);
+            var _enemy = new List<BotAgent>(BotManager.Singleton.Bots);
             _enemy.Remove(ai_);
 
             var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
@@ -86,20 +83,20 @@ namespace AI
             else if (SearchRoute.Count == 2)
             {
                 State = ThinkState.Attack;
-                ai_.Perform.Executes.Add(new(19.0f, () => ai_.Assault.Attack()));
-                ai_.Perform.Executes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Processes.Add(new(19.0f, () => ai_.Assault.Attack()));
+                ai_.Perform.Processes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
             }
             else if (SearchRoute.Count == 3)
             {
                 State = ThinkState.CollisionPredict;
-                ai_.Perform.Executes.Add(new(5.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
-                ai_.Perform.Executes.Add(new(5.0f, () => ai_.Assault.Attack()));
+                ai_.Perform.Processes.Add(new(5.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Processes.Add(new(5.0f, () => ai_.Assault.Attack()));
             }
             else
             {
                 State = ThinkState.Move;
-                ai_.Perform.Executes.Add(new(19.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
-                ai_.Perform.Executes.Add(new(1.0f, () => ai_.Assault.Attack()));
+                ai_.Perform.Processes.Add(new(19.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Processes.Add(new(1.0f, () => ai_.Assault.Attack()));
             }
         }
     }

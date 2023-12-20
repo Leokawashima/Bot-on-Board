@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Map.Chip.Component;
-using AI;
+using Bot;
 
 namespace Map.Chip
 {
@@ -41,7 +41,7 @@ namespace Map.Chip
             return true;
         }
 
-        public void Ride(AI.AIAgent ai_)
+        public void Ride(Bot.BotAgent ai_)
         {
             foreach (var component in Components)
             {

@@ -83,11 +83,12 @@ public class FadePanelSystem : MonoBehaviour
     {
         Enable();
 
+        float _cutting = m_cutting;
         float
-            _perFadeCutting = 1 / (float)m_cutting,
-            _perFadeTime = m_wholeTime / m_cutting;
+            _perFadeCutting = 1 / _cutting,
+            _perFadeTime = m_wholeTime / _cutting;
 
-        for (int i = 1; i <= m_cutting; ++i)
+        for (int i = 1; i <= _cutting; ++i)
         {
             yield return new WaitForSeconds(_perFadeTime);
             m_fadeValue = i * _perFadeCutting;
@@ -98,7 +99,7 @@ public class FadePanelSystem : MonoBehaviour
 
         yield return new WaitForSeconds(m_waitTime);
 
-        for (int i = 1; i <= m_cutting; ++i)
+        for (int i = 1; i <= _cutting; ++i)
         {
             yield return new WaitForSeconds(_perFadeTime);
             m_fadeValue = 1f - i * _perFadeCutting;

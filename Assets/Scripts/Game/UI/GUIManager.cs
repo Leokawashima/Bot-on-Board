@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using AI;
+using Bot;
 using Game;
 
 /// <summary>
@@ -17,7 +17,7 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
 
     public static event Action
         Event_TurnInitializeCutIn,
-        Event_AICutInFinish,
+        Event_BotCutInFinish,
         Event_AnimGameSet;
 
     void OnEnable()
@@ -71,7 +71,7 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
     {
         m_cutInSystem.CutIn("AIAction", () =>
         {
-            Event_AICutInFinish?.Invoke();
+            Event_BotCutInFinish?.Invoke();
         });
     }
     void OnTurnGameSet()
@@ -83,7 +83,7 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         });
     }
 
-    public void Refresh(AIAgent ai_)
+    public void Refresh(BotAgent ai_)
     {
         m_infoPlayerDataManager.Refresh(ai_.Operator.Index, ai_);
     }
@@ -92,15 +92,15 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
     {
         m_infoPlayerDataManager.Initialize();
     }
-    public void DamageEffect(AIAgent ai_, float power_)
+    public void DamageEffect(BotAgent ai_, float power_)
     {
         m_floatingUIManager.AddUI(ai_, power_, Color.red);
     }
-    public void HealEffect(AIAgent ai_, float power_)
+    public void HealEffect(BotAgent ai_, float power_)
     {
         m_floatingUIManager.AddUI(ai_, power_, Color.green);
     }
-    public void InteliEffect(AIAgent ai_, int difference_)
+    public void InteliEffect(BotAgent ai_, int difference_)
     {
         m_floatingUIManager.AddUI(ai_, difference_, Color.blue);
     }

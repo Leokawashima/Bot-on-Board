@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Cinemachine;
 
-namespace AI
+namespace Bot
 {
-    public class AICamera : MonoBehaviour
+    public class BotCamera : MonoBehaviour
     {
         [field: SerializeField]
         public CinemachineVirtualCameraBase Default { get; private set; }

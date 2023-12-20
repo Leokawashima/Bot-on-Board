@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using AI;
+using Bot;
 
 namespace Map.Chip.Component
 {
@@ -16,7 +16,7 @@ namespace Map.Chip.Component
             return true;
         }
 
-        public virtual void Ride(AIAgent ai_)
+        public virtual void Ride(BotAgent ai_)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Map.Chip.Component
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Ride(AIAgent ai_)
+        public override void Ride(BotAgent ai_)
         {
             ai_.Health.Damage(Power);
         }

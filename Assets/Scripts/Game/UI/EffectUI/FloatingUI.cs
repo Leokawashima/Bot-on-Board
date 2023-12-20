@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using AI;
+using Bot;
 
 public class FloatingUI :  MonoBehaviour
 {
@@ -14,12 +14,12 @@ public class FloatingUI :  MonoBehaviour
     [SerializeField] TMP_Text m_text;
     public event Action<FloatingUI> Event_Finished;
 
-    public void Effect(AIAgent ai_, float power_, Color color_)
+    public void Effect(BotAgent ai_, float power_, Color color_)
     {
         StartCoroutine(CoEffect(ai_, power_, color_));
     }
 
-    private IEnumerator CoEffect(AIAgent ai_, float power_, Color color_)
+    private IEnumerator CoEffect(BotAgent ai_, float power_, Color color_)
     {
         var _rect = m_text.transform as RectTransform;
         var _pos = ai_.transform.position;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Map.Object.Component;
-using AI;
+using Bot;
 
 namespace Map.Object
 {
@@ -32,7 +32,7 @@ namespace Map.Object
                 component.Initialize(this);
             }
 
-            manager_.MapObjectList.Add(this);
+            manager_.MapObjects.Add(this);
             manager_.Stage.SetMapObject(Position, this);
         }
 
@@ -50,7 +50,7 @@ namespace Map.Object
             return true;
         }
 
-        public void Hit(AIAgent ai_)
+        public void Hit(BotAgent ai_)
         {
             foreach (var component in Components)
             {
@@ -65,7 +65,7 @@ namespace Map.Object
                 component.Destroy();
             }
 
-            manager_.MapObjectList.Remove(this);
+            manager_.MapObjects.Remove(this);
             manager_.Stage.ReSetMapObject(Position);
             Destroy(gameObject);
         }

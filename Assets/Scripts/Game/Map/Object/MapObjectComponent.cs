@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using AI;
+using Bot;
 
 namespace Map.Object.Component
 {
@@ -19,7 +19,7 @@ namespace Map.Object.Component
             return true;
         }
 
-        public virtual void Hit(AIAgent ai_)
+        public virtual void Hit(BotAgent ai_)
         {
         }
 
@@ -64,7 +64,7 @@ namespace Map.Object.Component
         [SerializeField] private float Power = 3.0f;
         [SerializeField] private uint Remain = 1;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Assault.HoldWeapon(this.DeepCopyInstance());
         }
@@ -73,7 +73,7 @@ namespace Map.Object.Component
         {
             return (1 == (Mathf.Abs(pos_.x) + Mathf.Abs(pos_.y)));
         }
-        public virtual bool Attack(AIAgent Target_)
+        public virtual bool Attack(BotAgent Target_)
         {
             Target_.Health.Damage(Power);
             return --Remain <= 0;
@@ -85,7 +85,7 @@ namespace Map.Object.Component
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Health.Damage(Power);
         }
@@ -96,7 +96,7 @@ namespace Map.Object.Component
         [Header(nameof(Stan))]
         [SerializeField] private uint StanTurn = 1;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Health.StanTurn += StanTurn;
         }
@@ -107,7 +107,7 @@ namespace Map.Object.Component
         [Header(nameof(Heal))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Health.Heal(Power);
         }
@@ -116,7 +116,7 @@ namespace Map.Object.Component
     public class Direction : MapObjectComponent
     {
         [Header(nameof(Direction))]
-        public Map.Direction State;
+        public Map.DirectionState State;
 
         public Vector2Int Vector2D
         {
@@ -137,7 +137,7 @@ namespace Map.Object.Component
         // ヘッダーをつけるためだけの空変数
         [SerializeField] private uint Empty;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Travel.Step(Object.GetMOComponent<Direction>().Vector2D + Object.Position);
         }
@@ -149,7 +149,7 @@ namespace Map.Object.Component
         // ヘッダーをつけるためだけの空変数
         [SerializeField] private uint Empty;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             var _size = MapManager.Singleton.Stage.Size;
             int _randX = UnityEngine.Random.Range(0, _size.x),
@@ -163,7 +163,7 @@ namespace Map.Object.Component
         [Header(nameof(IncreaseIntelligent))]
         [SerializeField] private uint m_increase = 1;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Brain.InceaseIntelligent(m_increase);
         }
@@ -174,7 +174,7 @@ namespace Map.Object.Component
         [Header(nameof(DecreaseIntelligent))]
         [SerializeField] private uint m_decrease = 1;
 
-        public override void Hit(AIAgent ai_)
+        public override void Hit(BotAgent ai_)
         {
             ai_.Brain.DecreaseIntelligent(m_decrease);
         }
