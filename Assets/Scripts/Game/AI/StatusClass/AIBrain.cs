@@ -79,21 +79,27 @@ namespace AI
             SearchRoute = _aStar.Search(ai_.Travel.Position, _enemy[0].Travel.Position);
             if (ai_.Health.StanTurn > 0)
             {
-                --ai_.Health.StanTurn;
                 State = ThinkState.CantMove;
+                --ai_.Health.StanTurn;
             }
             // 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
             else if (SearchRoute.Count == 2)
             {
                 State = ThinkState.Attack;
+                ai_.Perform.Executes.Add(new(19.0f, () => ai_.Assault.Attack()));
+                ai_.Perform.Executes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
             }
             else if (SearchRoute.Count == 3)
             {
                 State = ThinkState.CollisionPredict;
+                ai_.Perform.Executes.Add(new(5.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Executes.Add(new(5.0f, () => ai_.Assault.Attack()));
             }
             else
             {
                 State = ThinkState.Move;
+                ai_.Perform.Executes.Add(new(19.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Executes.Add(new(1.0f, () => ai_.Assault.Attack()));
             }
         }
     }

@@ -21,6 +21,7 @@ namespace AI
         [field: SerializeField] public AIAssault Assault { get; private set; }
         [field: SerializeField] public AIBrain Brain { get; private set; }
         [field: SerializeField] public AITravel Travel { get; private set; }
+        [field: SerializeField] public AIPerform Perform { get; private set; }
 
         [field: SerializeField] public AICamera Camera { get; private set; }
 
@@ -33,6 +34,7 @@ namespace AI
             Assault.Initialize(this);
             Brain.Initialize(this);
             Travel.Initialize(this, pos_);
+            Perform.Initialize(this);
 
             return this;
         }
@@ -45,71 +47,8 @@ namespace AI
 
         public void Action()
         {
-            switch (Brain.State)
-            {
-                case ThinkState.Attack:
-                    // 重みつき確立ランダムを求める　今は9:1なので10％の確率で1が帰る
-                    if (GetRandomWeightedProbability(19, 1) == 0)// 10%で移動するかも(アホ)
-                    {
-                        // 仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
-                        // で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
-                        Assault.Attack();
-                    }
-                    else
-                    {
-                        Travel.Step(Brain.SearchRoute[1]);
-                    }
-                    break;
-                case ThinkState.Move:
-                    if (GetRandomWeightedProbability(19, 1) == 0)// 10%で攻撃する(アホ)
-                    {
-                        Travel.Step(Brain.SearchRoute[1]);
-                    }
-                    else
-                    {
-                        Assault.Attack();
-                    }
-                    break;
-                case ThinkState.CantMove:
-                    break;
-                case ThinkState.CollisionPredict:
-                    // 移動した場合相手に当たる可能性がある(Pathのカウント3)の場合50/50で移動か攻撃をする
-                    if (GetRandomWeightedProbability(5, 5) == 0)
-                    {
-                        Travel.Step(Brain.SearchRoute[1]);
-                    }
-                    else
-                    {
-                        Assault.Attack();
-                    }
-                    break;
-            }
-        }
-
-        private int GetRandomWeightedProbability(params int[] weight_)
-        {
-            int _total = 0;
-            foreach (var _value in weight_)
-            {
-                _total += _value;
-            }
-
-            float _random = _total * UnityEngine.Random.value;
-
-            for (int i = 0, len = weight_.Length; i < len; ++i)
-            {
-                // ランダムポイントが重みより小さいなら
-                if (_random < weight_[i])
-                {
-                    return i;
-                }
-                else
-                {
-                    // ランダムポイントが重みより大きいならその値を引いて次の要素へ
-                    _random -= weight_[i];
-                }
-            }
-            return -1;
+            Perform.Action();
+            Perform.Clear();
         }
     }
 }
