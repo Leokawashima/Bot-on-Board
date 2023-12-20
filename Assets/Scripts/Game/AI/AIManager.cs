@@ -44,15 +44,15 @@ namespace AI
                 {
                     _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
                 }
-                _ai.State.Event_Damage += (AIAgent ai_, float damage_) =>
+                _ai.Health.Event_Damage += (AIAgent ai_, float damage_) =>
                 {
                     GUIManager.Singleton.DamageEffect(ai_, damage_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.State.HP);
+                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.Health.HP);
                 };
-                _ai.State.Event_Heal += (AIAgent ai_, float heal_) =>
+                _ai.Health.Event_Heal += (AIAgent ai_, float heal_) =>
                 {
                     GUIManager.Singleton.HealEffect(ai_, heal_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.State.HP);
+                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.Health.HP);
                 };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
@@ -64,7 +64,7 @@ namespace AI
         {
             foreach (var _ai in AIList)
             {
-                if (_ai.State.Health == HealthState.Dead)
+                if (_ai.Health.State == HealthState.Dead)
                 {
                     return true;
                 }
@@ -104,9 +104,9 @@ namespace AI
                     if (CheckHitAI(_list[i], _list[i + j]))
                     {
                         _list[i].Travel.BackPosition();
-                        _list[i].State.Damage(0.5f);
+                        _list[i].Health.Damage(0.5f);
                         _list[i + j].Travel.BackPosition();
-                        _list[i + j].State.Damage(0.5f);
+                        _list[i + j].Health.Damage(0.5f);
                     }
                 }
             }

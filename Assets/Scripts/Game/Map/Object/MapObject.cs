@@ -40,7 +40,7 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                if (false == component.Update(this))
+                if (false == component.Update())
                 {
                     Finalize(manager_);
                     return false;
@@ -50,11 +50,11 @@ namespace Map.Object
             return true;
         }
 
-        public void Hit(AI.AIAgent ai_)
+        public void Hit(AIAgent ai_)
         {
             foreach (var component in Components)
             {
-                component.Hit(this, ai_);
+                component.Hit(ai_);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                component.Destroy(this);
+                component.Destroy();
             }
 
             manager_.MapObjectList.Remove(this);

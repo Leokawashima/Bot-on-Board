@@ -27,9 +27,9 @@ namespace AI
             var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
             // 相手は一人しかいない前提で[0]の座標をターゲットにする
             SearchRoute = _aStar.Search(ai_.Travel.Position, _enemy[0].Travel.Position);
-            if (ai_.State.StanTurn > 0)
+            if (ai_.Health.StanTurn > 0)
             {
-                --ai_.State.StanTurn;
+                --ai_.Health.StanTurn;
                 State = ThinkState.CantMove;
             }
             // 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)

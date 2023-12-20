@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Map;
-using Map.Object.Component;
 using Player;
 
 /// <summary>
@@ -18,11 +17,10 @@ namespace AI
         /// </summary>
         public PlayerAgent Operator { get; private set; }
 
+        [field: SerializeField] public AIHealth Health { get; private set; }
+        [field: SerializeField] public AIAssault Assault { get; private set; }
         [field: SerializeField] public AIBrain Brain { get; private set; }
         [field: SerializeField] public AITravel Travel { get; private set; }
-        [field: SerializeField] public AIState State { get; private set; }
-
-        [field: SerializeField] public Weapon HasWeapon { get; set; }
 
         [field: SerializeField] public AICamera Camera { get; private set; }
 
@@ -31,9 +29,10 @@ namespace AI
             name = $"AI：{operator_.Index}";
             Operator = operator_;
 
+            Health.Initialize(this);
+            Assault.Initialize(this);
             Brain.Initialize(this);
             Travel.Initialize(this, pos_);
-            State.Initialize(this);
 
             transform.localPosition = new Vector3(pos_.x, 1, pos_.y) + MapManager.Singleton.Offset;
 
@@ -56,7 +55,7 @@ namespace AI
                     {
                         // 仕様書の賢さレベルに応じて賢さ+2なら100%, +1なら95%, +-0なら90%, -1なら85%, -2なら80%
                         // で不定の動き...以下の処理で言うMoveが呼び出される...という感じになる
-                        Attack();
+                        Assault.Attack();
                     }
                     else
                     {
@@ -70,7 +69,7 @@ namespace AI
                     }
                     else
                     {
-                        Attack();
+                        Assault.Attack();
                     }
                     break;
                 case ThinkState.CantMove:
@@ -83,37 +82,9 @@ namespace AI
                     }
                     else
                     {
-                        Attack();
+                        Assault.Attack();
                     }
                     break;
-            }
-        }
-
-        void Attack()
-        {
-            // 自身を抜いた敵のリスト
-            var _enemy = new List<AIAgent>(AIManager.Singleton.AIList);
-            _enemy.Remove(this);
-
-            for (int i = 0; i < _enemy.Count; ++i)
-            {
-                var _pos = Travel.Position - _enemy[i].Travel.Position;
-                // マンハッタン距離法　前後左右一マスかチェック
-                if (1 == (Mathf.Abs(_pos.x) + Mathf.Abs(_pos.y)))
-                {
-                    if (HasWeapon != null && HasWeapon.CheckCollider())
-                    {
-                        if (false == HasWeapon.Action(this))
-                        {
-                            HasWeapon = null;
-                        }
-                    }
-                    else
-                    {
-                        _enemy[0].State.Damage(State.AttackPower);
-                    }
-                    break;
-                }
             }
         }
 

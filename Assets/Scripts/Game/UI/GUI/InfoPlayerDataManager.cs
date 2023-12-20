@@ -22,7 +22,7 @@ public class InfoPlayerDataManager : MonoBehaviour
             m_infoArray[i] = Instantiate(m_prefab, transform);
             m_infoArray[i].name = $"InfoPlayerData_{_ai.Operator.Name}";
             m_infoArray[i].Initialize($"P{_ai.Operator.Index + 1}");
-            m_infoArray[i].SetHP(_ai.State.HP);
+            m_infoArray[i].SetHP(_ai.Health.HP);
         }
     }
 
