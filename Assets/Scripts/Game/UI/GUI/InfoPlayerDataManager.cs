@@ -21,13 +21,12 @@ public class InfoPlayerDataManager : MonoBehaviour
             var _ai = _aiList[i];
             m_infoArray[i] = Instantiate(m_prefab, transform);
             m_infoArray[i].name = $"InfoPlayerData_{_ai.Operator.Name}";
-            m_infoArray[i].Initialize($"P{_ai.Operator.Index + 1}");
-            m_infoArray[i].SetHP(_ai.Health.HP);
+            m_infoArray[i].Initialize(_ai);
         }
     }
 
-    public void Refresh(int index_, float hp_)
+    public void Refresh(int index_, AIAgent ai_)
     {
-        m_infoArray[index_].SetHP(hp_);
+        m_infoArray[index_].Refresh(ai_);
     }
 }

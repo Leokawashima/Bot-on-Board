@@ -21,6 +21,8 @@ namespace AI
             m_operator = ai_;
             Position = pos_;
             PrePosition = pos_;
+
+            ai_.transform.localPosition = new Vector3(pos_.x, 1, pos_.y) + MapManager.Singleton.Offset;
         }
         public void Clear()
         {

@@ -83,9 +83,9 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         });
     }
 
-    public void OnSetHPText(int index_, float hp_)
+    public void Refresh(AIAgent ai_)
     {
-        m_infoPlayerDataManager.Refresh(index_, hp_);
+        m_infoPlayerDataManager.Refresh(ai_.Operator.Index, ai_);
     }
 
     public void InitializeInfoPlayerData()

@@ -98,7 +98,7 @@ namespace Map.Object.Component
 
         public override void Hit(AIAgent ai_)
         {
-            ai_.Health.StanTurn = StanTurn;
+            ai_.Health.StanTurn += StanTurn;
         }
     }
 
@@ -134,7 +134,8 @@ namespace Map.Object.Component
     public class DirectionMove : MapObjectComponent
     {
         [Header(nameof(DirectionMove))]
-        [SerializeField] private uint Power;
+        // ヘッダーをつけるためだけの空変数
+        [SerializeField] private uint Empty;
 
         public override void Hit(AIAgent ai_)
         {
@@ -142,10 +143,11 @@ namespace Map.Object.Component
         }
     }
 
-    public class RandomMove : MapObjectComponent
+    public class RandomWarp : MapObjectComponent
     {
-        [Header(nameof(RandomMove))]
-        [SerializeField] private uint Power;
+        [Header(nameof(RandomWarp))]
+        // ヘッダーをつけるためだけの空変数
+        [SerializeField] private uint Empty;
 
         public override void Hit(AIAgent ai_)
         {
@@ -153,6 +155,28 @@ namespace Map.Object.Component
             int _randX = UnityEngine.Random.Range(0, _size.x),
                 _randY = UnityEngine.Random.Range(0, _size.y);
             ai_.Travel.Warp(new Vector2Int(_randX, _randY));
+        }
+    }
+
+    public class IncreaseIntelligent : MapObjectComponent
+    {
+        [Header(nameof(IncreaseIntelligent))]
+        [SerializeField] private uint m_increase = 1;
+
+        public override void Hit(AIAgent ai_)
+        {
+            ai_.Brain.InceaseIntelligent(m_increase);
+        }
+    }
+
+    public class DecreaseIntelligent : MapObjectComponent
+    {
+        [Header(nameof(DecreaseIntelligent))]
+        [SerializeField] private uint m_decrease = 1;
+
+        public override void Hit(AIAgent ai_)
+        {
+            ai_.Brain.DecreaseIntelligent(m_decrease);
         }
     }
 }

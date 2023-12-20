@@ -34,8 +34,6 @@ namespace AI
             Brain.Initialize(this);
             Travel.Initialize(this, pos_);
 
-            transform.localPosition = new Vector3(pos_.x, 1, pos_.y) + MapManager.Singleton.Offset;
-
             return this;
         }
 
@@ -88,15 +86,17 @@ namespace AI
             }
         }
 
-        int GetRandomWeightedProbability(params int[] weight_)
+        private int GetRandomWeightedProbability(params int[] weight_)
         {
             int _total = 0;
             foreach (var _value in weight_)
+            {
                 _total += _value;
+            }
 
             float _random = _total * UnityEngine.Random.value;
 
-            for (int i = 0; i < weight_.Length; ++i)
+            for (int i = 0, len = weight_.Length; i < len; ++i)
             {
                 // ランダムポイントが重みより小さいなら
                 if (_random < weight_[i])
@@ -109,7 +109,7 @@ namespace AI
                     _random -= weight_[i];
                 }
             }
-            return default;
+            return -1;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Map.Object.Component;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace AI

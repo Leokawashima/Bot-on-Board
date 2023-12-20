@@ -13,9 +13,59 @@ namespace AI
         [field: SerializeField] public ThinkState State { get; private set; }
         [field: SerializeField] public List<Vector2Int> SearchRoute { get; private set; }
 
+        [field: SerializeField] public int Intelligent { get; private set; }
+        [SerializeField] public readonly int IntelligentMin = -2;
+        [SerializeField] public readonly int IntelligentMax = 2;
+
+        public event Action<AIAgent, int>
+            Event_IncreaseIntelligent,
+            Event_DecreaseIntelligent;
+
         public void Initialize(AIAgent ai_)
         {
             m_operator = ai_;
+            Intelligent = 0;
+        }
+
+        public void InceaseIntelligent(uint value_)
+        {
+            int _increase = (int)value_;
+            if (Intelligent >= IntelligentMax)
+            {
+                return;
+            }
+
+            if (Intelligent + _increase > IntelligentMax)
+            {
+                int _relative = Intelligent + _increase - IntelligentMax;
+                Intelligent += _relative;
+                Event_IncreaseIntelligent?.Invoke(m_operator, _relative);
+            }
+            else
+            {
+                Intelligent += _increase;
+                Event_IncreaseIntelligent?.Invoke(m_operator, _increase);
+            }
+        }
+        public void DecreaseIntelligent(uint value_)
+        {
+            int _decrease = (int)-value_;
+            if (Intelligent <= IntelligentMin)
+            {
+                return;
+            }
+
+            if (Intelligent + _decrease < IntelligentMin)
+            {
+                int _relative = Intelligent + _decrease - IntelligentMin;
+                Intelligent += _relative;
+                Event_DecreaseIntelligent?.Invoke(m_operator, _relative);
+            }
+            else
+            {
+                Intelligent += _decrease;
+                Event_DecreaseIntelligent?.Invoke(m_operator, _decrease);
+            }
         }
 
         public void Think(AIAgent ai_)

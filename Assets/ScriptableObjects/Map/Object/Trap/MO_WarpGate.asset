@@ -22,14 +22,14 @@ MonoBehaviour:
   Prefab: {fileID: -2494388723460330479, guid: 60e50565962aeca469021b2c3b331ee4, type: 3}
   Components:
   - rid: 8759145406249304075
-  - rid: 4745484900977868800
+  - rid: 4745484948046610434
   references:
     version: 2
     RefIds:
-    - rid: 4745484900977868800
-      type: {class: RandomMove, ns: Map.Object.Component, asm: Assembly-CSharp}
+    - rid: 4745484948046610434
+      type: {class: RandomWarp, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
-        Power: 0
+        Empty: 0
     - rid: 8759145406249304075
       type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:

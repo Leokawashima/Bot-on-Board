@@ -44,15 +44,25 @@ namespace AI
                 {
                     _ai.transform.rotation = Quaternion.Euler(0, 180, 0);
                 }
-                _ai.Health.Event_Damage += (AIAgent ai_, float damage_) =>
+                _ai.Health.Event_Damage += (AIAgent ai_, float power_) =>
                 {
-                    GUIManager.Singleton.DamageEffect(ai_, damage_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.Health.HP);
+                    GUIManager.Singleton.DamageEffect(ai_, power_);
+                    GUIManager.Singleton.Refresh(ai_);
                 };
-                _ai.Health.Event_Heal += (AIAgent ai_, float heal_) =>
+                _ai.Health.Event_Heal += (AIAgent ai_, float power_) =>
                 {
-                    GUIManager.Singleton.HealEffect(ai_, heal_);
-                    GUIManager.Singleton.OnSetHPText(ai_.Operator.Index, ai_.Health.HP);
+                    GUIManager.Singleton.HealEffect(ai_, power_);
+                    GUIManager.Singleton.Refresh(ai_);
+                };
+                _ai.Brain.Event_IncreaseIntelligent += (AIAgent ai_, int value_) =>
+                {
+                    GUIManager.Singleton.InteliEffect(ai_, value_);
+                    GUIManager.Singleton.Refresh(ai_);
+                };
+                _ai.Brain.Event_DecreaseIntelligent += (AIAgent ai_, int value_) =>
+                {
+                    GUIManager.Singleton.InteliEffect(ai_, value_);
+                    GUIManager.Singleton.Refresh(ai_);
                 };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
