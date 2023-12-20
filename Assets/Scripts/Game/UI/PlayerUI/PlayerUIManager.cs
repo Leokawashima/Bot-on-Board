@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Game;
+using Player;
 
 public class PlayerUIManager : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class PlayerUIManager : MonoBehaviour
 #if UNITY_EDITOR
     [Header("Debug"), SerializeField]
 #endif
-    private PlayerUI[] m_playerUIArray;
+    private PlayerUI[] m_playerUIs;
 
     public static event Action
         Event_ButtonPlace,
@@ -17,33 +18,34 @@ public class PlayerUIManager : MonoBehaviour
 
     public void Initialize()
     {
-        m_playerUIArray = new PlayerUI[GameManager.PLAYER_SIZE];
-        for (int i = 0, len = m_playerUIArray.Length; i < len; ++i)
+        var _players = PlayerManager.Singleton.Players;
+        m_playerUIs = new PlayerUI[_players.Count];
+        for (int i = 0, len = m_playerUIs.Length; i < len; ++i)
         {
-            m_playerUIArray[i] = Instantiate(m_prefab, transform);
-            m_playerUIArray[i].Initialize();
-            m_playerUIArray[i].Event_ButtonPlace += () =>
+            m_playerUIs[i] = Instantiate(m_prefab, transform);
+            m_playerUIs[i].Initialize(_players[i]);
+            m_playerUIs[i].Event_ButtonPlace += () =>
             {
                 Event_ButtonPlace?.Invoke();
             };
-            m_playerUIArray[i].Event_ButtonTurnEnd += () =>
+            m_playerUIs[i].Event_ButtonTurnEnd += () =>
             {
                 Event_ButtonTurnEnd?.Invoke();
             };
-            m_playerUIArray[i].gameObject.SetActive(false);
+            m_playerUIs[i].gameObject.SetActive(false);
         }
     }
 
     public void TurnInitialize()
     {
-        foreach (var ui_ in m_playerUIArray)
+        foreach (var ui in m_playerUIs)
         {
-            ui_.TurnInitialize();
+            ui.TurnInitialize();
         }
     }
 
     public void TurnPlace()
     {
-        m_playerUIArray[GameManager.Singleton.ProcessingPlayerIndex].gameObject.SetActive(true);
+        m_playerUIs[GameManager.Singleton.ProgressPlayerIndex].gameObject.SetActive(true);
     }
 }

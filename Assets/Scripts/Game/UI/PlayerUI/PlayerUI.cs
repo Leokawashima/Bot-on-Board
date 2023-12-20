@@ -3,29 +3,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using Map;
 using Bot;
-using Cysharp.Threading.Tasks;
+using Player;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
 /// </summary>
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] CardManager m_cardManager;
-    [SerializeField] InfoAIOrderManager m_orderManager;
-    [SerializeField] Button m_placeButton;
-    [SerializeField] Button m_turnEndButton;
+    private PlayerAgent m_operator;
 
-    [SerializeField] int m_MaxOfPlace = 3;
-    [SerializeField] int m_NumOfPlace = 0;
-    [SerializeField] int m_AddOfPlace = 3;
+    [SerializeField] private CardManager m_cardManager;
+    [SerializeField] private InfoAIOrderManager m_orderManager;
+    [SerializeField] private Button m_placeButton;
+    [SerializeField] private Button m_turnEndButton;
 
-    public event Action Event_ButtonPlace;
-    public event Action Event_ButtonTurnEnd;
+    [SerializeField] private int m_MaxOfPlace = 3;
+    [SerializeField] private int m_NumOfPlace = 0;
+    [SerializeField] private int m_AddOfPlace = 3;
+
+    public event Action
+        Event_ButtonPlace,
+        Event_ButtonTurnEnd;
 
     [SerializeField] DeckData_SO m_deck;
 
-    public void Initialize()
+    public void Initialize(PlayerAgent operator_)
     {
+        m_operator = operator_;
+        name = $"PlayerUI_{m_operator.Index}";
+
         m_NumOfPlace = m_MaxOfPlace;
 
         m_turnEndButton.onClick.AddListener(OnButton_TurnEnd);
@@ -52,9 +58,9 @@ public class PlayerUI : MonoBehaviour
         }
 
         // AIと被っていたら置けないとして返す　ものによってはAIに直接置けたらおもしろそう
-        foreach (var ai in BotManager.Singleton.Bots)
+        foreach (var bot in BotManager.Singleton.Bots)
         {
-            if (ai.Travel.Position == _chip.Position)
+            if (bot.Travel.Position == _chip.Position)
             {
                 return;
             }

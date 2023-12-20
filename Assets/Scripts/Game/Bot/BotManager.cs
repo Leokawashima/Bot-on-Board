@@ -9,7 +9,7 @@ namespace Bot
 {
     public class BotManager : SingletonMonoBehaviour<BotManager>
     {
-        public const int Bot_SIZE = 2;
+        private const int Bot_SIZE = 2;
 
         [SerializeField] BotAgent m_prefab;
         [SerializeField] BotCameraManager m_cameraManager;
@@ -32,7 +32,7 @@ namespace Bot
 
         public void Initialize()
         {
-            var _playerList = PlayerManager.Singleton.PlayerList;
+            var _playerList = PlayerManager.Singleton.Players;
             for (int i = 0, cnt = Bot_SIZE; i < cnt; ++i)//人数分処理する　現在は2固定
             {
                 var _oerator = _playerList[i];

@@ -22,14 +22,15 @@ namespace Map.Chip
             // データ生成時にデフォルトで追加されてほしいコンポーネントを記述する
         };
 
-        public virtual MapChip Spawn(Vector2Int mapPos_, MapManager manager_)
+        public virtual MapChip Spawn(Vector2Int pos_, MapManager manager_)
         {
             var _mc = Instantiate(Prefab, manager_.ChipParent);
-            _mc.transform.localPosition = new Vector3(mapPos_.x, 0.0f, mapPos_.y) + manager_.Offset;
+            _mc.name = $"MC_x:{pos_.x}y:{pos_.y}";
+            _mc.transform.localPosition = new Vector3(pos_.x, 0.0f, pos_.y) + manager_.Offset;
             _mc.transform.localRotation = Prefab.transform.rotation;
 
             _mc.Data = this;
-            _mc.Position = mapPos_;
+            _mc.Position = pos_;
             foreach (var component in Components)
             {
                 var _copy = component.DeepCopyInstance();

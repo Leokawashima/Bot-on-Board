@@ -31,14 +31,15 @@ namespace Map.Object
             new TurnDestroy(),
         };
 
-        public virtual MapObject Spawn(Vector2Int mapPos_, MapManager manager_)
+        public virtual MapObject Spawn(Vector2Int pos_, MapManager manager_)
         {
             var _mo = Instantiate(Prefab, manager_.ObjectParent);
-            _mo.transform.localPosition = new Vector3(mapPos_.x, 1.0f, mapPos_.y) + manager_.Offset;
+            _mo.name = $"MO_x:{pos_.x}y:{pos_.y}";
+            _mo.transform.localPosition = new Vector3(pos_.x, 1.0f, pos_.y) + manager_.Offset;
             _mo.transform.localRotation = Prefab.transform.rotation;
 
             _mo.Data = this;
-            _mo.Position = mapPos_;
+            _mo.Position = pos_;
             foreach (var component in Components)
             {
                 var _copy = component.DeepCopyInstance();

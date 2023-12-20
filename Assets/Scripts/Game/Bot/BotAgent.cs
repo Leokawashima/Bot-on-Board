@@ -23,7 +23,7 @@ namespace Bot
 
         public BotAgent Spawn(PlayerAgent operator_, Vector2Int pos_)
         {
-            name = $"Bot：{operator_.Index}";
+            name = $"Bot_{operator_.Index}";
             Operator = operator_;
 
             Health = new(this);

@@ -51,14 +51,14 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         m_turnCountManager.SetTurn(GameManager.Singleton.TurnElapsed);
         m_playerUIManager.TurnInitialize();
 
-        m_cutInSystem.CutIn("Turn:" + GameManager.Singleton.TurnElapsed, () =>
+        m_cutInSystem.CutIn($"Turn:{ GameManager.Singleton.TurnElapsed}", () =>
         {
             Event_TurnInitializeCutIn?.Invoke();
         });
     }
     void OnTurnPlace()
     {
-        m_cutInSystem.CutIn("Place:" + GameManager.Singleton.ProcessingPlayerIndex, () =>
+        m_cutInSystem.CutIn($"Place:{GameManager.Singleton.ProgressPlayerIndex}", () =>
         {
             m_playerUIManager.TurnPlace();
         });
@@ -83,25 +83,25 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         });
     }
 
-    public void Refresh(BotAgent ai_)
-    {
-        m_infoPlayerDataManager.Refresh(ai_.Operator.Index, ai_);
-    }
-
     public void InitializeInfoPlayerData()
     {
         m_infoPlayerDataManager.Initialize();
     }
-    public void DamageEffect(BotAgent ai_, float power_)
+    public void Refresh(BotAgent bot_)
     {
-        m_floatingUIManager.AddUI(ai_, power_, Color.red);
+        m_infoPlayerDataManager.Refresh(bot_.Operator.Index, bot_);
     }
-    public void HealEffect(BotAgent ai_, float power_)
+
+    public void DamageEffect(BotAgent bot_, float power_)
     {
-        m_floatingUIManager.AddUI(ai_, power_, Color.green);
+        m_floatingUIManager.AddUI(bot_, power_, Color.red);
     }
-    public void InteliEffect(BotAgent ai_, int difference_)
+    public void HealEffect(BotAgent bot_, float power_)
     {
-        m_floatingUIManager.AddUI(ai_, difference_, Color.blue);
+        m_floatingUIManager.AddUI(bot_, power_, Color.green);
+    }
+    public void InteliEffect(BotAgent bot_, int difference_)
+    {
+        m_floatingUIManager.AddUI(bot_, difference_, Color.blue);
     }
 }
