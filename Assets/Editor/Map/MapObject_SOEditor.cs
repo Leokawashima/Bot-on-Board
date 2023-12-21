@@ -53,12 +53,9 @@ namespace Map.Object
             {
                 var _root = new AdvancedDropdownItem("Components");
 
-                var _types = System.Reflection.Assembly.GetAssembly(typeof(MapObjectComponent))
-                    .GetTypes()
-                    .Where(x => x.IsSubclassOf(typeof(MapObjectComponent)) && !x.IsAbstract)
-                    .ToArray();
-                var _components = _types.Select(type => (MapObjectComponent)Activator.CreateInstance(type)).ToArray();
-                foreach(var component in _components)
+                var _components = ExtendMethod.GetSubClass<MapObjectComponent>();
+
+                foreach (var component in _components)
                 {
                     var _item = new AdvancedDropdownItem(component.GetType().Name);
                     m_components.Add(_item.id, component);

@@ -1567,12 +1567,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7447982992813195838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e98e5ff35a499014489d162112e8b255, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a73d42f86118d2438247653ccf8e235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_toggleGroup: {fileID: 9183808950083482611}
   m_prefab: {fileID: 8245634083912547314, guid: f6c25273f6f21ca489b99ab4bfa2a604, type: 3}
-  m_AIOrderArray: []
+  m_infoOrders: []
 --- !u!1 &7631444385680786357
 GameObject:
   m_ObjectHideFlags: 0

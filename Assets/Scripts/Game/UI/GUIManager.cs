@@ -9,7 +9,7 @@ using Game;
 public class GUIManager : SingletonMonoBehaviour<GUIManager>
 {
     [SerializeField] TurnCountManager m_turnCountManager;
-    [SerializeField] InfoPlayerDataManager m_infoPlayerDataManager;
+    [SerializeField] InfoBotStatusManager m_infoPlayerDataManager;
     [SerializeField] PlayerUIManager m_playerUIManager;
     [SerializeField] FloatingUIManager m_floatingUIManager;
     [SerializeField] CutInSystem m_cutInSystem;

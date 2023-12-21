@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 
-public class InfoAIOrder : MonoBehaviour
+public class InfoBotOrder : MonoBehaviour
 {
 #if UNITY_EDITOR
     [field: SerializeField]

@@ -13,7 +13,7 @@ public class PlayerUI : MonoBehaviour
     private PlayerAgent m_operator;
 
     [SerializeField] private CardManager m_cardManager;
-    [SerializeField] private InfoAIOrderManager m_orderManager;
+    [SerializeField] private InfoBotOrderManager m_orderManager;
     [SerializeField] private Button m_placeButton;
     [SerializeField] private Button m_turnEndButton;
 

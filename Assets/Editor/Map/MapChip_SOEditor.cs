@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using Map.Chip.Component;
-
+using System.Linq;
 namespace Map.Chip
 {
     /// <summary>
@@ -53,12 +51,9 @@ namespace Map.Chip
             {
                 var _root = new AdvancedDropdownItem("Components");
 
-                var _types = System.Reflection.Assembly.GetAssembly(typeof(MapChipComponent))
-                    .GetTypes()
-                    .Where(x => x.IsSubclassOf(typeof(MapChipComponent)) && !x.IsAbstract)
-                    .ToArray();
-                var _components = _types.Select(type => (MapChipComponent)Activator.CreateInstance(type)).ToArray();
-                foreach(var component in _components)
+                var _components = ExtendMethod.GetSubClass<MapChipComponent>();
+
+                foreach (var component in _components)
                 {
                     var _item = new AdvancedDropdownItem(component.GetType().Name);
                     m_components.Add(_item.id, component);

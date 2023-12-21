@@ -1,5 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Reflection;
+using UnityEngine;
 using TMPro;
 
 /// <summary>
@@ -45,18 +48,11 @@ public static class ExtendMethod
     /// 使いやすくGenerics化した
     /// <typeparam name="T">コピーを行う型</typeparam>
     /// <param name="from_">コピー元</param>
-    /// <param name="to_">コピー先　明示的にoutをつける</param>
+    /// <param name="to_">コピー先</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void DeepCopy<T>(this T from_, out T to_) where T : class
     {
-        var _copy = System.Activator.CreateInstance(from_.GetType()) as T;
-        var _fields = from_.GetType().GetFields();
-
-        foreach(var field in _fields)
-        {
-            field.SetValue(_copy, field.GetValue(from_));
-        }
-
-        to_ = _copy;
+        to_ = from_.DeepCopyInstance();
     }
 
     /// <summary>
@@ -64,13 +60,12 @@ public static class ExtendMethod
     /// </summary>
     /// 参考　https://albatrus.com/entry/2021/07/04/190000
     /// 使いやすくGenerics化した
-    /// どうやらenum型はpublicでないとコンパイラが暗黙的に変換するためかprivateではコンパイルできない
     /// <typeparam name="T">コピーを行う型</typeparam>
     /// <param name="from_">コピー元</param>
     /// <returns>コピーしたインスタンス</returns>
     public static T DeepCopyInstance<T>(this T from_) where T : class
     {
-        var _copy = System.Activator.CreateInstance(from_.GetType()) as T;
+        var _copy = Activator.CreateInstance(from_.GetType()) as T;
         var _fields = from_.GetType().GetFields();
 
         foreach (var field in _fields)
@@ -79,5 +74,38 @@ public static class ExtendMethod
         }
 
         return _copy;
+    }
+
+    /// <summary>
+    /// サブクラスを取得するメソッド
+    /// </summary>
+    /// 参考　https://light11.hatenadiary.com/entry/2019/10/02/233818
+    /// <typeparam name="T">列挙したい基底クラス型</typeparam>
+    /// <returns>サブクラスの配列を返す</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T[] GetSubClass<T>(this T _) where T : class
+    {
+        return GetSubClass<T>();
+    }
+
+    /// <summary>
+    /// サブクラスを取得するメソッド
+    /// </summary>
+    /// 参考　https://light11.hatenadiary.com/entry/2019/10/02/233818
+    /// <typeparam name="T">列挙したい基底クラス型</typeparam>
+    /// <param name="type_">列挙したい基底クラス</param>
+    /// <returns>サブクラスの配列を返す</returns>
+    public static T[] GetSubClass<T>() where T : class
+    {
+        var _getType = typeof(T);
+        var _types = Assembly
+            .GetAssembly(_getType)
+            .GetTypes()
+            .Where(type_ => type_.IsSubclassOf(_getType) && false == type_.IsAbstract)
+            .ToArray();
+        var _subs = _types
+            .Select(type_ => Activator.CreateInstance(type_) as T)
+            .ToArray();
+        return _subs;
     }
 }

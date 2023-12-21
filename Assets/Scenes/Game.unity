@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 47969279}
   - component: {fileID: 47969275}
   m_Layer: 5
-  m_Name: SubCanvas_InfoPlayerData
+  m_Name: SubCanvas_InfoBotStatus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,11 +152,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 47969274}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eff211b3adbef0c49b00587b1dd6f76a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dba9a339aa29194588dc0682953f5bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefab: {fileID: 7126723779813728080, guid: 39a456d002b04034ba7dbe9311723293, type: 3}
-  m_infoArray: []
+  m_statuses: []
 --- !u!114 &47969276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +393,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128953481}
-  m_LocalRotation: {x: 0.1919741, y: 0.21600763, z: -0.043360535, w: 0.9563506}
+  m_LocalRotation: {x: 0.19197412, y: 0.21600766, z: -0.043360543, w: 0.9563506}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1293,7 +1293,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328738301}
-  m_LocalRotation: {x: 0.20816258, y: 0.21524137, z: -0.04701697, w: 0.952958}
+  m_LocalRotation: {x: 0.20816255, y: 0.21524134, z: -0.047016963, w: 0.952958}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2093,7 +2093,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546397390}
-  m_LocalRotation: {x: 0.20175198, y: 0.21555258, z: -0.045569025, w: 0.95433575}
+  m_LocalRotation: {x: 0.20175195, y: 0.21555255, z: -0.045569018, w: 0.95433575}
   m_LocalPosition: {x: -5.314372, y: 5.1724577, z: -11.164235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3289,10 +3289,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DiceSystem: {fileID: 860583537}
   m_cutInSystem: {fileID: 755244528}
+  m_gameMode: {fileID: 0}
   <TurnElapsed>k__BackingField: 1
-  <ProcessingPlayerIndex>k__BackingField: 0
+  <ProgressPlayerIndex>k__BackingField: 0
   <TurnSuddenDeath>k__BackingField: 30
-  <ForceFinishTurn>k__BackingField: 50
+  <TurnForceFinish>k__BackingField: 50
   m_debug:
     m_gameState: 0
     m_battleState: 0
@@ -4639,7 +4640,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -5515,7 +5516,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033371890}
-  m_LocalRotation: {x: 0.19197412, y: 0.21600766, z: -0.043360543, w: 0.9563506}
+  m_LocalRotation: {x: 0.1919741, y: 0.21600763, z: -0.043360535, w: 0.9563506}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5708,7 +5709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_prefab: {fileID: 3704817949519636658, guid: 685a0fdf93cc90540ac8b5c4f0902bcc, type: 3}
-  m_playerUIArray: []
+  m_playerUIs: []
 --- !u!224 &2053929999
 RectTransform:
   m_ObjectHideFlags: 0
