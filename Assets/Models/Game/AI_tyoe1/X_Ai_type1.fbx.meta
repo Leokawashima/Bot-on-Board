@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bfc05c0fdcc5f9a4f857ee12ee02e5b4
+guid: 04436173856c2eb4280effb77af2c451
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,9 +33,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Arm_01_standby"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Arm_01_standby"
-      internalID: 8827887244642763905
+      name: Arm_01_standby
+      takeName: Armature|Arm_01_standby
+      internalID: -7769516253325295451
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -62,9 +62,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_00"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_00"
-      internalID: -4226333635521153757
+      name: Attack_00
+      takeName: Armature|Attack_00
+      internalID: -2941200005459946182
       firstFrame: 0
       lastFrame: 55
       wrapMode: 0
@@ -91,9 +91,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_01"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_01"
-      internalID: -8188084437450557211
+      name: Attack_01
+      takeName: Armature|Attack_01
+      internalID: -47757044105611666
       firstFrame: 0
       lastFrame: 5
       wrapMode: 0
@@ -120,9 +120,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_02.001"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_02.001"
-      internalID: 6895960870058108023
+      name: Attack_02
+      takeName: Armature|Attack_02
+      internalID: 8416408570801230831
       firstFrame: 0
       lastFrame: 1
       wrapMode: 0
@@ -149,11 +149,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_03"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_03"
-      internalID: 8920888608801191620
+      name: Attack_03
+      takeName: Armature|Attack_03
+      internalID: -7637964620427368052
       firstFrame: 0
-      lastFrame: 9
+      lastFrame: 10
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -178,11 +178,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_00.003"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_00.003"
-      internalID: 8495376015654874721
+      name: Attack_end_00
+      takeName: Armature|Attack_end_00
+      internalID: -7202915280603830026
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -207,11 +207,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_00.004"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_00.004"
-      internalID: -5696655757804758756
+      name: Attack_end_01
+      takeName: Armature|Attack_end_01
+      internalID: 7575965870728662845
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -236,9 +236,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_01"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_01"
-      internalID: 678571913085951642
+      name: Attack_end_02
+      takeName: Armature|Attack_end_02
+      internalID: 3389655516206543617
       firstFrame: 0
       lastFrame: 18
       wrapMode: 0
@@ -265,11 +265,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_02"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_end_02"
-      internalID: 3234139350009160893
+      name: Attack_standby_00
+      takeName: Armature|Attack_standby_00
+      internalID: -6506016745362768976
       firstFrame: 0
-      lastFrame: 17
+      lastFrame: 33
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -294,11 +294,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_00"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_00"
-      internalID: 8848943875584637634
+      name: Attack_standby_01
+      takeName: Armature|Attack_standby_01
+      internalID: 6410839904967607863
       firstFrame: 0
-      lastFrame: 32
+      lastFrame: 27
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -323,11 +323,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_00.001"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_00.001"
-      internalID: -8425238400060300974
+      name: Attack_standby_02
+      takeName: Armature|Attack_standby_02
+      internalID: 1217620142575919746
       firstFrame: 0
-      lastFrame: 32
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -352,11 +352,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_01"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_01"
-      internalID: 8401840443452621794
+      name: Damage_00
+      takeName: Armature|Damage_00
+      internalID: 7022329233036302804
       firstFrame: 0
-      lastFrame: 26
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -381,11 +381,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_02"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack_standby_02"
-      internalID: -7212724147490236180
+      name: Damage_01
+      takeName: Armature|Damage_01
+      internalID: 422978444421195532
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -410,125 +410,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_00"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_00"
-      internalID: 6714094848124858749
-      firstFrame: 0
-      lastFrame: 19
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_01"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_01"
-      internalID: 6479316598399564119
-      firstFrame: 0
-      lastFrame: 39
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_02"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Damage_02"
-      internalID: -4627989781538669787
-      firstFrame: 0
-      lastFrame: 57
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Happy"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Happy"
-      internalID: -416573620708450290
-      firstFrame: 0
-      lastFrame: 59
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Look_around"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Look_around"
-      internalID: 3066360288553176755
+      name: Damage_02
+      takeName: Armature|Damage_02
+      internalID: -1822695639634319692
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -555,9 +439,67 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Move_end"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Move_end"
-      internalID: 2699296155141608103
+      name: Happy
+      takeName: Armature|Happy
+      internalID: -8544982944672715099
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Look_around
+      takeName: Armature|Look_around
+      internalID: -3075097811559739107
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Move_end
+      takeName: Armature|Move_end
+      internalID: -2920319361914562749
       firstFrame: 0
       lastFrame: 19
       wrapMode: 0
@@ -584,9 +526,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Move_start"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Move_start"
-      internalID: 8868887086355695573
+      name: Move_start
+      takeName: Armature|Move_start
+      internalID: 2598212786189232679
       firstFrame: 0
       lastFrame: 9
       wrapMode: 0
@@ -613,11 +555,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_01"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_01"
-      internalID: -1790056505812809426
+      name: Standby_01
+      takeName: Armature|Standby_01
+      internalID: 5233236787441208461
       firstFrame: 0
-      lastFrame: 88
+      lastFrame: 89
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -642,11 +584,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_01.001"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_01.001"
-      internalID: 8029680401860568037
+      name: Standby_02
+      takeName: Armature|Standby_02
+      internalID: -283330357282701040
       firstFrame: 0
-      lastFrame: 88
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -671,40 +613,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_02"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Standby_02"
-      internalID: 1439786428181582208
+      name: Unwell
+      takeName: Armature|Unwell
+      internalID: -733863732391386115
       firstFrame: 0
-      lastFrame: 59
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Unwell"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Unwell"
-      internalID: -8643111710392200763
-      firstFrame: 0
-      lastFrame: 59
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
