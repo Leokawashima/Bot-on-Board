@@ -37,18 +37,7 @@ public class DeckListManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void Awake()
-    {
-        DeckManager.Event_Initialize += Initialize;
-        DeckManager.Event_Initialize += OpenDeckList;
-    }
-    private void OnDestroy()
-    {
-        DeckManager.Event_Initialize -= Initialize;
-        DeckManager.Event_Initialize -= OpenDeckList;
-    }
-
-    private void Initialize()
+    public void Initialize()
     {
         Enable();
 
@@ -67,8 +56,22 @@ public class DeckListManager : MonoBehaviour
             if (SelectInfo != null)
             {
                 DeleteDeck(SelectInfo.Index);
+                if (SelectInfo.Index == 0)
+                {
+                    SelectInfo.Initialize(0, m_deckData.Deck.DeepCopyInstance(), OnClickInfo);
+                }
+                else
+                {
+                    SelectInfo.Initialize(SelectInfo.Index, new()
+                    {
+                        Name = DECK_NAME + (SelectInfo.Index + 1)
+                    }, OnClickInfo);
+                }
+                m_deckListInfo.SetInfo(SelectInfo);
             }
         });
+
+        OpenDeckList();
     }
 
     private void OpenDeckList()
@@ -81,15 +84,9 @@ public class DeckListManager : MonoBehaviour
             }
             else
             {
-                _info.Initialize(0, new()
-                {
-                    Name = m_deckData.Deck.Name,
-                    State = m_deckData.Deck.State,
-                    CategoryCount = m_deckData.Deck.CategoryCount,
-                    RankCount = m_deckData.Deck.RankCount,
-                    CardIndexArray = m_deckData.Deck.CardIndexArray,
-                }, OnClickInfo);
+                _info.Initialize(0, m_deckData.Deck.DeepCopyInstance(), OnClickInfo);
             }
+            m_deckListInfo.SetInfo(_info);
         }
 
         // 2～10は空でも良いため空のデータにする

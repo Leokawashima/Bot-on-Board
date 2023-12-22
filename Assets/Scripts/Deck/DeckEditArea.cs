@@ -1,46 +1,38 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class DeckEditArea : MonoBehaviour
 {
-    [SerializeField]
-    private RectTransform m_baseRectTransform;
+    private RectTransform m_rectTransform;
 
-    private MapObjectCard[] m_editCardList;
-    public MapObjectCard[] EditCardList => m_editCardList;
+    public List<MapObjectCard> EditCards { get; private set; }
 
-    [SerializeField]
-    private MapObjectCard m_targetCard;
+    [SerializeField] private MapObjectCard m_targetCard;
 
-    [SerializeField] private Vector2 m_position = new Vector2(620, 108);
-    [SerializeField] private Vector2 m_offset = new Vector2(200, -134);
-    
-    [SerializeField] private int m_deckSize = 10;
-    
-    private const int WIDTH_SHEAT = 2;
+    [SerializeField] private int m_defaultDeckSize = 10;
 
     private void Start()
     {
-        m_editCardList = new MapObjectCard[m_deckSize];
-        for(int i = 0; i < m_deckSize; ++i)
+        m_rectTransform = transform as RectTransform;
+
+        EditCards = new(m_defaultDeckSize);
+        for(int i = 0, cnt = m_defaultDeckSize; i < cnt; ++i)
         {
-            CardCreate(i);
+            CardCreate();
         }
     }
 
-    private void CardCreate(int index_)
+    private void CardCreate()
     {
-        var _moc = Instantiate(m_targetCard, transform);
-        m_editCardList[index_] = _moc;
-        var _rect = _moc.transform as RectTransform;
-        _rect.anchoredPosition = m_position + new Vector2(m_offset.x * (index_ % WIDTH_SHEAT), m_offset.y * (int)(index_ / WIDTH_SHEAT));
+        var _moc = Instantiate(m_targetCard, m_rectTransform);
+        EditCards.Add(_moc);
     }
 
     public bool CheckHitCard(Vector2 mousePos_, out MapObjectCard card_)
     {
-        if (CheckHit(m_baseRectTransform, mousePos_))
+        if (CheckHit(m_rectTransform, mousePos_))
         {
-            foreach (var card in m_editCardList)
+            foreach (var card in EditCards)
             {
                 var _rect = card.transform as RectTransform;
                 if (CheckHit(_rect, mousePos_))
@@ -54,22 +46,17 @@ public class DeckEditArea : MonoBehaviour
         return false;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool CheckHit(RectTransform rect_, Vector2 mousePos_)
     {
-        return CheckHit(rect_.anchoredPosition, rect_.sizeDelta, mousePos_);
-    }
+        var _pos = rect_.position;
+        var _size = rect_.sizeDelta * rect_.localScale;
+        var _sizeHalf = _size / 2.0f;
 
-    private bool CheckHit(Vector2 pos_, Vector2 size_, Vector2 mousePos_)
-    {
-        if (pos_.x - size_.x / 2.0f < mousePos_.x && pos_.x + size_.x / 2.0f > mousePos_.x)
+        return _InSide(_pos.x, _sizeHalf.x, mousePos_.x) && _InSide(_pos.y, _sizeHalf.y, mousePos_.y);
+        
+        bool _InSide(float pos_, float sizeHalf_, float mousePos_)
         {
-            if (pos_.y - size_.y / 2.0f < mousePos_.y && pos_.y + size_.y / 2.0f > mousePos_.y)
-            {
-                return true;
-            }
-            return false;
+            return pos_ - sizeHalf_ < mousePos_ && pos_ + sizeHalf_ > mousePos_;
         }
-        return false;
     }
 }

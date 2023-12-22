@@ -1,26 +1,29 @@
 ﻿using UnityEngine;
 using TMPro;
-using Map.Object;
+using Map;
 
 public class DeckListInfo : MonoBehaviour
 {
     [SerializeField] private TMP_Text m_text;
 
-    [SerializeField] private MapObjectTable_SO m_table;
-
     public void SetInfo(InfoDeckData info_)
     {
         var _text = $"Name = {info_.Data.Name}\n";
-        if (info_.Data.CardIndexArray != null)
+
+        if (info_.Data.Cards != null)
         {
             _text += $"State = {info_.Data.State}\n";
-            _text += $"Size = {info_.Data.Size}\n";
+            _text += $"Size = {info_.Data.Cards.Count}\n";
 
-            if(info_.Data.CardIndexArray != null)
+            for (int i = 0, cnt = info_.Data.Cards.Count; i < cnt; ++i)
             {
-                for(int i = 0; i < info_.Data.CardIndexArray.Length; ++i)
+                if (info_.Data.Cards[i] != -1)
                 {
-                    _text += m_table.Table[info_.Data.CardIndexArray[i]].Name + "\n";
+                    _text += MapTable.Object.Table[info_.Data.Cards[i]].Name + "\n";
+                }
+                else
+                {
+                    _text += "ナシ\n";
                 }
             }
         }

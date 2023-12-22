@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class DeckInfoArea : MonoBehaviour
@@ -8,6 +7,7 @@ public class DeckInfoArea : MonoBehaviour
     [SerializeField] private TMP_Text m_rankText;
     [SerializeField] private TMP_Text m_deckSizeText;
     [SerializeField] private TMP_InputField m_nameInputField;
+    public string NameText => m_nameInputField.text;
 
     private void OnEnable()
     {
@@ -50,7 +50,7 @@ public class DeckInfoArea : MonoBehaviour
 
     public void SetDeckSizeText(InfoDeckData info_)
     {
-        m_deckSizeText.text = info_.Data.Size.ToString();
+        m_deckSizeText.text = info_.Data.Cards.Count.ToString();
     }
 
     public void SetNameText(InfoDeckData info_)

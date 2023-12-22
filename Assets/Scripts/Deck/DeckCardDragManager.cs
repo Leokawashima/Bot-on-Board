@@ -28,9 +28,9 @@ public class DeckCardDragManager : MonoBehaviour
     {
         m_cursorCard = Instantiate(m_cursorPrefab, transform.parent);
         var _rect = m_cursorCard.transform as RectTransform;
-        _rect.sizeDelta = (m_cursorPrefab.transform as RectTransform).sizeDelta;
+        m_cursorRectTransform = _rect;
+        _rect.localScale = (m_cursorPrefab.transform as RectTransform).localScale;
         m_cursorCard.gameObject.SetActive(false);
-        m_cursorRectTransform = m_cursorCard.transform as RectTransform;
     }
 
     private void OnCardCreated(List<DeckCardDrag> drags_)
@@ -46,7 +46,7 @@ public class DeckCardDragManager : MonoBehaviour
     private void OnBeginDrag(Vector2 mousePos_, MapObjectCard card_)
     {
         m_cursorCard.gameObject.SetActive(true);
-        m_cursorRectTransform.localPosition = mousePos_;
+        m_cursorRectTransform.position = mousePos_;
 
         CopyCard(card_, m_cursorCard);
     }
@@ -56,16 +56,11 @@ public class DeckCardDragManager : MonoBehaviour
         if (m_deckEditArea.CheckHitCard(mousePos_, out var _card))
         {
             var _rect = _card.transform as RectTransform;
-            m_cursorRectTransform.localPosition = _rect.anchoredPosition;
-            m_cursorRectTransform.sizeDelta = _rect.sizeDelta;
-            m_cursorRectTransform.localScale = _rect.localScale;
+            m_cursorRectTransform.position = _rect.position + Vector3.up * 90.0f;
+            return;
         }
-        else
-        {
-            m_cursorRectTransform.localPosition = mousePos_;
-            m_cursorRectTransform.sizeDelta = new Vector2(180, 360);
-            m_cursorRectTransform.localScale = new Vector2(1.0f, 0.5f);
-        }
+
+        m_cursorRectTransform.position = mousePos_;
     }
 
     private void OnEndDrag(Vector2 mousePos_)

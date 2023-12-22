@@ -14,16 +14,9 @@ public class DeckManager : MonoBehaviour
         isSameBan = 1 << 1,
     }
 
-    public static event Action
-        Event_Initialize,
-        Event_Finalize;
-
     private void Start()
     {
-        Event_Initialize?.Invoke();
-    }
-    private void OnDestroy()
-    {
-        Event_Finalize?.Invoke();
+        DeckList.Initialize();
+        DeckEdit.Initialize();
     }
 }

@@ -10,9 +10,6 @@ public class DeckCardList : MonoBehaviour
     [SerializeField] private RectTransform m_content;
 
     [SerializeField] private float m_size = 0.55f;
-    [SerializeField] private Vector2 m_position = new(-460, 810);
-    [SerializeField] private Vector2 m_offset = new(230, -350);
-    [SerializeField] private int m_sheat = 5;
 
     public static event Action<List<DeckCardDrag>> Event_CardCreated;
 
@@ -32,7 +29,6 @@ public class DeckCardList : MonoBehaviour
 
         var _rect = _moc.transform as RectTransform;
         _rect.localScale = Vector3.one * m_size;
-        _rect.anchoredPosition = m_position + new Vector2(m_offset.x * (index_ % m_sheat), m_offset.y * (int)(index_ / m_sheat));
 
         var _drag = _moc.gameObject.AddComponent<DeckCardDrag>();
         _drag.Initialize(_moc);

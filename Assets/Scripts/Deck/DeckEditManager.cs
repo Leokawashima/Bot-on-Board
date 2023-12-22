@@ -7,6 +7,7 @@ public class DeckEditManager : MonoBehaviour
 
     [SerializeField] DeckEditArea m_editArea;
     [SerializeField] DeckListInfo m_listInfo;
+    [SerializeField] DeckInfoArea m_infoArea;
 
     [SerializeField] private Button m_backButton;
     [SerializeField] private Button m_saveButton;
@@ -20,16 +21,7 @@ public class DeckEditManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void Awake()
-    {
-        DeckManager.Event_Initialize += Initialize;
-    }
-    private void OnDestroy()
-    {
-        DeckManager.Event_Initialize -= Initialize;
-    }
-
-    private void Initialize()
+    public void Initialize()
     {
         Disable();
 
@@ -42,14 +34,12 @@ public class DeckEditManager : MonoBehaviour
         {
             var _deckData = new DeckData()
             {
-                Name = "New Save",
-                CardIndexArray = new int[m_editArea.EditCardList.Length],
-
-
+                Name = m_infoArea.NameText,
+                Cards = new(m_editArea.EditCards.Count),
             };
-            for (int i = 0; i < m_editArea.EditCardList.Length; ++i)
+            for (int i = 0, cnt = m_editArea.EditCards.Count; i < cnt; ++i)
             {
-                _deckData.CardIndexArray[i] = m_editArea.EditCardList[i].Index;
+                _deckData.Cards.Add(m_editArea.EditCards[i].Index);
             }
             m_deckManager.DeckList.Save(m_deckManager.DeckList.SelectInfo.Index, _deckData);
             m_deckManager.DeckList.SelectInfo.SetData(_deckData);

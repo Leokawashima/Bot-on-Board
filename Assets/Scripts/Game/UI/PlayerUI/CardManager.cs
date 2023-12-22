@@ -42,7 +42,7 @@ public class CardManager : MonoBehaviour
     public void Initialize(DeckData deck_)
     {
         // 元データのリストコピーのため元データを改変しない
-        var _deck = deck_.CardIndexArray.ToList();
+        var _deck = deck_.Cards.ToList();
         for (int i = 0; i < HAND_SIZE; ++i)
         {
             var _index = Random.Range(0, _deck.Count - 1);
