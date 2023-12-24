@@ -47,6 +47,7 @@ namespace Bot
     {
         Step,
         Warp,
+        Attack,
     }
 }
 

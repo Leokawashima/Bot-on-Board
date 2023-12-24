@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Game;
+using Deck;
+using UnityEngine.InputSystem;
 
 public static class GlobalSystem
 {
@@ -18,9 +20,26 @@ public static class GlobalSystem
     {
         SetPause(false);
         SetGameMode(GameModeState.Non);
+        IndexPlayerFirst = -1;
+        DeckPlayerFirst = null;
+        IndexPlayerSecond = -1;
+        DeckPlayerSecond = null;
         
+        var _input = new InputActionMapSettings();
+        _input.UI.Esc.started += (InputAction.CallbackContext context_) =>
+        {
+            Application.Quit();
+        };
+        _input.Enable();
+
         SceneManager.LoadScene(Name.Scene.System, LoadSceneMode.Additive);
     }
+    public static int
+        IndexPlayerFirst,
+        IndexPlayerSecond;
+    public static DeckData
+        DeckPlayerFirst,
+        DeckPlayerSecond;
 }
 
 namespace Name

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +11,8 @@ public class Fader : MonoBehaviour
     public float fadeDamp = 0.0f;
     [HideInInspector]
     public string fadeScene;
+    [HideInInspector]
+    public string fadeClear;
     [HideInInspector]
     public float alpha = 0.0f;
     [HideInInspector]
@@ -78,7 +80,8 @@ public class Fader : MonoBehaviour
                 if (alpha == 1 && !startedLoading)
                 {
                     startedLoading = true;
-                    SceneManager.LoadScene(fadeScene);
+                    SceneManager.LoadScene(fadeScene, LoadSceneMode.Additive);
+                    SceneManager.UnloadSceneAsync(fadeClear);
                 }
 
             }

@@ -50,5 +50,17 @@ namespace Map.Object
 
             return _mo;
         }
+
+        public T GetMOComponent<T>() where T : MapObjectComponent
+        {
+            foreach (var component in Components)
+            {
+                if (component.GetType() == typeof(T))
+                {
+                    return component as T;
+                }
+            }
+            return null;
+        }
     }
 }

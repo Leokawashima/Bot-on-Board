@@ -110,7 +110,7 @@ public class TitleMenu : MonoBehaviour
                     _lens.scale.value = 0.15f;
                 });
 
-            Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
+            Initiate.Fade(Name.Scene.GameMode, Name.Scene.Title, Color.black, 1.0f);
 
             /// <summary>
             /// 経過時間を引数に呼ばれる処理を一定時間行って終了時にコールバックを呼び出すコルーチン

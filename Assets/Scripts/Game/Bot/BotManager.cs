@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Map;
+using Map.Object.Component;
 using Player;
 
 namespace Bot
@@ -65,6 +66,14 @@ namespace Bot
                     GUIManager.Singleton.InteliEffect(bot_, value_);
                     GUIManager.Singleton.Refresh(bot_);
                 };
+                _bot.Assault.Event_HoldWeapon += (BotAgent bot_, Weapon weapon_) =>
+                {
+                    GUIManager.Singleton.Refresh(bot_);
+                };
+                _bot.Assault.Event_ReleaceWeapon += (BotAgent bot_) =>
+                {
+                    GUIManager.Singleton.Refresh(bot_);
+                };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
             m_cameraManager.Initialize();
@@ -107,21 +116,6 @@ namespace Bot
                 bot.Action();
             }
 
-            // Botが二体以上いないとインデックス漏れエラー
-            for (int i = 0; i < _bots.Count - 1; ++i)
-            {
-                for (int j = i + 1; j < _bots.Count; ++j)
-                {
-                    if (CheckBotHit(_bots[i], _bots[i + j]))
-                    {
-                        _bots[i].Travel.BackPosition();
-                        _bots[i].Health.Damage(0.5f);
-                        _bots[i + j].Travel.BackPosition();
-                        _bots[i + j].Health.Damage(0.5f);
-                    }
-                }
-            }
-
             foreach (var bot in _bots)
             {
                 for (int i = 0; i < bot.Travel.Routes.Count; ++i)
@@ -138,14 +132,40 @@ namespace Bot
                 {
                     _maxMoveCnt = bot.Travel.Routes.Count;
                 }
-                StartCoroutine(bot.Travel.DelayMove());
             }
 
             StartCoroutine(Co_DelayMove());
 
             IEnumerator Co_DelayMove()
             {
-                yield return new WaitForSeconds(_maxMoveCnt + 1.0f);
+                for (int i = 0, cnt = _maxMoveCnt; i < cnt; ++i)
+                {
+                    foreach (var bot in _bots)
+                    {
+                        if (bot.Travel.Routes.Count > i)
+                        {
+                            StartCoroutine(bot.Travel.DelayMove(i));
+                        }
+                    }
+
+                    // Botが二体以上いないとインデックス漏れエラー
+                    for (int j = 0; j < _bots.Count - 1; ++j)
+                    {
+                        for (int k = j + 1; k < _bots.Count; ++k)
+                        {
+                            if (CheckBotHit(_bots[j], _bots[j + k]))
+                            {
+                                _bots[j].Travel.BackPosition();
+                                _bots[j].Health.Damage(0.5f);
+                                _bots[j + k].Travel.BackPosition();
+                                _bots[j + k].Health.Damage(0.5f);
+                            }
+                        }
+                    }
+                    
+                    yield return new WaitForSeconds(1.0f);
+                }
+                yield return new WaitForSeconds(1.0f);
                 Event_BotsActioned?.Invoke();
             }
         }

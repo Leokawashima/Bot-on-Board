@@ -55,6 +55,7 @@ namespace Bot
                 if (MapManager.Singleton.Stage.Object[pos_.y][pos_.x].Data.IsCollider) return;
             }
 
+
             Routes.Add(new(pos_, MoveState.Warp));
         }
 
@@ -64,38 +65,39 @@ namespace Bot
             m_operator.transform.localPosition = new Vector3(PrePosition.x, 0, PrePosition.y) + MapManager.Singleton.Offset + Vector3.up;
         }
 
-        public IEnumerator DelayMove()
+        public IEnumerator DelayMove(int index_)
         {
-            for (int i = 0, cnt = Routes.Count; i < cnt; ++i)
+            Position = Routes[index_].Position;
+            switch (Routes[index_].State)
             {
-                if (i != 0)
-                {
-                    PrePosition = Routes[i - 1].Position;
-                }
-                Position = Routes[i].Position;
-                switch (Routes[i].State)
-                {
-                    case MoveState.Step:
-                        for (int j = 1; j <= 10; ++j)
+                case MoveState.Step:
+                    for (int j = 1; j <= 10; ++j)
+                    {
+                        Vector2 _prepos = PrePosition;
+                        Vector2 _pos = Position;
+                        Vector2 _offset = (_pos - _prepos) * j / 10.0f;
+                        m_operator.transform.localPosition = new Vector3(_prepos.x, 1, _prepos.y)
+                            + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
+                        var _dir = Position - PrePosition;
+                        if (_dir != Vector2Int.zero)
                         {
-                            Vector2 prepos = PrePosition;
-                            Vector2 pos = Position;
-                            Vector2 _offset = (pos - prepos) * j / 10.0f;
-                            m_operator.transform.localPosition = new Vector3(prepos.x, 1, prepos.y)
-                                + new Vector3(_offset.x, 0, _offset.y) + MapManager.Singleton.Offset;
-                            var _dir = Position - PrePosition;
                             m_operator.transform.rotation = Quaternion.LookRotation(new Vector3(_dir.x, 0, _dir.y), Vector3.up);
-                            yield return new WaitForSeconds(0.1f);
                         }
-                        break;
-                    case MoveState.Warp:
-                        {
-                            m_operator.transform.localPosition = new Vector3(Position.x, 1, Position.y) + MapManager.Singleton.Offset;
-                            yield return new WaitForSeconds(1.0f);
-                        }
-                        break;
-                }
-
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    break;
+                case MoveState.Warp:
+                    {
+                        m_operator.transform.localPosition = new Vector3(Position.x, 1, Position.y) + MapManager.Singleton.Offset;
+                        yield return new WaitForSeconds(1.0f);
+                    }
+                    break;
+                case MoveState.Attack:
+                    {
+                        m_operator.Animator.Play("Attack");
+                        yield return new WaitForSeconds(1.0f);
+                    }
+                    break;
             }
             PrePosition = Position;
         }

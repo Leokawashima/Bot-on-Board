@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_LongSword
   m_EditorClassIdentifier: 
-  HasRarity: 1
+  HasRarity: 0
   HasCategory: 0
   Name: "\u30ED\u30F3\u30B0\u30BD\u30FC\u30C9"
-  Info: "\u534D\u3076\u3063\u305F\u5207\u308B\u534D"
-  TitleImage: {fileID: 21300000, guid: 35888767b5103f44c9ae8ac5c907951f, type: 3}
+  Info: "\u534D\u3076\u3063\u305F\u5207\u308B\u534D\n\u5A01\u529B3\u3002"
+  TitleImage: {fileID: 21300000, guid: 4c4d1566966e4f049a8863931809495c, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 4762864159647980754, guid: 1c925e76d6a373a4887092efebc03ce7, type: 3}

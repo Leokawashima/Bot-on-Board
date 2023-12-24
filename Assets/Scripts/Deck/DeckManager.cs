@@ -1,22 +1,25 @@
 ﻿using System;
 using UnityEngine;
 
-public class DeckManager : MonoBehaviour
+namespace Deck
 {
-    [field: SerializeField] public DeckListManager DeckList { get; private set; }
-    [field: SerializeField] public DeckEditManager DeckEdit { get; private set; }
-    
-    [Flags]
-    public enum DeckState
+    public class DeckManager : SingletonMonoBehaviour<DeckManager>
     {
-        Non = 0,
-        isRarilyLimit = 1 << 0,
-        isSameBan = 1 << 1,
-    }
+        [SerializeField] private DeckListManager m_deckList;
+        [SerializeField] private DeckEditManager m_deckEdit;
 
-    private void Start()
-    {
-        DeckList.Initialize();
-        DeckEdit.Initialize();
+        [Flags]
+        public enum DeckState
+        {
+            Non = 0,
+            isRarilyLimit = 1 << 0,
+            isSameBan = 1 << 1,
+        }
+
+        private void Start()
+        {
+            m_deckList.Initialize();
+            m_deckEdit.Initialize();
+        }
     }
 }

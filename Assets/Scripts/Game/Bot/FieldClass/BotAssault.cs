@@ -10,6 +10,7 @@ namespace Bot
     {
         [field: SerializeField] public float AttackPower { get; private set; }
         [field: SerializeField] public Weapon Weapon { get; private set; }
+        [field: SerializeField] public uint Arrow { get; private set; }
 
         public event Action<BotAgent, Weapon>
             Event_HoldWeapon;
@@ -26,11 +27,15 @@ namespace Bot
             Weapon = weapon_;
             Event_HoldWeapon?.Invoke(m_operator, weapon_);
         }
-
         public void ReleaceWeapon()
         {
             Weapon = null;
             Event_ReleaceWeapon?.Invoke(m_operator);
+        }
+
+        public void AddArrow(uint increase_)
+        {
+            Arrow = increase_;
         }
 
         private void Punch(BotAgent target_)
@@ -74,6 +79,8 @@ namespace Bot
                     }
                 }
             }
+
+            m_operator.Travel.Routes.Add(new BotTravel.Path(m_operator.Travel.Position, MoveState.Attack));
         }
     }
 }

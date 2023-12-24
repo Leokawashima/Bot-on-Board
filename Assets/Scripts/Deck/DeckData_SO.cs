@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "DeckData", menuName = "BoB/Deck/DeckData")]
-public class DeckData_SO : ScriptableObject
+namespace Deck
 {
-    public DeckData Deck;
+    [CreateAssetMenu(fileName = "DeckData", menuName = "BoB/Deck/DeckData")]
+    public class DeckData_SO : ScriptableObject
+    {
+        public DeckData Deck;
+    }
 }

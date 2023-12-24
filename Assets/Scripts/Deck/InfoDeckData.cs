@@ -3,66 +3,80 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Deck単位の情報を表示、保持するクラス
-/// </summary>
-public class InfoDeckData : MonoBehaviour
+namespace Deck
 {
-    #region Field
     /// <summary>
-    /// デッキのインデックスを各自保持するためのフィールド
+    /// Deck単位の情報を表示、保持するクラス
     /// </summary>
-    public int Index { get; private set; }
-
-    /// <summary>
-    /// デッキデータを保持するフィールド
-    /// </summary>
-    public DeckData Data { get; private set; }
-    public void SetData(DeckData data_)
+    public class InfoDeckData : MonoBehaviour
     {
-        Data = data_;
-    }
+        #region Field
+        /// <summary>
+        /// デッキのインデックスを各自保持するためのフィールド
+        /// </summary>
+        public int Index { get; private set; }
 
-    /// <summary>
-    /// 押されたことを検知するButton
-    /// </summary>
-    [SerializeField] private Button m_button;
+        /// <summary>
+        /// デッキデータを保持するフィールド
+        /// </summary>
+        public DeckData Data { get; private set; }
 
-    #region GUI
+        /// <summary>
+        /// 押されたことを検知するButton
+        /// </summary>
+        [SerializeField] private Button m_button;
 
-    /// <summary>
-    /// 名前を表示するText
-    /// </summary>
-    [SerializeField] private TMP_Text m_nameText;
+        public event Action<InfoDeckData> Event_ButtonClick;
 
-    #endregion GUI
+        #region GUI
 
-    #endregion Field
+        /// <summary>
+        /// 名前を表示するText
+        /// </summary>
+        [SerializeField] private TMP_Text m_nameText;
 
-    /// <summary>
-    /// 初期化処理
-    /// </summary>
-    public void Initialize(int index_, DeckData deck_, Action<InfoDeckData> action_)
-    {
-        // 最低必要情報設定
-        Index = index_;
-        Data = deck_;
+        #endregion GUI
 
-        // メソッド登録
-        m_button.onClick.AddListener(() =>
+        #endregion Field
+
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        public void Initialize(int index_, DeckData deck_)
         {
-            action_(this);
-        });
+            Index = index_;
+            Data = deck_;
 
-        ReFresh();
-    }
+            m_button.onClick.AddListener(OnButtonClick);
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    public void ReFresh()
-    {
-        // 表示項目設定
-        m_nameText.text = Data.Name;
+            ReFresh();
+        }
+
+        /// <summary>
+        /// デッキデータを設定するメソッド
+        /// </summary>
+        /// <param name="data_">設定するデータ</param>
+        public void SetData(DeckData data_)
+        {
+            Data = data_;
+            ReFresh();
+        }
+
+        /// <summary>
+        /// ボタンを押された時にイベントを呼び出すメソッド
+        /// </summary>
+        private void OnButtonClick()
+        {
+            Event_ButtonClick?.Invoke(this);
+        }
+
+        /// <summary>
+        /// 更新処理
+        /// </summary>
+        private void ReFresh()
+        {
+            // 表示項目設定
+            m_nameText.text = Data.Name;
+        }
     }
 }

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Deck;
 
 public class CardManager : MonoBehaviour
 {
     private const int
         HAND_SIZE = 4,
         DRAW_SIZE = 2;
-
-    private const float CARD_SELECT_OFFSET = 50.0f;
 
     [SerializeField] private CardGenerator m_cardGenerator;
 
@@ -23,6 +22,8 @@ public class CardManager : MonoBehaviour
     }
 
     [SerializeField] private ToggleGroup m_toggleGroup;
+
+    [SerializeField] private InfoCard m_info;
 
 #if UNITY_EDITOR
     [field: SerializeField]
@@ -41,6 +42,7 @@ public class CardManager : MonoBehaviour
 
     public void Initialize(DeckData deck_)
     {
+        HandCardList = new(HAND_SIZE);
         // 元データのリストコピーのため元データを改変しない
         var _deck = deck_.Cards.ToList();
         for (int i = 0; i < HAND_SIZE; ++i)
@@ -54,6 +56,8 @@ public class CardManager : MonoBehaviour
             _deck.RemoveAt(_index);
         }
         StockCardList = new(_deck);
+
+        m_info.Initialize();
     }
 
     private void CardCreate(int index_)
@@ -68,17 +72,18 @@ public class CardManager : MonoBehaviour
             TrashCardList.Add(index_);
             HandCardList.Remove(index_);
         };
+        _moc.Event_Info += (MapObjectCard card_) =>
+        {
+            m_info.Enable();
+            m_info.SetInfo(card_);
+        };
 
         var _rect = _moc.transform as RectTransform;
-        _rect.localScale = Vector2.one * 0.5f;
+        _rect.localScale = Vector2.one * 0.6f;
 
         _toggle.onValueChanged.AddListener((bool isOn_) =>
         {
-            _rect.anchoredPosition = new Vector2(
-                _rect.anchoredPosition.x,
-                isOn_ ?
-                _rect.anchoredPosition.y + CARD_SELECT_OFFSET : _rect.anchoredPosition.y - CARD_SELECT_OFFSET
-                );
+            _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, isOn_ ? -150 : -200);
         });
     }
     

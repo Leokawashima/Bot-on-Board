@@ -15,8 +15,8 @@ MonoBehaviour:
   HasRarity: 0
   HasCategory: 1
   Name: "\u30AF\u30ED\u30B9\u30DC\u30A6"
-  Info: "\u77E2\u3092\u6D88\u8CBB\u3057\u3066\u9060\u8DDD\u96E2\u653B\u6483\u3067\u304D\u308B\u3002\n\u5A01\u529B2\u3002\n\u6700\u521D\u304B\u3089\u77E2\u304C\u4E8C\u3064\u4ED8\u3044\u3066\u3044\u308B\u3002"
-  TitleImage: {fileID: 21300000, guid: ee67a6e4ab75bee42ac6348068fb6a25, type: 3}
+  Info: "\u77E2\u3092\u6D88\u8CBB\u3057\u3066\u9060\u8DDD\u96E2\u653B\u6483\u3067\u304D\u308B\u3002\n\u5A01\u529B2\u3002\n\u6700\u521D\u304B\u3089\u77E2\u304C\u4E8C\u3064\u4ED8\u3044\u3066\u3044\u308B\u3002\n(\u653B\u6483\u5224\u5B9A\u306F\u958B\u767A\u4E2D\u306E\u305F\u3081\u901A\u5E38\u653B\u6483\u3068\u540C\u3058)"
+  TitleImage: {fileID: 21300000, guid: c9a33320a000e7140baccf4ecf1bdc4b, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 6239989903741537931, guid: e2764d8aa3302ce49b4ab374233c861f, type: 3}
@@ -35,5 +35,5 @@ MonoBehaviour:
     - rid: 8759145406249304085
       type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
-        Power: 3
+        Power: 2
         Remain: 1

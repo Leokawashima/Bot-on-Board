@@ -21,6 +21,8 @@ namespace Game
         [field: SerializeField] public int TurnSuddenDeath { get; private set; } = 30;
         [field: SerializeField] public int TurnForceFinish { get; private set; } = 50;
 
+        [SerializeField] private Material m_skybox;
+
         public static event Action
             Event_Initialize,
             Event_Turn_Initialize,
@@ -56,6 +58,7 @@ namespace Game
 
         void Start()
         {
+            RenderSettings.skybox = m_skybox;
             SystemInitalize();
         }
 
@@ -73,7 +76,7 @@ namespace Game
         {
             Event_Finalize?.Invoke();
 
-            Initiate.Fade(Name.Scene.Result, Color.black, 1.0f);
+            Initiate.Fade(Name.Scene.Result, Name.Scene.Game, Color.black, 1.0f);
         }
 
         void TurnInitialize()
@@ -94,21 +97,14 @@ namespace Game
         {
             Event_Turn_Finalize?.Invoke();
 
-            if (BotManager.Singleton.CheckBotDead())
+            if (BotManager.Singleton.CheckBotDead() || TurnElapsed > TurnForceFinish)
             {
                 TurnGameSet();
             }
 
-            if (TurnElapsed < TurnForceFinish)
-            {
-                TurnElapsed++;
+            TurnElapsed++;
 
-                TurnInitialize();
-            }
-            else
-            {
-                TurnGameSet();
-            }
+            TurnInitialize();
         }
         void TurnGameSet()
         {

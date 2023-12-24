@@ -9,9 +9,13 @@ namespace Map.Object.Component
     {
         protected MapObject Object;
 
-        public virtual void Initialize(MapObject obj_)
+        public virtual void Awake(MapObject obj_)
         {
             Object = obj_;
+        }
+
+        public virtual void Start()
+        {
         }
 
         public virtual bool Update()
@@ -19,7 +23,7 @@ namespace Map.Object.Component
             return true;
         }
 
-        public virtual void Hit(BotAgent ai_)
+        public virtual void Hit(BotAgent bot_)
         {
         }
 
@@ -35,7 +39,7 @@ namespace Map.Object.Component
         [SerializeField] private uint TurnMax = 10;
         [SerializeField] private uint TurnSpawn = 10;
 
-        public override void Initialize(MapObject obj_)
+        public override void Awake(MapObject obj_)
         {
             TurnDestruction = TurnSpawn;
         }
@@ -85,9 +89,9 @@ namespace Map.Object.Component
         [Header(nameof(Damage))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Health.Damage(Power);
+            bot_.Health.Damage(Power);
         }
     }
 
@@ -96,9 +100,9 @@ namespace Map.Object.Component
         [Header(nameof(Stan))]
         [SerializeField] private uint StanTurn = 1;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Health.StanTurn += StanTurn;
+            bot_.Health.StanTurn += StanTurn;
         }
     }
 
@@ -107,16 +111,16 @@ namespace Map.Object.Component
         [Header(nameof(Heal))]
         [SerializeField] private float Power = 1.0f;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Health.Heal(Power);
+            bot_.Health.Heal(Power);
         }
     }
 
     public class Direction : MapObjectComponent
     {
         [Header(nameof(Direction))]
-        public Map.DirectionState State;
+        public DirectionState State;
 
         public Vector2Int Vector2D
         {
@@ -137,9 +141,9 @@ namespace Map.Object.Component
         // ヘッダーをつけるためだけの空変数
         [SerializeField] private uint Empty;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Travel.Step(Object.GetMOComponent<Direction>().Vector2D + Object.Position);
+            bot_.Travel.Step(Object.GetMOComponent<Direction>().Vector2D + Object.Position);
         }
     }
 
@@ -149,12 +153,12 @@ namespace Map.Object.Component
         // ヘッダーをつけるためだけの空変数
         [SerializeField] private uint Empty;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
             var _size = MapManager.Singleton.Stage.Size;
             int _randX = UnityEngine.Random.Range(0, _size.x),
                 _randY = UnityEngine.Random.Range(0, _size.y);
-            ai_.Travel.Warp(new Vector2Int(_randX, _randY));
+            bot_.Travel.Warp(new Vector2Int(_randX, _randY));
         }
     }
 
@@ -163,9 +167,9 @@ namespace Map.Object.Component
         [Header(nameof(IncreaseIntelligent))]
         [SerializeField] private uint m_increase = 1;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Brain.InceaseIntelligent(m_increase);
+            bot_.Brain.InceaseIntelligent(m_increase);
         }
     }
 
@@ -174,9 +178,43 @@ namespace Map.Object.Component
         [Header(nameof(DecreaseIntelligent))]
         [SerializeField] private uint m_decrease = 1;
 
-        public override void Hit(BotAgent ai_)
+        public override void Hit(BotAgent bot_)
         {
-            ai_.Brain.DecreaseIntelligent(m_decrease);
+            bot_.Brain.DecreaseIntelligent(m_decrease);
+        }
+    }
+
+    public class Arrow : MapObjectComponent
+    {
+        [Header(nameof(Arrow))]
+        [SerializeField] private uint m_increase = 3;
+
+        public override void Hit(BotAgent bot_)
+        {
+            bot_.Assault.AddArrow(m_increase);
+        }
+    }
+
+    public class OverrideSpawn : MapObjectComponent
+    {
+        [Header(nameof(OverrideSpawn))]
+        [SerializeField] private uint Empty;
+        public override void Awake(MapObject obj_)
+        {
+            Object = obj_;
+
+            var _pos = obj_.Position;
+            for (int i = 0, cnt = MapManager.Singleton.MapObjects.Count; i < cnt; ++i)
+            {
+                if (MapManager.Singleton.MapObjects[i].Position == _pos)
+                {
+                    MapManager.Singleton.MapObjects[i].Finalize(MapManager.Singleton);
+                }
+            }
+        }
+        public override void Start()
+        {
+            Object.Finalize(MapManager.Singleton);
         }
     }
 }

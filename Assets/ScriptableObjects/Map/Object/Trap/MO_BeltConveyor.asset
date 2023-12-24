@@ -16,7 +16,7 @@ MonoBehaviour:
   HasCategory: 3
   Name: "\u30D9\u30EB\u30C8\u30B3\u30F3\u30D9\u30A2"
   Info: "\u30D9\u30EB\u30C8\u30B3\u30F3\u30D9\u30A2\u3002\n\u4E57\u308B\u3068\u30B3\u30F3\u30D9\u30A2\u65B9\u5411\u306B\u79FB\u52D5\u3057\u3066\u3057\u307E\u3046\u3002"
-  TitleImage: {fileID: 21300000, guid: b79cc5edd0717a3448349f750813bf5c, type: 3}
+  TitleImage: {fileID: 21300000, guid: fd1e70a3b2475ce43a1617ac79403604, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: -7133317745497258694, guid: c89f38bf5334a394d85c801e74c1a321, type: 3}
@@ -40,4 +40,4 @@ MonoBehaviour:
     - rid: 8759145406249304070
       type: {class: DirectionMove, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
-        Power: 0
+        Empty: 0

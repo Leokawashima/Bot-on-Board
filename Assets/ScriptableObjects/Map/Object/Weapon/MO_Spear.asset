@@ -15,8 +15,8 @@ MonoBehaviour:
   HasRarity: 0
   HasCategory: 0
   Name: "\u30E4\u30EA"
-  Info: "\u30E4\u30EA\u3002\n\u30E4\u30EA\u30E4\u30EA\u30E4\u30EA\u3002"
-  TitleImage: {fileID: 21300000, guid: 37139c2f631675f488b86767a9708d31, type: 3}
+  Info: "\u30E4\u30EA\u3002\n\u30E4\u30EA\u30E4\u30EA\u30E4\u30EA\u3002\n\u5A01\u529B2.5\u3002"
+  TitleImage: {fileID: 21300000, guid: 1b1dbc9e768c85d48abfb9e3a8deb6be, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 1642479611443022614, guid: 448fe33e2065bb24bbf314e959cc28f8, type: 3}
@@ -35,5 +35,5 @@ MonoBehaviour:
     - rid: 8759145406249304089
       type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
-        Power: 3
+        Power: 2.5
         Remain: 1

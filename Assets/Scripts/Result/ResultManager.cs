@@ -12,6 +12,6 @@ public class ResultManager : MonoBehaviour
 
     void OnButtonTitle()
     {
-        Initiate.Fade(Name.Scene.Title, Color.black, 1.0f);
+        Initiate.Fade(Name.Scene.Title, Name.Scene.Result, Color.black, 1.0f);
     }
 }

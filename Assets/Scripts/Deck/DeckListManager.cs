@@ -1,161 +1,168 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using MyFileSystem;
 
-public class DeckListManager : MonoBehaviour
+namespace Deck
 {
-    private const int PRESET_DECK_SIZE = 10;
-
-    [SerializeField] DeckManager m_deckManager;
-
-    public InfoDeckData SelectInfo { get; private set; }
-
-    [SerializeField] private RectTransform m_content;
-    [SerializeField] private InfoDeckData m_prefab;
-    [SerializeField] private float m_position = -85.0f;
-    [SerializeField] private float m_offset = -160.0f;
-
-    private const string DECK_NAME = "Deck";
-
-    // デフォルトのデータをいれるためだけのSOをいれている
-    [SerializeField] private DeckData_SO m_deckData;
-
-    [SerializeField] DeckListInfo m_deckListInfo;
-
-    [SerializeField] private Button m_editButton;
-    [SerializeField] private Button m_deleteButton;
-
-    public static event Action<InfoDeckData> Event_EditOpen;
-
-    public void Enable()
+    public class DeckListManager : SingletonMonoBehaviour<DeckListManager>
     {
-        gameObject.SetActive(true);
-    }
-    public void Disable()
-    {
-        gameObject.SetActive(false);
-    }
+        [SerializeField] Canvas m_canvas;
 
-    public void Initialize()
-    {
-        Enable();
+        public InfoDeckData SelectInfo { get; private set; }
 
-        m_editButton.onClick.AddListener(() =>
+        [SerializeField] DeckListInfo m_deckListInfo;
+        [SerializeField] InfoDeckDataManager m_infoManager;
+
+        [SerializeField] private Button
+            m_editButton,
+            m_deleteButton;
+        [SerializeField] private PopupDialog
+            m_editDialog,
+            m_deleteDialog;
+
+        #region ベータ用に最低限機能を実装した部分
+        [SerializeField] private Button m_backButton;
+        [SerializeField] private RectTransform
+            m_playerFirst,
+            m_playerSecond;
+        [SerializeField] private Button
+            m_playerFirstSetButton,
+            m_playerSecondSetButton;
+
+        #endregion ベータ用に最低限機能を実装した部分
+
+        public event Action<InfoDeckData>
+            Event_Edit,
+            Event_Delete;
+
+        private void Enable()
+        {
+            m_canvas.enabled = true;
+        }
+        private void Disable()
+        {
+            m_canvas.enabled = false;
+        }
+
+        public void Initialize()
+        {
+            Enable();
+
+            DeckEditManager.Singleton.Event_Back += OnButtonBack;
+            DeckEditManager.Singleton.Event_Save += OnButtonSave;
+            m_infoManager.Event_ClickInfo += OnClickInfo;
+
+            m_backButton.onClick.AddListener(OnButtonListBack);
+
+            m_editButton.onClick.AddListener(OnButtonEdit);
+            m_editDialog.AcceptButton.onClick.AddListener(OnDialogEditAccept);
+            m_editDialog.CancelButton.onClick.AddListener(OnDialogEditCancel);
+
+            m_deleteButton.onClick.AddListener(OnButtonDelete);
+            m_deleteDialog.AcceptButton.onClick.AddListener(OnDialogDeleteAccept);
+            m_deleteDialog.CancelButton.onClick.AddListener(OnDialogDeleteCancel);
+
+            m_playerFirst.gameObject.SetActive(false);
+            m_playerSecond.gameObject.SetActive(false);
+            m_playerFirstSetButton.onClick.AddListener(OnButtonPlayerFirst);
+            m_playerSecondSetButton.onClick.AddListener(OnButtonPlayerSecond);
+
+            m_infoManager.Initialize();
+            if (GlobalSystem.IndexPlayerFirst != -1)
+            {
+                var _index = GlobalSystem.IndexPlayerFirst;
+                m_playerFirst.gameObject.SetActive(true);
+                m_playerFirst.SetParent(m_infoManager.Infos[_index].transform);
+                m_playerFirst.transform.localPosition = new Vector3(350, 30, 0);
+            }
+            if (GlobalSystem.IndexPlayerSecond != -1)
+            {
+                var _index = GlobalSystem.IndexPlayerSecond;
+                m_playerSecond.gameObject.SetActive (true);
+                m_playerSecond.SetParent(m_infoManager.Infos[_index].transform);
+                m_playerSecond.transform.localPosition = new Vector3(400, 30, 0);
+            }
+        }
+
+        private void OnButtonListBack()
+        {
+            Initiate.Fade(Name.Scene.GameMode, Name.Scene.Deck, Color.black, 1.0f);
+        }
+
+        private void OnButtonEdit()
         {
             if (SelectInfo != null)
             {
-                Disable();
-                m_deckManager.DeckEdit.Enable();
-                Event_EditOpen?.Invoke(SelectInfo);
+                m_editDialog.DialogText.text = $"{SelectInfo.Data.Name}\nを編集します\nよろしいですか？";
+                m_editDialog.Enable();
             }
-        });
+        }
+        private void OnDialogEditAccept()
+        {
+            Disable();
+            Event_Edit?.Invoke(SelectInfo);
+            m_editDialog.Disable();
+        }
+        private void OnDialogEditCancel()
+        {
+            m_editDialog.Disable();
+        }
 
-        m_deleteButton.onClick.AddListener(() =>
+        private void OnButtonDelete()
         {
             if (SelectInfo != null)
             {
-                DeleteDeck(SelectInfo.Index);
-                if (SelectInfo.Index == 0)
-                {
-                    SelectInfo.Initialize(0, m_deckData.Deck.DeepCopyInstance(), OnClickInfo);
-                }
-                else
-                {
-                    SelectInfo.Initialize(SelectInfo.Index, new()
-                    {
-                        Name = DECK_NAME + (SelectInfo.Index + 1)
-                    }, OnClickInfo);
-                }
-                m_deckListInfo.SetInfo(SelectInfo);
-            }
-        });
-
-        OpenDeckList();
-    }
-
-    private void OpenDeckList()
-    {
-        // 最初のデッキデータは空になってほしくない為にデータがない場合既存のデータから読み取る
-        {
-            if(OpenDeck(0, out var _deck, out var _info))
-            {
-                _info.Initialize(0, _deck, OnClickInfo);
-            }
-            else
-            {
-                _info.Initialize(0, m_deckData.Deck.DeepCopyInstance(), OnClickInfo);
-            }
-            m_deckListInfo.SetInfo(_info);
-        }
-
-        // 2～10は空でも良いため空のデータにする
-        for(int i = 1; i < PRESET_DECK_SIZE; ++i)
-        {
-            if (OpenDeck(i, out var _deck, out var _info))
-            {
-                _info.Initialize(i, _deck, OnClickInfo);
-            }
-            else
-            {
-                _info.Initialize(i, new()
-                {
-                    Name = DECK_NAME + (i + 1)
-                }, OnClickInfo);
+                m_deleteDialog.DialogText.text = $"{SelectInfo.Data.Name}\nを削除します\nよろしいですか？";
+                m_deleteDialog.Enable();
             }
         }
-    }
-
-    private void OnClickInfo(InfoDeckData info_)
-    {
-        SelectInfo = info_;
-        m_deckListInfo.SetInfo(info_);
-    }
-
-    private bool OpenDeck(int index_, out DeckData deck_, out InfoDeckData info_)
-    {
-        info_ = Instantiate(m_prefab, m_content);
-        var _rect = info_.transform as RectTransform;
-        _rect.anchoredPosition = new(_rect.anchoredPosition.x, m_position + index_ * m_offset);
-
-        return LoadDeck(index_, out deck_);
-    }
-
-    public void Save(int index_, DeckData deck_)
-    {
-        SaveDeck(index_, deck_);
-    }
-
-    private void SaveDeck(int index_, DeckData deck_)
-    {
-        var _str = JsonUtility.ToJson(deck_);
-
-        // 暗号化する処理
-
-        JsonFileSystem.Save(GetDeckFilePath(index_), _str);
-    }
-
-    private bool LoadDeck(int index_, out DeckData deck_)
-    {
-        if(false == JsonFileSystem.Load(GetDeckFilePath(index_), out string _str))
+        private void OnDialogDeleteAccept()
         {
-            deck_ = null;
-            return false;
+            DeckJsonFileSystem.DeleteJson(SelectInfo.Index);
+            Event_Delete?.Invoke(SelectInfo);
+            m_deckListInfo.SetInfo(SelectInfo);
+
+            m_deleteDialog.Disable();
+        }
+        private void OnDialogDeleteCancel()
+        {
+            m_deleteDialog.Disable();
         }
 
-        // 暗号化から戻す処理
+        private void OnClickInfo(InfoDeckData info_)
+        {
+            SelectInfo = info_;
+            m_deckListInfo.SetInfo(info_);
+        }
 
-        deck_ = JsonUtility.FromJson<DeckData>(_str);
-        return true;
-    }
+        private void OnButtonBack()
+        {
+            Enable();
+        }
+        private void OnButtonSave(DeckData deck_)
+        {
+            DeckJsonFileSystem.SaveJson(SelectInfo.Index, deck_);
+            SelectInfo.SetData(deck_);
+            m_deckListInfo.SetInfo(SelectInfo);
 
-    private bool DeleteDeck(int index_)
-    {
-        return JsonFileSystem.Delete(GetDeckFilePath(index_));
-    }
+            Enable();
+        }
 
-    private string GetDeckFilePath(int index_)
-    {
-        return Name.FilePath.FilePath_Deck + $"/Deck{index_}.json";
+        private void OnButtonPlayerFirst()
+        {
+            m_playerFirst.gameObject.SetActive(true);
+            m_playerFirst.SetParent(SelectInfo.transform);
+            m_playerFirst.transform.localPosition = new Vector3(350, 30, 0);
+            GlobalSystem.IndexPlayerFirst = SelectInfo.Index;
+            GlobalSystem.DeckPlayerFirst = SelectInfo.Data.DeepCopyInstance();
+        }
+        private void OnButtonPlayerSecond()
+        {
+            m_playerSecond.gameObject.SetActive(true);
+            m_playerSecond.SetParent(SelectInfo.transform);
+            m_playerSecond.transform.localPosition = new Vector3(400, 30, 0);
+            GlobalSystem.IndexPlayerSecond = SelectInfo.Index;
+            GlobalSystem.DeckPlayerSecond = SelectInfo.Data.DeepCopyInstance();
+        }
     }
 }

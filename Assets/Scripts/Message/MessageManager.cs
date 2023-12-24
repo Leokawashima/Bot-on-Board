@@ -160,6 +160,6 @@ public class MessageManager : MonoBehaviour
         }
 
         m_text.SetAlpha(0);
-        Initiate.Fade(Name.Scene.Title, Color.black, 1.0f);
+        Initiate.Fade(Name.Scene.Title, Name.Scene.Message, Color.black, 1.0f);
     }
 }

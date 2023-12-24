@@ -16,11 +16,16 @@ MonoBehaviour:
   HasCategory: 2
   Name: "\u30CF\u30AB\u30A4\u30D0\u30AF\u30C0\u30F3"
   Info: "\u8A2D\u7F6E\u30DE\u30B9\u306B\u3042\u308B\u3082\u306E\u3092\u30CF\u30AB\u30A4\u3059\u308B\u3002"
-  TitleImage: {fileID: 21300000, guid: 3fab799c1ae807744a5f8339413fb1be, type: 3}
+  TitleImage: {fileID: 21300000, guid: 18a2c9a1f5679954098e5af90b04c8f2, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: -7713710083345739746, guid: 20a3b0b3cdca01f45bddbfcf46efa322, type: 3}
-  Components: []
+  Components:
+  - rid: 8759145594821541889
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 8759145594821541889
+      type: {class: OverrideSpawn, ns: Map.Object.Component, asm: Assembly-CSharp}
+      data:
+        Empty: 0

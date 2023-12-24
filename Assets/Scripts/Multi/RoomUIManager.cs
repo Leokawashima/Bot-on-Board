@@ -80,7 +80,7 @@ public class RoomUIManager : MonoBehaviour
     {
         RoomUDP.SetRoomState(RoomUDP.RoomState.Host);
         //テスト実装　通信処理を挟む
-        Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
+        Initiate.Fade(Name.Scene.Game, Name.Scene.Room, Color.black, 1.0f);
     }
     public void OnClick_GameReady()
     {
@@ -88,7 +88,7 @@ public class RoomUIManager : MonoBehaviour
         RoomUDP.SetRoomState(RoomUDP.RoomState.Client);
         RoomUDP.SetRoomIPAddress(roomList.SelectInfoRoomData.RoomData.Address);
         //RoomUDP.SetRoomIPAddress(new IPAddress(new byte[] {127, 0, 0, 1}));
-        Initiate.Fade(Name.Scene.Game, Color.black, 1.0f);
+        Initiate.Fade(Name.Scene.Game, Name.Scene.Room, Color.black, 1.0f);
     }
 
     public void SetUI(UIState state_)

@@ -83,7 +83,7 @@ namespace Bot
             else if (SearchRoute.Count == 2)
             {
                 State = ThinkState.Attack;
-                ai_.Perform.Processes.Add(new(19.0f, () => ai_.Assault.Attack()));
+                ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Assault.Attack()));
                 ai_.Perform.Processes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
             }
             else if (SearchRoute.Count == 3)
@@ -95,7 +95,7 @@ namespace Bot
             else
             {
                 State = ThinkState.Move;
-                ai_.Perform.Processes.Add(new(19.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
                 ai_.Perform.Processes.Add(new(1.0f, () => ai_.Assault.Attack()));
             }
         }

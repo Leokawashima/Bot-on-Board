@@ -1558,7 +1558,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 9f24673963743c1408f1c5de6d291730, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3293,6 +3293,7 @@ MonoBehaviour:
   <ProgressPlayerIndex>k__BackingField: 0
   <TurnSuddenDeath>k__BackingField: 30
   <TurnForceFinish>k__BackingField: 50
+  m_skybox: {fileID: 2100000, guid: 6218479dec4c98f46884419a97e6c5c1, type: 2}
   m_debug:
     m_gameState: 0
     m_battleState: 0

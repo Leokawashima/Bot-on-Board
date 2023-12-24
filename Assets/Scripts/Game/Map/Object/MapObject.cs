@@ -29,11 +29,19 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                component.Initialize(this);
+                component.Awake(this);
             }
 
             manager_.MapObjects.Add(this);
             manager_.Stage.SetMapObject(Position, this);
+        }
+
+        public void First(MapManager manager_)
+        {
+            foreach (var component in Components)
+            {
+                component.Start();
+            }
         }
 
         public bool TurnUpdate(MapManager manager_)

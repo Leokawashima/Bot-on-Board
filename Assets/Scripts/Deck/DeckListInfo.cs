@@ -2,32 +2,35 @@
 using TMPro;
 using Map;
 
-public class DeckListInfo : MonoBehaviour
+namespace Deck
 {
-    [SerializeField] private TMP_Text m_text;
-
-    public void SetInfo(InfoDeckData info_)
+    public class DeckListInfo : MonoBehaviour
     {
-        var _text = $"Name = {info_.Data.Name}\n";
+        [SerializeField] private TMP_Text m_text;
 
-        if (info_.Data.Cards != null)
+        public void SetInfo(InfoDeckData info_)
         {
-            _text += $"State = {info_.Data.State}\n";
-            _text += $"Size = {info_.Data.Cards.Count}\n";
+            var _text = $"Name = {info_.Data.Name}\n";
 
-            for (int i = 0, cnt = info_.Data.Cards.Count; i < cnt; ++i)
+            if (info_.Data.Cards != null)
             {
-                if (info_.Data.Cards[i] != -1)
+                _text += $"State = {info_.Data.State}\n";
+                _text += $"Size = {info_.Data.Cards.Count}\n";
+
+                for (int i = 0, cnt = info_.Data.Cards.Count; i < cnt; ++i)
                 {
-                    _text += MapTable.Object.Table[info_.Data.Cards[i]].Name + "\n";
-                }
-                else
-                {
-                    _text += "ナシ\n";
+                    if (info_.Data.Cards[i] != -1)
+                    {
+                        _text += $"{MapTable.Object.Table[info_.Data.Cards[i]].Name}\n";
+                    }
+                    else
+                    {
+                        _text += "ナシ\n";
+                    }
                 }
             }
-        }
 
-        m_text.text = _text;
+            m_text.text = _text;
+        }
     }
 }

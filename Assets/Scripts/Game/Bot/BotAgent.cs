@@ -20,6 +20,7 @@ namespace Bot
         [field: SerializeField] public BotPerform Perform { get; private set; }
 
         [field: SerializeField] public BotCamera Camera { get; private set; }
+        [field: SerializeField] public AnimatorSystem Animator { get; private set; }
 
         public BotAgent Spawn(PlayerAgent operator_, Vector2Int pos_)
         {

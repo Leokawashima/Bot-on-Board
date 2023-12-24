@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Map;
+using Map.Object.Component;
 using Bot;
 using Player;
+using Deck;
 
 /// <summary>
 /// 一人当たりのプレイヤーのUIを管理するクラス
@@ -27,7 +29,7 @@ public class PlayerUI : MonoBehaviour
 
     [SerializeField] DeckData_SO m_deck;
 
-    public void Initialize(PlayerAgent operator_)
+    public void Initialize(PlayerAgent operator_, DeckData deck_)
     {
         m_operator = operator_;
         name = $"PlayerUI_{m_operator.Index}";
@@ -37,7 +39,14 @@ public class PlayerUI : MonoBehaviour
         m_turnEndButton.onClick.AddListener(OnButton_TurnEnd);
         m_placeButton.onClick.AddListener(OnButton_Place);
 
-        m_cardManager.Initialize(m_deck.Deck);
+        if (deck_ != null && deck_.Cards != null && deck_.Cards.Count >= 6)
+        {
+            m_cardManager.Initialize(deck_);
+        }
+        else
+        {
+            m_cardManager.Initialize(m_deck.Deck);
+        }
         m_orderManager.Initialize();
     }
 
@@ -67,10 +76,17 @@ public class PlayerUI : MonoBehaviour
         }
 
         // オブジェクトがあるなら返す　ハカイ爆弾などのためにこれは別途方法を考えないといけない
-        if (MapManager.Singleton.Stage.Object[_chip.Position.y][_chip.Position.x] != null)
-            return;
+        var _obj = MapManager.Singleton.Stage.Object[_chip.Position.y][_chip.Position.x];
+        if (_obj != null)
+        {
+            if (m_cardManager.GetSelectCard.SO.GetMOComponent<OverrideSpawn>() == null)
+            {
+                return;
+            }
+        }
 
         var _mo = MapManager.Singleton.ObjectSpawn(m_cardManager.GetSelectCard.SO, _chip);
+        _mo.First(MapManager.Singleton);
         m_cardManager.GetSelectCard.Trash();
 
         Event_ButtonPlace?.Invoke();

@@ -16,7 +16,7 @@ MonoBehaviour:
   HasCategory: 2
   Name: "\u30D6\u30C3\u30AF"
   Info: "\u4E57\u3063\u305F\u3089\u30AB\u30B7\u30B3\u30B5\u304C\u4E00\u3064\u4E0A\u304C\u308B\u3002"
-  TitleImage: {fileID: 21300000, guid: e05eaa5774937fe47b034574e570ea5c, type: 3}
+  TitleImage: {fileID: 21300000, guid: 3badebfe61575824a95e30844649be64, type: 3}
   Cost: 0
   IsCollider: 0
   Prefab: {fileID: 711941203453368293, guid: a5d7ebf7ed7224140a41c04225d63fbf, type: 3}
