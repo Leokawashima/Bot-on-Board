@@ -20,11 +20,19 @@ namespace Map
         private static MapObjectTable_SO s_object;
         public static MapObjectTable_SO Object => s_object.GetInstance(RESOURCE_PATH[2]);
 
+        private static CardRarityTable_SO s_rarity;
+        public static CardRarityTable_SO Rarity => s_rarity.GetInstance(RESOURCE_PATH[3]);
+
+        private static CardCategoryTable_SO s_category;
+        public static CardCategoryTable_SO Category => s_category.GetInstance(RESOURCE_PATH[4]);
+
         private static readonly string[] RESOURCE_PATH = new string[]
         {
             "MSTable",
             "MCTable",
             "MOTable",
+            "RarityTable",
+            "CategoryTable"
         };
 
         public static void Clear()
@@ -32,6 +40,8 @@ namespace Map
             s_stage = null;
             s_chip = null;
             s_object = null;
+            s_rarity = null;
+            s_category = null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

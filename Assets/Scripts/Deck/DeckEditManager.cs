@@ -1,16 +1,20 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Deck.List;
 
-namespace Deck
+namespace Deck.Edit
 {
     public class DeckEditManager : SingletonMonoBehaviour<DeckEditManager>
     {
         [SerializeField] Canvas m_canvas;
 
-        [SerializeField] DeckEditArea m_editArea;
-        [SerializeField] DeckListInfo m_listInfo;
-        [SerializeField] DeckInfoArea m_infoArea;
+        [field: SerializeField] public DeckEditDragManager DragManager { get; private set; }
+        [field: SerializeField] public DeckEditCards Cards { get; private set; }
+        [field: SerializeField] public DeckEditCategory Category { get; private set; }
+        [field: SerializeField] public DeckEditInfo Info { get; private set; }
+        [field: SerializeField] public DeckEditSetting Setting { get; private set; }
+        [field: SerializeField] public DeckEditSearch Search { get; private set; }
 
         [SerializeField] private Button
             m_backButton,
@@ -34,7 +38,12 @@ namespace Deck
         public void Initialize()
         {
             Disable();
-            m_infoArea.Initialize();
+            DragManager.Initialize();
+            Cards.Initialize();
+            Category.Initialize();
+            Info.Initialize();
+            Setting.Initialize();
+            Search.Initialize();
 
             DeckListManager.Singleton.Event_Edit += (InfoDeckData deta_) =>
             {
@@ -76,12 +85,12 @@ namespace Deck
         {
             var _deckData = new DeckData()
             {
-                Name = m_infoArea.NameText,
-                Cards = new(m_editArea.EditCards.Count),
+                Name = Info.NameText,
+                Cards = new(DragManager.EditCards.Count),
             };
-            for (int i = 0, cnt = m_editArea.EditCards.Count; i < cnt; ++i)
+            for (int i = 0, cnt = DragManager.EditCards.Count; i < cnt; ++i)
             {
-                _deckData.Cards.Add(m_editArea.EditCards[i].Index);
+                _deckData.Cards.Add(DragManager.EditCards[i].Index);
             }
             Event_Save?.Invoke(_deckData);
 

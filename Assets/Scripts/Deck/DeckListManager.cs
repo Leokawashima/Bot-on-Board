@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Deck.Edit;
 
-namespace Deck
+namespace Deck.List
 {
     public class DeckListManager : SingletonMonoBehaviour<DeckListManager>
     {

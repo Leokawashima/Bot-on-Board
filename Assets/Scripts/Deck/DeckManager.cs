@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using Deck.List;
+using Deck.Edit;
 
 namespace Deck
 {

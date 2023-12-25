@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Map;
 
-namespace Deck
+namespace Deck.Edit
 {
-    public class DeckCardList : MonoBehaviour
+    public class DeckEditCards : MonoBehaviour
     {
         [SerializeField] private CardGenerator m_cardGenerator;
 
@@ -15,9 +15,9 @@ namespace Deck
 
         [SerializeField] private InfoCard m_info;
 
-        public static event Action<List<CardDrag>> Event_CardCreated;
+        public event Action<List<CardDrag>> Event_CardCreated;
 
-        private void Start()
+        public void Initialize()
         {
             m_info.Initialize();
 
@@ -39,8 +39,7 @@ namespace Deck
                 m_info.SetInfo(card_);
             };
 
-            var _rect = _moc.transform as RectTransform;
-            _rect.localScale = Vector3.one * m_size;
+            _moc.transform.localScale = Vector2.one * m_size;
 
             var _drag = _moc.gameObject.AddComponent<CardDrag>();
             _drag.Initialize(_moc);
