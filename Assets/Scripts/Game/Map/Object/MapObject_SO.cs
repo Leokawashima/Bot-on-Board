@@ -7,9 +7,8 @@ namespace Map.Object
     [CreateAssetMenu(fileName = "MO_", menuName = "BoB/Map/MapObject")]
     public class MapObject_SO : ScriptableObject
     {
-        public Rarity HasRarity = Rarity.Common;
-
-        public Category HasCategory = Category.Weapon_Type1;
+        public Rarity_Template Rarity;
+        public Category_SO Category;
 
         public string Name = string.Empty;
 
@@ -33,7 +32,7 @@ namespace Map.Object
 
         public virtual MapObject Spawn(Vector2Int pos_, MapManager manager_)
         {
-            var _mo = Instantiate(Prefab, manager_.ObjectParent);
+            var _mo = Instantiate(Prefab, manager_.ParentObject);
             _mo.name = $"MO_x:{pos_.x}y:{pos_.y}";
             _mo.transform.localPosition = new Vector3(pos_.x, 1.0f, pos_.y) + manager_.Offset;
             _mo.transform.localRotation = Prefab.transform.rotation;

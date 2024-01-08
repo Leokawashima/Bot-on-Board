@@ -1,12 +1,21 @@
 ﻿using UnityEngine;
 using TMPro;
+using Game.GameRule;
 
-//完成
 public class TurnCountManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI m_TurnText;
 
-    public void SetTurn(int turn_)
+    private void OnEnable()
+    {
+        GameRule_Template.Event_TurnChanged += SetTurn;
+    }
+    private void OnDisable()
+    {
+        GameRule_Template.Event_TurnChanged -= SetTurn;
+    }
+
+    private void SetTurn(int turn_)
     {
         m_TurnText.text = turn_.ToString();
     }

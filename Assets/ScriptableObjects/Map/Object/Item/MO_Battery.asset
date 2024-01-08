@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_Battery
   m_EditorClassIdentifier: 
-  HasRarity: 0
-  HasCategory: 2
+  Rarity: {fileID: 11400000, guid: 871a91ff42b16d24ebf7b9726b477240, type: 2}
+  Category: {fileID: 11400000, guid: 597f519768033644e87f81cfe85111ee, type: 2}
   Name: "\u30D0\u30C3\u30C6\u30EA\u30FC"
   Info: "\u4E57\u3063\u305F\u3089HP\u30923\u56DE\u5FA9\u3059\u308B\u3002"
   TitleImage: {fileID: 21300000, guid: 773e71a48a4a77a4885d9bd95db9e25b, type: 3}

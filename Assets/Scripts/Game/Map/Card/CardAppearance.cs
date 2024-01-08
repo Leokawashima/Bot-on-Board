@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Map.Object;
 
 public class CardAppearance : MonoBehaviour
 {
@@ -29,5 +30,13 @@ public class CardAppearance : MonoBehaviour
         m_categoryIcon.color = from_.m_categoryIcon.color;
         m_categoryIcon.sprite = from_.m_categoryIcon.sprite;
         m_categoryIcon.material = from_.m_categoryIcon.material;
+    }
+
+    public void Initialize(MapObject_SO so_)
+    {
+        so_.Rarity.Generate(this, so_.Category);
+
+        m_text.text = so_.Name;
+        m_title.sprite = so_.TitleImage;
     }
 }

@@ -10,8 +10,9 @@ using RoomUDPSystem;
 /// 制作者　日本電子専門学校　ゲーム制作科　22CI0212　川島
 public class NetConnectManager : SingletonMonoBehaviour<NetConnectManager>
 {
-    public event Action Event_PlayersConnected;
-    public event Action Event_PlayersDisconnected;
+    public event Action
+        Event_PlayersConnected,
+        Event_PlayersDisconnected;
 
     public void Host()
     {

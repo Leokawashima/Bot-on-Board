@@ -22,10 +22,8 @@ namespace Map
         [SerializeField] private bool m_drawObjectGizmos = true;
 #endif
 
-        [field: SerializeField]
-        public Transform ChipParent { get; private set; }
-        [field: SerializeField]
-        public Transform ObjectParent { get; private set; }
+        [field: SerializeField] public Transform ParentChip { get; private set; }
+        [field: SerializeField] public Transform ParentObject { get; private set; }
 
         [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
 
@@ -37,22 +35,14 @@ namespace Map
 
         public Vector3 Offset { get; private set; }
 
-        private void OnEnable()
+        public void MapCreate()
         {
-            GameManager.Event_Initialize += OnSystemInitialize;
-            GameManager.Event_Turn_Finalize += OnGameFinalize;
-        }
-        private void OnDisable()
-        {
-            GameManager.Event_Initialize -= OnSystemInitialize;
-            GameManager.Event_Turn_Finalize -= OnGameFinalize;
-        }
+            Stage = new(MapTable.Stage.Table[0]);
+            Offset = new(-Stage.Size.x / 2.0f + 0.5f, 0, -Stage.Size.y / 2.0f + 0.5f);
 
-        private void OnSystemInitialize()
-        {
-            MapCreate();
+            StartCoroutine(CoMapCreate());
         }
-        private void OnGameFinalize()
+        public void OnGameFinalize()
         {
             for (int i = 0; i < MapObjects.Count; i++)
             {
@@ -64,19 +54,13 @@ namespace Map
             }
         }
 
-        private void MapCreate()
-        {
-            Stage = new(MapTable.Stage.Table[0]);
-            Offset = new(-Stage.Size.x / 2.0f + 0.5f, 0, -Stage.Size.y / 2.0f + 0.5f);
-
-            StartCoroutine(CoMapCreate());
-        }
-
         private IEnumerator CoMapCreate()
         {
             var _size = Stage.Size;
             var _chipTable = MapTable.Chip.Table;
             var _objectTable = MapTable.Object.Table;
+            var _stageChip = Stage.SO.MapChip;
+            var _stageObject = Stage.SO.MapObject;
 
             for (int i = 0, cnt = _size.x + _size.y; i < cnt; ++i)
             {
@@ -88,15 +72,14 @@ namespace Map
                         if (i == x + z)
                         {
                             int _index = z * _size.x + x;
-                            if (Stage.SO.MapChip[_index] != -1)
+                            var _pos = new Vector2Int(x, z);
+                            if (_stageChip[_index] != -1)
                             {
-                                var _mc = _chipTable[Stage.SO.MapChip[_index]]
-                                    .Spawn(new Vector2Int(x, z), this);
+                                _chipTable[_stageChip[_index]].Spawn(_pos, this);
                             }
-                            if (Stage.SO.MapObject[_index] != -1)
+                            if (_stageObject[_index] != -1)
                             {
-                                var _mo = _objectTable[Stage.SO.MapObject[_index]]
-                                    .Spawn(new Vector2Int(x, z), this);
+                                _objectTable[_stageObject[_index]].Spawn(_pos, this);
                             }
                         }
                     }

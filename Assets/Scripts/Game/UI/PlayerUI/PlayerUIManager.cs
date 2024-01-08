@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Game;
 using Player;
 
 public class PlayerUIManager : MonoBehaviour
@@ -39,7 +38,7 @@ public class PlayerUIManager : MonoBehaviour
             {
                 Event_ButtonTurnEnd?.Invoke();
             };
-            m_playerUIs[i].gameObject.SetActive(false);
+            m_playerUIs[i].Disable();
         }
     }
 
@@ -51,8 +50,8 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
 
-    public void TurnPlace()
+    public void Enable(int index_)
     {
-        m_playerUIs[GameManager.Singleton.ProgressPlayerIndex].gameObject.SetActive(true);
+        m_playerUIs[index_].Enable();
     }
 }

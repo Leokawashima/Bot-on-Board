@@ -12,51 +12,34 @@ namespace Map
     public static class MapTable
     {
         private static MapStageTable_SO s_stage;
-        public static MapStageTable_SO Stage => s_stage.GetInstance(RESOURCE_PATH[0]);
+        public static MapStageTable_SO Stage => s_stage.GetInstance();
 
         private static MapChipTable_SO s_chip;
-        public static MapChipTable_SO Chip => s_chip.GetInstance(RESOURCE_PATH[1]);
+        public static MapChipTable_SO Chip => s_chip.GetInstance();
 
         private static MapObjectTable_SO s_object;
-        public static MapObjectTable_SO Object => s_object.GetInstance(RESOURCE_PATH[2]);
-
-        private static CardRarityTable_SO s_rarity;
-        public static CardRarityTable_SO Rarity => s_rarity.GetInstance(RESOURCE_PATH[3]);
-
-        private static CardCategoryTable_SO s_category;
-        public static CardCategoryTable_SO Category => s_category.GetInstance(RESOURCE_PATH[4]);
-
-        private static readonly string[] RESOURCE_PATH = new string[]
-        {
-            "MSTable",
-            "MCTable",
-            "MOTable",
-            "RarityTable",
-            "CategoryTable"
-        };
+        public static MapObjectTable_SO Object => s_object.GetInstance();
 
         public static void Clear()
         {
             s_stage = null;
             s_chip = null;
             s_object = null;
-            s_rarity = null;
-            s_category = null;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static T GetInstance<T>(this T instance_, string path_) where T : class
+        private static T GetInstance<T>(this T instance_) where T : class
         {
             if (instance_ != null)
             {
                 return instance_;
             }
 
-            var _asset = Resources.Load(path_) as T;
+            var _asset = Resources.Load(typeof(T).Name) as T;
             if (_asset == null)
             {
 #if UNITY_EDITOR
-                Debug.LogError($"Missing Table for Serach Path from {path_}");
+                Debug.LogError($"Missing Table for Serach Path from {typeof(T).Name}");
                 UnityEditor.EditorApplication.isPlaying = false;
 #else
                 // アプリで読み込めない場合強制終了

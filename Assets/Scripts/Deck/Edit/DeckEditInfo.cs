@@ -22,6 +22,8 @@ namespace Deck.Edit
         {
             m_deck = new()
             {
+                Rank = new int[4],
+                Category = new int[5],
                 Cards = new(),
             };
             DeckEditManager.Singleton.DragManager.Event_EndDrag += OnEndDrag;
@@ -33,13 +35,13 @@ namespace Deck.Edit
             if (DeckEditManager.Singleton.DragManager.EditDeck.Cards[index_] != -1)
             {
                 var _mo = MapTable.Object.Table[DeckEditManager.Singleton.DragManager.EditDeck.Cards[index_]];
-                m_deck.Rank[(int)_mo.HasRarity]--;
-                m_deck.Category[(int)_mo.HasCategory]--;
+                //m_deck.Rank[(int)_mo.HasRarity]--;
+                //m_deck.Category[(int)_mo.Category]--;
                 m_deck.Cards.Remove(card_.Index);
             }
 
-            m_deck.Rank[(int)card_.SO.HasRarity]++;
-            m_deck.Category[(int)card_.SO.HasCategory]++;
+            //m_deck.Rank[(int)card_.SO.HasRarity]++;
+            //m_deck.Category[(int)card_.SO.Category]++;
             m_deck.Cards.Add(card_.Index);
             SetCategoryText(m_deck);
             SetRankText(m_deck);
@@ -57,10 +59,11 @@ namespace Deck.Edit
         public void SetCategoryText(DeckData deck_)
         {
             var _text = string.Empty;
-            var _colors = new Color[] { Color.red, Color.blue, Color.green, new Color(0.6f, 0.0f, 1.0f), new Color(0.3f, 0.3f, 0.0f) };
+            deck_.Category = new int[1];
+            
             for (int i = 0; i < deck_.Category.Length; ++i)
             {
-                _text += $"<color=#{ColorUtility.ToHtmlStringRGB(_colors[i])}>{deck_.Category[i]}</color>\n";
+                _text += $"{deck_.Category[i]}\n";
             }
             m_categoryText.text = _text;
         }

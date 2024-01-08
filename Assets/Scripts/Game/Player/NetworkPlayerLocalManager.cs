@@ -10,20 +10,20 @@ public class NetworkPlayerLocalManager : MonoBehaviour
 
     void OnEnable()
     {
-        PlayerInputManager.OnMouseMainClickEvent += OnMouse_MainClick;
-        PlayerInputManager.OnDragStartEvent += OnMouse_DragStart;
-        PlayerInputManager.OnDragCancelEvent += OnMouse_DragCancel;
+        InputManager.Event_Main += OnMouse_MainClick;
+        InputManager.Event_DragStart += OnMouse_DragStart;
+        InputManager.Event_DragCancel += OnMouse_DragCancel;
     }
     void OnDisable()
     {
-        PlayerInputManager.OnMouseMainClickEvent -= OnMouse_MainClick;
-        PlayerInputManager.OnDragStartEvent -= OnMouse_DragStart;
-        PlayerInputManager.OnDragCancelEvent -= OnMouse_DragCancel;
+        InputManager.Event_Main -= OnMouse_MainClick;
+        InputManager.Event_DragStart -= OnMouse_DragStart;
+        InputManager.Event_DragCancel -= OnMouse_DragCancel;
     }
 
     void OnMouse_MainClick()
     {
-        Ray ray = Camera.main.ScreenPointToRay(PlayerInputManager.m_Pos);
+        Ray ray = Camera.main.ScreenPointToRay(InputManager.Position);
 
         int mask = 1 << Name.Layer.Map | 1 << Name.Layer.UI;
         if(Physics.Raycast(ray, out var hit, Mathf.Infinity, mask))
@@ -38,22 +38,22 @@ public class NetworkPlayerLocalManager : MonoBehaviour
 
     void OnMouse_DragStart()
     {
-        m_Position = PlayerInputManager.m_Pos;
-        PlayerInputManager.OnMouseMovePerformEvent += OnMouse_MovePerform;
+        m_Position = InputManager.Position;
+        InputManager.Event_Position += OnMouse_MovePerform;
     }
 
     void OnMouse_DragCancel()
     {
-        PlayerInputManager.OnMouseMovePerformEvent -= OnMouse_MovePerform;
+        InputManager.Event_Position -= OnMouse_MovePerform;
         CameraManager.Singleton.SetFreeLookCamIsMove(false);
     }
 
     void OnMouse_MovePerform()
     {
-        if ((m_Position - PlayerInputManager.m_Pos).magnitude >= 20.0f)
+        if ((m_Position - InputManager.Position).magnitude >= 20.0f)
         {
             CameraManager.Singleton.SetFreeLookCamIsMove(true);
-            PlayerInputManager.OnMouseMovePerformEvent -= OnMouse_MovePerform;
+            InputManager.Event_Position -= OnMouse_MovePerform;
         }
     }
 }

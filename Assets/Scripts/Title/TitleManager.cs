@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// タイトルシーンを管理するクラス
@@ -17,21 +16,16 @@ public class TitleManager : MonoBehaviour
 #endif
     bool m_isEntered = false;
 
-    InputActionMapSettings m_input;
-
     void OnEnable()
     {
-        m_input = new();
-        m_input.UI.Any.started += OnClickAnyInput;
-        m_input.Enable();
+        InputManager.Event_Any += OnAny;
     }
     void OnDisable()
     {
-        m_input.UI.Any.started -= OnClickAnyInput;
-        m_input.Disable();
+        InputManager.Event_Any -= OnAny;
     }
 
-    void OnClickAnyInput(InputAction.CallbackContext context_)
+    void OnAny()
     {
         if (m_isEntered == false)
         {

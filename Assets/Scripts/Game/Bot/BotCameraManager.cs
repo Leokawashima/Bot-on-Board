@@ -1,26 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Bot
 {
     public class BotCameraManager : MonoBehaviour
     {
         [SerializeField] CameraChangeSystem cameraSystem;
-
-        private InputActionMapSettings m_input;
-
-        private void Awake()
-        {
-            m_input = new();
-            m_input.Player.Debug.started += OnCameraChenge;
-            m_input.Enable();
-        }
-        private void OnDestroy()
-        {
-            m_input.Player.Debug.started -= OnCameraChenge;
-            m_input.Disable();
-            m_input = null;
-        }
 
         public void Initialize()
         {
@@ -31,7 +15,7 @@ namespace Bot
             cameraSystem.Refresh();
         }
 
-        private void OnCameraChenge(InputAction.CallbackContext context_)
+        private void OnCameraChenge()
         {
             cameraSystem.Change();
         }

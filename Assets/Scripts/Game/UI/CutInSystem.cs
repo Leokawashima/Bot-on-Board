@@ -7,20 +7,22 @@ using TMPro;
 /// </summary>
 public class CutInSystem : MonoBehaviour
 {
-    [Header("アニメーション名は CutIn で大文字まで統一すること")]
-    [SerializeField] AnimatorSystem m_AnimatorSystem;
+    [Header("アニメーション名は CutIn で大文字まで統一\n空のデフォルトはSpeed0")]
+    [SerializeField] private AnimatorSystem m_animator;
 
-    [SerializeField] TextMeshProUGUI m_Text;
+    [SerializeField] private TextMeshProUGUI m_text;
 
-    public void CutIn(string text_, Action callback_)
+    private int m_cutInHash = Animator.StringToHash("CutIn");
+
+    public void Play(string text_, Action callback_)
     {
-        m_Text.text = text_;
-        m_AnimatorSystem.Play("CutIn", callback_, 0);
+        m_text.text = text_;
+        m_animator.Play(m_cutInHash, callback_, 0);
     }
 
-    public void CutIn(string text_)
+    public void Play(string text_)
     {
-        m_Text.text = text_;
-        m_AnimatorSystem.Play("CutIn", 0);
+        m_text.text = text_;
+        m_animator.Play(m_cutInHash, 0);
     }
 }

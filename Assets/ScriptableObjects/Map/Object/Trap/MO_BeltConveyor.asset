@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d999bff5df9894ebb5c522319259bb, type: 3}
   m_Name: MO_BeltConveyor
   m_EditorClassIdentifier: 
-  HasRarity: 0
-  HasCategory: 3
+  Rarity: {fileID: 11400000, guid: 871a91ff42b16d24ebf7b9726b477240, type: 2}
+  Category: {fileID: 11400000, guid: 8e0524e2d1c924a4b83b12103ccebb5e, type: 2}
   Name: "\u30D9\u30EB\u30C8\u30B3\u30F3\u30D9\u30A2"
   Info: "\u30D9\u30EB\u30C8\u30B3\u30F3\u30D9\u30A2\u3002\n\u4E57\u308B\u3068\u30B3\u30F3\u30D9\u30A2\u65B9\u5411\u306B\u79FB\u52D5\u3057\u3066\u3057\u307E\u3046\u3002"
   TitleImage: {fileID: 21300000, guid: fd1e70a3b2475ce43a1617ac79403604, type: 3}

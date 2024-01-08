@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
-using Map;
-using Bot;
-using Player;
+using Game.GameRule;
 
 namespace Game
 {
@@ -12,135 +9,43 @@ namespace Game
     /// </summary>
     public class GameManager : SingletonMonoBehaviour<GameManager>
     {
-        [SerializeField] DiceSystem m_DiceSystem;
-        [SerializeField] CutInSystem m_cutInSystem;
-        [SerializeField] GameMode_Template m_gameMode;
-
-        [field: SerializeField] public int TurnElapsed { get; private set; } = 1;
-        [field: SerializeField] public int ProgressPlayerIndex { get; private set; } = 0;
-        [field: SerializeField] public int TurnSuddenDeath { get; private set; } = 30;
-        [field: SerializeField] public int TurnForceFinish { get; private set; } = 50;
+        [field: SerializeField] public GameMode_Template Mode { get; private set; }
+        [field: SerializeField] public GameRule_Template Rule { get; private set; }
 
         [SerializeField] private Material m_skybox;
 
         public static event Action
             Event_Initialize,
-            Event_Turn_Initialize,
-            Event_Turn_Place,
-            Event_Turn_TurnEnd,
-            Event_Turn_AIAction,
-            Event_Turn_GameSet,
-            Event_Turn_Finalize,
             Event_Finalize;
 
 #if UNITY_EDITOR
         [SerializeField] private GameDebug m_debug;
 #endif
 
-        #region EventSubscribe
-        void OnEnable()
-        {
-            MapManager.Event_MapCreated += OnMapCreated;
-            GUIManager.Event_TurnInitializeCutIn += OnInitializeCutIn;
-            PlayerUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
-            GUIManager.Event_AnimGameSet += SystemFinalize;
-            BotManager.Event_BotsActioned += TurnFinalize;
-        }
-        void OnDisable()
-        {
-            MapManager.Event_MapCreated -= OnMapCreated;
-            GUIManager.Event_TurnInitializeCutIn -= OnInitializeCutIn;
-            PlayerUIManager.Event_ButtonTurnEnd -= OnButton_TurnEnd;
-            GUIManager.Event_AnimGameSet -= SystemFinalize;
-            BotManager.Event_BotsActioned -= TurnFinalize;
-        }
-        #endregion EventSubscribe
-
-        void Start()
+        private void Start()
         {
             RenderSettings.skybox = m_skybox;
             SystemInitalize();
         }
 
-        void SystemInitalize()
+        private void SystemInitalize()
         {
-            UnityEngine.Random.InitState(DateTime.Now.Millisecond + DateTime.Now.Second);
+            UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             CameraManager.Singleton.SetFreeLookCamIsMove(false);
 
-            m_gameMode = gameObject.AddComponent<GameModeLocal>();
-            m_gameMode.Initialize();
+            Mode = gameObject.AddComponent<GameModeLocal>();
+            Mode.Initialize();
 
             Event_Initialize?.Invoke();
+
+            Rule = gameObject.AddComponent<GameRuleTurn>();
+            Rule.Initialize();
         }
-        void SystemFinalize()
+        public void SystemFinalize()
         {
             Event_Finalize?.Invoke();
 
             Initiate.Fade(Name.Scene.Result, Name.Scene.Game, Color.black, 1.0f);
-        }
-
-        void TurnInitialize()
-        {
-            ProgressPlayerIndex = 0;
-
-            Event_Turn_Initialize?.Invoke();
-        }
-        void TurnPlace()
-        {
-            Event_Turn_Place?.Invoke();
-        }
-        void TurnAIAction()
-        {
-            Event_Turn_AIAction?.Invoke();
-        }
-        void TurnFinalize()
-        {
-            Event_Turn_Finalize?.Invoke();
-
-            if (BotManager.Singleton.CheckBotDead() || TurnElapsed > TurnForceFinish)
-            {
-                TurnGameSet();
-            }
-
-            TurnElapsed++;
-
-            TurnInitialize();
-        }
-        void TurnGameSet()
-        {
-            Event_Turn_GameSet?.Invoke();
-        }
-
-        void OnMapCreated()
-        {
-            BotManager.Singleton.Initialize();
-
-            TurnInitialize();
-        }
-
-        void OnInitializeCutIn()
-        {
-            StartCoroutine(Co_Delay());
-
-            IEnumerator Co_Delay()
-            {
-                yield return new WaitForSeconds(0.1f);
-                TurnPlace();
-            }
-        }
-
-        void OnButton_TurnEnd()
-        {
-            if (++ProgressPlayerIndex < PlayerManager.Singleton.Players.Count)
-            {
-                Event_Turn_TurnEnd?.Invoke();
-
-                TurnPlace();
-            }
-            else
-            {
-                TurnAIAction();
-            }
         }
     }
 }

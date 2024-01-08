@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using static Game.GameManager;
+using Game.GameRule;
 
 namespace Game
 {
@@ -12,45 +12,45 @@ namespace Game
 
         GameDebug()
         {
-            Event_Initialize += SetGameState(GameState.Initialize);
-            Event_Initialize += SetBattleState(BattleState.Non);
+            GameManager.Event_Initialize += SetGameState(GameState.Initialize);
+            GameManager.Event_Initialize += SetBattleState(BattleState.Non);
 
-            Event_Turn_Initialize += SetGameState(GameState.Battle);
-            Event_Turn_Initialize += SetBattleState(BattleState.Initialize);
+            GameRule_Template.Event_Initialize += SetGameState(GameState.Battle);
+            GameRule_Template.Event_Initialize += SetBattleState(BattleState.Initialize);
 
-            Event_Turn_Place += SetBattleState(BattleState.Place);
+            GameRule_Template.Event_Place += SetBattleState(BattleState.Place);
 
-            Event_Turn_TurnEnd += SetBattleState(BattleState.TurnEnd);
+            GameRule_Template.Event_TurnEnd += SetBattleState(BattleState.TurnEnd);
 
-            Event_Turn_AIAction += SetBattleState(BattleState.AIAction);
+            GameRule_Template.Event_AIAction += SetBattleState(BattleState.AIAction);
 
-            Event_Turn_Finalize += SetBattleState(BattleState.Finalize);
+            GameRule_Template.Event_Finalize += SetBattleState(BattleState.Finalize);
 
-            Event_Turn_GameSet += SetBattleState(BattleState.GameSet);
+            GameRule_Template.Event_GameSet += SetBattleState(BattleState.GameSet);
 
-            Event_Finalize += SetGameState(GameState.Finalize);
-            Event_Finalize += SetBattleState(BattleState.Non);
+            GameManager.Event_Finalize += SetGameState(GameState.Finalize);
+            GameManager.Event_Finalize += SetBattleState(BattleState.Non);
         }
         ~GameDebug()
         {
-            Event_Initialize -= SetGameState(GameState.Initialize);
-            Event_Initialize -= SetBattleState(BattleState.Non);
+            GameManager.Event_Initialize -= SetGameState(GameState.Initialize);
+            GameManager.Event_Initialize -= SetBattleState(BattleState.Non);
 
-            Event_Turn_Initialize -= SetGameState(GameState.Battle);
-            Event_Turn_Initialize -= SetBattleState(BattleState.Initialize);
+            GameRule_Template.Event_Initialize -= SetGameState(GameState.Battle);
+            GameRule_Template.Event_Initialize -= SetBattleState(BattleState.Initialize);
 
-            Event_Turn_Place -= SetBattleState(BattleState.Place);
+            GameRule_Template.Event_Place -= SetBattleState(BattleState.Place);
 
-            Event_Turn_TurnEnd -= SetBattleState(BattleState.TurnEnd);
+            GameRule_Template.Event_TurnEnd -= SetBattleState(BattleState.TurnEnd);
 
-            Event_Turn_AIAction -= SetBattleState(BattleState.AIAction);
+            GameRule_Template.Event_AIAction -= SetBattleState(BattleState.AIAction);
 
-            Event_Turn_Finalize -= SetBattleState(BattleState.Finalize);
+            GameRule_Template.Event_Finalize -= SetBattleState(BattleState.Finalize);
 
-            Event_Turn_GameSet -= SetBattleState(BattleState.GameSet);
+            GameRule_Template.Event_GameSet -= SetBattleState(BattleState.GameSet);
 
-            Event_Finalize -= SetGameState(GameState.Finalize);
-            Event_Finalize -= SetBattleState(BattleState.Non);
+            GameManager.Event_Finalize -= SetGameState(GameState.Finalize);
+            GameManager.Event_Finalize -= SetBattleState(BattleState.Non);
         }
 
         private Action SetGameState(GameState state_)

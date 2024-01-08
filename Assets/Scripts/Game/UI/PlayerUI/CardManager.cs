@@ -10,7 +10,7 @@ public class CardManager : MonoBehaviour
         HAND_SIZE = 4,
         DRAW_SIZE = 2;
 
-    [SerializeField] private CardGenerator m_cardGenerator;
+    [SerializeField] private MapObjectCard m_prefab;
 
     public MapObjectCard GetSelectCard
     {
@@ -62,7 +62,8 @@ public class CardManager : MonoBehaviour
 
     private void CardCreate(int index_)
     {
-        var _moc = m_cardGenerator.Create(index_, transform);
+        var _moc = Instantiate(m_prefab, transform);
+        _moc.Initialize(index_);
 
         var _toggle = _moc.gameObject.GetComponent<Toggle>();
         _toggle.group = m_toggleGroup;

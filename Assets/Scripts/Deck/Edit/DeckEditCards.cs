@@ -7,7 +7,7 @@ namespace Deck.Edit
 {
     public class DeckEditCards : MonoBehaviour
     {
-        [SerializeField] private CardGenerator m_cardGenerator;
+        [SerializeField] private MapObjectCard m_prefab;
 
         [SerializeField] private RectTransform m_content;
 
@@ -31,7 +31,8 @@ namespace Deck.Edit
 
         private CardDrag CardCreate(int index_)
         {
-            var _moc = m_cardGenerator.Create(index_, m_content);
+            var _moc = Instantiate(m_prefab, m_content);
+            _moc.Initialize(index_);
 
             _moc.Event_Info += (MapObjectCard card_) =>
             {

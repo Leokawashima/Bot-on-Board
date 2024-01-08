@@ -6286,7 +6286,6 @@ GameObject:
   - component: {fileID: 5941694351608628357}
   - component: {fileID: 5991587216905332812}
   - component: {fileID: 2357278406166277046}
-  - component: {fileID: 6727820137438946961}
   m_Layer: 5
   m_Name: IF_Master
   m_TagString: Untagged
@@ -6451,20 +6450,6 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
---- !u!114 &6727820137438946961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3834343411905380601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146287130a00b7f44862fbc2b461b225, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputField: {fileID: 2357278406166277046}
-  m_valueMax: 100
 --- !u!1 &4022616468222995817
 GameObject:
   m_ObjectHideFlags: 0
@@ -6852,7 +6837,6 @@ GameObject:
   - component: {fileID: 3438646740320679699}
   - component: {fileID: 4066920985844660774}
   - component: {fileID: 790561245530832339}
-  - component: {fileID: 1750030524157372918}
   m_Layer: 5
   m_Name: IF_UI
   m_TagString: Untagged
@@ -7017,20 +7001,6 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
---- !u!114 &1750030524157372918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4141031825871471412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146287130a00b7f44862fbc2b461b225, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputField: {fileID: 790561245530832339}
-  m_valueMax: 100
 --- !u!1 &4214876057853031635
 GameObject:
   m_ObjectHideFlags: 0
@@ -8977,7 +8947,6 @@ GameObject:
   - component: {fileID: 4760357929472443648}
   - component: {fileID: 5816386690428257084}
   - component: {fileID: 8871065832367658248}
-  - component: {fileID: 5249215723490139945}
   m_Layer: 5
   m_Name: IF_BGM
   m_TagString: Untagged
@@ -9142,20 +9111,6 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
---- !u!114 &5249215723490139945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5537631619549412537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146287130a00b7f44862fbc2b461b225, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputField: {fileID: 8871065832367658248}
-  m_valueMax: 100
 --- !u!1 &5642564620684415830
 GameObject:
   m_ObjectHideFlags: 0
@@ -9281,7 +9236,6 @@ GameObject:
   - component: {fileID: 4031564384210416207}
   - component: {fileID: 5077223672034934371}
   - component: {fileID: 6998832572607821519}
-  - component: {fileID: 3676300452422825966}
   m_Layer: 5
   m_Name: IF_SE
   m_TagString: Untagged
@@ -9446,20 +9400,6 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
---- !u!114 &3676300452422825966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5654615866438289196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146287130a00b7f44862fbc2b461b225, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputField: {fileID: 6998832572607821519}
-  m_valueMax: 100
 --- !u!1 &5657243305094539920
 GameObject:
   m_ObjectHideFlags: 0

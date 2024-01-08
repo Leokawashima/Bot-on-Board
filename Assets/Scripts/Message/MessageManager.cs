@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using TMPro;
 
 /// <summary>
@@ -36,11 +35,6 @@ public class MessageManager : MonoBehaviour
     private int m_index = 0;
 
     /// <summary>
-    /// InputSystemの編集用マップ
-    /// </summary>
-    private InputActionMapSettings m_inputMap;
-
-    /// <summary>
     /// コルーチンのアクティブなものを保持するフィールド
     /// </summary>
     private Coroutine m_activeCorutine;
@@ -50,9 +44,7 @@ public class MessageManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        m_inputMap = new();
-        m_inputMap.UI.Any.started += OnAnyInput;
-        m_inputMap.Enable();
+        InputManager.Event_Any += OnAny;
 
         /* 
          * TextAreaAttributeを付与しない場合\nで改行するために差し替え処理が必要
@@ -73,7 +65,7 @@ public class MessageManager : MonoBehaviour
     /// <summary>
     /// InputSystemのイベントハンドラ
     /// </summary>
-    private void OnAnyInput(InputAction.CallbackContext context)
+    private void OnAny()
     {
         SetNextMessage();
     }
@@ -96,8 +88,7 @@ public class MessageManager : MonoBehaviour
         }
         else
         {
-            m_inputMap.UI.Any.started -= OnAnyInput;
-            m_inputMap.Disable();
+            InputManager.Event_Any -= OnAny;
 
             if (m_activeCorutine != null)
             {

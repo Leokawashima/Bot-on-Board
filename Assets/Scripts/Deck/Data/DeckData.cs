@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Map;
 
 namespace Deck
 {
@@ -23,12 +22,12 @@ namespace Deck
         /// <summary>
         /// デッキのランク毎のカウント
         /// </summary>
-        public int[] Rank = new int[MapTable.Rarity.Table.Length];
+        public int[] Rank;
 
         /// <summary>
         /// デッキのカテゴリ毎のカウント
         /// </summary>
-        public int[] Category = new int[MapTable.Category.Table.Length];
+        public int[] Category;
 
         /// <summary>
         /// デッキのフィールド

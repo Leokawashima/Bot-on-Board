@@ -14,6 +14,8 @@ public class PlayerUI : MonoBehaviour
 {
     private PlayerAgent m_operator;
 
+    [SerializeField] Canvas m_canvas;
+
     [SerializeField] private CardManager m_cardManager;
     [SerializeField] private InfoBotOrderManager m_orderManager;
     [SerializeField] private Button m_placeButton;
@@ -28,6 +30,9 @@ public class PlayerUI : MonoBehaviour
         Event_ButtonTurnEnd;
 
     [SerializeField] DeckData_SO m_deck;
+
+    public void Enable() => m_canvas.enabled = true;
+    public void Disable() => m_canvas.enabled = false;
 
     public void Initialize(PlayerAgent operator_, DeckData deck_)
     {
@@ -102,7 +107,7 @@ public class PlayerUI : MonoBehaviour
 
     void OnButton_TurnEnd()
     {
-        gameObject.SetActive(false);
+        Disable();
 
         Event_ButtonTurnEnd?.Invoke();
     }

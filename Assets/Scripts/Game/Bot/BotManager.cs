@@ -10,8 +10,6 @@ namespace Bot
 {
     public class BotManager : SingletonMonoBehaviour<BotManager>
     {
-        private const int Bot_SIZE = 2;
-
         [SerializeField] BotAgent m_prefab;
         [SerializeField] BotCameraManager m_cameraManager;
 
@@ -22,23 +20,14 @@ namespace Bot
 
         public static event Action Event_BotsActioned;
 
-        private void OnEnable()
-        {
-            GUIManager.Event_BotCutInFinish += Action;
-        }
-        private void OnDisable()
-        {
-            GUIManager.Event_BotCutInFinish -= Action;
-        }
-
         public void Initialize()
         {
             var _playerList = PlayerManager.Singleton.Players;
-            for (int i = 0, cnt = Bot_SIZE; i < cnt; ++i)//人数分処理する　現在は2固定
+            for (int i = 0, cnt = _playerList.Count; i < cnt; ++i)//人数分処理する　現在は2固定
             {
                 var _oerator = _playerList[i];
                 var _bot = Instantiate(m_prefab, transform);
-                _bot.Spawn(_oerator, new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
+                _bot.Initialize(_oerator, new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
                 Bots.Add(_bot);
 
                 if (i == 1)
