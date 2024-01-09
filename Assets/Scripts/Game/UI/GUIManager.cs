@@ -18,6 +18,7 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         m_floatingUI.Initialize();
 
         PlayerUI.Initialize();
+        CutIn.Disable();
     }
 
     // 右側に出るプレイヤーのデータ
