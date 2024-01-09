@@ -1,11 +1,11 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using TMPro;
 
 /// <summary>
-/// TMProの文字を回転させる
+/// TMProの文字をアニメーションさせる
 /// </summary>
 /// 参考　https://gurutaka-log.com/unity-textmeshpro-rotate
-/// わりかしいじくり倒している
+/// いじくり倒して実験している
 public class AnimationText : MonoBehaviour
 {
     [SerializeField] private TMP_Text m_text;
@@ -109,7 +109,7 @@ public class AnimationText : MonoBehaviour
         }
 
         // ジオメトリ更新
-        for (int i = 0; i < _textInfo.meshInfo.Length; i++)
+        for (int i = 0, len = _textInfo.meshInfo.Length; i < len; i++)
         {
             // メッシュ情報
             _textInfo.meshInfo[i].mesh.vertices = _textInfo.meshInfo[i].vertices;
@@ -120,11 +120,5 @@ public class AnimationText : MonoBehaviour
     private float Remap(float value, float from1, float from2, float to1, float to2)
     {
         return to1 + (value - from1) * (to2 - to1) / (from2 - from1);
-    }
-
-    [ContextMenu("A")]
-    private void TEST()
-    {
-        Debug.Log(Remap(0.5f, 0.0f, 1.0f, 0.0f, 10.0f));
     }
 }
