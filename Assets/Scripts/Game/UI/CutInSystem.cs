@@ -7,7 +7,7 @@ using TMPro;
 /// </summary>
 public class CutInSystem : MonoBehaviour
 {
-    [SerializeField] Canvas m_canvas;
+    [SerializeField] private Canvas m_canvas;
 
     [Header("アニメーション名は CutIn で大文字まで統一\n空のデフォルトはSpeed0")]
     [SerializeField] private AnimatorSystem m_animator;

@@ -7,11 +7,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class TCPAndUDPTest : MonoBehaviour
 {
-    [SerializeField] TMPro.TextMeshProUGUI text;
-    [SerializeField] TMPro.TMP_InputField inputField;
+    [SerializeField] TMP_Text text;
+    [SerializeField] TMP_InputField inputField;
 
     List<string> Log = new();
 

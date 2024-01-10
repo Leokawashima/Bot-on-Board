@@ -9,7 +9,8 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
     [SerializeField] TurnCountManager m_turnCountManager;
     [SerializeField] InfoBotStatusManager m_infoPlayerDataManager;
     [field: SerializeField] public PlayerUIManager PlayerUI { get; private set; }
-    [field: SerializeField] public CutInSystem CutIn { get; private set; }
+    [field: SerializeField] public CutInSystem CutInDefault { get; private set; }
+    [field: SerializeField] public CutInSystem CutInTurn { get; private set; }
 
     [SerializeField] FloatingUIManager m_floatingUI;
 
@@ -18,7 +19,8 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
         m_floatingUI.Initialize();
 
         PlayerUI.Initialize();
-        CutIn.Disable();
+        CutInDefault.Disable();
+        CutInTurn.Disable();
     }
 
     // 右側に出るプレイヤーのデータ

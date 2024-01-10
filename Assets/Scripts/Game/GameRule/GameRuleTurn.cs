@@ -31,14 +31,14 @@ namespace Game.GameRule
 
         private void OnMapCreated()
         {
-            GUIManager.Singleton.CutIn.Play($"Turn:{TurnElapsed}", () =>
+            GUIManager.Singleton.CutInTurn.Play("ターン", () =>
             {
                 CallEventInitialize();
                 BotManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
                 GUIManager.Singleton.PlayerUI.TurnInitialize();
                 
-                GUIManager.Singleton.CutIn.Play($"Player{ProgressIndex}\n○○のターン！", () =>
+                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });
@@ -49,7 +49,7 @@ namespace Game.GameRule
         {
             if (IsGameSet())
             {
-                GUIManager.Singleton.CutIn.Play("GameSet", () =>
+                GUIManager.Singleton.CutInDefault.Play("ゲームセット", () =>
                 {
                     CallEventGameSet();
                     GameManager.Singleton.SystemFinalize();
@@ -62,11 +62,11 @@ namespace Game.GameRule
                 NextTurn();
                 ResetProgress();
 
-                GUIManager.Singleton.CutIn.Play($"Turn:{TurnElapsed}", () =>
+                GUIManager.Singleton.CutInTurn.Play("ターン", () =>
                 {
                     CallEventInitialize();
                     GUIManager.Singleton.PlayerUI.TurnInitialize();
-                    GUIManager.Singleton.CutIn.Play($"Player{ProgressIndex}\n○○のターン！", () =>
+                    GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
                     {
                         GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                     });
@@ -80,14 +80,14 @@ namespace Game.GameRule
                 CallEventTurnEnd();
 
                 CallEventPlace();
-                GUIManager.Singleton.CutIn.Play($"Place:{ProgressIndex}", () =>
+                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });
             }
             else
             {
-                GUIManager.Singleton.CutIn.Play("AIの行動！", () =>
+                GUIManager.Singleton.CutInDefault.Play("AIの行動！", () =>
                 {
                     CallEventAIAction();
                     BotManager.Singleton.Action();

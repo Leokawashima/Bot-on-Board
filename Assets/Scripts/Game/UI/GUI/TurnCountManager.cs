@@ -4,7 +4,7 @@ using Game.GameRule;
 
 public class TurnCountManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI m_TurnText;
+    [SerializeField] TMP_Text m_TurnText;
 
     private void OnEnable()
     {
