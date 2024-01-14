@@ -13,6 +13,7 @@ namespace Map
     /// <summary>
     /// マップを管理するクラス
     /// </summary>
+    [DisallowMultipleComponent]
     public class MapManager : SingletonMonoBehaviour<MapManager>
     {
 #if UNITY_EDITOR
@@ -21,11 +22,15 @@ namespace Map
         [SerializeField] private bool m_drawChipGizmos = true;
         [SerializeField] private bool m_drawObjectGizmos = true;
 #endif
+        [SerializeField] private Transform m_plane;
+        [SerializeField] private MeshRenderer m_select;
+        public MeshRenderer Select => m_select;
+        [SerializeField] private GridMesh m_grid;
 
         [field: SerializeField] public Transform ParentChip { get; private set; }
         [field: SerializeField] public Transform ParentObject { get; private set; }
 
-        [SerializeField] float m_WaitOnePlaceSecond = 0.05f;
+        [SerializeField] private float m_WaitOnePlaceSecond = 0.05f;
 
         public MapStage Stage { get; private set; }
 
@@ -40,9 +45,12 @@ namespace Map
             Stage = new(MapTable.Stage.Table[0]);
             Offset = new(-Stage.Size.x / 2.0f + 0.5f, 0, -Stage.Size.y / 2.0f + 0.5f);
 
+            m_plane.localScale = new(Stage.Size.x / 10.0f, 1.0f, Stage.Size.y / 10.0f);
+            m_select.enabled = false;
+
             StartCoroutine(CoMapCreate());
         }
-        public void OnGameFinalize()
+        public void TurnUpdate()
         {
             for (int i = 0; i < MapObjects.Count; i++)
             {
@@ -88,12 +96,16 @@ namespace Map
                 yield return new WaitForSeconds(m_WaitOnePlaceSecond);
             }
 
+            m_grid.Initialize(_size);
+            m_grid.Refresh(Stage);
             Event_MapCreated?.Invoke();
         }
 
         public MapObject ObjectSpawn(MapObject_SO so_, MapChip chip_)
         {
-            return so_.Spawn(chip_.Position, this);
+            var _mo = so_.Spawn(chip_.Position, this);
+            m_grid.Refresh(Stage);
+            return _mo;
         }
 
         public void AIHitCheck(Vector2Int pos_, BotAgent bot_)
@@ -104,7 +116,6 @@ namespace Map
                 Stage.Object[pos_.y][pos_.x].Finalize(this);
             }
         }
-
         public void AIRideCheck(Vector2Int pos_, BotAgent bot_)
         {
             if (Stage.Chip[pos_.y][pos_.x] != null)

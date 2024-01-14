@@ -54,12 +54,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Power: -0.63
+    - _Power: 4
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 4
-    - _Speed: 0.15
+    - _Scale: 2
+    - _Speed: 0.2
     - _TwirlStrength: 9.1
     m_Colors:
-    - _Color: {r: 0.59607846, g: 2, b: 2, a: 0}
+    - _Color: {r: 0, g: 0.009803921, b: 0.011764706, a: 1}
+    - _SubColor: {r: 0.011764706, g: 0, b: 0.011764706, a: 1}
   m_BuildTextureStacks: []
