@@ -11,7 +11,6 @@ namespace Bot
     public class BotManager : SingletonMonoBehaviour<BotManager>
     {
         [SerializeField] BotAgent m_prefab;
-        [SerializeField] BotCameraManager m_cameraManager;
 
 #if UNITY_EDITOR
         [field: Header("Debug"), SerializeField]
@@ -65,7 +64,6 @@ namespace Bot
                 };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
-            m_cameraManager.Initialize();
         }
 
         // 誰か死んだ時点でtrueを返している

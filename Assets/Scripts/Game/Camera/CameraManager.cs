@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using Cinemachine;
+using Bot;
+using UnityEngine.UI;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : SingletonMonoBehaviour<CameraManager>
 {
-    public static CameraManager Singleton;
+    [SerializeField] private CinemachineInputProvider m_InputProvider;
+    [SerializeField] private CameraChangeSystem m_changeSystem;
+    [SerializeField] private Button m_changeButton;
 
-    [SerializeField] CinemachineInputProvider m_InputProvider;
-
-    void Awake()
+    public void Initialize()
     {
-        Singleton = this;
+        m_changeButton.onClick.AddListener(m_changeSystem.Next);
+        for (int i = 0, cnt = BotManager.Singleton.Bots.Count; i < cnt; ++i)
+        {
+            m_changeSystem.AddCamera(BotManager.Singleton.Bots[i].Camera.Default);
+        }
     }
-
-    private void Update()
-    {
-        SetFreeLookCamIsMove(false == EventSystem.current.IsPointerOverGameObject());
-    }
-
     public void SetFreeLookCamIsMove(bool flag_)
     {
         m_InputProvider.enabled = flag_;

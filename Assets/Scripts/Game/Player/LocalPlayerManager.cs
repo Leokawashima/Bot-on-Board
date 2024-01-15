@@ -55,8 +55,11 @@ public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
 
     private void OnDragStart()
     {
-        m_mousePosition = InputManager.Position;
-        InputManager.Event_Position += OnMove;
+        if (false == m_isPointerOver)
+        {
+            m_mousePosition = InputManager.Position;
+            InputManager.Event_Position += OnMove;
+        }
     }
 
     private void OnDragCancel()
@@ -67,10 +70,13 @@ public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
 
     private void OnMove()
     {
-        if ((m_mousePosition - InputManager.Position).magnitude >= 20.0f)
+        if (false == m_isPointerOver)
         {
-            CameraManager.Singleton.SetFreeLookCamIsMove(true);
-            InputManager.Event_Position -= OnMove;
+            if ((m_mousePosition - InputManager.Position).magnitude >= 20.0f)
+            {
+                InputManager.Event_Position -= OnMove;
+                CameraManager.Singleton.SetFreeLookCamIsMove(true);
+            }
         }
     }
 

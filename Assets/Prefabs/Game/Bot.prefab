@@ -157,6 +157,7 @@ MonoBehaviour:
     <StanTurn>k__BackingField: 0
   <Assault>k__BackingField:
     <AttackPower>k__BackingField: 0
+    <Arrow>k__BackingField: 0
   <Brain>k__BackingField:
     <State>k__BackingField: 0
     <SearchRoute>k__BackingField: []
@@ -195,7 +196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 2649444160234318367}
-  m_defaultStateName: StandBy
 --- !u!1 &4639887804427791479
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +295,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5342720588949169401}
-  m_LocalRotation: {x: 0.13371919, y: -0.69434804, z: 0.1337192, w: 0.69434804}
+  m_LocalRotation: {x: 0.1337192, y: -0.69434804, z: 0.1337192, w: 0.69434804}
   m_LocalPosition: {x: 0.24943092, y: 2.1070712, z: -7.495725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 5
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 0}
+  m_LookAt: {fileID: 4869696264618002843}
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60.000004

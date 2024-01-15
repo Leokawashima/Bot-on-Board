@@ -67,6 +67,11 @@ public class CardManager : MonoBehaviour
             }
             else
             {
+                if (SelectCard != null)
+                {
+                    var _rect = SelectCard.transform as RectTransform;
+                    _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
+                }
                 SelectCard = _moc;
                 _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -150);
             }

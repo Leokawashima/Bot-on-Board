@@ -35,6 +35,7 @@ namespace Game.GameRule
             {
                 CallEventInitialize();
                 BotManager.Singleton.Initialize();
+                CameraManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
                 GUIManager.Singleton.PlayerUI.TurnInitialize();
                 
