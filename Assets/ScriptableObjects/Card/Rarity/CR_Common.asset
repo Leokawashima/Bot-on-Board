@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8280483813e9a7647a27ae32f6366344, type: 3}
   m_Name: CR_Common
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 21300000, guid: 6ed4379b6b38275479585fa6b569d9e2, type: 3}

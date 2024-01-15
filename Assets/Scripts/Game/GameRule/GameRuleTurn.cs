@@ -26,6 +26,7 @@ namespace Game.GameRule
 
         public override void Initialize()
         {
+            //CameraManager.Singleton.Animation();
             MapManager.Singleton.MapCreate();
         }
 

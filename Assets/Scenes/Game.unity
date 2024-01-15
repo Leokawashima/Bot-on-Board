@@ -3665,7 +3665,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3723,7 +3723,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914009053}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3898,6 +3898,8 @@ MonoBehaviour:
   m_InputProvider: {fileID: 626029443}
   m_changeSystem: {fileID: 1003058852}
   m_changeButton: {fileID: 1789648008}
+  m_cam: {fileID: 0}
+  m_smoothPath: {fileID: 0}
 --- !u!1 &1004095209
 GameObject:
   m_ObjectHideFlags: 0

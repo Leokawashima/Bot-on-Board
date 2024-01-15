@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d70cad4a2141cd409a8701efaad2ece, type: 3}
   m_Name: CR_Rare
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 21300000, guid: 451ea172fc75e664492380d9991b77f7, type: 3}
   m_backGround: {fileID: 21300000, guid: 01a09eed3dc95cf41a977cf0fbcf96bd, type: 3}
