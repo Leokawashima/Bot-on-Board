@@ -13,6 +13,7 @@ public class InfoCard : MonoBehaviour
 
     [SerializeField] private Image m_objectImage;
     [SerializeField] private Image m_categoryImage;
+    [SerializeField] private Image m_rarityImage;
 
     public void Enable()
     {
@@ -31,7 +32,10 @@ public class InfoCard : MonoBehaviour
 
     public void SetInfo(MapObjectCard card_)
     {
+        m_nameText.text = card_.SO.Name;
         m_infoText.text = card_.SO.Info;
         m_objectImage.sprite = card_.SO.TitleImage;
+        m_categoryImage.sprite = card_.SO.Category.Image;
+        m_rarityImage.sprite = card_.SO.Rarity.Icon;
     }
 }

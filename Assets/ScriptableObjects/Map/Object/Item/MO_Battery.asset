@@ -15,10 +15,11 @@ MonoBehaviour:
   Rarity: {fileID: 11400000, guid: 871a91ff42b16d24ebf7b9726b477240, type: 2}
   Category: {fileID: 11400000, guid: 597f519768033644e87f81cfe85111ee, type: 2}
   Name: "\u30D0\u30C3\u30C6\u30EA\u30FC"
-  Info: "\u4E57\u3063\u305F\u3089HP\u30923\u56DE\u5FA9\u3059\u308B\u3002"
+  Info: "\u89E6\u308C\u308B\u3068HP\u30923\u56DE\u5FA9\u3059\u308B\u30D0\u30C3\u30C6\u30EA\u30FC\u3002"
   TitleImage: {fileID: 21300000, guid: 773e71a48a4a77a4885d9bd95db9e25b, type: 3}
   Cost: -50
   IsCollider: 0
+  CanOverrideSpawn: 0
   Prefab: {fileID: 8468683320965597539, guid: 25212d0b95ea95b43b2b01dd59ce295a, type: 3}
   Components:
   - rid: 8759145406249304065
