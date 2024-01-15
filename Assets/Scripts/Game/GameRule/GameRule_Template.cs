@@ -52,12 +52,12 @@ namespace Game.GameRule
         protected void NextTurn()
         {
             TurnElapsed++;
-            Event_TurnChanged?.Invoke(TurnElapsed);
+            Event_TurnChanged?.Invoke(TurnElapsed + 1);
         }
         protected void ResetTurn()
         {
             TurnElapsed = 0;
-            Event_TurnChanged?.Invoke(TurnElapsed);
+            Event_TurnChanged?.Invoke(TurnElapsed + 1);
         }
         protected void NextProgress()
         {

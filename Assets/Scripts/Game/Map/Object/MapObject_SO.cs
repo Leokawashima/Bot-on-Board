@@ -20,6 +20,7 @@ namespace Map.Object
         public int Cost = 0;
 
         public bool IsCollider = false;
+        public bool CanOverrideSpawn = false;
 
         public MapObject Prefab;
 

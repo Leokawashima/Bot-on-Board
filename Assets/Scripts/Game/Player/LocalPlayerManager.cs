@@ -1,29 +1,28 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using Map;
 using Map.Chip;
 
 public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
 {
     public MapChip SelectChip { get; private set; }
-    Vector2 m_mousePosition;
+    private Vector2 m_mousePosition;
 
     private bool m_isPointerOver;
 
-    (Color main, Color outLine) m_selectColor;
-    Coroutine m_activeCorutine;
+    private readonly int m_mask = 1 << Name.Layer.Map;
 
-    void OnEnable()
+    private void OnEnable()
     {
-        InputManager.Event_Main += OnMouse_MainClick;
-        InputManager.Event_DragStart += OnMouse_DragStart;
-        InputManager.Event_DragCancel += OnMouse_DragCancel;
+        InputManager.Event_Main += OnMain;
+        InputManager.Event_DragStart += OnDragStart;
+        InputManager.Event_DragCancel += OnDragCancel;
         PlayerUIManager.Event_ButtonPlace += OnButton_Place;
     }
-    void OnDisable()
+    private void OnDisable()
     {
-        InputManager.Event_Main -= OnMouse_MainClick;
-        InputManager.Event_DragStart -= OnMouse_DragStart;
-        InputManager.Event_DragCancel -= OnMouse_DragCancel;
+        InputManager.Event_Main -= OnMain;
+        InputManager.Event_DragStart -= OnDragStart;
+        InputManager.Event_DragCancel -= OnDragCancel;
         PlayerUIManager.Event_ButtonPlace -= OnButton_Place;
     }
 
@@ -32,82 +31,57 @@ public class LocalPlayerManager : SingletonMonoBehaviour<LocalPlayerManager>
         m_isPointerOver = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 
-    void OnMouse_MainClick()
+    private void OnMain()
     {
-        Ray _ray = Camera.main.ScreenPointToRay(InputManager.Position);
+        var _ray = Camera.main.ScreenPointToRay(InputManager.Position);
 
-        int _mask = 1 << Name.Layer.Map;
-
-        // UI上かどうか
         if (false == m_isPointerOver)
         {
-            if (Physics.Raycast(_ray, out var hit, Mathf.Infinity, _mask))
+            if (Physics.Raycast(_ray, out var hit, Mathf.Infinity, m_mask))
             {
-                var _chip = hit.collider.GetComponent<MapChip>();
+                var _mapManager = MapManager.Singleton;
+                var _pos = new Vector2Int((int)(hit.point.x + _mapManager.Stage.Size.x / 2.0f), (int)(hit.point.z + _mapManager.Stage.Size.y / 2.0f));
+                var _chip = MapManager.Singleton.Stage.Chip[_pos.y][_pos.x];
                 if (SelectChip != _chip)
                 {
-                    Stop();
                     SelectChip = _chip;
-                    HighLight(SelectChip);
+                    var _select = MapManager.Singleton.Select;
+                    _select.enabled = true;
+                    _select.transform.localPosition = new(_chip.transform.localPosition.x, _select.transform.localPosition.y, _chip.transform.localPosition.z);
                 }
             }
         }
     }
 
-    void OnMouse_DragStart()
+    private void OnDragStart()
     {
-        m_mousePosition = InputManager.Position;
-        InputManager.Event_Position += OnMouse_MovePerform;
+        if (false == m_isPointerOver)
+        {
+            m_mousePosition = InputManager.Position;
+            InputManager.Event_Position += OnMove;
+        }
     }
 
-    void OnMouse_DragCancel()
+    private void OnDragCancel()
     {
-        InputManager.Event_Position -= OnMouse_MovePerform;
+        InputManager.Event_Position -= OnMove;
         CameraManager.Singleton.SetFreeLookCamIsMove(false);
     }
 
-    void OnMouse_MovePerform()
+    private void OnMove()
     {
-        if ((m_mousePosition - InputManager.Position).magnitude >= 20.0f)
+        if (false == m_isPointerOver)
         {
-            CameraManager.Singleton.SetFreeLookCamIsMove(true);
-            InputManager.Event_Position -= OnMouse_MovePerform;
+            if ((m_mousePosition - InputManager.Position).magnitude >= 20.0f)
+            {
+                InputManager.Event_Position -= OnMove;
+                CameraManager.Singleton.SetFreeLookCamIsMove(true);
+            }
         }
     }
 
-    void OnButton_Place()
+    private void OnButton_Place()
     {
-        Stop();
-    }
-
-    private void HighLight(MapChip chip_)
-    {
-        m_activeCorutine = StartCoroutine(CoHighLight(chip_));
-    }
-    private void Stop()
-    {
-        if (m_activeCorutine != null)
-        {
-            StopCoroutine(m_activeCorutine);
-            m_activeCorutine = null;
-            SelectChip.Material.color = m_selectColor.main;
-            // SelectChip.Material.SetColor("_OutlineColor", m_selectColor.outLine);
-        }
-    }
-    IEnumerator CoHighLight(MapChip chip_)
-    {
-        m_selectColor.main = chip_.Material.color;
-        // m_selectColor.outLine = chip_.Material.GetColor("_OutlineColor");
-
-        float _h, _v;
-        Color.RGBToHSV(chip_.Material.color, out _h, out _, out _v);
-
-        // chip_.Material.SetColor("_OutlineColor", Color.blue);
-
-        while (true)
-        {
-            chip_.Material.color = Color.HSVToRGB(_h, Time.time % 1, _v);
-            yield return new WaitForSeconds(0.1f);
-        }
+        MapManager.Singleton.Select.enabled = false;
     }
 }

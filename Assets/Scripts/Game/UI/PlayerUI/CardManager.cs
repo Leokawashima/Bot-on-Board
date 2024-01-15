@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Deck;
 
 public class CardManager : MonoBehaviour
@@ -12,50 +11,37 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private MapObjectCard m_prefab;
 
-    public MapObjectCard GetSelectCard
-    {
-        get
-        {
-            return m_toggleGroup.ActiveToggles().FirstOrDefault()?.
-                GetComponent<MapObjectCard>();
-        }
-    }
-
-    [SerializeField] private ToggleGroup m_toggleGroup;
+    public MapObjectCard SelectCard { get; private set; }
 
     [SerializeField] private InfoCard m_info;
 
 #if UNITY_EDITOR
     [field: SerializeField]
 #endif
-    public List<int> TrashCardList { get; private set; } = new();
+    public List<int> TrashCards { get; private set; } = new();
 
 #if UNITY_EDITOR
     [field: SerializeField]
 #endif
-    public List<int> HandCardList { get; private set; }
+    public List<int> HandCards { get; private set; }
 
 #if UNITY_EDITOR
     [field: SerializeField]
 #endif
-    public List<int> StockCardList { get; private set; } = new();
+    public List<int> StockCards { get; private set; } = new();
 
     public void Initialize(DeckData deck_)
     {
-        HandCardList = new(HAND_SIZE);
+        HandCards = new(HAND_SIZE);
         // 元データのリストコピーのため元データを改変しない
         var _deck = deck_.Cards.ToList();
         for (int i = 0; i < HAND_SIZE; ++i)
         {
             var _index = Random.Range(0, _deck.Count - 1);
 
-            HandCardList.Add(_deck[_index]);
-
-            CardCreate(_deck[_index]);
-
-            _deck.RemoveAt(_index);
+            Draw(_deck, HandCards, _index);
         }
-        StockCardList = new(_deck);
+        StockCards = new(_deck);
 
         m_info.Initialize();
     }
@@ -65,49 +51,69 @@ public class CardManager : MonoBehaviour
         var _moc = Instantiate(m_prefab, transform);
         _moc.Initialize(index_);
 
-        var _toggle = _moc.gameObject.GetComponent<Toggle>();
-        _toggle.group = m_toggleGroup;
-
-        _moc.Event_Trash += () =>
-        {
-            TrashCardList.Add(index_);
-            HandCardList.Remove(index_);
-        };
-        _moc.Event_Info += (MapObjectCard card_) =>
-        {
-            m_info.Enable();
-            m_info.SetInfo(card_);
-        };
-
         var _rect = _moc.transform as RectTransform;
         _rect.localScale = Vector2.one * 0.6f;
 
-        _toggle.onValueChanged.AddListener((bool isOn_) =>
+        _moc.Event_Select += OnClick;
+        _moc.Event_Trash += OnTrash;
+        _moc.Event_Info += OnInfo;
+
+        void OnClick()
         {
-            _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, isOn_ ? -150 : -200);
-        });
+            if (SelectCard == _moc)
+            {
+                _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
+                SelectCard = null;
+            }
+            else
+            {
+                if (SelectCard != null)
+                {
+                    var _rect = SelectCard.transform as RectTransform;
+                    _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
+                }
+                SelectCard = _moc;
+                _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -150);
+            }
+        }
+        void OnTrash()
+        {
+            TrashCards.Add(index_);
+            HandCards.Remove(index_);
+        }
+        void OnInfo(MapObjectCard card_)
+        {
+            m_info.Enable();
+            m_info.SetInfo(card_);
+        }
     }
-    
-    public void Draw()
+
+    public void Replenish()
     {
-        var _space = HAND_SIZE - HandCardList.Count;
+        var _space = HAND_SIZE - HandCards.Count;
         var _draw = Mathf.Min(_space, DRAW_SIZE);
 
         for (int i = 0; i < _draw; ++i)
         {
-            var _index = Random.Range(0, StockCardList.Count - 1);
-            HandCardList.Add(StockCardList[_index]);
+            var _index = Random.Range(0, StockCards.Count - 1);
 
-            CardCreate(StockCardList[_index]);
-
-            StockCardList.RemoveAt(_index);
+            Draw(StockCards, HandCards, _index);
         }
 
         // ドローが終わったら破棄カードたちを山札に戻す
-        foreach (var index in TrashCardList)
+        foreach (var index in TrashCards)
         {
-            StockCardList.Add(index);
+            StockCards.Add(index);
         }
-        TrashCardList.Clear();
+        TrashCards.Clear();
+    }
+
+    private void Draw(List<int> from_, List<int> to_, int index_)
+    {
+        to_.Add(from_[index_]);
+
+        CardCreate(from_[index_]);
+
+        from_.RemoveAt(index_);
     }
 }

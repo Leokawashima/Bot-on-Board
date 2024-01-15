@@ -35,6 +35,7 @@ namespace Game.GameRule
             {
                 CallEventInitialize();
                 BotManager.Singleton.Initialize();
+                CameraManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
                 GUIManager.Singleton.PlayerUI.TurnInitialize();
                 
@@ -58,6 +59,8 @@ namespace Game.GameRule
             else
             {
                 CallEventFinalize();
+
+                MapManager.Singleton.TurnUpdate();
 
                 NextTurn();
                 ResetProgress();
@@ -94,6 +97,8 @@ namespace Game.GameRule
                 });
             }
         }
+
+
         public override bool IsGameSet()
         {
             return BotManager.Singleton.CheckBotDead() || TurnElapsed > TurnForceFinish;
