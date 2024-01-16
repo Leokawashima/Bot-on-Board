@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Noise
+  m_Name: Mat_Noise
   m_Shader: {fileID: -6465566751694194690, guid: 3eb504761d026e64db15727dd278f4ae, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
