@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TV Noise
-  m_Shader: {fileID: -6465566751694194690, guid: fdc1d4ff12b9afb46aa752e74d697499, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 6e225e786573e874499cff462138624b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
