@@ -82,26 +82,20 @@ namespace Deck.Edit
             }
         }
 
-        private void OnCardCreated(List<MapObjectCard> cards_)
+        private void OnCardCreated(List<CardDragHandler> cards_)
         {
             foreach (var card in cards_)
             {
-                card.AddEvent(EventTriggerType.BeginDrag, _OnBeginDrag);
-                card.AddEvent(EventTriggerType.Drag, OnDrag);
-                card.AddEvent(EventTriggerType.EndDrag, OnEndDrag);
-
-                void _OnBeginDrag(BaseEventData eventData_)
-                {
-                    OnBeginDrag(eventData_, card);
-                }
+                card.Event_BeginDrag += OnBeginDrag;
+                card.Event_Drag += OnDrag;
+                card.Event_EndDrag += OnEndDrag;
             }
         }
 
-        private void OnBeginDrag(BaseEventData eventData_, MapObjectCard card_)
+        private void OnBeginDrag(PointerEventData eventData_, MapObjectCard card_)
         {
-            var _pointer = eventData_ as PointerEventData;
             m_cursorCard.gameObject.SetActive(true);
-            m_cursorRectTransform.position = _pointer.position;
+            m_cursorRectTransform.position = eventData_.position;
 
             CopyCard(card_, m_cursorCard);
         }

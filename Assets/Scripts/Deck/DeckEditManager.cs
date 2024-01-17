@@ -26,14 +26,8 @@ namespace Deck.Edit
         public event Action Event_Back;
         public event Action<DeckData> Event_Save;
 
-        public void Enable()
-        {
-            m_canvas.enabled = true;
-        }
-        public void Disable()
-        {
-            m_canvas.enabled = false;
-        }
+        public void Enable() => m_canvas.enabled = true;
+        public void Disable() => m_canvas.enabled = false;
 
         public void Initialize()
         {

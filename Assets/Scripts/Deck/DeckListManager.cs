@@ -36,14 +36,8 @@ namespace Deck.List
             Event_Edit,
             Event_Delete;
 
-        private void Enable()
-        {
-            m_canvas.enabled = true;
-        }
-        private void Disable()
-        {
-            m_canvas.enabled = false;
-        }
+        private void Enable() => m_canvas.enabled = true;
+        private void Disable() => m_canvas.enabled = false;
 
         public void Initialize()
         {

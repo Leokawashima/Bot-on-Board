@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Deck;
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 
 public class CardManager : MonoBehaviour
 {
@@ -54,37 +56,43 @@ public class CardManager : MonoBehaviour
         var _rect = _moc.transform as RectTransform;
         _rect.localScale = Vector2.one * 0.6f;
 
-        _moc.Event_Select += OnClick;
         _moc.Event_Trash += OnTrash;
-        _moc.Event_Info += OnInfo;
-
-        void OnClick()
-        {
-            if (SelectCard == _moc)
-            {
-                _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
-                SelectCard = null;
-            }
-            else
-            {
-                if (SelectCard != null)
-                {
-                    var _rect = SelectCard.transform as RectTransform;
-                    _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
-                }
-                SelectCard = _moc;
-                _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -150);
-            }
-        }
         void OnTrash()
         {
             TrashCards.Add(index_);
             HandCards.Remove(index_);
         }
-        void OnInfo(MapObjectCard card_)
+
+        var _click = _moc.AddComponent<CardClickHandler>();
+        _click.Initialize(_moc);
+
+        _click.Event_Click += OnClick;
+        void OnClick(PointerEventData eventData_)
         {
-            m_info.Enable();
-            m_info.SetInfo(card_);
+            if (eventData_.button == PointerEventData.InputButton.Left)
+            {
+                if (SelectCard == _moc)
+                {
+                    _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
+                    SelectCard = null;
+                }
+                else
+                {
+                    if (SelectCard != null)
+                    {
+                        var _rect = SelectCard.transform as RectTransform;
+                        _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -200);
+                    }
+                    SelectCard = _moc;
+                    _rect.anchoredPosition = new Vector2(_rect.anchoredPosition.x, -150);
+                }
+            }
+            if (eventData_.button == PointerEventData.InputButton.Right)
+            {
+                m_info.Enable();
+                m_info.SetInfo(_moc);
+            }
+            
         }
     }
 
