@@ -15,14 +15,10 @@ namespace Deck.Edit
 
         [SerializeField] private float m_size = 0.55f;
 
-        [SerializeField] private InfoCard m_info;
-
         public event Action<List<CardDragHandler>> Event_CardCreated;
 
         public void Initialize()
         {
-            m_info.Initialize();
-
             var _cards = new List<CardDragHandler>();
             for (int i = 0, len = MapTable.Object.Table.Length; i < len; ++i)
             {
@@ -46,8 +42,7 @@ namespace Deck.Edit
             {
                 if (eventData_.button == PointerEventData.InputButton.Right)
                 {
-                    m_info.Enable();
-                    m_info.SetInfo(_moc);
+                    InfoCardData.Enable(_moc);
                 }
             }
 

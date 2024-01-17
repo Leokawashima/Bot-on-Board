@@ -27,11 +27,9 @@ namespace Deck.Edit
 
             m_rectTransform = transform as RectTransform;
 
-            EditDeck = new()
-            {
-                Cards = new()
-            };
+            EditDeck = new();
             EditCards = new();
+
             for (int i = 0, cnt = m_defaultDeckSize; i < cnt; ++i)
             {
                 CardCreate();

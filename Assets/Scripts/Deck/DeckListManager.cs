@@ -17,9 +17,6 @@ namespace Deck.List
         [SerializeField] private Button
             m_editButton,
             m_deleteButton;
-        [SerializeField] private PopupDialog
-            m_editDialog,
-            m_deleteDialog;
 
         #region ベータ用に最低限機能を実装した部分
         [SerializeField] private Button m_backButton;
@@ -50,12 +47,7 @@ namespace Deck.List
             m_backButton.onClick.AddListener(OnButtonListBack);
 
             m_editButton.onClick.AddListener(OnButtonEdit);
-            m_editDialog.AcceptButton.onClick.AddListener(OnDialogEditAccept);
-            m_editDialog.CancelButton.onClick.AddListener(OnDialogEditCancel);
-
             m_deleteButton.onClick.AddListener(OnButtonDelete);
-            m_deleteDialog.AcceptButton.onClick.AddListener(OnDialogDeleteAccept);
-            m_deleteDialog.CancelButton.onClick.AddListener(OnDialogDeleteCancel);
 
             m_playerFirst.gameObject.SetActive(false);
             m_playerSecond.gameObject.SetActive(false);
@@ -88,27 +80,20 @@ namespace Deck.List
         {
             if (SelectInfo != null)
             {
-                m_editDialog.DialogText.text = $"{SelectInfo.Data.Name}\nを編集します\nよろしいですか？";
-                m_editDialog.Enable();
+                PopupDialog.Enable($"{SelectInfo.Data.Name}\nを編集します\nよろしいですか？", OnDialogEditAccept);
             }
         }
         private void OnDialogEditAccept()
         {
             Disable();
             Event_Edit?.Invoke(SelectInfo);
-            m_editDialog.Disable();
-        }
-        private void OnDialogEditCancel()
-        {
-            m_editDialog.Disable();
         }
 
         private void OnButtonDelete()
         {
             if (SelectInfo != null)
             {
-                m_deleteDialog.DialogText.text = $"{SelectInfo.Data.Name}\nを削除します\nよろしいですか？";
-                m_deleteDialog.Enable();
+                PopupDialog.Enable($"{SelectInfo.Data.Name}\nを削除します\nよろしいですか？", OnDialogDeleteAccept);
             }
         }
         private void OnDialogDeleteAccept()
@@ -116,12 +101,6 @@ namespace Deck.List
             DeckJsonFileSystem.DeleteJson(SelectInfo.Index);
             Event_Delete?.Invoke(SelectInfo);
             m_deckListInfo.SetInfo(SelectInfo);
-
-            m_deleteDialog.Disable();
-        }
-        private void OnDialogDeleteCancel()
-        {
-            m_deleteDialog.Disable();
         }
 
         private void OnClickInfo(InfoDeckData info_)

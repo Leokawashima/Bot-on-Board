@@ -51,10 +51,7 @@ namespace Deck
                 }
                 else
                 {
-                    _info.Initialize(i, new()
-                    {
-                        Name = DECK_NAME + (i + 1)
-                    });
+                    _info.Initialize(i, new(DECK_NAME + (i + 1)));
                 }
                 _info.Event_ButtonClick += Event_ClickInfo;
                 Infos.Add(_info);
@@ -69,10 +66,7 @@ namespace Deck
             }
             else
             {
-                info_.Initialize(info_.Index, new()
-                {
-                    Name = DECK_NAME + (info_.Index + 1)
-                });
+                info_.Initialize(info_.Index, new(DECK_NAME + (info_.Index + 1)));
             }
         }
 

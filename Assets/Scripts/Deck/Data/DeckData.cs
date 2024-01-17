@@ -12,12 +12,12 @@ namespace Deck
         /// <summary>
         /// デッキの名前
         /// </summary>
-        public string Name = "null";
+        public string Name = "ナナシ";
 
         /// <summary>
         /// デッキの状態
         /// </summary>
-        public DeckManager.DeckState State = DeckManager.DeckState.Non;
+        public DeckManager.DeckState State;
 
         /// <summary>
         /// デッキのランク毎のカウント
@@ -32,6 +32,22 @@ namespace Deck
         /// <summary>
         /// デッキのフィールド
         /// </summary>
-        public List<int> Cards = new();
+        public List<int> Cards;
+
+        public DeckData()
+        {
+            // データベースからひぱってくるコードを書く　今は仮
+            Rarity = new int[4];
+            Category = new int[5];
+            Cards = new();
+        }
+        public DeckData(string name_)
+        {
+            // データベースからひぱってくるコードを書く　今は仮
+            Name = name_;
+            Rarity = new int[4];
+            Category = new int[5];
+            Cards = new();
+        }
     }
 }
