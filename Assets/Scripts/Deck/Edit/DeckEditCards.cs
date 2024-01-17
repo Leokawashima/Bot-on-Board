@@ -15,21 +15,21 @@ namespace Deck.Edit
 
         [SerializeField] private InfoCard m_info;
 
-        public event Action<List<CardDrag>> Event_CardCreated;
+        public event Action<List<MapObjectCard>> Event_CardCreated;
 
         public void Initialize()
         {
             m_info.Initialize();
 
-            var _dragCards = new List<CardDrag>();
+            var _cards = new List<MapObjectCard>();
             for (int i = 0, len = MapTable.Object.Table.Length; i < len; ++i)
             {
-                _dragCards.Add(CardCreate(i));
+                _cards.Add(CardCreate(i));
             }
-            Event_CardCreated?.Invoke(_dragCards);
+            Event_CardCreated?.Invoke(_cards);
         }
 
-        private CardDrag CardCreate(int index_)
+        private MapObjectCard CardCreate(int index_)
         {
             var _moc = Instantiate(m_prefab, m_content);
             _moc.Initialize(index_);
@@ -42,10 +42,7 @@ namespace Deck.Edit
 
             _moc.transform.localScale = Vector2.one * m_size;
 
-            var _drag = _moc.gameObject.AddComponent<CardDrag>();
-            _drag.Initialize(_moc);
-
-            return _drag;
+            return _moc;
         }
     }
 }

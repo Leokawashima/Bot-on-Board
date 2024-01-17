@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Map;
 using Map.Object;
@@ -24,12 +25,7 @@ public class MapObjectCard : MonoBehaviour
         Index = index_;
         Appearance.Initialize(SO);
 
-        var _entry = new EventTrigger.Entry
-        {
-            eventID = EventTriggerType.PointerClick,
-        };
-        _entry.callback.AddListener(OnPointerClick);
-        m_trigger.triggers.Add(_entry);
+        AddEvent(EventTriggerType.PointerClick, OnPointerClick);
     }
 
     public void Trash()
@@ -39,8 +35,17 @@ public class MapObjectCard : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void AddEvent(EventTriggerType type_, UnityAction<BaseEventData> callback_)
+    {
+        var _entry = new EventTrigger.Entry
+        {
+            eventID = type_,
+        };
+        _entry.callback.AddListener(callback_);
+        m_trigger.triggers.Add(_entry);
+    }
 
-    void OnPointerClick(BaseEventData eventData_)
+    private void OnPointerClick(BaseEventData eventData_)
     {
         var _event = eventData_ as PointerEventData ;
         if (_event.button == PointerEventData.InputButton.Left)

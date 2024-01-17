@@ -22,7 +22,7 @@ namespace Deck.Edit
         {
             m_deck = new()
             {
-                Rank = new int[4],
+                Rarity = new int[4],
                 Category = new int[5],
                 Cards = new(),
             };
@@ -71,9 +71,11 @@ namespace Deck.Edit
         public void SetRankText(DeckData deck_)
         {
             var _text = string.Empty;
-            for (int i = 0; i < deck_.Rank.Length; ++i)
+            deck_.Rarity = new int[1];
+
+            for (int i = 0; i < deck_.Rarity.Length; ++i)
             {
-                _text += $"{deck_.Rank[i]}\n";
+                _text += $"{deck_.Rarity[i]}\n";
             }
             m_rankText.text = _text;
         }
