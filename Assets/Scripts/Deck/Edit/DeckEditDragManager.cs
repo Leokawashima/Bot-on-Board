@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Deck.Edit
 {
@@ -75,46 +76,47 @@ namespace Deck.Edit
 
             return _InSide(_pos.x, _sizeHalf.x, mousePos_.x) && _InSide(_pos.y, _sizeHalf.y, mousePos_.y);
 
-            bool _InSide(float pos_, float sizeHalf_, float mousePos_)
+            static bool _InSide(float pos_, float sizeHalf_, float mousePos_)
             {
                 return pos_ - sizeHalf_ < mousePos_ && pos_ + sizeHalf_ > mousePos_;
             }
         }
 
-
-        private void OnCardCreated(List<CardDrag> drags_)
+        private void OnCardCreated(List<CardDragHandler> cards_)
         {
-            foreach (var drag in drags_)
+            foreach (var card in cards_)
             {
-                drag.OnBeginDrag += OnBeginDrag;
-                drag.OnDrag += OnDrag;
-                drag.OnEndDrag += OnEndDrag;
+                card.Event_BeginDrag += OnBeginDrag;
+                card.Event_Drag += OnDrag;
+                card.Event_EndDrag += OnEndDrag;
             }
         }
 
-        private void OnBeginDrag(Vector2 mousePos_, MapObjectCard card_)
+        private void OnBeginDrag(PointerEventData eventData_, MapObjectCard card_)
         {
             m_cursorCard.gameObject.SetActive(true);
-            m_cursorRectTransform.position = mousePos_;
+            m_cursorRectTransform.position = eventData_.position;
 
             CopyCard(card_, m_cursorCard);
         }
 
-        private void OnDrag(Vector2 mousePos_)
+        private void OnDrag(BaseEventData eventData_)
         {
-            if (CheckHitCard(mousePos_, out var _card, out var index_))
+            var _pointer = eventData_ as PointerEventData;
+            if (CheckHitCard(_pointer.position, out var _card, out var index_))
             {
                 var _rect = _card.transform as RectTransform;
                 m_cursorRectTransform.position = _rect.position + Vector3.up * 90.0f;
                 return;
             }
 
-            m_cursorRectTransform.position = mousePos_;
+            m_cursorRectTransform.position = _pointer.position;
         }
 
-        private void OnEndDrag(Vector2 mousePos_)
+        private void OnEndDrag(BaseEventData eventData_)
         {
-            if (CheckHitCard(mousePos_, out var _card, out var index_))
+            var _pointer = eventData_ as PointerEventData;
+            if (CheckHitCard(_pointer.position, out var _card, out var index_))
             {
                 Event_EndDrag?.Invoke(m_cursorCard, index_);
                 // カードに情報を渡す

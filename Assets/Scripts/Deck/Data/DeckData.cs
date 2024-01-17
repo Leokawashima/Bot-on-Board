@@ -22,7 +22,7 @@ namespace Deck
         /// <summary>
         /// デッキのランク毎のカウント
         /// </summary>
-        public int[] Rank;
+        public int[] Rarity;
 
         /// <summary>
         /// デッキのカテゴリ毎のカウント
