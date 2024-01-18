@@ -18,16 +18,7 @@ namespace Deck.List
             m_editButton,
             m_deleteButton;
 
-        #region ベータ用に最低限機能を実装した部分
         [SerializeField] private Button m_backButton;
-        [SerializeField] private RectTransform
-            m_playerFirst,
-            m_playerSecond;
-        [SerializeField] private Button
-            m_playerFirstSetButton,
-            m_playerSecondSetButton;
-
-        #endregion ベータ用に最低限機能を実装した部分
 
         public event Action<InfoDeckData>
             Event_Edit,
@@ -49,26 +40,7 @@ namespace Deck.List
             m_editButton.onClick.AddListener(OnButtonEdit);
             m_deleteButton.onClick.AddListener(OnButtonDelete);
 
-            m_playerFirst.gameObject.SetActive(false);
-            m_playerSecond.gameObject.SetActive(false);
-            m_playerFirstSetButton.onClick.AddListener(OnButtonPlayerFirst);
-            m_playerSecondSetButton.onClick.AddListener(OnButtonPlayerSecond);
-
             m_infoManager.Initialize();
-            if (GlobalSystem.IndexPlayerFirst != -1)
-            {
-                var _index = GlobalSystem.IndexPlayerFirst;
-                m_playerFirst.gameObject.SetActive(true);
-                m_playerFirst.SetParent(m_infoManager.Infos[_index].transform);
-                m_playerFirst.transform.localPosition = new Vector3(350, 30, 0);
-            }
-            if (GlobalSystem.IndexPlayerSecond != -1)
-            {
-                var _index = GlobalSystem.IndexPlayerSecond;
-                m_playerSecond.gameObject.SetActive (true);
-                m_playerSecond.SetParent(m_infoManager.Infos[_index].transform);
-                m_playerSecond.transform.localPosition = new Vector3(400, 30, 0);
-            }
         }
 
         private void OnButtonListBack()
@@ -120,23 +92,6 @@ namespace Deck.List
             m_deckListInfo.SetInfo(SelectInfo);
 
             Enable();
-        }
-
-        private void OnButtonPlayerFirst()
-        {
-            m_playerFirst.gameObject.SetActive(true);
-            m_playerFirst.SetParent(SelectInfo.transform);
-            m_playerFirst.transform.localPosition = new Vector3(350, 30, 0);
-            GlobalSystem.IndexPlayerFirst = SelectInfo.Index;
-            GlobalSystem.DeckPlayerFirst = SelectInfo.Data.DeepCopyInstance();
-        }
-        private void OnButtonPlayerSecond()
-        {
-            m_playerSecond.gameObject.SetActive(true);
-            m_playerSecond.SetParent(SelectInfo.transform);
-            m_playerSecond.transform.localPosition = new Vector3(400, 30, 0);
-            GlobalSystem.IndexPlayerSecond = SelectInfo.Index;
-            GlobalSystem.DeckPlayerSecond = SelectInfo.Data.DeepCopyInstance();
         }
     }
 }

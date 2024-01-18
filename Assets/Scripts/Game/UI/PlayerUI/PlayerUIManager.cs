@@ -22,25 +22,13 @@ public class PlayerUIManager : MonoBehaviour
         for (int i = 0, len = m_playerUIs.Length; i < len; ++i)
         {
             m_playerUIs[i] = Instantiate(m_prefab, transform);
-            if (i == 0)
-            {
-                m_playerUIs[i].Initialize(_players[i], GlobalSystem.DeckPlayerFirst);
-            }
-            if (i == 1)
-            {
-                m_playerUIs[i].Initialize(_players[i], GlobalSystem.DeckPlayerSecond);
-            }
-            m_playerUIs[i].Event_ButtonPlace += () =>
-            {
-                Event_ButtonPlace?.Invoke();
-            };
-            m_playerUIs[i].Event_ButtonTurnEnd += () =>
-            {
-                Event_ButtonTurnEnd?.Invoke();
-            };
+            m_playerUIs[i].Event_ButtonPlace += () => Event_ButtonPlace?.Invoke();
+            m_playerUIs[i].Event_ButtonTurnEnd += () => Event_ButtonTurnEnd?.Invoke();
             m_playerUIs[i].Disable();
         }
     }
+
+    public void Enable(int index_) => m_playerUIs[index_].Enable();
 
     public void TurnInitialize()
     {
@@ -48,10 +36,5 @@ public class PlayerUIManager : MonoBehaviour
         {
             ui.TurnInitialize();
         }
-    }
-
-    public void Enable(int index_)
-    {
-        m_playerUIs[index_].Enable();
     }
 }
