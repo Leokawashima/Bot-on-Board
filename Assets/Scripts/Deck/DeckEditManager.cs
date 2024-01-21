@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Deck.List;
 
 namespace Deck.Edit
@@ -16,46 +15,33 @@ namespace Deck.Edit
         [field: SerializeField] public DeckEditSetting Setting { get; private set; }
         [field: SerializeField] public DeckEditSearch Search { get; private set; }
 
-        [SerializeField] private Button
-            m_backButton,
-            m_saveButton;
-
         public event Action Event_Back;
         public event Action<DeckData> Event_Save;
 
-        public void Enable() => m_canvas.enabled = true;
-        public void Disable() => m_canvas.enabled = false;
+        public static void Enable() => Singleton.m_canvas.enabled = true;
+        public static void Disable() => Singleton.m_canvas.enabled = false;
 
         public void Initialize()
         {
-            Disable();
             DragManager.Initialize();
             Cards.Initialize();
             Category.Initialize();
             Info.Initialize();
             Setting.Initialize();
             Search.Initialize();
-
-            DeckListManager.Singleton.Event_Edit += (InfoDeckData deta_) =>
-            {
-                Enable();
-            };
-
-            m_backButton.onClick.AddListener(OnButtonBack);
-            m_saveButton.onClick.AddListener(OnButtonSave);
         }
 
-        private void OnButtonBack()
+        public void OnButtonBack()
         {
             PopupDialog.Enable("変更せずに戻ります\nよろしいですか？", OnDialogBackAccept);
         }
         private void OnDialogBackAccept()
         {
-            Disable();
             Event_Back?.Invoke();
+            Disable();
         }
 
-        private void OnButtonSave()
+        public void OnButtonSave()
         {
             PopupDialog.Enable("保存して終了します\nよろしいですか？", OnDialogSaveAccept);
         }
@@ -70,9 +56,11 @@ namespace Deck.Edit
             {
                 _deckData.Cards.Add(DragManager.EditCards[i].Index);
             }
+
             Event_Save?.Invoke(_deckData);
 
             Disable();
+            DeckListManager.Enable();
         }
     }
 }

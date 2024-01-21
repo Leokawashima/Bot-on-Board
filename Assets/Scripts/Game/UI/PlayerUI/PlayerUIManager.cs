@@ -22,6 +22,7 @@ public class PlayerUIManager : MonoBehaviour
         for (int i = 0, len = m_playerUIs.Length; i < len; ++i)
         {
             m_playerUIs[i] = Instantiate(m_prefab, transform);
+            m_playerUIs[i].Initialize(_players[i], null);
             m_playerUIs[i].Event_ButtonPlace += () => Event_ButtonPlace?.Invoke();
             m_playerUIs[i].Event_ButtonTurnEnd += () => Event_ButtonTurnEnd?.Invoke();
             m_playerUIs[i].Disable();
