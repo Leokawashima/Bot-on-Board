@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InfoPlayerSettingManager : MonoBehaviour
@@ -31,32 +32,31 @@ public class InfoPlayerSettingManager : MonoBehaviour
         for (int i = 0; i < _count; ++i)
         {
             var _info = Instantiate(m_prefab, m_content);
+            var _setting = _info.AddComponent<PlayerSetting>();
+            _setting.Initialize(i, "Default", colors[i]);
+            _info.Initlaize(_setting);
             m_infos.Add(_info);
-            _info.Set(i + 1, colors[i], "Default");
         }
 
-        m_plusMinusButton.Event_ValueChanged += OnValueChanged;
+        m_plusMinusButton.Event_ValueAdd += OnValueAdd;
+        m_plusMinusButton.Event_valueSub -= OnValueSub;
 
-        void OnValueChanged(int value_)
+        void OnValueAdd(int value_)
         {
-            var _diff = m_infos.Count - value_;
-            if (_diff < 0)
+            for (int i = 0; i < value_; ++i)
             {
-                for (int i = 0, cnt = Mathf.Abs(_diff); i < cnt; ++i)
-                {
-                    var _info = Instantiate(m_prefab, m_content);
-                    m_infos.Add(_info);
-                    _info.Set(m_infos.Count + i, colors[m_infos.Count - 1 + i], "Default");
-                }
+                var _info = Instantiate(m_prefab, m_content);
+                m_infos.Add(_info);
+                _info.Set(m_infos.Count + i, colors[m_infos.Count - 1 + i], "Default");
             }
-            else
+        }
+        void OnValueSub(int value_)
+        {
+            for (int i = 0; i < value_; ++i)
             {
-                for (int i = 0, cnt = Mathf.Abs(_diff); i < cnt; ++i)
-                {
-                    var _info = m_infos[m_infos.Count - 1];
-                    m_infos.Remove(_info);
-                    Destroy(_info.gameObject);
-                }
+                var _info = m_infos[m_infos.Count - 1];
+                m_infos.Remove(_info);
+                Destroy(_info.gameObject);
             }
         }
     }
