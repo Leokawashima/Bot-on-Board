@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//参考：https://qiita.com/ga-mi-_qiita/items/ecba3343a14887bcb314
 public class Gamer : MonoBehaviour
 {
     [Header("ここに現在のマテリアルをドロップ")]
-    [SerializeField]Material material;
+    Material material;
     [Header("虹色に光るスピード（0.001を推奨）")]
     [SerializeField]float gamingSpeed = 0.001f;
     float hue;
 
-    // Start is called before the first frame update
     void Start()
     {
+        //スクリプトを付けたオブジェクトのみ光らせる
+        material = GetComponent<Renderer>().material;
         hue = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         hue += gamingSpeed;
