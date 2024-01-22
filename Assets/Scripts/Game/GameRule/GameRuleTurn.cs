@@ -7,8 +7,8 @@ namespace Game.GameRule
 {
     public class GameRuleTurn : GameRule_Template
     {
-        [field: SerializeField] public int TurnSuddenDeath { get; private set; } = 30;
-        [field: SerializeField] public int TurnForceFinish { get; private set; } = 50;
+        [field: SerializeField] public int TurnSuddenDeath { get; private set; }
+        [field: SerializeField] public int TurnForceFinish { get; private set; }
 
         private void OnEnable()
         {
@@ -38,7 +38,6 @@ namespace Game.GameRule
                 BotManager.Singleton.Initialize();
                 CameraManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
-                GUIManager.Singleton.PlayerUI.TurnInitialize();
                 
                 GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
                 {

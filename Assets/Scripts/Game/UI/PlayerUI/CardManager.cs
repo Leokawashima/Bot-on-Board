@@ -15,8 +15,6 @@ public class CardManager : MonoBehaviour
 
     public MapObjectCard SelectCard { get; private set; }
 
-    [SerializeField] private InfoCard m_info;
-
 #if UNITY_EDITOR
     [field: SerializeField]
 #endif
@@ -44,8 +42,6 @@ public class CardManager : MonoBehaviour
             Draw(_deck, HandCards, _index);
         }
         StockCards = new(_deck);
-
-        m_info.Initialize();
     }
 
     private void CardCreate(int index_)
@@ -89,8 +85,7 @@ public class CardManager : MonoBehaviour
             }
             if (eventData_.button == PointerEventData.InputButton.Right)
             {
-                m_info.Enable();
-                m_info.SetInfo(_moc);
+                InfoCardData.Enable(_moc);
             }
             
         }

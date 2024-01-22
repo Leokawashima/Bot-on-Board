@@ -21,7 +21,6 @@ public class FlipImage : UIBehaviour, IMeshModifier
     private RectTransform m_rectTransform;
 
 #if UNITY_EDITOR
-    // new は継承クラスに同一名のメソッドを作るためのもの…らしい
     public new void OnValidate()
     {
         GetComponent<Graphic>().SetVerticesDirty();

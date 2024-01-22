@@ -1,51 +1,66 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
-public class PopupDialog : MonoBehaviour
+public class PopupDialog : SingletonMonoBehaviour<PopupDialog>
 {
-    [SerializeField] Canvas m_canvas;
+    [SerializeField] private Canvas m_canvas;
 
-    [field: SerializeField] public TMP_Text DialogText { get; private set; }
+    [SerializeField] private TMP_Text m_dialogText;
+    public static TMP_Text DialogText => Singleton.m_dialogText;
+    [SerializeField] private TMP_Text m_acceptText;
+    public static TMP_Text AcceptText => Singleton.m_acceptText;
+    [SerializeField] private TMP_Text m_cancelText;
+    public static TMP_Text CancelText => Singleton.m_cancelText;
 
-    [field: SerializeField] public Button AcceptButton { get; private set; }
-    [field: SerializeField] public TMP_Text AcceptText { get; private set; }
+    [SerializeField] private Button m_acceptButton;
+    [SerializeField] private Button m_cancelButton;
 
-    [field: SerializeField] public Button CancelButton { get; private set; }
-    [field: SerializeField] public TMP_Text CancelText { get; private set; }
+    public static void Enable() => Singleton.m_canvas.enabled = true;
+    public static void Disable() => Singleton.m_canvas.enabled = false;
 
-    public void Initialize(string text_)
+    public static void Enable(string dialog_, UnityAction acceptCallback_)
     {
-        DialogText.text = text_;
+        DialogText.text = dialog_;
+        Singleton.m_acceptButton.onClick.AddListener(acceptCallback_);
+        Enable();
+    }
+    public static void Enable(string dialog_, UnityAction acceptCallback_, UnityAction cancelCallback_)
+    {
+        DialogText.text = dialog_;
+        Singleton.m_acceptButton.onClick.AddListener(acceptCallback_);
+        Singleton.m_cancelButton.onClick.AddListener(cancelCallback_);
+        Enable();
     }
 
-    public void Initialize(string text_, string acceptText_, string cancelText_)
+    public static void SetText(string dialog_)
     {
-        DialogText.text = text_;
-        AcceptText.text = acceptText_;
-        CancelText.text = cancelText_;
+        DialogText.text = dialog_;
+    }
+    public static void SetText(string dialog_, string accept_, string cancel_)
+    {
+        DialogText.text = dialog_;
+        AcceptText.text = accept_;
+        CancelText.text = cancel_;
     }
 
-    public void Enable()
+    public void RemoveCallback()
     {
-        m_canvas.enabled = true;
-    }
-    public void Disable()
-    {
-        m_canvas.enabled = false;
+        m_acceptButton.onClick.RemoveAllListeners();
+        m_cancelButton.onClick.RemoveAllListeners();
     }
 
 #if UNITY_EDITOR
-    [SerializeField] private string
-        m_dialogText,
-        m_acceptText,
-        m_cancelText;
+    [SerializeField] private string m_dialogPreview;
+    [SerializeField] private string m_acceptPreview;
+    [SerializeField] private string m_cancelPreview;
 
     private void OnValidate()
     {
-        DialogText.text = m_dialogText;
-        AcceptText.text = m_acceptText;
-        CancelText.text = m_cancelText;
+        m_dialogText.text = m_dialogPreview;
+        m_acceptText.text = m_acceptPreview;
+        m_cancelText.text = m_cancelPreview;
     }
 #endif
 }

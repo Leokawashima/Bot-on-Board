@@ -20,12 +20,7 @@ namespace Deck.Edit
 
         public void Initialize()
         {
-            m_deck = new()
-            {
-                Rarity = new int[4],
-                Category = new int[5],
-                Cards = new(),
-            };
+            m_deck = new();
             DeckEditManager.Singleton.DragManager.Event_EndDrag += OnEndDrag;
             DeckListManager.Singleton.Event_Edit += OnEdit;
         }
@@ -35,23 +30,23 @@ namespace Deck.Edit
             if (DeckEditManager.Singleton.DragManager.EditDeck.Cards[index_] != -1)
             {
                 var _mo = MapTable.Object.Table[DeckEditManager.Singleton.DragManager.EditDeck.Cards[index_]];
-                //m_deck.Rank[(int)_mo.HasRarity]--;
-                //m_deck.Category[(int)_mo.Category]--;
+                m_deck.Rarity[_mo.Rarity.ID]--;
+                m_deck.Category[_mo.Category.ID]--;
                 m_deck.Cards.Remove(card_.Index);
             }
 
-            //m_deck.Rank[(int)card_.SO.HasRarity]++;
-            //m_deck.Category[(int)card_.SO.Category]++;
+            m_deck.Rarity[card_.SO.Rarity.ID]++;
+            m_deck.Category[card_.SO.Category.ID]++;
             m_deck.Cards.Add(card_.Index);
             SetCategoryText(m_deck);
-            SetRankText(m_deck);
+            SetRarityText(m_deck);
             SetDeckSizeText(m_deck);
         }
 
         private void OnEdit(InfoDeckData info_)
         {
             SetCategoryText(info_.Data);
-            SetRankText(info_.Data);
+            SetRarityText(info_.Data);
             SetDeckSizeText(info_.Data);
             SetNameText(info_.Data);
         }
@@ -59,7 +54,6 @@ namespace Deck.Edit
         public void SetCategoryText(DeckData deck_)
         {
             var _text = string.Empty;
-            deck_.Category = new int[1];
             
             for (int i = 0; i < deck_.Category.Length; ++i)
             {
@@ -68,10 +62,9 @@ namespace Deck.Edit
             m_categoryText.text = _text;
         }
 
-        public void SetRankText(DeckData deck_)
+        public void SetRarityText(DeckData deck_)
         {
             var _text = string.Empty;
-            deck_.Rarity = new int[1];
 
             for (int i = 0; i < deck_.Rarity.Length; ++i)
             {

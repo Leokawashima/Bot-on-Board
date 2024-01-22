@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cbdc591505d7984d9841e223acf9efe, type: 3}
   m_Name: CC_LongRangeWeapon
   m_EditorClassIdentifier: 
+  ID: 1
   Name: LongRangeWeapon
   Color: {r: 0, g: 0, b: 1, a: 1}
   Color_BG: {r: 0.504, g: 0.504, b: 1, a: 1}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cbdc591505d7984d9841e223acf9efe, type: 3}
   m_Name: CC_Wall
   m_EditorClassIdentifier: 
+  ID: 4
   Name: Wall
   Color: {r: 1, g: 0.5, b: 0, a: 1}
   Color_BG: {r: 1, g: 0.75297254, b: 0.504, a: 1}

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Deck.List;
 using Deck.Edit;
 
@@ -20,8 +21,16 @@ namespace Deck
 
         private void Start()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             m_deckList.Initialize();
             m_deckEdit.Initialize();
+
+            DeckListManager.Enable();
+            DeckEditManager.Disable();
         }
     }
 }

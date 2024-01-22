@@ -1,37 +1,20 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Game;
-using Deck;
 
 public static class GlobalSystem
 {
     public static bool IsPause { get; private set; }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetPause(bool pause_) { IsPause = pause_; }
-
-    public static GameModeState GameMode { get; private set; }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetGameMode(GameModeState state_) { GameMode = state_; }
+    public static void SetPause(bool pause_)  => IsPause = pause_;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnRuntimeInitialize()
     {
         SetPause(false);
-        SetGameMode(GameModeState.Non);
-        IndexPlayerFirst = -1;
-        DeckPlayerFirst = null;
-        IndexPlayerSecond = -1;
-        DeckPlayerSecond = null;
 
         SceneManager.LoadScene(Name.Scene.System, LoadSceneMode.Additive);
     }
-    public static int
-        IndexPlayerFirst,
-        IndexPlayerSecond;
-    public static DeckData
-        DeckPlayerFirst,
-        DeckPlayerSecond;
 }
 
 namespace Name

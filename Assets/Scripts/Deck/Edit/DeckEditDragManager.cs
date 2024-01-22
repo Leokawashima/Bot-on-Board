@@ -27,11 +27,9 @@ namespace Deck.Edit
 
             m_rectTransform = transform as RectTransform;
 
-            EditDeck = new()
-            {
-                Cards = new()
-            };
+            EditDeck = new();
             EditCards = new();
+
             for (int i = 0, cnt = m_defaultDeckSize; i < cnt; ++i)
             {
                 CardCreate();
@@ -100,23 +98,22 @@ namespace Deck.Edit
             CopyCard(card_, m_cursorCard);
         }
 
-        private void OnDrag(BaseEventData eventData_)
+        private void OnDrag(PointerEventData eventData_)
         {
-            var _pointer = eventData_ as PointerEventData;
-            if (CheckHitCard(_pointer.position, out var _card, out var index_))
+            if (CheckHitCard(eventData_.position, out var _card, out var index_))
             {
                 var _rect = _card.transform as RectTransform;
                 m_cursorRectTransform.position = _rect.position + Vector3.up * 90.0f;
                 return;
             }
 
-            m_cursorRectTransform.position = _pointer.position;
+            m_cursorRectTransform.position = eventData_.position;
+            //m_cursorRectTransform.localPosition = eventData_.position;
         }
 
-        private void OnEndDrag(BaseEventData eventData_)
+        private void OnEndDrag(PointerEventData eventData_)
         {
-            var _pointer = eventData_ as PointerEventData;
-            if (CheckHitCard(_pointer.position, out var _card, out var index_))
+            if (CheckHitCard(eventData_.position, out var _card, out var index_))
             {
                 Event_EndDrag?.Invoke(m_cursorCard, index_);
                 // カードに情報を渡す

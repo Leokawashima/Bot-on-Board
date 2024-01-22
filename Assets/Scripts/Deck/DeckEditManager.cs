@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Deck.List;
 
 namespace Deck.Edit
@@ -16,64 +15,35 @@ namespace Deck.Edit
         [field: SerializeField] public DeckEditSetting Setting { get; private set; }
         [field: SerializeField] public DeckEditSearch Search { get; private set; }
 
-        [SerializeField] private Button
-            m_backButton,
-            m_saveButton;
-        [SerializeField] private PopupDialog
-            m_backDialog,
-            m_saveDialog;
-
         public event Action Event_Back;
         public event Action<DeckData> Event_Save;
 
-        public void Enable() => m_canvas.enabled = true;
-        public void Disable() => m_canvas.enabled = false;
+        public static void Enable() => Singleton.m_canvas.enabled = true;
+        public static void Disable() => Singleton.m_canvas.enabled = false;
 
         public void Initialize()
         {
-            Disable();
             DragManager.Initialize();
             Cards.Initialize();
             Category.Initialize();
             Info.Initialize();
             Setting.Initialize();
             Search.Initialize();
-
-            DeckListManager.Singleton.Event_Edit += (InfoDeckData deta_) =>
-            {
-                Enable();
-            };
-
-            m_backButton.onClick.AddListener(OnButtonBack);
-            m_backDialog.AcceptButton.onClick.AddListener(OnDialogBackAccept);
-            m_backDialog.CancelButton.onClick.AddListener(OnDialogBackCancel);
-
-            m_saveButton.onClick.AddListener(OnButtonSave);
-            m_saveDialog.AcceptButton.onClick.AddListener(OnDialogSaveAccept);
-            m_saveDialog.CancelButton.onClick.AddListener(OnDialogSaveCancel);
         }
 
-        private void OnButtonBack()
+        public void OnButtonBack()
         {
-            m_backDialog.DialogText.text = "変更せずに戻ります\nよろしいですか？";
-            m_backDialog.Enable();
+            PopupDialog.Enable("変更せずに戻ります\nよろしいですか？", OnDialogBackAccept);
         }
         private void OnDialogBackAccept()
         {
-            Disable();
             Event_Back?.Invoke();
-
-            m_backDialog.Disable();
-        }
-        private void OnDialogBackCancel()
-        {
-            m_backDialog.Disable();
+            Disable();
         }
 
-        private void OnButtonSave()
+        public void OnButtonSave()
         {
-            m_saveDialog.DialogText.text = "保存して終了します\nよろしいですか？";
-            m_saveDialog.Enable();
+            PopupDialog.Enable("保存して終了します\nよろしいですか？", OnDialogSaveAccept);
         }
         private void OnDialogSaveAccept()
         {
@@ -86,14 +56,11 @@ namespace Deck.Edit
             {
                 _deckData.Cards.Add(DragManager.EditCards[i].Index);
             }
+
             Event_Save?.Invoke(_deckData);
 
             Disable();
-            m_saveDialog.Disable();
-        }
-        private void OnDialogSaveCancel()
-        {
-            m_saveDialog.Disable();
+            DeckListManager.Enable();
         }
     }
 }
