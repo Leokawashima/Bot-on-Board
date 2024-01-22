@@ -23,7 +23,12 @@ public class PlayerSetting : MonoBehaviour
         for (int i = 0; i < _operations; ++i)
         {
             var _setting = gameObject.AddComponent<BotSetting>();
+            _setting.Initialize(index_, 10.0f, 10.0f, 1.0f);
             BotSettings.Add(_setting);
         }
+    }
+    public void SetName(string name_)
+    {
+        Name = name_;
     }
 }
