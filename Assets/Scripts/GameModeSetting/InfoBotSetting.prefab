@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1698091195558361451}
   - component: {fileID: 3081971544963855310}
   - component: {fileID: 2012283657940963582}
-  - component: {fileID: 1677300110538568699}
+  - component: {fileID: 110701783979517676}
   m_Layer: 5
-  m_Name: InfoPlayerSetting
+  m_Name: InfoBotSetting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 760, y: 270}
+  m_SizeDelta: {x: 680, y: 150}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3081971544963855310
 MonoBehaviour:
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1677300110538568699
+--- !u!114 &110701783979517676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,13 +108,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 720343099840688582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 684dcdae3e1a7de41b9e8f6b9d12e3ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bbf73a017e3e954792ab129b3c3d182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_button: {fileID: 2012283657940963582}
-  m_shadow: {fileID: 5692701569885603049}
   m_indexText: {fileID: 7270134646993911983}
-  m_nameText: {fileID: 1447018759735523198}
+  m_settingText: {fileID: 1447018759735523198}
 --- !u!1 &2931490441615901947
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +128,7 @@ GameObject:
   - component: {fileID: 1034384070242310105}
   - component: {fileID: 4306208277344362205}
   m_Layer: 5
-  m_Name: IMG_PlayerIndex
+  m_Name: IMG_BotIndex
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +153,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -32, y: -10}
-  m_SizeDelta: {x: 500, y: 90}
+  m_SizeDelta: {x: 250, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2317240798443230020
 CanvasRenderer:
@@ -235,7 +234,7 @@ GameObject:
   - component: {fileID: 5241453790682568394}
   - component: {fileID: 1447018759735523198}
   m_Layer: 5
-  m_Name: TXT_Name
+  m_Name: TXT_Setting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,8 +257,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38, y: 12}
-  m_SizeDelta: {x: -180, y: -48}
+  m_AnchoredPosition: {x: 0, y: -13.5}
+  m_SizeDelta: {x: -6, y: -57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5241453790682568394
 CanvasRenderer:
@@ -371,7 +370,7 @@ GameObject:
   - component: {fileID: 6054061765412435753}
   - component: {fileID: 5692701569885603049}
   m_Layer: 5
-  m_Name: IMG_Name
+  m_Name: IMG_Setting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,10 +392,10 @@ RectTransform:
   m_Father: {fileID: 1698091195558361451}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -32, y: -32}
-  m_SizeDelta: {x: 800, y: 161.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -15}
+  m_SizeDelta: {x: 0, y: -30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &906590113424333456
 CanvasRenderer:
@@ -426,8 +425,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3dc1439698d1ae0458857d47b1c972e4, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 509009c638b94074a818e3c6db3aa40f, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -448,7 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 8, y: -8}
   m_UseGraphicAlpha: 1
 --- !u!1 &8838554189611482134
@@ -463,7 +462,7 @@ GameObject:
   - component: {fileID: 916908128632713350}
   - component: {fileID: 7270134646993911983}
   m_Layer: 5
-  m_Name: TXT_PlayerIndex
+  m_Name: TXT_BotIndex
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,7 +485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7, y: 0}
+  m_AnchoredPosition: {x: 7.0000153, y: 0}
   m_SizeDelta: {x: -78, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &916908128632713350
@@ -517,7 +516,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Player1
+  m_text: Bot0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c876f0beb154a048bcebb3fedde58fe, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 515b2fd7227595d46b1f2ed44f060f0b, type: 2}
@@ -526,8 +525,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283190527
-  m_fontColor: {r: 1, g: 0.3, b: 0.3, a: 1}
+    rgba: 4291580498
+  m_fontColor: {r: 0.32, g: 0.32, b: 0.8, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -544,8 +543,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 86
-  m_fontSizeBase: 86
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 35

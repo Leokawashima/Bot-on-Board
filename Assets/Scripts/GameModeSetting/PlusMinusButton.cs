@@ -12,7 +12,7 @@ public class PlusMinusButton : MonoBehaviour
     public event Action<int>
         Event_ValueChanged,
         Event_ValueAdd,
-        Event_valueSub;
+        Event_ValueSub;
 
     public void Increment()
     {
@@ -23,46 +23,32 @@ public class PlusMinusButton : MonoBehaviour
         SetValue(Value - 1);
     }
 
-    private int Set(int value_)
-    {
-        Value = value_;
-        Event_ValueChanged?.Invoke(value_);
-        m_text.text = value_.ToString();
-        return value_;
-    }
-
     public int SetValue(int value_)
     {
-        if (value_ > ValueMax)
+        var _assign = value_;
+        if (_assign > ValueMax)
         {
-            var _diff = ValueMax - Value;
-            if (_diff > 0)
-            {
-                Event_ValueAdd?.Invoke(_diff);
-            }
-            return Set(ValueMax);
+            _assign = ValueMax;
         }
-        if (value_ < ValueMin)
+        if (_assign < ValueMin)
         {
-            var _diff = Value - ValueMin;
-            if (_diff > 0)
-            {
-                Event_valueSub?.Invoke(_diff);
-            }
-            return Set(ValueMin);
+            _assign = ValueMin;
         }
+
+        var _diff = _assign - Value;
+        if (_diff > 0)
         {
-            var _diff = Value - value_;
-            if (_diff > 0)
-            {
-                Event_ValueAdd?.Invoke(_diff);
-            }
-            else
-            {
-                Event_valueSub?.Invoke(-_diff);
-            }
-            return Set(value_);
+            Event_ValueAdd?.Invoke(_diff);
         }
+        if (_diff < 0)
+        {
+            Event_ValueSub?.Invoke(-_diff);
+        }
+
+        Value = _assign;
+        Event_ValueChanged?.Invoke(_assign);
+        m_text.text = _assign.ToString();
+        return _assign;
     }
     public void SetMin(int min_)
     {
@@ -74,4 +60,16 @@ public class PlusMinusButton : MonoBehaviour
         ValueMax = max_;
         SetValue(Value);
     }
+    public void SetMinMax(int min_, int max_)
+    {
+        ValueMin = min_;
+        ValueMax = max_;
+        SetValue(Value);
+    }
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        SetValue(Value);
+    }
+#endif 
 }

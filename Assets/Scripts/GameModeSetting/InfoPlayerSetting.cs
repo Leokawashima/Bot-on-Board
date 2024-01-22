@@ -12,30 +12,30 @@ public class InfoPlayerSetting : MonoBehaviour
     [SerializeField] private TMP_Text m_indexText;
     [SerializeField] private TMP_Text m_nameText;
 
-    public Action<InfoPlayerSetting> Event_OnClick;
+    public Action<InfoPlayerSetting> Event_Click;
 
     public void Initlaize(PlayerSetting data_)
     {
         Data = data_;
-        Set(data_.Index, data_.HSVColor, data_.Name);
+        Set(data_);
         m_button.onClick.AddListener(OnClick);
     }
 
     private void OnClick()
     {
-        Event_OnClick?.Invoke(this);
+        Event_Click?.Invoke(this);
     }
 
-    public void Set(int index_, float color_, string name_)
+    public void Set(PlayerSetting data_)
     {
-        var _textColor = Color.HSVToRGB(color_, 0.7f, 1.0f);
+        var _textColor = Color.HSVToRGB(data_.HSVColor, 0.7f, 1.0f);
         m_indexText.color = _textColor;
-        m_indexText.text = $"Player{index_ + 1}";
+        m_indexText.text = $"Player{data_.Index + 1}";
 
-        var _shadowColor = Color.HSVToRGB(color_, 1.0f, 1.0f);
+        var _shadowColor = Color.HSVToRGB(data_.HSVColor, 1.0f, 1.0f);
         _shadowColor.a -= 0.5f;
         m_shadow.effectColor = _shadowColor;
 
-        m_nameText.text = name_;
+        m_nameText.text = data_.Name;
     }
 }
