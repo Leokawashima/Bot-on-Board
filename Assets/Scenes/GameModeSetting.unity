@@ -361,6 +361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 80249433}
   - component: {fileID: 80249434}
+  - component: {fileID: 80249435}
   m_Layer: 5
   m_Name: PlayerSetting
   m_TagString: Untagged
@@ -404,6 +405,18 @@ MonoBehaviour:
   m_indexText: {fileID: 1139525182}
   m_nameInputField: {fileID: 1230672995}
   <PlusMinusButton>k__BackingField: {fileID: 1068474635}
+--- !u!114 &80249435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80249432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf844b6173bfac4298e62d003d030ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &102016153
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,6 +1177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 334723500}
+  - component: {fileID: 334723501}
   m_Layer: 5
   m_Name: GameSetting
   m_TagString: Untagged
@@ -1192,6 +1206,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 0, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &334723501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334723499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df166539efe8c69419c3446bf308c698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_suddonDeathPlusMinusButton: {fileID: 0}
+  m_forceFinishPlusMinusButton: {fileID: 0}
 --- !u!1 &353375108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368,8 +1396,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1243422834}
   - {fileID: 510238358}
+  - {fileID: 1243422834}
   - {fileID: 1597621336}
   m_Father: {fileID: 1289122600}
   m_RootOrder: -1
@@ -2331,6 +2359,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929973cb21a91794a92f31a31c9908f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_infoScrollView: {fileID: 0}
+  m_gameSetting: {fileID: 0}
+  m_playerSetting: {fileID: 0}
+  m_botSetting: {fileID: 0}
   m_manager: {fileID: 1243422836}
   m_show: {fileID: 80249434}
   edit: {fileID: 1995068319}
@@ -2715,8 +2747,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1243422834}
-  - component: {fileID: 1243422836}
   - component: {fileID: 1243422835}
+  - component: {fileID: 1243422836}
+  - component: {fileID: 1243422837}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -2794,6 +2827,18 @@ MonoBehaviour:
   m_prefab: {fileID: 1677300110538568699, guid: 63a6cc3058a3d2c4fa0b0a2859dde481, type: 3}
   m_showInfoPlayerSetting: {fileID: 80249434}
   <Infos>k__BackingField: []
+--- !u!114 &1243422837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243422833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5989d4c4a186b754e99a75a804c02a64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1289122597
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,6 +4161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1995068318}
   - component: {fileID: 1995068319}
+  - component: {fileID: 1995068320}
   m_Layer: 5
   m_Name: BotSetting
   m_TagString: Untagged
@@ -4165,6 +4211,18 @@ MonoBehaviour:
   m_botOperationsPMButton: {fileID: 1068474635}
   m_showInfoPlayerSetting: {fileID: 1243422836}
   m_managers: []
+--- !u!114 &1995068320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995068317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7f8293b211fc0047ae184ebb7d9aa70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2002871884
 GameObject:
   m_ObjectHideFlags: 0
