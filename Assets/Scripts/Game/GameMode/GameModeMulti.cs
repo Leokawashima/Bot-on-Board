@@ -2,7 +2,7 @@
 
 namespace Game
 {
-    public class GamoMeodeMulti : GameMode_Template
+    public class GameModeMulti : GameMode_Template
     {
         public override void Initialize()
         {

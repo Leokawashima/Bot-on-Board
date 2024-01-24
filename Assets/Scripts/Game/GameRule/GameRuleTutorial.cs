@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using Bot;
 using Player;
 using Map;
@@ -27,7 +28,36 @@ namespace Game.GameRule
         public override void Initialize()
         {
             //CameraManager.Singleton.Animation();
-            MapManager.Singleton.MapCreate();
+
+            // コードベースでやるとAwakeを待つことができない、
+            // コンストラクタをいじれないので事実的にAwakeを待つ処理を書くクソ実装
+            // 改善策が必須
+            StartCoroutine(Co_Static());
+            IEnumerator Co_Static()
+            {
+                while(true)
+                {
+                    var _error = false;
+                    try
+                    {
+                        TutorialManager.Initialize();
+                        TutorialManager.Enable(0, MapManager.Singleton.MapCreate);
+                    }
+                    catch
+                    {
+                        _error = true;
+                    }
+
+                    if (_error )
+                    {
+                        yield return null;
+                    }
+                    else
+                    {
+                        yield break;
+                    }
+                }
+            }
         }
 
         private void OnMapCreated()

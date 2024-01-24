@@ -25,15 +25,18 @@ namespace GameMode
         }
         private void OnButtonTutorial()
         {
-
+            GlobalSystem.SetGameMode(GlobalSystem.GameMode.Tutorial);
+            Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
         }
         private void OnButtonLocal()
         {
+            GlobalSystem.SetGameMode(GlobalSystem.GameMode.Local);
             Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
         }
         private void OnButtonMulti()
         {
-
+            GlobalSystem.SetGameMode(GlobalSystem.GameMode.Multi);
+            Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
         }
     }
 }

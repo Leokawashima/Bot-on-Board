@@ -19,7 +19,9 @@ namespace Game
             Event_Finalize;
 
 #if UNITY_EDITOR
+        [Header("Debug")]
         [SerializeField] private GameDebug m_debug;
+        [SerializeField] private GlobalSystem.GameMode GameMode = GlobalSystem.GameMode.Non;
 #endif
 
         private void Start()
@@ -33,12 +35,33 @@ namespace Game
             UnityEngine.Random.InitState(DateTime.Now.Millisecond);
             CameraManager.Singleton.SetFreeLookCamIsMove(false);
 
-            Mode = gameObject.AddComponent<GameModeLocal>();
+            // GameSettingみたいなシーンを作ってゲーム設定代入も読み込みもその単一シーンで賄うほうが話早め　だがとりあえずの処理
+#if UNITY_EDITOR
+            switch (GameMode)
+#else
+            switch (GlobalSystem.CurrentGameMode)
+#endif
+            {
+                case GlobalSystem.GameMode.Non:
+                    // エラー吐くからデータ設定しっかり
+                    break;
+                case GlobalSystem.GameMode.Tutorial:
+                    Mode = gameObject.AddComponent<GameModeTutorial>();
+                    Rule = gameObject.AddComponent<GameRuleTutorial>();
+                    break;
+                case GlobalSystem.GameMode.Local:
+                    Mode = gameObject.AddComponent<GameModeLocal>();
+                    Rule = gameObject.AddComponent<GameRuleTurn>();
+                    break;
+                case GlobalSystem.GameMode.Multi:
+                    Mode = gameObject.AddComponent<GameModeMulti>();
+                    Rule = gameObject.AddComponent<GameRuleTurn>();
+                    break;
+            }
             Mode.Initialize();
 
             Event_Initialize?.Invoke();
 
-            Rule = gameObject.AddComponent<GameRuleTurn>();
             Rule.Initialize();
         }
         public void SystemFinalize()
