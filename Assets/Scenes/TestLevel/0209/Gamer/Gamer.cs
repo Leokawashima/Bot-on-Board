@@ -10,18 +10,28 @@ public class Gamer : MonoBehaviour
     [Header("虹色に光るスピード（0.001を推奨）")]
     [SerializeField]float gamingSpeed = 0.001f;
     float hue;
+    [SerializeField] bool reverse = false; //逆再生
 
     void Start()
     {
         //スクリプトを付けたオブジェクトのみ光らせる
         material = GetComponent<Renderer>().material;
-        hue = 0;
+        if(reverse) hue = 1;
+        else hue = 0;
     }
 
     void Update()
     {
-        hue += gamingSpeed;
-        if (hue >= 1.0f) hue = 0;
+        if(reverse)
+        {
+            hue -= gamingSpeed;
+            if (hue <= 0.0f) hue += 1.0f;
+        }
+        else
+        {
+            hue += gamingSpeed;
+            if (hue >= 1.0f) hue -= 1.0f;
+        }
         material.color = Color.HSVToRGB(hue, 1, 1);
     }
 }
