@@ -28,35 +28,13 @@ namespace Game.GameRule
         public override void Initialize()
         {
             //CameraManager.Singleton.Animation();
+            TutorialManager.Event_SingletonCreated += OnSingletonCreated;
 
-            // コードベースでやるとAwakeを待つことができない、
-            // コンストラクタをいじれないので事実的にAwakeを待つ処理を書くクソ実装
-            // 改善策が必須
-            StartCoroutine(Co_Static());
-            IEnumerator Co_Static()
+            void OnSingletonCreated()
             {
-                while(true)
-                {
-                    var _error = false;
-                    try
-                    {
-                        TutorialManager.Initialize();
-                        TutorialManager.Enable(0, MapManager.Singleton.MapCreate);
-                    }
-                    catch
-                    {
-                        _error = true;
-                    }
-
-                    if (_error )
-                    {
-                        yield return null;
-                    }
-                    else
-                    {
-                        yield break;
-                    }
-                }
+                TutorialManager.Initialize();
+                TutorialManager.Enable(0, MapManager.Singleton.MapCreate);
+                TutorialManager.Event_SingletonCreated -= OnSingletonCreated;
             }
         }
 

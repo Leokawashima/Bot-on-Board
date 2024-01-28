@@ -37,7 +37,11 @@ namespace Game
 
             // GameSettingみたいなシーンを作ってゲーム設定代入も読み込みもその単一シーンで賄うほうが話早め　だがとりあえずの処理
 #if UNITY_EDITOR
-            switch (GameMode)
+            var _current = GameMode;
+            if (GlobalSystem.CurrentGameMode != GlobalSystem.GameMode.Non)
+                _current = GlobalSystem.CurrentGameMode;
+            
+            switch (_current)
 #else
             switch (GlobalSystem.CurrentGameMode)
 #endif
