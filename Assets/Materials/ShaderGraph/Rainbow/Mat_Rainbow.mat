@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GamerV2
+  m_Name: Mat_Rainbow
   m_Shader: {fileID: -6465566751694194690, guid: 3429c00d2fc1a714a86c0310b85bce9d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
