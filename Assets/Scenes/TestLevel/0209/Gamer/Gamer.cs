@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//他のShaderGraphと併せて適用することが可能
+//そうでない場合はGamerV2(ShaderGraph)でゲーミングにすることを推奨
 //参考：https://qiita.com/ga-mi-_qiita/items/ecba3343a14887bcb314
 public class Gamer : MonoBehaviour
 {
