@@ -1,6 +1,4 @@
-﻿using Unity.Netcode;
-using UnityEngine;
-using Player;
+﻿using Player;
 
 namespace Game
 {

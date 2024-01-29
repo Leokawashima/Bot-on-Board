@@ -3898,8 +3898,8 @@ MonoBehaviour:
   m_InputProvider: {fileID: 626029443}
   m_changeSystem: {fileID: 1003058852}
   m_changeButton: {fileID: 1789648008}
-  m_cam: {fileID: 0}
-  m_smoothPath: {fileID: 0}
+  m_cam: {fileID: 68454247}
+  m_smoothPath: {fileID: 1488693599}
 --- !u!1 &1004095209
 GameObject:
   m_ObjectHideFlags: 0
@@ -3951,6 +3951,7 @@ MonoBehaviour:
   m_debug:
     m_gameState: 0
     m_battleState: 0
+  GameMode: 1
 --- !u!82 &1004095213
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6730,7 +6731,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5525500643224062688, guid: 7b65ddbf0899a164e8b9aa9560b0d7be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

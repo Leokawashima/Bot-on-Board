@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Player;
+﻿using Player;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -7,7 +7,12 @@ namespace Game
     {
         public override void Initialize()
         {
-            PlayerManager.Singleton.Initialize();
+            var _playerManager = PlayerManager.Singleton;
+            _playerManager.Initialize();
+
+            _playerManager.gameObject.AddComponent<LocalPlayerManager>();
+
+            SceneManager.LoadScene(Name.Scene.Tutorial, LoadSceneMode.Additive);
         }
     }
 }

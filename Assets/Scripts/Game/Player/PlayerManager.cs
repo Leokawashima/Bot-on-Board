@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GameMode;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player
@@ -12,14 +13,21 @@ namespace Player
 #endif
         public List<PlayerAgent> Players { get; private set; } = new();
 
-        private const int PLAYER_SIZE = 2;
-
         public void Initialize()
         {
-            for (int i = 0, cnt = PLAYER_SIZE; i < cnt; ++i)
+#if UNITY_EDITOR
+            var _settings = GameModeManager.PlayerSettings;
+            if (_settings == null )
+            {
+
+            }
+#else
+            var _settings = GameModeDataBase.PlayerSettings;
+#endif
+            for (int i = 0, cnt = _settings.Length; i < cnt; ++i)
             {
                 var _player = Instantiate(m_prefab, transform);
-                _player.Initialize(i);
+                _player.Initialize(_settings[i]);
                 Players.Add(_player);
             }
         }

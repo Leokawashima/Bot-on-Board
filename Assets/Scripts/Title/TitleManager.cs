@@ -56,40 +56,40 @@ public class TitleManager : MonoBehaviour
         m_menu.OnShowCredit += () =>
         {
             m_fadePanelSystem.Fade();
-            m_fadePanelSystem.OnFadeInCompleted += m_credit.Enable;
-            m_fadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Event_FadeInCompleted += m_credit.Enable;
+            m_fadePanelSystem.Event_FadeFinished += () =>
             {
-                m_fadePanelSystem.OnFadeInCompleted -= m_credit.Enable;
+                m_fadePanelSystem.Event_FadeInCompleted -= m_credit.Enable;
             };
         };
 
         m_menu.OnShowTutorial += () =>
         {
             m_fadePanelSystem.Fade();
-            m_fadePanelSystem.OnFadeInCompleted += m_tutorial.Enable;
-            m_fadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Event_FadeInCompleted += m_tutorial.Enable;
+            m_fadePanelSystem.Event_FadeFinished += () =>
             {
-                m_fadePanelSystem.OnFadeInCompleted -= m_tutorial.Enable;
+                m_fadePanelSystem.Event_FadeInCompleted -= m_tutorial.Enable;
             };
         };
 
         m_credit.OnHideCredit += () =>
         {
             m_fadePanelSystem.Fade();
-            m_fadePanelSystem.OnFadeInCompleted += m_credit.Disable;
-            m_fadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Event_FadeInCompleted += m_credit.Disable;
+            m_fadePanelSystem.Event_FadeFinished += () =>
             {
-                m_fadePanelSystem.OnFadeInCompleted -= m_credit.Disable;
+                m_fadePanelSystem.Event_FadeInCompleted -= m_credit.Disable;
             };
         };
 
         m_tutorial.OnHideCredit += () =>
         {
             m_fadePanelSystem.Fade();
-            m_fadePanelSystem.OnFadeInCompleted += m_tutorial.Disable;
-            m_fadePanelSystem.OnFadeFinished += () =>
+            m_fadePanelSystem.Event_FadeInCompleted += m_tutorial.Disable;
+            m_fadePanelSystem.Event_FadeFinished += () =>
             {
-                m_fadePanelSystem.OnFadeInCompleted -= m_tutorial.Disable;
+                m_fadePanelSystem.Event_FadeInCompleted -= m_tutorial.Disable;
             };
         };
     }

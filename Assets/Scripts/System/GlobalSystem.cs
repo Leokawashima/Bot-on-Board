@@ -1,17 +1,19 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GameMode;
 
 public static class GlobalSystem
 {
     public static bool IsPause { get; private set; }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetPause(bool pause_)  => IsPause = pause_;
+    public static void SetPause(bool pause_) => IsPause = pause_;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnRuntimeInitialize()
     {
         SetPause(false);
+        GameModeManager.Clear();
 
         SceneManager.LoadScene(Name.Scene.System, LoadSceneMode.Additive);
     }
@@ -26,6 +28,7 @@ namespace Name
         public const string Title = "Title";
         public const string Deck = "Deck";
         public const string GameMode = "GameMode";
+        public const string Tutorial = "Tutorial";
         public const string Room = "Room";
         public const string Game = "Game";
         public const string Result = "Result";
