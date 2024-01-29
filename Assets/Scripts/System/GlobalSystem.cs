@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GameMode;
 
 public static class GlobalSystem
 {
@@ -8,22 +9,11 @@ public static class GlobalSystem
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetPause(bool pause_) => IsPause = pause_;
 
-    public enum GameMode
-    {
-        Non,
-        Tutorial,
-        Local,
-        Multi,
-    }
-    public static GameMode CurrentGameMode { get; private set; }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetGameMode(GameMode gameMode_) => CurrentGameMode = gameMode_;
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void OnRuntimeInitialize()
     {
         SetPause(false);
-        SetGameMode(GameMode.Non);
+        GameModeManager.Clear();
 
         SceneManager.LoadScene(Name.Scene.System, LoadSceneMode.Additive);
     }

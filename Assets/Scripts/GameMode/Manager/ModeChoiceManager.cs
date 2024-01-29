@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using GameMode;
 
 public class ModeChoiceManager : SingletonMonoBehaviour<ModeChoiceManager>
 {
@@ -11,6 +12,9 @@ public class ModeChoiceManager : SingletonMonoBehaviour<ModeChoiceManager>
     [SerializeField] private Button m_multiButton;
     [SerializeField] private TMP_Text[] m_dtailText;
     [SerializeField] private Button m_acceptButton;
+    [SerializeField] private FadePanelSystem m_fadeSystem;
+
+    [field: SerializeField] public GameModeManager.GameMode GameMode { get; private set; }
 
     public void Enable() => m_canvas.enabled = true;
     public void Disable() => m_canvas.enabled = false;
@@ -31,21 +35,21 @@ public class ModeChoiceManager : SingletonMonoBehaviour<ModeChoiceManager>
 
     private void OnButtonTutorial()
     {
-        GlobalSystem.SetGameMode(GlobalSystem.GameMode.Tutorial);
+        GameMode = GameModeManager.GameMode.Tutorial;
         m_dtailText[0].enabled = true;
         m_dtailText[1].enabled = false;
         m_dtailText[2].enabled = false;
     }
     private void OnButtonLocal()
     {
-        GlobalSystem.SetGameMode(GlobalSystem.GameMode.Local);
+        GameMode = GameModeManager.GameMode.Local;
         m_dtailText[1].enabled = true;
         m_dtailText[0].enabled = false;
         m_dtailText[2].enabled = false;
     }
     private void OnButtonMulti()
     {
-        GlobalSystem.SetGameMode(GlobalSystem.GameMode.Multi);
+        GameMode = GameModeManager.GameMode.Multi;
         m_dtailText[2].enabled = true;
         m_dtailText[0].enabled = false;
         m_dtailText[1].enabled = false;
@@ -53,17 +57,26 @@ public class ModeChoiceManager : SingletonMonoBehaviour<ModeChoiceManager>
 
     private void OnButtonAccept()
     {
-        switch (GlobalSystem.CurrentGameMode)
+        switch (GameMode)
         {
-            case GlobalSystem.GameMode.Non:
+            case GameModeManager.GameMode.Non:
                 break;
-            case GlobalSystem.GameMode.Local:
-                break;
-            case GlobalSystem.GameMode.Tutorial:
+            case GameModeManager.GameMode.Tutorial:
                 Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
                 break;
-            case GlobalSystem.GameMode.Multi:
+            case GameModeManager.GameMode.Local:
+                m_fadeSystem.Event_FadeInCompleted += OnFadeIn;
+                m_fadeSystem.Fade();
                 break;
+            case GameModeManager.GameMode.Multi:
+                m_fadeSystem.Event_FadeInCompleted += OnFadeIn;
+                break;
+        }
+        void OnFadeIn()
+        {
+            Disable();
+            GameModeManager.Singleton.Enable();
+            m_fadeSystem.Event_FadeInCompleted -= OnFadeIn;
         }
     }
 }

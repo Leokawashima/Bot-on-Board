@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Game.GameRule;
+using GameMode;
 
 namespace Game
 {
@@ -21,7 +22,7 @@ namespace Game
 #if UNITY_EDITOR
         [Header("Debug")]
         [SerializeField] private GameDebug m_debug;
-        [SerializeField] private GlobalSystem.GameMode GameMode = GlobalSystem.GameMode.Non;
+        [SerializeField] private GameModeManager.GameMode GameMode = GameModeManager.GameMode.Non;
 #endif
 
         private void Start()
@@ -38,26 +39,26 @@ namespace Game
             // GameSettingみたいなシーンを作ってゲーム設定代入も読み込みもその単一シーンで賄うほうが話早め　だがとりあえずの処理
 #if UNITY_EDITOR
             var _current = GameMode;
-            if (GlobalSystem.CurrentGameMode != GlobalSystem.GameMode.Non)
-                _current = GlobalSystem.CurrentGameMode;
+            if (GameModeManager.CurrentGameMode != GameModeManager.GameMode.Non)
+                _current = GameModeManager.CurrentGameMode;
             
             switch (_current)
 #else
-            switch (GlobalSystem.CurrentGameMode)
+            switch (GameModeManager.CurrentGameMode)
 #endif
             {
-                case GlobalSystem.GameMode.Non:
+                case GameModeManager.GameMode.Non:
                     // エラー吐くからデータ設定しっかり
                     break;
-                case GlobalSystem.GameMode.Tutorial:
+                case GameModeManager.GameMode.Tutorial:
                     Mode = gameObject.AddComponent<GameModeTutorial>();
                     Rule = gameObject.AddComponent<GameRuleTutorial>();
                     break;
-                case GlobalSystem.GameMode.Local:
+                case GameModeManager.GameMode.Local:
                     Mode = gameObject.AddComponent<GameModeLocal>();
                     Rule = gameObject.AddComponent<GameRuleTurn>();
                     break;
-                case GlobalSystem.GameMode.Multi:
+                case GameModeManager.GameMode.Multi:
                     Mode = gameObject.AddComponent<GameModeMulti>();
                     Rule = gameObject.AddComponent<GameRuleTurn>();
                     break;

@@ -5,7 +5,7 @@ using TMPro;
 
 public class InfoPlayerSetting : MonoBehaviour
 {
-    public PlayerSetting Data { get; private set; }
+    [field: SerializeField] public PlayerSetting Data { get; private set; }
     [SerializeField] private Button m_button;
 
     [SerializeField] private Shadow m_shadow;

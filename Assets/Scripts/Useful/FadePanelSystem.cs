@@ -40,12 +40,12 @@ public class FadePanelSystem : MonoBehaviour
     /// <summary>
     /// フェードイン終了時のコールバック
     /// </summary>
-    public event Action OnFadeInCompleted;
+    public event Action Event_FadeInCompleted;
 
     /// <summary>
     /// フェードアウト終了時のコールバック
     /// </summary>
-    public event Action OnFadeFinished;
+    public event Action Event_FadeFinished;
 
     /// <summary>
     /// 変化させるマテリアルのパラメータ　専用のシェーダにあるパラメータとなる
@@ -55,18 +55,12 @@ public class FadePanelSystem : MonoBehaviour
     /// <summary>
     /// 画像の有効化
     /// </summary>
-    public void Enable()
-    {
-        m_image.enabled = true;
-    }
+    public void Enable() => m_image.enabled = true;
 
     /// <summary>
     /// 画像の無効化
     /// </summary>
-    public void Disable()
-    {
-        m_image.enabled = false;
-    }
+    public void Disable() => m_image.enabled = false;
 
     /// <summary>
     /// フェードさせる
@@ -95,7 +89,7 @@ public class FadePanelSystem : MonoBehaviour
             m_image.material.SetFloat(PARAMETER, m_fadeValue);
         }
         m_image.material.SetFloat(PARAMETER, 1);
-        OnFadeInCompleted?.Invoke();
+        Event_FadeInCompleted?.Invoke();
 
         yield return new WaitForSeconds(m_waitTime);
 
@@ -106,7 +100,7 @@ public class FadePanelSystem : MonoBehaviour
             m_image.material.SetFloat(PARAMETER, m_fadeValue);
         }
         m_image.material.SetFloat(PARAMETER, 0);
-        OnFadeFinished?.Invoke();
+        Event_FadeFinished?.Invoke();
 
         Disable();
     }

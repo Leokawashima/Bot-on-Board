@@ -30,7 +30,7 @@ namespace Game.GameRule
             //CameraManager.Singleton.Animation();
             TutorialManager.Event_SingletonCreated += OnSingletonCreated;
 
-            void OnSingletonCreated()
+            static void OnSingletonCreated()
             {
                 TutorialManager.Initialize();
                 TutorialManager.Enable(0, MapManager.Singleton.MapCreate);
@@ -46,8 +46,8 @@ namespace Game.GameRule
                 BotManager.Singleton.Initialize();
                 CameraManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
-                
-                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
+
+                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });
@@ -77,7 +77,7 @@ namespace Game.GameRule
                 {
                     CallEventInitialize();
                     GUIManager.Singleton.PlayerUI.TurnInitialize();
-                    GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
+                    GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
                     {
                         GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                     });
@@ -91,7 +91,7 @@ namespace Game.GameRule
                 CallEventTurnEnd();
 
                 CallEventPlace();
-                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n○○のターン！", () =>
+                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InfoBotSetting : MonoBehaviour
 {
-    public BotSetting Data { get; private set; }
+    [field: SerializeField] public BotSetting Data { get; private set; }
     [SerializeField] private Button m_button;
 
     [SerializeField] private TMP_Text m_indexText;

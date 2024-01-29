@@ -54,7 +54,7 @@ public class InfoScrollViewManager : SingletonMonoBehaviour<InfoScrollViewManage
     private InfoPlayerSetting CreateInfo(int index_, string name_)
     {
         var _info = Instantiate(m_prefab, m_content);
-        var _setting = _info.gameObject.AddComponent<PlayerSetting>();
+        var _setting = new PlayerSetting();
         _setting.Initialize(index_, name_, colors[index_], 1, 4);
         _info.Initlaize(_setting);
         _info.Event_Click += PlayerSettingManager.Singleton.Select;
