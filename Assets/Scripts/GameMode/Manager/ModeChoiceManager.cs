@@ -62,6 +62,12 @@ public class ModeChoiceManager : SingletonMonoBehaviour<ModeChoiceManager>
             case GameModeManager.GameMode.Non:
                 break;
             case GameModeManager.GameMode.Tutorial:
+                var _settings = new PlayerSetting[InfoScrollViewManager.Singleton.Infos.Count];
+                for (int i = 0; i < _settings.Length; ++i)
+                {
+                    _settings[i] = InfoScrollViewManager.Singleton.Infos[i].Data;
+                }
+                GameModeManager.Initialize(GameMode, 10, 15, _settings);
                 Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
                 break;
             case GameModeManager.GameMode.Local:

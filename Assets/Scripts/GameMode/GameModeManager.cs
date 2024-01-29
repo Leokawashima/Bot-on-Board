@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameMode
 {
@@ -11,6 +12,9 @@ namespace GameMode
         [SerializeField] private BotSettingManager m_botSetting;
 
         [SerializeField] private Canvas m_canvas;
+
+        [SerializeField] private Button m_gameStartButton;
+
         public void Enable() => m_canvas.enabled = true;
         public void Disable() => m_canvas.enabled = false;
         private void Start() => Initialize();
@@ -27,6 +31,22 @@ namespace GameMode
             m_gameSetting.Enable();
             m_playerSetting.Disable();
             m_botSetting.Disable();
+            m_gameStartButton.onClick.AddListener(OnClick);
+        }
+
+        private void OnClick()
+        {
+            var _mode = ModeChoiceManager.Singleton.GameMode;
+            var _turnsd = GameSettingManager.Singleton.TurnSuddonDeath;
+            var _turnff = GameSettingManager.Singleton.TurnForceFinish;
+            var _settings = new PlayerSetting[InfoScrollViewManager.Singleton.Infos.Count];
+            for (int i = 0; i < _settings.Length; ++i)
+            {
+                _settings[i] = InfoScrollViewManager.Singleton.Infos[i].Data;
+            }
+
+            Initialize(_mode, _turnsd, _turnff, _settings);
+            Initiate.Fade(Name.Scene.Game, Name.Scene.GameMode, Color.black, 1.0f);
         }
 
         public static void Initialize(GameMode mode_, int turnSD_, int turnFF_, PlayerSetting[] settings_)
