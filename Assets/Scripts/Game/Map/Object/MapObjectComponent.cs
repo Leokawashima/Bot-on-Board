@@ -9,18 +9,13 @@ namespace Map.Object.Component
     {
         protected MapObject Object;
 
-        public virtual void Awake(MapObject obj_)
+        public virtual void Initialize(MapObject obj_)
         {
             Object = obj_;
         }
 
-        public virtual void Start()
+        public virtual void Update()
         {
-        }
-
-        public virtual bool Update()
-        {
-            return true;
         }
 
         public virtual void Hit(BotAgent bot_)
@@ -39,17 +34,16 @@ namespace Map.Object.Component
         [SerializeField] private uint TurnMax = 10;
         [SerializeField] private uint TurnSpawn = 10;
 
-        public override void Awake(MapObject obj_)
+        public override void Initialize(MapObject obj_)
         {
             TurnDestruction = TurnSpawn;
         }
-        public override bool Update()
+        public override void Update()
         {
             if(--TurnDestruction <= 0)
             {
-                return false;
+                Object.WillDestory = true;
             }
-            return true;
         }
 
         public virtual void AddTurn(uint add_)
@@ -182,7 +176,7 @@ namespace Map.Object.Component
     {
         [Header(nameof(OverrideSpawn))]
         [SerializeField] private uint Empty;
-        public override void Awake(MapObject obj_)
+        public override void Initialize(MapObject obj_)
         {
             Object = obj_;
 
@@ -194,10 +188,6 @@ namespace Map.Object.Component
                     MapManager.Singleton.MapObjects[i].Finalize(MapManager.Singleton);
                 }
             }
-        }
-        public override bool Update()
-        {
-            return false;
         }
     }
 

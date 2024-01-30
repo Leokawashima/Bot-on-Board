@@ -19,6 +19,21 @@ namespace Bot
 
         public static event Action Event_BotsActioned;
 
+        private Vector2Int[] m_pos = new Vector2Int[]
+        {
+            new Vector2Int(0, 0),
+            new Vector2Int(9, 9),
+            new Vector2Int(9, 0),
+            new Vector2Int(0, 9),
+        };
+        private int[] m_rot = new int[]
+        {
+            0,
+            180,
+            180, 
+            0,
+        };
+
         public void Initialize()
         {
             Bots = new();
@@ -30,13 +45,10 @@ namespace Bot
                 for (int j = 0; j < _botSetting.Count; ++j)
                 {
                     var _bot = Instantiate(m_prefab, transform);
-                    _bot.Initialize(_oerator, _botSetting[j], new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
+                    _bot.Initialize(_oerator, _botSetting[j], m_pos[i]);
                     Bots.Add(_bot);
 
-                    if (i == 1)
-                    {
-                        _bot.transform.rotation = Quaternion.Euler(0, 180, 0);
-                    }
+                    _bot.transform.rotation = Quaternion.Euler(0, m_rot[i], 0);
 
                     _bot.Health.Event_Damage += (BotAgent bot_, float power_) =>
                     {
@@ -140,17 +152,16 @@ namespace Bot
                         }
                     }
 
-                    // Botが二体以上いないとインデックス漏れエラー
                     for (int j = 0; j < _bots.Count - 1; ++j)
                     {
                         for (int k = j + 1; k < _bots.Count; ++k)
                         {
-                            if (CheckBotHit(_bots[j], _bots[j + k]))
+                            if (CheckBotHit(_bots[j], _bots[k]))
                             {
                                 _bots[j].Travel.BackPosition();
                                 _bots[j].Health.Damage(0.5f);
-                                _bots[j + k].Travel.BackPosition();
-                                _bots[j + k].Health.Damage(0.5f);
+                                _bots[k].Travel.BackPosition();
+                                _bots[k].Health.Damage(0.5f);
                             }
                         }
                     }

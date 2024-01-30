@@ -24,8 +24,8 @@ public class InfoBotStatusManager : MonoBehaviour
         }
     }
 
-    public void Refresh(int index_, BotAgent bot_)
+    public void Refresh(int index_)
     {
-        m_statuses[index_].Refresh(bot_);
+        m_statuses[index_].Refresh();
     }
 }

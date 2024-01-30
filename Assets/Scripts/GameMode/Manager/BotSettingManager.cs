@@ -9,28 +9,21 @@ public class BotSettingManager : SingletonMonoBehaviour<BotSettingManager>
     [SerializeField] private PlusMinusButton m_hpMaxPMButton;
     [SerializeField] private PlusMinusButton m_attackPMButton;
 
-    [SerializeField] private Transform m_content;
-    [SerializeField] private InfoBotSettingManager m_prefab;
-
-#if UNITY_EDITOR
-    [SerializeField]
-#endif
-    private List<InfoBotSettingManager> m_managers;
-
     public void Enable() => m_canvas.enabled = true;
     public void Disable() => m_canvas.enabled = false;
 
     public void Initialize()
     {
-        var _playerInfos = InfoScrollViewManager.Singleton.Infos;
-        var _playerPMButton = GameSettingManager.Singleton.PlayerPMButton;
-        var _botPMButton = PlayerSettingManager.Singleton.BotPMButton;
-        m_managers = new(_playerPMButton.ValueMax);
-        for (int i = 0; i < _playerInfos.Count; ++i)
+
+    }
+
+    public void Select(List<BotSetting> settings_)
+    {
+        for (int i = 0; i < settings_.Count; ++i)
         {
-            var _manager = Instantiate(m_prefab, m_content);
-            _manager.Initialize(_botPMButton.ValueMax, _playerInfos[i].Data.BotSettings);
-            m_managers.Add(_manager);
+            m_hpPMButton.SetValue((int)settings_[i].HP);
+            m_hpMaxPMButton.SetValue((int)settings_[i].HPMax);
+            m_attackPMButton.SetValue((int)settings_[i].Attack);
         }
     }
 }

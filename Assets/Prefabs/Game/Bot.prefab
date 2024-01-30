@@ -170,6 +170,8 @@ MonoBehaviour:
     <Processes>k__BackingField: []
   <Camera>k__BackingField: {fileID: 9117685005750319661}
   <Animator>k__BackingField: {fileID: 5349933589260454475}
+  m_ear1: {fileID: 2437561653785440178}
+  m_ear2: {fileID: 2101114293370049730}
 --- !u!114 &9117685005750319661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +409,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2649444160234318367}
   m_SourcePrefab: {fileID: 100100000, guid: 04436173856c2eb4280effb77af2c451, type: 3}
+--- !u!137 &2101114293370049730 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1511379783511325709, guid: 04436173856c2eb4280effb77af2c451, type: 3}
+  m_PrefabInstance: {fileID: 8515788241076000561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &2437561653785440178 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2882905049821464445, guid: 04436173856c2eb4280effb77af2c451, type: 3}
+  m_PrefabInstance: {fileID: 8515788241076000561}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8188829675484999898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 04436173856c2eb4280effb77af2c451, type: 3}

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Bot;
-using Unity.VisualScripting;
 
 namespace Map.Object.Component
 {
@@ -118,7 +117,7 @@ namespace Map.Object.Component
     {
         public override bool CheckCollider(Vector2Int pos_)
         {
-            return 2 >= Mathf.Abs(pos_.x) ||  2 >= Mathf.Abs(pos_.y);
+            return 2 >= Mathf.Abs(pos_.x) + Mathf.Abs(pos_.y);
         }
     }
 }

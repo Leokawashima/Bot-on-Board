@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: LongRangeWeapon
   Color: {r: 0, g: 0, b: 1, a: 1}
   Color_BG: {r: 0.504, g: 0.504, b: 1, a: 1}
-  Color_Frame: {r: 0.801, g: 0.801, b: 1, a: 0}
+  Color_Frame: {r: 0.801, g: 0.801, b: 1, a: 1}
   Color_Icon: {r: 1, g: 1, b: 1, a: 1}
   Color_Text: {r: 0, g: 0, b: 0, a: 1}
   Icon: {fileID: 21300000, guid: eb9bd55b1c17c2942bc603d73d7118e5, type: 3}

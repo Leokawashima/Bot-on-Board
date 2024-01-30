@@ -30,7 +30,7 @@ public class GUIManager : SingletonMonoBehaviour<GUIManager>
     }
     public void Refresh(BotAgent bot_)
     {
-        m_infoPlayerDataManager.Refresh(bot_.Operator.Index, bot_);
+        m_infoPlayerDataManager.Refresh(bot_.Operator.Index);
     }
 
     // FloatUI

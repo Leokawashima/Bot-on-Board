@@ -72,32 +72,37 @@ namespace Bot
             _enemy.Remove(ai_);
 
             var _aStar = new AStarAlgorithm(MapManager.Singleton.Stage);
-            // 相手は一人しかいない前提で[0]の座標をターゲットにする
-            SearchRoute = _aStar.Search(ai_.Travel.Position, _enemy[0].Travel.Position);
+            var _rand = UnityEngine.Random.Range(0, _enemy.Count);
+            SearchRoute = _aStar.Search(ai_.Travel.Position, _enemy[_rand].Travel.Position);
             if (ai_.Health.StanTurn > 0)
             {
                 State = ThinkState.CantMove;
                 --ai_.Health.StanTurn;
             }
-            // 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
-            else if (SearchRoute.Count == 2)
-            {
-                State = ThinkState.Attack;
-                ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Assault.Attack()));
-                ai_.Perform.Processes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
-            }
-            else if (SearchRoute.Count == 3)
-            {
-                State = ThinkState.CollisionPredict;
-                ai_.Perform.Processes.Add(new(5.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
-                ai_.Perform.Processes.Add(new(5.0f, () => ai_.Assault.Attack()));
-            }
             else
             {
-                State = ThinkState.Move;
-                ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
-                ai_.Perform.Processes.Add(new(1.0f, () => ai_.Assault.Attack()));
+                // こぶしが射程圏内
+                if (SearchRoute.Count == 2)
+                {
+                    State = ThinkState.Attack;
+                    ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Assault.Attack()));
+                    ai_.Perform.Processes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                }
+                // 次の移動でぶつかるカモ
+                if (SearchRoute.Count == 3)
+                {
+                    State = ThinkState.CollisionPredict;
+                    ai_.Perform.Processes.Add(new(5.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                    ai_.Perform.Processes.Add(new(5.0f, () => ai_.Assault.Attack()));
+                }
+                if (SearchRoute.Count > 4)
+                {
+                    State = ThinkState.Move;
+                    ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                    ai_.Perform.Processes.Add(new(1.0f, () => ai_.Assault.Attack()));
+                }
             }
+            // 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
         }
     }
 }

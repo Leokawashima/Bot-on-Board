@@ -10,11 +10,6 @@ public class PageWindow : MonoBehaviour
 
     public void Initialize()
     {
-        if (Size <= 1)
-        {
-            return;
-        }
-
         m_pages[0].SetActive(true);
         for (int i = 1; i < m_pages.Length; ++i)
         {

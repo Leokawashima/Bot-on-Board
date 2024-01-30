@@ -43,70 +43,46 @@ namespace Game.GameRule
 
         private void OnMapCreated()
         {
-            TurnCutIn(() =>
-            {
-                CallEventInitialize();
-                BotManager.Singleton.Initialize();
-                CameraManager.Singleton.Initialize();
-                GUIManager.Singleton.Initialize();
-
-                PlayerCutIn(() =>
+            TutorialManager.Enable(1,() =>
+                TurnCutIn(() =>
                 {
-                    GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
-                });
-            });
+                    CallEventInitialize();
+                    BotManager.Singleton.Initialize();
+                    CameraManager.Singleton.Initialize();
+                    GUIManager.Singleton.Initialize();
+
+                    PlayerCutIn(() =>
+                    {
+                        TutorialManager.Enable(2, () =>
+                        {
+                            GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
+                        });
+                    });
+                })
+                );
         }
 
         private void OnBotActioned()
         {
-            if (IsGameSet())
+            TutorialManager.Enable(4, () =>
             {
                 GameSetCutIn(() =>
                 {
                     CallEventGameSet();
                     GameManager.Singleton.SystemFinalize();
                 });
-            }
-            else
-            {
-                CallEventFinalize();
-
-                MapManager.Singleton.TurnUpdate();
-
-                NextTurn();
-                ResetProgress();
-
-                TurnCutIn(() =>
-                {
-                    CallEventInitialize();
-                    GUIManager.Singleton.PlayerUI.TurnInitialize();
-                    PlayerCutIn(() =>
-                    {
-                        GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
-                    });
-                });
-            }
+            });
         }
         private void OnButton_TurnEnd()
         {
-            if (++ProgressIndex < PlayerManager.Singleton.Players.Count)
-            {
-                CallEventTurnEnd();
-
-                CallEventPlace();
-                PlayerCutIn(() =>
-                {
-                    GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
-                });
-            }
-            else
+            TutorialManager.Enable(3, () =>
             {
                 AICutIn(() =>
                 {
                     CallEventAIAction();
                     BotManager.Singleton.Action();
                 });
-            }
+            });
         }
 
         public override bool IsGameSet()

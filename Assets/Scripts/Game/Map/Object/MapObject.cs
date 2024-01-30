@@ -10,6 +10,8 @@ namespace Map.Object
         public MapObject_SO Data { get; set; }
         public Vector2Int Position = Vector2Int.zero;
 
+        public bool WillDestory = false;
+
         [field: SerializeReference]
         public List<MapObjectComponent> Components { get; private set; } = new();
 
@@ -29,40 +31,33 @@ namespace Map.Object
         {
             foreach (var component in Components)
             {
-                component.Awake(this);
+                component.Initialize(this);
             }
 
             manager_.MapObjects.Add(this);
             manager_.Stage.SetMapObject(Position, this);
         }
 
-        public void First(MapManager manager_)
-        {
-            foreach (var component in Components)
-            {
-                component.Start();
-            }
-        }
-
         public bool TurnUpdate(MapManager manager_)
         {
             foreach (var component in Components)
             {
-                if (false == component.Update())
-                {
-                    Finalize(manager_);
-                    return false;
-                }
+                component.Update();
             }
 
+            if (WillDestory)
+            {
+                Finalize(manager_);
+                return false;
+            }
             return true;
         }
 
-        public void Hit(BotAgent ai_)
+        public void Hit(BotAgent bot_)
         {
             foreach (var component in Components)
             {
-                component.Hit(ai_);
+                component.Hit(bot_);
             }
         }
 

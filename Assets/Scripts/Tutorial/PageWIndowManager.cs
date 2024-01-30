@@ -27,6 +27,7 @@ public class PageWindowManager : MonoBehaviour
         foreach (var window in m_windows)
         {
             window.Initialize();
+            window.gameObject.SetActive(false);
         }
         Enable(false);
     }
@@ -35,6 +36,7 @@ public class PageWindowManager : MonoBehaviour
     {
         Enable(true);
         m_target = m_windows[index_];
+        m_target.gameObject.SetActive(true);
         SetIntaractable();
         SetText();
     }
@@ -48,6 +50,7 @@ public class PageWindowManager : MonoBehaviour
     private void OnClose()
     {
         Enable(false);
+        m_target.gameObject.SetActive(false);
         Event_Closed?.Invoke();
     }
     private void OnForward()

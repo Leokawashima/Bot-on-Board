@@ -1870,6 +1870,10 @@ PrefabInstance:
       propertyPath: m_valueMin
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3433913277601577705, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4592694074135898753, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
       propertyPath: <Value>k__BackingField
       value: 2
@@ -1885,6 +1889,10 @@ PrefabInstance:
     - target: {fileID: 4959348614270576200, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
       propertyPath: m_text
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344162246248358553, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
+      propertyPath: m_Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6442860953772553401, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
       propertyPath: m_Name
@@ -2002,6 +2010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583189635}
   - component: {fileID: 583189636}
+  - component: {fileID: 583189637}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2043,6 +2052,102 @@ MonoBehaviour:
   m_botSetting: {fileID: 1359719412}
   m_canvas: {fileID: 694427030}
   m_gameStartButton: {fileID: 1354112428}
+--- !u!82 &583189637
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583189634}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 2302667426069295789, guid: d180d20d197e33d4b81660ed23e57c0c, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 52ad7bbc01734854d85cf890cca284e4, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &592561220
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,7 +2798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7467619412447430154, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
       propertyPath: <ValueMin>k__BackingField
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2878,7 +2983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7467619412447430154, guid: 9070a0f05f5cb75419f87f1f8e252aa8, type: 3}
       propertyPath: <ValueMin>k__BackingField
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5069,9 +5174,6 @@ MonoBehaviour:
   m_hpPMButton: {fileID: 700469833}
   m_hpMaxPMButton: {fileID: 741365422}
   m_attackPMButton: {fileID: 532627383}
-  m_content: {fileID: 592561221}
-  m_prefab: {fileID: 234308033787942308, guid: 24f9892f6c4afac4f8c3672f02626e45, type: 3}
-  m_managers: []
 --- !u!114 &1359719413
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,6 +22,17 @@ namespace Bot
         [field: SerializeField] public BotCamera Camera { get; private set; }
         [field: SerializeField] public AnimatorSystem Animator { get; private set; }
 
+        [SerializeField] Renderer m_ear1;
+        [SerializeField] Renderer m_ear2;
+
+        private readonly float[] m_COLORS = new float[]
+    {
+        0.0f,
+        240.0f / 360.0f,
+        120.0f / 360.0f,
+        60.0f / 360.0f,
+    };
+
         public void Initialize(PlayerAgent operator_, BotSetting setting_, Vector2Int pos_)
         {
             name = $"Bot_{operator_.Index}";
@@ -32,6 +43,8 @@ namespace Bot
             Brain = new(this);
             Travel = new(this, pos_);
             Perform = new(this);
+            m_ear1.material.color = Color.HSVToRGB(m_COLORS[operator_.Index], 1.0f, 1.0f);
+            m_ear2.material.color = Color.HSVToRGB(m_COLORS[operator_.Index], 1.0f, 1.0f);
         }
 
         public void Think()

@@ -91,7 +91,6 @@ public class PlayerUI : MonoBehaviour
         }
 
         var _mo = MapManager.Singleton.ObjectSpawn(m_cardManager.SelectCard.SO, _chip);
-        _mo.First(MapManager.Singleton);
         m_cardManager.SelectCard.Trash();
 
         Event_ButtonPlace?.Invoke();

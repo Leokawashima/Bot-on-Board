@@ -9,7 +9,6 @@ public class PlayerSetting
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public float HSVColor { get; private set; }
     [field: SerializeField] public Color Color { get; private set; }
-    [field: SerializeField] public int BotOperations { get; private set; }
     [field: SerializeField] public List<BotSetting> BotSettings { get; private set; }
 
     public void Initialize(int index_, string name_, float hsv_, int bots_, int botMax_)
@@ -20,7 +19,6 @@ public class PlayerSetting
         Color = Color.HSVToRGB(hsv_, 1.0f, 1.0f);
 
         var _operations = bots_;
-        BotOperations = _operations;
         BotSettings = new(botMax_);
         for (int i = 0; i < _operations; ++i)
         {
@@ -49,7 +47,6 @@ public class PlayerSetting
         {
             var _setting = BotSettings[BotSettings.Count - 1];
             BotSettings.Remove(_setting);
-            _setting = null;
         }
     }
 }

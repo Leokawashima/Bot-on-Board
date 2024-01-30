@@ -17,7 +17,7 @@ namespace Player
             Index = setting_.Index;
             name = $"Player_{setting_.Index + 1}:{setting_.Name}";
             Name = $"{setting_.Name}";
-            Bots = new(setting_.BotOperations);
+            Bots = new(setting_.BotSettings.Count);
 
             Setting = setting_;
         }
