@@ -42,9 +42,9 @@ namespace Bot
         {
             target_.Health.Damage(AttackPower);
         }
-        private void WeaponAttack(BotAgent target_)
+        private void WeaponAttack(Vector2Int pos_)
         {
-            if (false == Weapon.Attack(target_))
+            if (false == Weapon.Attack(pos_))
             {
                 ReleaceWeapon();
             }
@@ -65,7 +65,7 @@ namespace Bot
                 {
                     if (Weapon.CheckCollider(_posRelative))
                     {
-                        WeaponAttack(_enemy[i]);
+                        WeaponAttack(_posRelative);
                         break;
                     }
                 }

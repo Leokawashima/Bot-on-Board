@@ -23,18 +23,20 @@ MonoBehaviour:
   Prefab: {fileID: 1066075577020487917, guid: 9384fa41774d86142894d870bccd4878, type: 3}
   Components:
   - rid: 8759145406249304082
-  - rid: 8759145406249304088
+  - rid: 5221059134187372549
   references:
     version: 2
     RefIds:
+    - rid: 5221059134187372549
+      type: {class: Tools, ns: Map.Object.Component, asm: Assembly-CSharp}
+      data:
+        Power: 1.5
+        Remain: 1
+        m_subject: Rock
+        m_toolDamage: 5
     - rid: 8759145406249304082
       type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10
         TurnSpawn: 10
-    - rid: 8759145406249304088
-      type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
-      data:
-        Power: 1.5
-        Remain: 1

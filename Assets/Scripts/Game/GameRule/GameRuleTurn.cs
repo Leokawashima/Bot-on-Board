@@ -17,7 +17,6 @@ namespace Game.GameRule
             MapManager.Event_MapCreated += OnMapCreated;
             BotManager.Event_BotsActioned += OnBotActioned;
             PlayerUIManager.Event_ButtonTurnEnd += OnButton_TurnEnd;
-
         }
         private void OnDisable()
         {

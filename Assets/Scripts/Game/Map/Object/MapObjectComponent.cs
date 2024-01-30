@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Bot;
+using Unity.VisualScripting;
 
 namespace Map.Object.Component
 {
@@ -60,27 +61,10 @@ namespace Map.Object.Component
                 TurnDestruction = TurnMax;
             }
         }
-    }
 
-    public class Weapon : MapObjectComponent
-    {
-        [Header(nameof(Weapon))]
-        [SerializeField] private float Power = 3.0f;
-        [SerializeField] private uint Remain = 1;
-
-        public override void Hit(BotAgent ai_)
+        public virtual void SubTrun(uint sub_)
         {
-            ai_.Assault.HoldWeapon(this.DeepCopyInstance());
-        }
-
-        public virtual bool CheckCollider(Vector2Int pos_)
-        {
-            return (1 == (Mathf.Abs(pos_.x) + Mathf.Abs(pos_.y)));
-        }
-        public virtual bool Attack(BotAgent Target_)
-        {
-            Target_.Health.Damage(Power);
-            return --Remain <= 0;
+            TurnDestruction -= sub_;
         }
     }
 
@@ -216,5 +200,17 @@ namespace Map.Object.Component
         {
             return false;
         }
+    }
+
+    public class Rock : MapObjectComponent
+    {
+        [Header(nameof(Rock))]
+        [SerializeField] private uint Empty;
+    }
+
+    public class Log : MapObjectComponent
+    {
+        [Header(nameof(Log))]
+        [SerializeField] private uint Empty;
     }
 }

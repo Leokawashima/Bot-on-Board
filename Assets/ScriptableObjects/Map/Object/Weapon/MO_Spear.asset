@@ -36,5 +36,5 @@ MonoBehaviour:
     - rid: 8759145406249304089
       type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
-        Power: 2.5
+        Power: 1
         Remain: 1

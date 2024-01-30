@@ -23,18 +23,20 @@ MonoBehaviour:
   Prefab: {fileID: 3761954505819919209, guid: 0d8e14f7c7e1bb143ba2f283d5e06503, type: 3}
   Components:
   - rid: 8759145406249304078
-  - rid: 8759145406249304084
+  - rid: 5221059134187372548
   references:
     version: 2
     RefIds:
+    - rid: 5221059134187372548
+      type: {class: Tools, ns: Map.Object.Component, asm: Assembly-CSharp}
+      data:
+        Power: 1.5
+        Remain: 1
+        m_subject: Log
+        m_toolDamage: 5
     - rid: 8759145406249304078
       type: {class: TurnDestroy, ns: Map.Object.Component, asm: Assembly-CSharp}
       data:
         TurnDestruction: 0
         TurnMax: 10
         TurnSpawn: 10
-    - rid: 8759145406249304084
-      type: {class: Weapon, ns: Map.Object.Component, asm: Assembly-CSharp}
-      data:
-        Power: 1.5
-        Remain: 1
