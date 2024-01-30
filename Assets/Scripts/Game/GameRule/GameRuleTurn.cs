@@ -3,6 +3,7 @@ using Bot;
 using Player;
 using Map;
 using System;
+using GameMode;
 
 namespace Game.GameRule
 {
@@ -28,6 +29,9 @@ namespace Game.GameRule
         public override void Initialize()
         {
             //CameraManager.Singleton.Animation();
+            TurnSuddenDeath = GameModeManager.TurnSuddonDeath;
+            TurnForceFinish = GameModeManager.TurnForceFinish;
+            ResetTurn();
             MapManager.Singleton.MapCreate();
         }
 

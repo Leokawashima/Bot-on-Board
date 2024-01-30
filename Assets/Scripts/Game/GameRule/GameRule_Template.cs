@@ -54,6 +54,11 @@ namespace Game.GameRule
             TurnElapsed++;
             Event_TurnChanged?.Invoke(TurnElapsed + 1);
         }
+        protected void SetTurn(int turn_)
+        {
+            TurnElapsed = turn_;
+            Event_TurnChanged?.Invoke(turn_ + 1);
+        }
         protected void ResetTurn()
         {
             TurnElapsed = 0;

@@ -19,7 +19,7 @@ MonoBehaviour:
   TitleImage: {fileID: 21300000, guid: 18a2c9a1f5679954098e5af90b04c8f2, type: 3}
   Cost: 0
   IsCollider: 0
-  CanOverrideSpawn: 0
+  CanOverrideSpawn: 1
   Prefab: {fileID: -7713710083345739746, guid: 20a3b0b3cdca01f45bddbfcf46efa322, type: 3}
   Components:
   - rid: 8759145594821541889

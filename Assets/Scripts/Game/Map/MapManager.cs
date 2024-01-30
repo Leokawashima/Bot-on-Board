@@ -60,6 +60,7 @@ namespace Map
                     --i;
                 }
             }
+            m_grid.Refresh(Stage);
         }
 
         private IEnumerator CoMapCreate()

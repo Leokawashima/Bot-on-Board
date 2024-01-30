@@ -212,9 +212,9 @@ namespace Map.Object.Component
                 }
             }
         }
-        public override void Start()
+        public override bool Update()
         {
-            Object.Finalize(MapManager.Singleton);
+            return false;
         }
     }
 }
