@@ -22,13 +22,13 @@ namespace Bot
         [field: SerializeField] public BotCamera Camera { get; private set; }
         [field: SerializeField] public AnimatorSystem Animator { get; private set; }
 
-        public void Initialize(PlayerAgent operator_, Vector2Int pos_)
+        public void Initialize(PlayerAgent operator_, BotSetting setting_, Vector2Int pos_)
         {
             name = $"Bot_{operator_.Index}";
             Operator = operator_;
 
-            Health = new(this);
-            Assault = new(this);
+            Health = new(this, setting_);
+            Assault = new(this, setting_);
             Brain = new(this);
             Travel = new(this, pos_);
             Perform = new(this);

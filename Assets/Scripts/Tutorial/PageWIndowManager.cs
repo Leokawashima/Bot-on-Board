@@ -28,33 +28,48 @@ public class PageWindowManager : MonoBehaviour
         {
             window.Initialize();
         }
-        m_canvas.enabled = false;
+        Enable(false);
     }
 
     public void Enable(int index_)
     {
-        m_canvas.enabled = true;
+        Enable(true);
         m_target = m_windows[index_];
+        SetIntaractable();
         SetText();
+    }
+
+    private void Enable(bool active_)
+    {
+        m_canvas.enabled = active_;
+        gameObject.SetActive(active_);
     }
 
     private void OnClose()
     {
-        m_canvas.enabled = false;
+        Enable(false);
         Event_Closed?.Invoke();
     }
     private void OnForward()
     {
         m_target.PageForward();
+        SetIntaractable();
         SetText();
     }
     private void OnBackward()
     {
         m_target.PageBackward();
+        SetIntaractable();
         SetText();
     }
     private void SetText()
     {
-        m_numberText.text = $"{m_target.Index} / {m_target.Size}";
+        m_numberText.text = $"{m_target.Index + 1} / {m_target.Size}";
+    }
+
+    private void SetIntaractable()
+    {
+        m_forwardButton.interactable = m_target.Index != m_target.Size - 1;
+        m_backwardButton.interactable = m_target.Index != 0;
     }
 }

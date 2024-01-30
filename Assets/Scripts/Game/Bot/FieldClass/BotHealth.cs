@@ -17,12 +17,12 @@ namespace Bot
             Event_Damage,
             Event_Heal;
 
-        public BotHealth(BotAgent bot_) : base(bot_)
+        public BotHealth(BotAgent bot_, BotSetting setting_) : base(bot_)
         {
             State = HealthState.Alive;
 
-            HPMax = 10.0f; // 仮初期設定
-            HP = HPMax;
+            HPMax = setting_.HP;
+            HP = setting_.HPMax;
 
             StanTurn = 0;
         }

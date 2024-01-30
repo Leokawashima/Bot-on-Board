@@ -17,9 +17,9 @@ namespace Bot
         public event Action<BotAgent>
             Event_ReleaceWeapon;
 
-        public BotAssault(BotAgent bot_) : base(bot_)
+        public BotAssault(BotAgent bot_, BotSetting setting_) : base(bot_)
         {
-            AttackPower = 1.0f; // 仮初期設定
+            AttackPower = setting_.Attack;
         }
 
         public void HoldWeapon(Weapon weapon_)

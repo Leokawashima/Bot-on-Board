@@ -1895,6 +1895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canvas: {fileID: 1425440166}
+  m_graphicRaycaster: {fileID: 1425440164}
   m_closeButton: {fileID: 959579900}
   m_forwardButton: {fileID: 1408293210}
   m_backwardButton: {fileID: 823677663}

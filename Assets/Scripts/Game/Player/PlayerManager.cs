@@ -36,7 +36,7 @@ namespace Player
                 }
             }
 #else
-            var _settings = GameModeDataBase.PlayerSettings;
+            var _settings = GameModeManager.PlayerSettings;
 #endif
             for (int i = 0, cnt = _settings.Length; i < cnt; ++i)
             {

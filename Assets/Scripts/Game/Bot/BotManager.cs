@@ -15,53 +15,58 @@ namespace Bot
 #if UNITY_EDITOR
         [field: Header("Debug"), SerializeField]
 #endif
-        public List<BotAgent> Bots { get; private set; } = new();
+        public List<BotAgent> Bots { get; private set; }
 
         public static event Action Event_BotsActioned;
 
         public void Initialize()
         {
+            Bots = new();
             var _playerList = PlayerManager.Singleton.Players;
-            for (int i = 0, cnt = _playerList.Count; i < cnt; ++i)//人数分処理する　現在は2固定
+            for (int i = 0, cnt = _playerList.Count; i < cnt; ++i)
             {
                 var _oerator = _playerList[i];
-                var _bot = Instantiate(m_prefab, transform);
-                _bot.Initialize(_oerator, new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
-                Bots.Add(_bot);
-
-                if (i == 1)
+                var _botSetting = _oerator.Setting.BotSettings;
+                for (int j = 0; j < _botSetting.Count; ++j)
                 {
-                    _bot.transform.rotation = Quaternion.Euler(0, 180, 0);
+                    var _bot = Instantiate(m_prefab, transform);
+                    _bot.Initialize(_oerator, _botSetting[j], new Vector2Int(i * 9, i * 9));// 0,0 9,9に初期化している
+                    Bots.Add(_bot);
+
+                    if (i == 1)
+                    {
+                        _bot.transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
+
+                    _bot.Health.Event_Damage += (BotAgent bot_, float power_) =>
+                    {
+                        GUIManager.Singleton.DamageEffect(bot_, power_);
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
+                    _bot.Health.Event_Heal += (BotAgent bot_, float power_) =>
+                    {
+                        GUIManager.Singleton.HealEffect(bot_, power_);
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
+                    _bot.Brain.Event_IncreaseIntelligent += (BotAgent bot_, int value_) =>
+                    {
+                        GUIManager.Singleton.InteliEffect(bot_, value_);
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
+                    _bot.Brain.Event_DecreaseIntelligent += (BotAgent bot_, int value_) =>
+                    {
+                        GUIManager.Singleton.InteliEffect(bot_, value_);
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
+                    _bot.Assault.Event_HoldWeapon += (BotAgent bot_, Weapon weapon_) =>
+                    {
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
+                    _bot.Assault.Event_ReleaceWeapon += (BotAgent bot_) =>
+                    {
+                        GUIManager.Singleton.Refresh(bot_);
+                    };
                 }
-
-                _bot.Health.Event_Damage += (BotAgent bot_, float power_) =>
-                {
-                    GUIManager.Singleton.DamageEffect(bot_, power_);
-                    GUIManager.Singleton.Refresh(bot_);
-                };
-                _bot.Health.Event_Heal += (BotAgent bot_, float power_) =>
-                {
-                    GUIManager.Singleton.HealEffect(bot_, power_);
-                    GUIManager.Singleton.Refresh(bot_);
-                };
-                _bot.Brain.Event_IncreaseIntelligent += (BotAgent bot_, int value_) =>
-                {
-                    GUIManager.Singleton.InteliEffect(bot_, value_);
-                    GUIManager.Singleton.Refresh(bot_);
-                };
-                _bot.Brain.Event_DecreaseIntelligent += (BotAgent bot_, int value_) =>
-                {
-                    GUIManager.Singleton.InteliEffect(bot_, value_);
-                    GUIManager.Singleton.Refresh(bot_);
-                };
-                _bot.Assault.Event_HoldWeapon += (BotAgent bot_, Weapon weapon_) =>
-                {
-                    GUIManager.Singleton.Refresh(bot_);
-                };
-                _bot.Assault.Event_ReleaceWeapon += (BotAgent bot_) =>
-                {
-                    GUIManager.Singleton.Refresh(bot_);
-                };
             }
             GUIManager.Singleton.InitializeInfoPlayerData();
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PageWindow : MonoBehaviour
 {
@@ -24,13 +25,19 @@ public class PageWindow : MonoBehaviour
     public void PageForward()
     {
         m_pages[Index].SetActive(false);
-        Index = (Index + 1) % m_pages.Length;
+        if (Index + 1 != Size)
+        {
+            Index += 1;
+        }
         m_pages[Index].SetActive(true);
     }
     public void PageBackward()
     {
         m_pages[Index].SetActive(false);
-        Index = Index - 1 < 0 ? 0 : Index - 1;
+        if (Index - 1 >= 0)
+        {
+            Index -= 1;
+        }
         m_pages[Index].SetActive(true);
     }
 }
