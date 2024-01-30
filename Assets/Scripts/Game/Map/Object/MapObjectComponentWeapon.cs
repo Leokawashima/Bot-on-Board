@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Bot;
-using TMPro;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace Map.Object.Component
 {
@@ -109,11 +108,17 @@ namespace Map.Object.Component
 
     public class LongSword : Weapon
     {
-
+        public override bool CheckCollider(Vector2Int pos_)
+        {
+            return 1 == Mathf.Abs(pos_.x) || 1 == Mathf.Abs(pos_.y);
+        }
     }
 
     public class Spear : Weapon
     {
-
+        public override bool CheckCollider(Vector2Int pos_)
+        {
+            return 2 >= Mathf.Abs(pos_.x) ||  2 >= Mathf.Abs(pos_.y);
+        }
     }
 }

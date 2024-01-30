@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using Bot;
-using Unity.VisualScripting;
 
 namespace Map.Object.Component
 {
