@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 using Bot;
 using Player;
@@ -40,14 +40,14 @@ namespace Game.GameRule
 
         private void OnMapCreated()
         {
-            GUIManager.Singleton.CutInTurn.Play("ターン", () =>
+            TurnCutIn(() =>
             {
                 CallEventInitialize();
                 BotManager.Singleton.Initialize();
                 CameraManager.Singleton.Initialize();
                 GUIManager.Singleton.Initialize();
 
-                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
+                PlayerCutIn(() =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });
@@ -58,7 +58,7 @@ namespace Game.GameRule
         {
             if (IsGameSet())
             {
-                GUIManager.Singleton.CutInDefault.Play("ゲームセット", () =>
+                GameSetCutIn(() =>
                 {
                     CallEventGameSet();
                     GameManager.Singleton.SystemFinalize();
@@ -73,11 +73,11 @@ namespace Game.GameRule
                 NextTurn();
                 ResetProgress();
 
-                GUIManager.Singleton.CutInTurn.Play("ターン", () =>
+                TurnCutIn(() =>
                 {
                     CallEventInitialize();
                     GUIManager.Singleton.PlayerUI.TurnInitialize();
-                    GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
+                    PlayerCutIn(() =>
                     {
                         GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                     });
@@ -91,14 +91,14 @@ namespace Game.GameRule
                 CallEventTurnEnd();
 
                 CallEventPlace();
-                GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}のターン！", () =>
+                PlayerCutIn(() =>
                 {
                     GUIManager.Singleton.PlayerUI.Enable(ProgressIndex);
                 });
             }
             else
             {
-                GUIManager.Singleton.CutInDefault.Play("AIの行動！", () =>
+                AICutIn(() =>
                 {
                     CallEventAIAction();
                     BotManager.Singleton.Action();
@@ -106,10 +106,26 @@ namespace Game.GameRule
             }
         }
 
-
         public override bool IsGameSet()
         {
             return BotManager.Singleton.CheckBotDead() || TurnElapsed > TurnForceFinish;
+        }
+
+        private void TurnCutIn(Action callback_)
+        {
+            GUIManager.Singleton.CutInTurn.Play("ターン", callback_);
+        }
+        private void PlayerCutIn(Action callback_)
+        {
+            GUIManager.Singleton.CutInDefault.Play($"Player{ProgressIndex + 1}\n{PlayerManager.Singleton.Players[ProgressIndex].Name}\nのターン！", callback_);
+        }
+        private void AICutIn(Action callback_)
+        {
+            GUIManager.Singleton.CutInDefault.Play("AIの行動！", callback_);
+        }
+        private void GameSetCutIn(Action callback_)
+        {
+            GUIManager.Singleton.CutInDefault.Play("ゲームセット", callback_);
         }
     }
 }

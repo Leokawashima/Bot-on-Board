@@ -11,7 +11,7 @@ public class InfoScrollViewManager : SingletonMonoBehaviour<InfoScrollViewManage
 #endif
     public List<InfoPlayerSetting> Infos { get; private set; }
 
-    private readonly float[] colors = new float[]
+    private readonly float[] m_COLORS = new float[]
     {
         0.0f,
         240.0f / 360.0f,
@@ -55,7 +55,7 @@ public class InfoScrollViewManager : SingletonMonoBehaviour<InfoScrollViewManage
     {
         var _info = Instantiate(m_prefab, m_content);
         var _setting = new PlayerSetting();
-        _setting.Initialize(index_, name_, colors[index_], 1, 4);
+        _setting.Initialize(index_, name_, m_COLORS[index_], 1, 4);
         _info.Initlaize(_setting);
         _info.Event_Click += PlayerSettingManager.Singleton.Select;
         return _info;
