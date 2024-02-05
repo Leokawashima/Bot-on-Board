@@ -101,6 +101,10 @@ namespace Bot
                     ai_.Perform.Processes.Add(new(19.0f + Intelligent, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
                     ai_.Perform.Processes.Add(new(1.0f, () => ai_.Assault.Attack()));
                 }
+                if (ai_.Perform.Processes.Count == 0)
+                {
+                    ai_.Perform.Processes.Add(new(1.0f, () => ai_.Travel.Step(ai_.Brain.SearchRoute[1])));
+                }
             }
             // 自身の座標から一マス範囲なのでこぶしの射程圏内　なので攻撃志向(超簡易実装)
         }
