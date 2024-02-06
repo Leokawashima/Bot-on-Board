@@ -36,6 +36,7 @@ namespace Map.Object.Component
 
         public override void Initialize(MapObject obj_)
         {
+            base.Initialize(obj_);
             TurnDestruction = TurnSpawn;
         }
         public override void Update()
